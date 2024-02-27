@@ -2,5 +2,28 @@
 
 public class MainWindowViewModel : ViewModelBase
 {
-    public string Greeting => "Welcome to Avalonia!";
+    public MainWindowViewModel()
+    {
+        
+    }
+
+    private void CheckVersionOfProgram(string path)
+    {
+        
+    }
+
+    private void LoadNewVersionOfProgram()
+    {
+        
+    }
+
+    private void InstallNewVersionOfProgram()
+    {
+        
+    }
+
+    private void LoadProgram()
+    {
+        
+    }
 }

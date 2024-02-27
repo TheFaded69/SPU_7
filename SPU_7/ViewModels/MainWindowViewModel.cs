@@ -1,6 +1,18 @@
-﻿namespace SPU_7.ViewModels;
+﻿using System;
 
-public class MainWindowViewModel : ViewModelBase
+namespace SPU_7.ViewModels;
+
+public class MainWindowViewModel : ViewModelBase, IDisposable
 {
-    public string Greeting => "Welcome to Avalonia!";
+    public MainWindowViewModel()
+    {
+        
+    }
+
+    
+    
+    public void Dispose()
+    {
+        // TODO release managed resources here
+    }
 }

@@ -1,0 +1,161 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:controls="using:Material.Styles.Controls"
+        xmlns:materialIcons="using:Material.Icons.Avalonia"
+        xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+        
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SPU_7.Views.MainWindowView"
+        x:Name="mainWindow"
+        x:DataType="viewModels:MainWindowViewModel"
+        WindowState="FullScreen"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        Title="СПУ-7">
+        
+          <Design.DataContext>
+    <viewModels:MainWindowViewModel/>
+  </Design.DataContext>
+    
+    
+    
+    <DockPanel LastChildFill="True">
+      <!-- Верхняя панель -->
+      <controls:ColorZone Padding="5"
+                          VerticalAlignment="Top" 
+                          HorizontalAlignment="Stretch"
+                          Mode="PrimaryMid"
+                          DockPanel.Dock="Top"
+                          Height="56"
+                          PointerPressed="InputElement_OnPointerPressed"
+                          PointerMoved="InputElement_OnPointerMoved"
+                          PointerReleased="InputElement_OnPointerReleased">     
+          <DockPanel>
+   
+            <Button DockPanel.Dock="Right" 
+                    Width="46" 
+                    Height="46"
+                    Command="{Binding CloseWindowCommand}"
+                    CommandParameter="{Binding ElementName=mainWindow}"
+                    ToolTip.Tip="Закрыть"
+                    Classes="flat">
+              <materialIcons:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black"/>
+            </Button>
+            <Button DockPanel.Dock="Right"
+                    Width="46" 
+                    Height="46"
+                    IsVisible="{Binding !IsFullScreen}"
+                    Command="{Binding FullScreenWindowCommand}"
+                    CommandParameter="{Binding ElementName=mainWindow}"
+                    ToolTip.Tip="Развернуть на весь экран"
+                    Classes="flat">
+              <materialIcons:MaterialIcon Kind="Maximize" Width="40" Height="40" Foreground="Black"/>           
+            </Button>
+            <Button DockPanel.Dock="Right"
+                    Width="46" 
+                    Height="46"
+                    IsVisible="{Binding IsFullScreen}"
+                    Command="{Binding UnFullScreenWindowCommand}"
+                    CommandParameter="{Binding ElementName=mainWindow}"
+                    ToolTip.Tip="Уменьшить размер окна"
+                    Classes="flat">
+              <materialIcons:MaterialIcon Kind="DockWindow" Width="40" Height="40" Foreground="Black"/>           
+            </Button>
+            <Button DockPanel.Dock="Right" 
+                    Width="46" 
+                    Height="46"
+                    Command="{Binding HideWindowCommand}"
+                    CommandParameter="{Binding ElementName=mainWindow}"
+                    ToolTip.Tip="Свернуть"
+                    Classes="flat">
+              <materialIcons:MaterialIcon Kind="Minimize" Width="40" Height="40" Foreground="Black"/>            
+            </Button> 
+            <Button DockPanel.Dock="Right" 
+                    Width="46" 
+                    Height="46"
+                    Command="{Binding OpenHelpCommand}"
+                    ToolTip.Tip="Справка"
+                    Classes="flat">
+              <materialIcons:MaterialIcon Kind="QuestionMark" Width="40" Height="40" Foreground="Black"/>            
+            </Button>
+
+            <Button DockPanel.Dock="Right"
+                    Width="46"
+                    Height="46"
+                    Command="{Binding OpenAuthorizationCommand}"
+                    ToolTip.Tip="Авторизация пользователя"
+                    IsVisible="{Binding !IsAuthorize}"
+                    Classes="flat">
+              <materialIcons:MaterialIcon Kind="Login" Width="40" Height="40" Foreground="Black"/>
+              
+            </Button>
+            <Button DockPanel.Dock="Right"
+                    Width="46"
+                    Height="46"
+                    Command="{Binding ExitUserCommand}"
+                    ToolTip.Tip="Выйти из учетной записи"
+                    IsVisible="{Binding IsAuthorize}"
+                    Classes="flat">
+              <materialIcons:MaterialIcon Kind="Logout" Width="40" Height="40" Foreground="Black"/>
+
+            </Button>
+            
+            <Button DockPanel.Dock="Left"
+                    Width="46"
+                    Height="46"
+                    Command="{Binding OpenStandSettingsCommand}"
+                    ToolTip.Tip="Настройки"
+                    IsVisible="{Binding !IsCommonUser}"
+                    Classes="flat">
+              <materialIcons:MaterialIcon Kind="Settings" 
+                                          Width="40" 
+                                          Height="40" 
+                                          Foreground="Black"/>
+            </Button>
+            
+            <Button DockPanel.Dock="Right"
+                    Width="46"
+                    Height="46"
+                    Command="{Binding OpenAddUserCommand}"
+                    ToolTip.Tip="Добавить пользователя"
+                    IsVisible="{Binding !IsCommonUser}"
+                    Classes="flat">
+              <materialIcons:MaterialIcon Kind="Add" 
+                                          Width="40" 
+                                          Height="40" 
+                                          Foreground="Black"/>
+            </Button>
+            
+            <TextBlock DockPanel.Dock="Right"
+                       Margin="5"
+                       FontSize="20"
+                       VerticalAlignment="Center"
+                       Text="{Binding Employee}"
+                       TextAlignment="Right"/>
+
+
+            <TextBlock  Text="СПУ-5" 
+                        DockPanel.Dock="Left"
+                        Margin="5"
+                        FontSize="20" 
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"/>
+            
+            <TextBlock  Name="TimeBlock"
+                        Margin="350,5,5,5"
+                        FontSize="20" 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+            
+          </DockPanel>          
+        </controls:ColorZone>
+
+      <!-- Основная часть окна -->
+      <ContentPresenter Content="{Binding StandView}"/>
+    </DockPanel>
+        
+</Window>
