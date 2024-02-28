@@ -1,0 +1,70 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:operationConfigurationViewModels="clr-namespace:SPU_7.ViewModels.ScriptViewModels.OperationViewModels.OperationConfigurationViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.ScriptViews.OperationViews.OperationConfigurationViews.CheckTightnessOperationConfigurationView"
+             x:DataType="operationConfigurationViewModels:CheckTightnessOperationConfigurationViewModel">
+    <DockPanel LastChildFill="True">
+        <Grid ColumnDefinitions="0.5*, 0.5*"
+              RowDefinitions="Auto, Auto, Auto, Auto">
+            <TextBox Grid.Row="0"
+                     Grid.Column="0"
+                     Text="{Binding PressureVacuumMinimum}"
+                     Margin="5"
+                     UseFloatingWatermark="True"
+                     Watermark="Введите давление"
+                     assists:TextFieldAssist.Label="Минимальное давление вакуума, кПа"/>
+            
+            <TextBox Grid.Row="0"
+                     Grid.Column="1"
+                     Text="{Binding VacuumWaitTime}"
+                     Margin="5"
+                     UseFloatingWatermark="True"
+                     Watermark="Введите время"
+                     assists:TextFieldAssist.Label="Время ожидания вакуума, сек"/>
+            
+            <TextBox Grid.Row="1"
+                     Grid.Column="0"
+                     Text="{Binding PressureResiverMinimum}"
+                     Margin="5"
+                     UseFloatingWatermark="True"
+                     Watermark="Введите давление"
+                     assists:TextFieldAssist.Label="Минимальное давление ресивера, кПа"/>
+            
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Text="{Binding StabilizationTime}"
+                     Margin="5"
+                     UseFloatingWatermark="True"
+                     Watermark="Введите время"
+                     assists:TextFieldAssist.Label="Время стабилизации, мин"/>
+            
+            <TextBox Grid.Row="2"
+                     Grid.Column="0"
+                     Text="{Binding PressureDifferenceMaximum}"
+                     Margin="5"
+                     UseFloatingWatermark="True"
+                     Watermark="Введите давление"
+                     assists:TextFieldAssist.Label="Максимальная разница давления перепара, кПа"/>
+            
+            <TextBox Grid.Row="2"
+                     Grid.Column="1"
+                     Text="{Binding TestTime}"
+                     Margin="5"
+                     UseFloatingWatermark="True"
+                     Watermark="Введите время"
+                     assists:TextFieldAssist.Label="Время теста, мин"/>
+            
+            <ComboBox Grid.Row="3"
+                      Grid.Column="0"
+                      ItemsSource="{Binding NozzleValues}"
+                      SelectedItem="{Binding SelectedNozzleValue}"
+                      Margin="5"
+                      assists:ComboBoxAssist.Label="Номинал сопла для проверки"
+                      Theme="{StaticResource MaterialOutlineComboBox}"/>
+        </Grid>
+    </DockPanel>
+</UserControl>

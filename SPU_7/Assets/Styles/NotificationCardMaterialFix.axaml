@@ -1,0 +1,32 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style Selector="NotificationCard">
+    <Setter Property="UseLayoutRounding" Value="True" />
+    <Setter Property="Width" Value="250" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="Black" />
+    <Setter Property="RenderTransformOrigin" Value="50%,75%" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <LayoutTransformControl Name="PART_LayoutTransformControl" UseRenderTransform="True">
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Margin="8,8,0,0">
+            <ContentControl Name="PART_Content" Content="{TemplateBinding Content}" />
+          </Border>
+        </LayoutTransformControl>
+      </ControlTemplate>
+    </Setter>
+
+  </Style>
+
+  <Style Selector="NotificationCard/template/ ContentControl#PART_Content">
+    <Setter Property="MinHeight" Value="100" />
+  </Style>
+
+  <Style Selector="NotificationCard">
+    <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+  </Style>
+</Styles>

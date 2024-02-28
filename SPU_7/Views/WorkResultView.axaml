@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+             xmlns:convertors="clr-namespace:SPU_7.Views.Convertors"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:CompileBindings="False"
+
+             x:Class="SPU_7.Views.WorkResultView">
+    
+    <Design.DataContext>
+        <viewModels:WorkResultViewModel/>
+    </Design.DataContext>
+    
+    <ItemsControl ItemsSource="{Binding LogsCollection}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Rows="1"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <DockPanel HorizontalAlignment="Stretch">
+                    <DockPanel DockPanel.Dock="Top">
+                        <TextBlock Text="{Binding LogName}"
+                                   Margin="5, 5, 5, 0"
+                                   FontSize="18"
+                                   DockPanel.Dock="Left"/>
+                        <Rectangle Margin="5, 5, 5, 0"
+                                   VerticalAlignment="Center"
+                                   Height="2"
+                                   Fill="#2196f3"/>
+                    </DockPanel>
+        
+                    <controls:Card Margin="5">
+                        <ScrollViewer>
+                            <ItemsControl Margin="5"
+                                          ItemsSource="{Binding Logs}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Message}"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="16"
+                                                   Foreground="{Binding LogLevel, Converter={convertors:LogLevelToForegroundConverter}}"
+                                                   Margin="5 0 5 0">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </controls:Card>
+                </DockPanel>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+</UserControl>

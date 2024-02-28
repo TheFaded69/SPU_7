@@ -1,0 +1,103 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:validation="clr-namespace:SPU_7.ViewModels.WorkReportViewModels.ResultViewModels.Validation"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.WorkReportViews.ResultView.ValidationResultView"
+             x:DataType="validation:ValidationResultViewModel">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top"
+                   LastChildFill="False">
+            <ComboBox ItemsSource="{Binding VendorNumbers}"
+                      SelectedIndex="{Binding SelectedIndex}"
+                      SelectedItem="{Binding SelectedVendorNumber}"
+                      Margin="5"
+                      Classes="Outline"
+                      assists:ComboBoxAssist.Label="Заводской номер"
+                      Theme="{StaticResource MaterialOutlineComboBox}"
+                      DockPanel.Dock="Left"
+                      Width="300" />
+            <Button Margin="5"
+                    Content="Протокол"
+                    IsEnabled="{Binding SelectedIndex, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Command="{Binding ShowProtocolViewerCommand}" />
+            <TextBlock Margin="5"
+                       Text="{Binding GoodDevice}"
+                       DockPanel.Dock="Right"
+                       VerticalAlignment="Center"
+                       IsVisible="{Binding SelectedVendorNumber, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <TextBlock Margin="5"
+                       Text="Пригодность: "
+                       DockPanel.Dock="Right"
+                       VerticalAlignment="Center"
+                       IsVisible="{Binding SelectedVendorNumber, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <TextBlock Margin="5"
+                       Text="{Binding DeviceName}"
+                       IsVisible="{Binding SelectedVendorNumber, Converter={x:Static ObjectConverters.IsNotNull}}"
+                       DockPanel.Dock="Right"
+                       VerticalAlignment="Center" />
+            <TextBlock Margin="5"
+                       Text="Устройство: "
+                       IsVisible="{Binding SelectedVendorNumber, Converter={x:Static ObjectConverters.IsNotNull}}"
+                       DockPanel.Dock="Right"
+                       VerticalAlignment="Center" />
+            <TextBlock Margin="5"
+                       Text="{Binding VendorName}"
+                       DockPanel.Dock="Right"
+                       IsVisible="{Binding SelectedVendorNumber, Converter={x:Static ObjectConverters.IsNotNull}}"
+                       VerticalAlignment="Center" />
+            <TextBlock Margin="5"
+                       Text="Производитель: "
+                       DockPanel.Dock="Right"
+                       IsVisible="{Binding SelectedVendorNumber, Converter={x:Static ObjectConverters.IsNotNull}}"
+                       VerticalAlignment="Center" />
+
+        </DockPanel>
+        <DockPanel DockPanel.Dock="Top"
+                   LastChildFill="False">
+            <TextBox UseFloatingWatermark="True"
+                     Margin="5"
+                     DockPanel.Dock="Left"
+                     Width="200"
+                     Watermark="Введите значение"
+                     assists:TextFieldAssist.Label="Эталонная температура"
+                     Text="{Binding Temperature}" />
+            <TextBox UseFloatingWatermark="True"
+                     Margin="5"
+                     Width="200"
+                     DockPanel.Dock="Left"
+                     Watermark="Введите значение"
+                     assists:TextFieldAssist.Label="Эталонная влажность"
+                     Text="{Binding Humidity}" />
+            <TextBox UseFloatingWatermark="True"
+                     Margin="5"
+                     Width="200"
+                     DockPanel.Dock="Left"
+                     Watermark="Введите значение"
+                     assists:TextFieldAssist.Label="Эталонное давление"
+                     Text="{Binding Pressure}" />
+        </DockPanel>
+        <DataGrid ItemsSource="{Binding ValidationDeviceResultViewModels}"
+                  Margin="5"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№ точки"
+                                    Binding="{Binding PointNumber}" />
+                <DataGridTextColumn Header="№ измерения"
+                                    Binding="{Binding MeasureNumber}" />
+                <DataGridTextColumn Header="Эталонный объем"
+                                    Binding="{Binding TargetVolume}" />
+                <DataGridTextColumn Header="Начальный объем"
+                                    Binding="{Binding StartVolumeValue}" />
+                <DataGridTextColumn Header="Конечный объем"
+                                    Binding="{Binding EndVolumeValue}" />
+                <DataGridTextColumn Header="Отклонение допуск"
+                                    Binding="{Binding TargetVolumeDifference}" />
+                <DataGridTextColumn Header="Отклонение факт"
+                                    Binding="{Binding VolumeDifference}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

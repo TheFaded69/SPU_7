@@ -1,0 +1,36 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:extensionViewModels="clr-namespace:SPU_7.ViewModels.ExtensionViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.ExtensionViews.StandExtensionView"
+             x:DataType="extensionViewModels:StandExtensionViewModel">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top"
+                   Margin="5,5,5,0">
+            <TextBlock Text="CТЕНД"
+
+                       Margin="5, 5, 5, 5"
+                       DockPanel.Dock="Left"
+                       FontSize="18" />
+            <Rectangle Margin="5, 5, 5, 5"
+                       VerticalAlignment="Center"
+                       Height="2"
+                       Fill="#2196f3" />
+        </DockPanel>
+         <controls:Card DockPanel.Dock="Top"
+                       Margin="5,5,5,5">
+             <Grid ColumnDefinitions="1*"
+                   RowDefinitions="Auto">
+                 <Button Grid.Row="0"
+                         Grid.Column="0"
+                         Margin="5"
+                         Command="{Binding ResetPressureSensorCommand}"
+                         Content="Сброс ДД"
+                         ToolTip.Tip="Сброс датчиков давления на ноль"/>
+             </Grid>
+         </controls:Card>
+    </DockPanel>
+</UserControl>

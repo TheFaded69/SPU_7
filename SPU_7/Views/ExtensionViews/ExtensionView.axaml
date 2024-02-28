@@ -1,0 +1,23 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:extensionViewModels="clr-namespace:SPU_7.ViewModels.ExtensionViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.ExtensionViews.ExtensionView"
+             x:DataType="extensionViewModels:ExtensionViewModel">
+    <DockPanel LastChildFill="False">
+        <ContentPresenter Content="{Binding UserControlWorkResult}"
+                          DockPanel.Dock="Bottom"
+                          Height="300" />
+        <StackPanel Orientation="Vertical"
+                    DockPanel.Dock="Right">
+            <ContentPresenter Width="400"
+                              VerticalAlignment="Top"
+                              Content="{Binding StandExtensionUserControl}" />
+            <ContentPresenter Width="400"
+                              VerticalAlignment="Top"
+                              Content="{Binding VacuumCreatorExtensionUserControl}" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

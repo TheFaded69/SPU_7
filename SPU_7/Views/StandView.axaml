@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.StandView"
+             x:CompileBindings="False"
+
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:viewModels="clr-namespace:SPU_7.ViewModels">
+
+    <Design.DataContext>
+        <viewModels:StandViewModel />
+    </Design.DataContext>
+
+    <TabControl>
+        <TabItem Header="Мнемосхема"
+                 FontSize="18">
+            <DockPanel>
+
+                <ContentPresenter Content="{Binding UserControlMnemonicSchemeControl}"
+                                  DockPanel.Dock="Right"
+                                  Width="400"
+                                  Margin="0,0,0,0" />
+                
+                <controls:Card Margin="5,5,0,0">
+
+                    <Viewbox Stretch="Uniform"
+                             VerticalAlignment="Top"
+                             HorizontalAlignment="Left">
+
+                        <ContentPresenter Content="{Binding UserControlMnemonicScheme}" />
+                    </Viewbox>
+                </controls:Card>
+            </DockPanel>
+        </TabItem>
+        <TabItem Header="Дополнительные возможности"
+                 FontSize="18">
+            <ContentPresenter Content="{Binding UserControlExtension}"/>
+        </TabItem>
+    </TabControl>
+</UserControl>

@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.ConfirmView"
+             x:CompileBindings="False"
+
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Loaded="Control_OnLoaded"
+             Width="300"
+             Height="150">
+
+    <Design.DataContext>
+        <viewModels:ConfirmViewModel />
+    </Design.DataContext>
+
+    <controls:Card>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Bottom"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button Margin="5"
+                        Classes="flat"
+                        Content="Ок"
+                        HorizontalAlignment="Center"
+                        Command="{Binding PositiveConfirmCommand}" />
+                <Button Margin="5"
+                        Content="Отмена"
+                        HorizontalAlignment="Center"
+                        Command="{Binding NegativeConfirmCommand}" />
+            </StackPanel>
+
+            <TextBlock Margin="5,15,5,5"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="{Binding Message}" />
+        </DockPanel>
+    </controls:Card>
+</UserControl>

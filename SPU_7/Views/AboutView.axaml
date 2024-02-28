@@ -1,0 +1,32 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.AboutView"
+             xmlns:controls="using:Material.Styles.Controls"
+             Loaded="Control_OnLoaded"
+             PointerPressed="InputElement_OnPointerPressed"
+             xmlns:assists="using:Material.Styles.Assists">
+    <DockPanel LastChildFill="False" >
+        <Image Margin="5"
+               DockPanel.Dock="Top"
+               Source="/Assets/tdLogoMain.png"
+               Width="400"/>
+        <TextBlock DockPanel.Dock="Top"
+                   Margin="5"
+                   Text="Установка поверочная СПУ-5"/>
+        <TextBlock DockPanel.Dock="Top"
+                   Margin="5"
+                   Text="Наименование ПО: SPU_5"/>
+        <TextBlock DockPanel.Dock="Top"
+                   Margin="5"
+                   Text="Версия ПО: 1.1"/>
+        <TextBlock DockPanel.Dock="Top"
+                   Margin="5"
+                   Text="ООО НПО Турбулентность-ДОН"/>
+        <TextBlock DockPanel.Dock="Top"
+                   Margin="5"
+                   Text="Цифровой идентификатор ПО: 0х03b31d0"/>
+    </DockPanel>
+</UserControl>

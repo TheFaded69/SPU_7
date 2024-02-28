@@ -1,0 +1,85 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.ScriptViews.OperationViews.OperationEditorView"
+             
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             x:CompileBindings="False"
+
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:assists="using:Material.Styles.Assists"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:operationViewModels="clr-namespace:SPU_7.ViewModels.ScriptViewModels.OperationViewModels"
+             Height="900"
+             Width="1100"
+             
+             Loaded="Control_OnLoaded">
+    
+    <Design.DataContext>
+        <operationViewModels:OperationEditorViewModel/>
+    </Design.DataContext>
+    
+    <DockPanel>
+        
+        <DockPanel DockPanel.Dock="Top"
+                   LastChildFill="False">
+            <Button DockPanel.Dock="Right" 
+                    Width="46" 
+                    Height="46"
+                    Margin="0,5,5,0"
+                    Command="{Binding CloseWindowCommand}"
+                    ToolTip.Tip="Закрыть"
+                    Classes="flat">
+                <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black"/>
+            </Button>
+                  
+            <TextBlock Margin="10,5,5,5"
+                       FontSize="20"
+                       Text="{Binding Title}"
+                       DockPanel.Dock="Left"
+                       VerticalAlignment="Center"/>
+        </DockPanel>
+        
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Horizontal">
+            <TextBox UseFloatingWatermark="True"
+                     Margin="5"
+                     Text="{Binding Name}"
+                     Watermark="Введите название"
+                     assists:TextFieldAssist.Label="Название операции"/>
+
+            <TextBox UseFloatingWatermark="True"
+                     Margin="5"
+                     Text="{Binding Description}"
+                     Watermark="Введите описание"
+                     assists:TextFieldAssist.Label="Описание операции"/>
+
+            <ComboBox assists:ComboBoxAssist.Label="Тип операции"
+                      Theme="{StaticResource MaterialOutlineComboBox}"
+                      ItemsSource="{Binding Operations}"
+                      SelectedItem="{Binding SelectedStringOperation}" 
+                      Width="300"
+                      Margin="0,0,5,0"/>
+
+        </StackPanel>
+        
+        <Button Margin="5"
+                Content="Сохранить"
+                DockPanel.Dock="Bottom"
+                HorizontalAlignment="Center"
+                Command="{Binding SaveOperationCommand}"/>
+        
+        <controls:Card Margin="5">
+        
+            <ContentPresenter Content="{Binding OperationConfigurationEditor}"/>
+        
+        </controls:Card>
+    </DockPanel>
+    
+    
+    
+    
+</UserControl>

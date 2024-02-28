@@ -1,0 +1,58 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.WriteDeviceInformationView"
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:deviceInformationViewModels="clr-namespace:SPU_7.ViewModels.DeviceInformationViewModels"
+             x:DataType="deviceInformationViewModels:WriteDeviceInformationViewModel"
+             Loaded="Control_OnLoaded">
+    
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top"
+                   LastChildFill="False">
+            <Button DockPanel.Dock="Right" 
+                    Width="46" 
+                    Height="46"
+                    Margin="5"
+                    Command="{Binding CloseWindowCommand}"
+                    ToolTip.Tip="Закрыть"
+                    Classes="flat">
+                <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black"/>
+            </Button>
+                  
+            <TextBlock Margin="10,5,5,5"
+                       FontSize="20"
+                       Text="{Binding Title}"
+                       DockPanel.Dock="Left"
+                       VerticalAlignment="Center"/>
+        </DockPanel>
+        
+        <Button Margin="5"
+                DockPanel.Dock="Bottom"
+                HorizontalAlignment="Center"
+                Content="Oк"
+                Command="{Binding WriteDeviceInformationCommand}"/>
+        <DataGrid Margin="5"
+                  ItemsSource="{Binding DeviceInformationViewModels}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№"
+                                    Binding="{Binding DeviceNumber}"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Header="Серийный номер"
+                                    Binding="{Binding DeviceVendorNumber}"/>
+                <DataGridTemplateColumn Header="Вкл\выкл"
+                                        IsReadOnly="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox Margin="5"
+                                      IsChecked="{Binding IsManualEnabled}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

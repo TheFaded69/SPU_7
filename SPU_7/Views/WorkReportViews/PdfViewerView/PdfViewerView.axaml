@@ -1,0 +1,42 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.WorkReportViews.PdfViewerView.PdfViewerView"
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
+             xmlns:assists="using:Material.Styles.Assists"
+             Loaded="Control_OnLoaded"
+             x:DataType="workReportViewModels:PdfViewerViewModel"
+             xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
+             xmlns:workReportViewModels="clr-namespace:SPU_7.ViewModels.WorkReportViewModels">
+    <DockPanel>
+        <controls:ColorZone Padding="5"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Stretch"
+                            Mode="PrimaryMid"
+                            DockPanel.Dock="Top"
+                            Height="56">
+            <DockPanel LastChildFill="False">
+                <Button DockPanel.Dock="Right"
+                        Width="46"
+                        Height="46"
+                        Command="{Binding CloseWindowCommand}"
+                        ToolTip.Tip="Закрыть"
+                        Classes="flat">
+                    <materialIcons:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black" />
+                </Button>
+                <TextBlock Margin="5"
+                           Text="Просмотр протокола"
+                           DockPanel.Dock="Left"
+                           FontSize="20"
+                           VerticalAlignment="Center" />
+            </DockPanel>
+        </controls:ColorZone>
+        
+        <controls:Card Margin="5">
+            <webview:WebView Address="{Binding CurrentAddress}" />
+        </controls:Card>
+    </DockPanel>
+</UserControl>

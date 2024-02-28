@@ -1,0 +1,45 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:operationConfigurationViewModels="clr-namespace:SPU_7.ViewModels.ScriptViewModels.OperationViewModels.OperationConfigurationViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.ScriptViews.OperationViews.OperationConfigurationViews.NozzleSelectorView"
+             x:DataType="operationConfigurationViewModels:NozzleSelectorViewModel">
+    <controls:Card Margin="5">
+        <DockPanel>
+            <Button Command="{Binding ChooseNozzlesCommand}"
+                    Margin="5"
+                    HorizontalAlignment="Center"
+                    Content="OK"
+                    DockPanel.Dock="Bottom"/>
+            <ItemsControl ItemsSource="{Binding StandSettingsNozzleViewModels}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Margin="5"
+                                  IsChecked="{Binding IsChecked}"/>
+                        
+                        <TextBlock Text="Сопло №"
+                                   Margin="5,5,0,5"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Number}"
+                                   Margin="0,5,5,5"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="Калибровочный расход: " 
+                                   Margin="5"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding NozzleFactValue}"
+                                   Margin="5"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="м3/ч"
+                                   Margin="5"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        </DockPanel>
+    </controls:Card>
+</UserControl>

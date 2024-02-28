@@ -1,0 +1,147 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.ScriptViews.ScriptEditorView"
+
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             x:CompileBindings="True"
+             x:DataType="scriptViewModels:ScriptEditorViewModel"
+             
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:assists="using:Material.Styles.Assists"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:scriptViewModels="clr-namespace:SPU_7.ViewModels.ScriptViewModels"
+             xmlns:convertors="clr-namespace:SPU_7.Views.Convertors"
+
+             Height="{Binding Height}"
+             Loaded="Control_OnLoaded">
+    
+    <Design.DataContext>
+        <scriptViewModels:ScriptEditorViewModel/>
+    </Design.DataContext>
+    
+    <controls:Card Margin="0">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top"
+                   LastChildFill="False"
+        >
+            <Button DockPanel.Dock="Right" 
+                    Width="46" 
+                    Height="46"
+                    Command="{Binding CloseWindowCommand}"
+                    ToolTip.Tip="Закрыть"
+                    Classes="flat">
+                <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black"/>
+            </Button>
+                  
+            <TextBlock Margin="5"
+                       FontSize="20"
+                       Text="{Binding Title}"
+                       DockPanel.Dock="Left"
+                       VerticalAlignment="Center"/>
+        </DockPanel>
+        
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Horizontal">
+        <TextBox UseFloatingWatermark="True"
+                 Margin="5"
+                 Text="{Binding Name}"
+                 Watermark="Введите название"
+                 assists:TextFieldAssist.Label="Название сценария"/>
+
+        <TextBox UseFloatingWatermark="True"
+                 Margin="5"
+                 Text="{Binding Description}"
+                 Watermark="Введите описание"
+                 assists:TextFieldAssist.Label="Описание сценария"/>
+        
+        <ComboBox assists:ComboBoxAssist.Label="Номер линии"
+                  Theme="{StaticResource MaterialOutlineComboBox}"
+                  Margin="5"
+                  ItemsSource="{Binding LineNumbers}"
+                  SelectedItem="{Binding SelectedLineNumber}"
+                  VerticalAlignment="Bottom"
+                  Width="150"/>
+
+        <!--ComboBox Margin="5"
+                  ItemsSource="{Binding StringDeviceTypes}"
+                  SelectedItem="{Binding SelectedStringDeviceType}"
+                  assists:ComboBoxAssist.Label="Тип устройства"
+                  Theme="{StaticResource MaterialOutlineComboBox}"
+                  Width="150"/-->
+
+
+      </StackPanel>
+      <DockPanel DockPanel.Dock="Right"
+                 Width="150"
+                 LastChildFill="False">
+        <Button Margin="5"
+                Content="Создать"
+                DockPanel.Dock="Top"
+                IsVisible="{Binding IsEditMode}"
+                Command="{Binding CreateOperationCommand}"/>
+        <Button Margin="5"
+                Content="Редактировать"
+                DockPanel.Dock="Top"
+                IsVisible="{Binding IsEditMode}"
+                Command="{Binding EditOperationCommand}"
+                IsEnabled="{Binding SelectedOperation, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        <Button Margin="5"
+                Content="Удалить"
+                DockPanel.Dock="Top"
+                IsVisible="{Binding IsEditMode}"
+                Command="{Binding DeleteOperationCommand}"
+                IsEnabled="{Binding SelectedOperation, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        <Button Margin="5"
+                Content="Сохранить"
+                DockPanel.Dock="Bottom"
+                Command="{Binding SaveScriptCommand}"/>
+      </DockPanel>
+        
+        <StackPanel DockPanel.Dock="Bottom"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal" IsVisible="{Binding IsEditMode}">
+            <Button Margin="5"
+                    Command="{Binding MoveUpCommand}"
+                    IsEnabled="{Binding SelectedOperation,  Converter={x:Static ObjectConverters.IsNotNull}}">
+                <avalonia:MaterialIcon Kind="ArrowUp" />
+            </Button>
+            <Button Margin="5"
+                    Command="{Binding MoveDownCommand}"
+                    IsEnabled="{Binding SelectedOperation,  Converter={x:Static ObjectConverters.IsNotNull}}">
+                <avalonia:MaterialIcon Kind="ArrowDown" />
+            </Button>
+        </StackPanel>
+        
+        
+      <DataGrid Margin="5"
+                IsVisible="{Binding IsEditMode}"
+                ItemsSource="{Binding Operations}"
+                SelectedItem="{Binding SelectedOperation}"
+                SelectionMode="Single">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Название"
+                              IsReadOnly="True"
+                              Binding="{Binding Name}"/>
+          <DataGridTextColumn Header="Тип операции"
+                              IsReadOnly="True"
+                              Binding="{Binding OperationType, Converter={convertors:OperationTypeToStringConverter}}"/>
+          <DataGridTemplateColumn  Header="Описание"
+                                   IsReadOnly="True"
+                                   Width="300">
+              <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                      <TextBlock Margin="5"
+                                 Text="{Binding Description}"
+                                 TextWrapping="Wrap"/>
+                  </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+    </DockPanel>
+  </controls:Card>
+</UserControl>

@@ -1,0 +1,85 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.AuthorizationView"
+             x:CompileBindings="False"
+
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:assists="using:Material.Styles.Assists"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
+             xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+             Loaded="Control_OnLoaded"
+             MinWidth="400">
+    
+    <Design.DataContext>
+        <viewModels:AuthorizationViewModel/>
+    </Design.DataContext>
+    
+  <controls:Card>
+    <DockPanel>
+
+      <TextBox UseFloatingWatermark="True" 
+               Margin="5"
+               DockPanel.Dock="Top"
+               Watermark="Введите имя пользователя" 
+               assists:TextFieldAssist.Label="Имя пользователя"
+               Text="{Binding UserName}"/>
+
+      <TextBox UseFloatingWatermark="True"
+               Margin="5"
+               DockPanel.Dock="Top"
+               Classes="revealPasswordButton" 
+               Watermark="Введите пароль"
+               assists:TextFieldAssist.Label="Пароль" 
+               PasswordChar="*"
+               Text="{Binding UserPassword}"/>
+
+      <StackPanel Orientation="Horizontal"
+                  DockPanel.Dock="Top"
+                  HorizontalAlignment="Center"
+                  IsVisible="{Binding IsInvalidUser}">
+
+        <materialIcons:MaterialIcon Kind="Error"
+                                    Width="40" 
+                                    Height="40" 
+                                    Foreground="Red"
+                                    Margin="5"/>
+        
+        <TextBlock Text="Неверное имя пользователя или пароль!"
+                   Foreground="Red"
+                   VerticalAlignment="Center"
+                   Margin="5"/>
+        
+      </StackPanel>
+      
+      <CheckBox IsChecked="{Binding IsRememberUser}"
+                Content="Запомнить пользователя"
+                Margin="5"
+                DockPanel.Dock="Top"
+                HorizontalAlignment="Center"/>
+      
+      <StackPanel Orientation="Horizontal"
+                  DockPanel.Dock="Bottom"
+                  HorizontalAlignment="Center">
+        
+        <Button Margin="5"
+                Content="Ок"
+                Command="{Binding AuthorizeCommand}"
+                Width="100"/>
+        
+        <Button Classes="flat"
+                Margin="5"
+                Content="Отмена"
+                Command="{Binding CancelCommand}"
+                Width="100"/>
+       
+      </StackPanel>
+    </DockPanel>
+  </controls:Card>
+
+</UserControl>

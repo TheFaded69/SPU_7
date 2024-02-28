@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        
+        xmlns:controls="using:Material.Styles.Controls"
+        xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+        x:CompileBindings="False"
+
+        x:Class="SPU_7.Views.HelpView"
+        MinHeight="700"
+        MinWidth="1000" >
+
+  <Design.DataContext>
+    <viewModels:HelpViewModel/>
+  </Design.DataContext>
+  
+  <DockPanel>
+
+    <controls:Card DockPanel.Dock="Left"
+                   Width="250"
+                   Margin="5">
+      <TreeView>
+        <TreeDataTemplate />
+        <TreeDataTemplate />
+        <TreeDataTemplate />
+      </TreeView>
+    </controls:Card>
+
+    <controls:Card Margin="0,5,5,5" />
+
+  </DockPanel>
+  
+</UserControl>

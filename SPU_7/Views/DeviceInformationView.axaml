@@ -1,0 +1,59 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.DeviceInformationView"
+             xmlns:materialIcon="using:Material.Icons.Avalonia"
+             xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+             xmlns:convertors="clr-namespace:SPU_7.Views.Convertors"
+             x:CompileBindings="False">
+    
+    
+    <Design.DataContext>
+        <viewModels:DeviceInformationViewModel/>
+    </Design.DataContext>
+    
+
+    <DockPanel LastChildFill="False">
+        <ItemsControl DockPanel.Dock="Top"
+                      IsVisible="{Binding !IsSettingsMode}"
+                      ItemsSource="{Binding Parameters}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="0.6*, 0.4*"
+                          IsVisible="{Binding IsVisible}">
+                        <TextBlock Grid.Column="0"
+                                   Text="{Binding Name}"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Value}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        
+            <ScrollViewer IsVisible="{Binding IsSettingsMode}"
+                          DockPanel.Dock="Top">
+                <ItemsControl DockPanel.Dock="Top"
+                              ItemsSource="{Binding Parameters}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="0.3*, 0.7*">
+                                <CheckBox Grid.Column="0"
+                                          IsChecked="{Binding IsVisible}"
+                                          Margin="0,0,5,0"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Name}"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            
+            <ToggleButton DockPanel.Dock="Bottom"
+                          IsChecked="{Binding IsSettingsMode}">
+                <materialIcon:MaterialIcon Kind="{Binding IsSettingsMode, Converter={convertors:DeviceInformationModeToKindConverter}}"/>
+            </ToggleButton>
+        </DockPanel>
+</UserControl>

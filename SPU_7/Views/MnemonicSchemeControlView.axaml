@@ -1,0 +1,299 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.MnemonicSchemeControlView"
+             x:CompileBindings="False"
+
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:mnemonicSchemeViewModels="clr-namespace:SPU_7.ViewModels.MnemonicSchemeViewModels"
+             xmlns:convertors="clr-namespace:SPU_7.Views.Convertors">
+
+    <Design.DataContext>
+        <mnemonicSchemeViewModels:MnemonicSchemeControlViewModel />
+    </Design.DataContext>
+
+    <DockPanel LastChildFill="False">
+        <DockPanel DockPanel.Dock="Top"
+                   Margin="5,5,5,0">
+            <TextBlock Text="ПАРАМЕТРЫ СРЕДЫ"
+
+                       Margin="5, 5, 5, 5"
+                       DockPanel.Dock="Left"
+                       FontSize="18" />
+            <Rectangle Margin="5, 5, 5, 5"
+                       VerticalAlignment="Center"
+                       Height="2"
+                       Fill="#2196f3" />
+        </DockPanel>
+        <controls:Card DockPanel.Dock="Top"
+                       Margin="5,5,5,0">
+            <Grid ColumnDefinitions="0.75*, 0.25*"
+                  RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Margin="5"
+                           FontSize="18"
+                           Text="Температура, °C" />
+                <TextBlock Grid.Row="0"
+                           Grid.Column="1"
+                           FontSize="18"
+                           Text="{Binding TemperatureTube}"
+                           Margin="5" />
+                <TextBlock Grid.Row="1"
+                           Margin="5"
+                           Grid.Column="0"
+                           FontSize="18"
+                           Text="Давление атмосферное, кПа" />
+                <TextBlock Grid.Row="1"
+                           Margin="5"
+                           Grid.Column="1"
+                           FontSize="18"
+                           Text="{Binding Pressure}" />
+
+                <TextBlock Grid.Row="2"
+                           Margin="5"
+                           Grid.Column="0"
+                           FontSize="18"
+                           Text="Температура среды, °C" />
+                <TextBlock Grid.Row="2"
+                           Margin="5"
+                           Grid.Column="1"
+                           FontSize="18"
+                           Text="{Binding Temperature}" />
+                <TextBlock Grid.Row="3"
+                           Margin="5"
+                           Grid.Column="0"
+                           FontSize="18"
+                           Text="Влажность среды, %" />
+                <TextBlock Grid.Row="3"
+                           Margin="5"
+                           Grid.Column="1"
+                           FontSize="18"
+                           Text="{Binding Humidity}" />
+                <TextBlock Grid.Row="4"
+                           Margin="5"
+                           Grid.Column="0"
+                           FontSize="18"
+                           Text="Давление перепад, кПа" />
+                <TextBlock Grid.Row="4"
+                           Margin="5"
+                           Grid.Column="1"
+                           FontSize="18"
+                           Text="{Binding PressureDifference}" />
+                <TextBlock Grid.Row="5"
+                           Margin="5"
+                           Grid.Column="0"
+                           FontSize="18"
+                           Text="Давление ресивер, кПа" />
+                <TextBlock Grid.Row="5"
+                           Margin="5"
+                           Grid.Column="1"
+                           FontSize="18"
+                           Text="{Binding PressureResiver}" />
+                <TextBlock Grid.Row="6"
+                           Margin="5"
+                           Grid.Column="0"
+                           FontSize="18"
+                           Text="Выставленный расход, м3/ч" />
+                <TextBlock Grid.Row="6"
+                           Margin="5"
+                           Grid.Column="1"
+                           FontSize="18"
+                           Text="{Binding TargetFlow}" />
+            </Grid>
+        </controls:Card>
+        <DockPanel DockPanel.Dock="Top"
+                   Margin="5,5,5,0">
+            <TextBlock Text="СТЕНД"
+                       Margin="5, 5, 5, 5"
+                       DockPanel.Dock="Left"
+                       FontSize="18" />
+            <Rectangle Margin="5, 5, 5, 5"
+                       VerticalAlignment="Center"
+                       Height="2"
+                       Fill="#2196f3" />
+        </DockPanel>
+        <controls:Card DockPanel.Dock="Top"
+                       Margin="5,5,5,0">
+            <Grid ColumnDefinitions="0.5*, 0.5*"
+                  RowDefinitions="Auto">
+                <Button Grid.Column="0"
+                        Grid.Row="0"
+                        Margin="5"
+                        IsEnabled="{Binding IsWriteDeviceInformationEnabled}"
+                        Content="Счетчики газа"
+                        ToolTip.Tip="Записать информацию об устройствах"
+                        Command="{Binding WriteDeviceInformationCommand}"/>
+            </Grid>
+        </controls:Card>
+        <DockPanel DockPanel.Dock="Top"
+                   Margin="5,5,5,0">
+            <TextBlock Text="СЦЕНАРИЙ"
+                       Margin="5, 5, 5, 5"
+                       DockPanel.Dock="Left"
+                       FontSize="18" />
+            <Rectangle Margin="5, 5, 5, 5"
+                       VerticalAlignment="Center"
+                       Height="2"
+                       Fill="#2196f3" />
+        </DockPanel>
+        <controls:Card DockPanel.Dock="Top"
+                       Margin="5,5,5,0">
+            <DockPanel>
+                <Grid DockPanel.Dock="Top"
+                      ColumnDefinitions="0.5*, 0.5*">
+                    <TextBlock Text="{Binding ScriptName}"
+                               Margin="5"
+                               FontSize="18"
+                               DockPanel.Dock="Left"
+                               VerticalAlignment="Center" />
+                    <Button Grid.Column="1"
+                            Content="Выбрать"
+                            DockPanel.Dock="Right"
+                            Margin="5"
+                            IsEnabled="{Binding IsChooseScriptEnable}"
+                            ToolTip.Tip="Выбрать сценарий"
+                            Command="{Binding ChooseScriptCommand}" />
+                </Grid>
+                <ScrollViewer MaxHeight="250">
+                    <ItemsControl ItemsSource="{Binding Operations}"
+                                  Margin="5"
+                                  IsVisible="{Binding Operations, Converter={x:Static ObjectConverters.IsNotNull}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <TextBlock Text="{Binding Number}"
+                                               Margin="5"
+                                               DockPanel.Dock="Left"
+                                               FontSize="18"
+                                               VerticalAlignment="Center" />
+
+                                    <avalonia:MaterialIcon Margin="5"
+                                                           Kind="{Binding OperationStatus, Converter={convertors:OperationStatusToIconConverter}}"
+                                                           Foreground="{Binding OperationStatus, Converter={convertors:OperationStatusToColorConverter}}"
+                                                           IsVisible="{Binding OperationStatus, Converter={convertors:OperationStatusToVisibleConverter}}"
+                                                           DockPanel.Dock="Right"
+                                                           Width="24"
+                                                           Height="24">
+                                        <ToolTip.Tip>
+                                            <TextBlock
+                                                Text="{Binding OperationStatus, Converter={convertors:OperationStatusToToolTipConverter}}" />
+                                        </ToolTip.Tip>
+                                    </avalonia:MaterialIcon>
+
+                                    <ProgressBar Classes="circular"
+                                                 IsIndeterminate="True"
+                                                 Margin="5"
+                                                 Width="24"
+                                                 Height="24"
+                                                 DockPanel.Dock="Right"
+                                                 IsVisible="{Binding OperationStatus, Converter={convertors:OperationStatusToNoVisibleConverter}}">
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="Выполнение" />
+                                        </ToolTip.Tip>
+                                    </ProgressBar>
+
+                                    <TextBlock Text="{Binding Name}"
+                                               Margin="5"
+                                               FontSize="18"
+                                               DockPanel.Dock="Left"
+                                               VerticalAlignment="Center" />
+
+                                </DockPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </controls:Card>
+        <controls:Card DockPanel.Dock="Top"
+                       IsVisible="{Binding IsTimerVisible}"
+                       Margin="5,5,5,0">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Операция:"
+                               Margin="5"
+                               FontSize="18"/>
+                    <TextBlock Text="{Binding OperationName}"
+                               Margin="5"
+                               FontSize="18"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Действие:"
+                               Margin="5"
+                               FontSize="18"/>
+                    <TextBlock Text="{Binding Message}"
+                               Margin="5"
+                               FontSize="18"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Осталось:"
+                               Margin="5"
+                               FontSize="18"/>
+                    <TextBlock Text="{Binding TimeString}"
+                               Margin="5"
+                               FontSize="18"/>
+                </StackPanel>
+            </StackPanel>
+        </controls:Card>
+        
+        <DockPanel DockPanel.Dock="Top"
+                   Margin="5,5,5,0">
+            <TextBlock Text="УПРАВЛЕНИЕ СЦЕНАРИЕМ"
+                       Margin="5, 5, 5, 5"
+                       DockPanel.Dock="Left"
+                       FontSize="18" />
+            <Rectangle Margin="5, 5, 5, 5"
+                       VerticalAlignment="Center"
+                       Height="2"
+                       Fill="#2196f3" />
+        </DockPanel>
+        <controls:Card DockPanel.Dock="Top"
+                       Margin="5,5,5,0">
+            <StackPanel>
+                <Grid ColumnDefinitions="0.5*, 0.5*"
+                      RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+                    <Button Margin="5"
+                            Content="Пуск"
+                            Grid.Column="0"
+                            Grid.Row="5"
+                            Command="{Binding StartScriptCommand}"
+                            IsEnabled="{Binding IsStartEnable}"/>
+                    <Button Margin="5"
+                            Content="Стоп"
+                            Grid.Column="2"
+                            Grid.Row="5"
+                            Command="{Binding StopScriptCommand}" 
+                            IsEnabled="{Binding IsStopEnable}"/>
+                </Grid>
+            </StackPanel>
+        </controls:Card>
+       
+        <DockPanel DockPanel.Dock="Top"
+                   Margin="5,5,5,0">
+            <TextBlock Text="ОТЧЕТ"
+                       Margin="5, 5, 5, 5"
+                       DockPanel.Dock="Left"
+                       FontSize="18" />
+            <Rectangle Margin="5, 5, 5, 5"
+                       VerticalAlignment="Center"
+                       Height="2"
+                       Fill="#2196f3" />
+        </DockPanel>
+        <controls:Card DockPanel.Dock="Top"
+                       Margin="5,5,5,0">
+            <Grid ColumnDefinitions="0.5*, 0.5*"
+                  RowDefinitions="Auto">
+                <Button Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="5"
+                        Command="{Binding OpenWorkReportCommand}"
+                        Content="БД"/>
+            </Grid>
+        </controls:Card>
+       
+    </DockPanel>
+</UserControl>

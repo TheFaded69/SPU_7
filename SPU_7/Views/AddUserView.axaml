@@ -1,0 +1,69 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SPU_7.Views.AddUserView"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:assists="using:Material.Styles.Assists"
+             xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+             MinWidth="400"
+             Loaded="Control_OnLoaded"
+             x:DataType="viewModels:AddUserViewModel">
+    
+    <Design.DataContext>
+        <viewModels:AddUserViewModel/>
+    </Design.DataContext>
+    
+    <controls:Card>
+        <DockPanel>
+            <TextBox UseFloatingWatermark="True" 
+                     Margin="5"
+                     DockPanel.Dock="Top"
+                     Watermark="Введите имя пользователя" 
+                     assists:TextFieldAssist.Label="Имя пользователя"
+                     Text="{Binding UserName}"/>
+            
+            <TextBox UseFloatingWatermark="True" 
+                     Margin="5"
+                     DockPanel.Dock="Top"
+                     Watermark="Введите ФИО" 
+                     assists:TextFieldAssist.Label="ФИО"
+                     Text="{Binding Employee}"/>
+
+            <TextBox UseFloatingWatermark="True"
+                     Margin="5"
+                     DockPanel.Dock="Top"
+                     Classes="revealPasswordButton" 
+                     Watermark="Введите пароль"
+                     assists:TextFieldAssist.Label="Пароль" 
+                     PasswordChar="*"
+                     Text="{Binding UserPassword}"/>
+            
+            <ComboBox Margin="5"
+                      ItemsSource="{Binding StringUserTypes}"
+                      SelectedItem="{Binding SelectedStringUserType}"
+                      DockPanel.Dock="Top"
+                      Classes="Outline"
+                      assists:ComboBoxAssist.Label="Тип пользователя"
+                      Theme="{StaticResource MaterialOutlineComboBox}"/>
+            
+            <StackPanel Orientation="Horizontal"
+                        DockPanel.Dock="Bottom"
+                        HorizontalAlignment="Center">
+        
+                <Button Margin="5"
+                        Content="Ок"
+                        Command="{Binding AddUserCommand}"
+                        Width="100"/>
+        
+                <Button Classes="flat"
+                        Margin="5"
+                        Content="Отмена"
+                        Command="{Binding CancelCommand}"
+                        Width="100"/>
+       
+            </StackPanel>
+        </DockPanel>
+    </controls:Card>
+    
+</UserControl>

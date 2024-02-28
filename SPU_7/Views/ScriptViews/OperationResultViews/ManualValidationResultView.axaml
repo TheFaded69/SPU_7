@@ -1,0 +1,96 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.ScriptViews.OperationResultViews.ManualValidationResultView"
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:materialIcon="using:Material.Icons.Avalonia"
+             xmlns:operationExecutingViewModels="clr-namespace:SPU_7.ViewModels.ScriptViewModels.OperationViewModels.OperationExecutingViewModels"
+             xmlns:convertors="clr-namespace:SPU_7.Views.Convertors"
+             x:CompileBindings="False"
+
+             >
+    <Design.DataContext>
+        <operationExecutingViewModels:ManualValidationResultViewModel/>
+    </Design.DataContext>
+    
+    
+    <controls:Card Margin="5">
+        <DockPanel LastChildFill="True">
+            
+            <Button Margin="5"
+                    Content="Ок"
+                    Command="{Binding OkCommand}"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Bottom"/>
+            
+            <StackPanel Orientation="Horizontal"
+                        DockPanel.Dock="Top"
+                        HorizontalAlignment="Center">
+                <TextBlock Margin="5"
+                           Text="Устройство №"/>
+                <TextBlock Margin="5"
+                           Text="{Binding DeviceNumber}"/>
+            </StackPanel>
+            
+            
+            <DataGrid IsReadOnly="False"
+                      Margin="5"
+                      ItemsSource="{Binding ResultViewModels}"
+                      DockPanel.Dock="Top">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№ точки"
+                                        Binding="{Binding PointNumber}"
+                                        IsReadOnly="True"/>
+                    <DataGridTextColumn Header="№ измерения"
+                                        Binding="{Binding MeasureNumber}"
+                                        IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Время поверки объема"
+                                        Binding="{Binding ValidationVolumeTime}"
+                                        IsReadOnly="True"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByVolumeConverter}}"/>
+                    <DataGridTextColumn Header="Эталонный объем"
+                                        Binding="{Binding TargetVolume}"
+                                        IsReadOnly="True"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByVolumeConverter}}"/>
+                    <DataGridTextColumn Header="Начальный объем"
+                                        Binding="{Binding StartVolumeValue}"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByVolumeConverter}}"/>
+                    <DataGridTextColumn Header="Конченый объем"
+                                        Binding="{Binding EndVolumeValue}"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByVolumeConverter}}"/>
+                    <DataGridTextColumn Header="Отклонение"
+                                        Binding="{Binding VolumeDifference}"
+                                        IsReadOnly="True"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByVolumeConverter}}"/>
+                    
+                    <DataGridTextColumn Header="Начальное значение"
+                                        Binding="{Binding StartVolumeValue}"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
+                    <DataGridTextColumn Header="Конечное значние"
+                                        Binding="{Binding EndVolumeValue}"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
+                    <DataGridTextColumn Header="Время поверки расхода"
+                                        Binding="{Binding ValidationFlowTime}"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
+                    <DataGridTextColumn Header="Эталонный расход"
+                                        Binding="{Binding TargetFlow}"
+                                        IsReadOnly="True"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
+                    <DataGridTextColumn Header="Реальный расход"
+                                        Binding="{Binding CalculateFlow}"
+                                        IsReadOnly="True"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
+                    <DataGridTextColumn Header="Отклонение"
+                                        Binding="{Binding FlowDifference}"
+                                        IsReadOnly="True"
+                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
+
+                </DataGrid.Columns>
+            </DataGrid>
+            
+        </DockPanel>
+    </controls:Card>
+    
+</UserControl>

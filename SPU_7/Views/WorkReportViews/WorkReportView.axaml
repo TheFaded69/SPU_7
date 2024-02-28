@@ -1,0 +1,149 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SPU_7.Views.WorkReportViews.WorkReportView"
+             xmlns:controls="using:Material.Styles.Controls"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
+             xmlns:assists="using:Material.Styles.Assists"
+             xmlns:workReportViewModels="clr-namespace:SPU_7.ViewModels.WorkReportViewModels"
+             xmlns:convertors="clr-namespace:SPU_7.Views.Convertors"
+             Loaded="Control_OnLoaded"
+             x:DataType="workReportViewModels:WorkReportViewModel">
+    <Design.DataContext>
+        <workReportViewModels:WorkReportViewModel />
+    </Design.DataContext>
+
+    <DockPanel>
+        <controls:ColorZone Padding="5"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Stretch"
+                            Mode="PrimaryMid"
+                            DockPanel.Dock="Top"
+                            Height="56">
+            <DockPanel LastChildFill="False">
+                <Button DockPanel.Dock="Right"
+                        Width="46"
+                        Height="46"
+                        Command="{Binding CloseWindowCommand}"
+                        ToolTip.Tip="Закрыть"
+                        Classes="flat">
+                    <materialIcons:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black" />
+                </Button>
+                <TextBlock Margin="5"
+                           Text="Отчет"
+                           DockPanel.Dock="Left"
+                           FontSize="20"
+                           VerticalAlignment="Center" />
+            </DockPanel>
+        </controls:ColorZone>
+
+        <controls:Card Margin="5">
+            <TabControl>
+                
+                <TabItem Header="Результаты">
+                    <DockPanel LastChildFill="True">
+                        <StackPanel Orientation="Vertical"
+                                    DockPanel.Dock="Right"
+                                    Width="300">
+                            <DatePicker Margin="5"
+                                        SelectedDate="{Binding StartDateOffsetScript}"
+                                        assists:TextFieldAssist.Label="Начальная дата" />
+
+                            <DatePicker Margin="5"
+                                        SelectedDate="{Binding EndDateOffsetScript}"
+                                        assists:TextFieldAssist.Label="Конечная дата" />
+
+                            <TextBox Margin="5"
+                                     UseFloatingWatermark="True"
+                                     Watermark="Введите заводской номер" 
+                                     assists:TextFieldAssist.Label="Заводской номер"
+                                     Text="{Binding VendorNumber}"/>
+                            
+                            <TextBox Margin="5"
+                                     UseFloatingWatermark="True"
+                                     Watermark="Введите название производителя" 
+                                     assists:TextFieldAssist.Label="Производитель"
+                                     Text="{Binding VendorName}"/>
+                            
+                            <TextBox Margin="5"
+                                     UseFloatingWatermark="True"
+                                     Watermark="Введите адрес производителя" 
+                                     assists:TextFieldAssist.Label="Адрес производителя"
+                                     Text="{Binding VendorAddress}"/>
+                            
+                            
+                            <Grid ColumnDefinitions="0.5*, 0.5*">
+                                <Button Margin="5"
+                                        Content="Загрузить"
+                                        Command="{Binding LoadScriptReportsCommand}" />
+                                <Button Margin="5"
+                                        Content="Сбросить"
+                                        Grid.Column="1"
+                                        Classes="flat"
+                                        Command="{Binding ResetScriptReportsCommand}" />
+                            </Grid>
+
+                        </StackPanel>
+                        <DataGrid Margin="5"
+                                  
+                                  ItemsSource="{Binding ScriptReportViewModels}"
+                                  SelectedItem="{Binding SelectedScriptViewModel}"
+                                  SelectionMode="Single"
+                                  DockPanel.Dock="Left"
+                                  HorizontalScrollBarVisibility="Visible"
+                                  VerticalScrollBarVisibility="Visible">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название"
+                                                    Binding="{Binding Name}"
+                                                    IsReadOnly="True" />
+                                <DataGridTextColumn Header="Описание"
+                                                    Binding="{Binding Description}"
+                                                    IsReadOnly="True" />
+                                <DataGridTextColumn Header="Дата"
+                                                    Binding="{Binding CreateTime}"
+                                                    IsReadOnly="True" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <ContentPresenter DockPanel.Dock="Bottom"
+                                          Height="600"
+                                          Content="{Binding ResultView}"
+                                          IsVisible="{Binding SelectedOperationReportViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                        <DataGrid Margin="5"
+                                  ItemsSource="{Binding OperationReportViewModels}"
+                                  SelectedItem="{Binding SelectedOperationReportViewModel}"
+                                  SelectionMode="Single"
+                                  DockPanel.Dock="Left"
+                                  HorizontalScrollBarVisibility="Visible"
+                                  VerticalScrollBarVisibility="Visible">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <materialIcons:MaterialIcon
+                                                Kind="{Binding OperationResultType, Converter={convertors:OperationResultStatusToIconConverter}}"
+                                                Foreground="{Binding OperationResultType, Converter={convertors:OperationResultStatusToColorConverter}}"
+                                                ToolTip.Tip="{Binding OperationResultType, Converter={convertors:EnumToDescriptionConverter}}"
+                                                Width="30"
+                                                Height="30" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Название"
+                                                    IsReadOnly="True"
+                                                    Binding="{Binding OperationType, Converter={convertors:EnumToDescriptionConverter}}" />
+
+                                <DataGridTextColumn Header="Сообщение"
+                                                    Binding="{Binding Message}"
+                                                    IsReadOnly="True" />
+                                
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </TabItem>
+            </TabControl>
+        </controls:Card>
+    </DockPanel>
+
+</UserControl>

@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SPU_7.Views.ConnectionSettingsView"
+        x:CompileBindings="False"
+
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        
+        xmlns:controls="using:Material.Styles.Controls"
+        xmlns:viewModels="clr-namespace:SPU_7.ViewModels">
+    
+    <Design.DataContext>
+        <viewModels:ConnectionSettingsViewModel/>
+    </Design.DataContext>
+    
+    <Grid ColumnDefinitions="0.3*, 0.3*, 0.4*"
+          RowDefinitions="Auto, Auto">
+
+    <controls:Card Grid.Column="0"
+                   Grid.Row="0"
+                   Margin="5">
+      <DockPanel>
+        <TextBlock DockPanel.Dock="Top"
+                   HorizontalAlignment="Center"
+                   Text="RS-232-1"
+                   Margin="5"/>
+        <Grid ColumnDefinitions="0.6*, 0.4*"
+              RowDefinitions="Auto, Auto,Auto, Auto,Auto, Auto">        
+          <TextBlock Grid.Column="0"
+                     Grid.Row="0"
+                     Text="Порт"/>
+          <ComboBox Grid.Column="1"
+                    Grid.Row="0"/>
+
+          <TextBlock Grid.Column="0"
+                     Grid.Row="1"
+                     Text="Скорость (Бит/с)"/>
+          <ComboBox Grid.Column="1"
+                    Grid.Row="1"/>
+
+          <TextBlock Grid.Column="0"
+                     Grid.Row="2"
+                     Text="Биты данных"/>
+          <ComboBox Grid.Column="1"
+                    Grid.Row="2"/>
+
+          <TextBlock Grid.Column="0"
+                     Grid.Row="3"
+                     Text="Четность"/>
+          <ComboBox Grid.Column="1"
+                    Grid.Row="3"/>
+
+          <TextBlock Grid.Column="0"
+                     Grid.Row="4"
+                     Text="Стоповые биты"/>
+          <ComboBox Grid.Column="1"
+                    Grid.Row="4"/>
+
+          <TextBlock Grid.Column="0"
+                     Grid.Row="5"
+                     Text="Управление потоком"/>
+          <ComboBox Grid.Column="1"
+                    Grid.Row="5"/>    
+        </Grid>   
+      </DockPanel>
+    </controls:Card>
+
+    <controls:Card Grid.Column="1"
+                   Grid.Row="0"
+                   Margin="0,5,5,5">
+      <DockPanel />
+    </controls:Card>
+
+    <controls:Card Grid.Column="2"
+                   Grid.Row="0"
+                   Margin="0,5,5,5">
+      <DockPanel />
+    </controls:Card>
+
+    <Button Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Classes="flat"
+            Content="Применить"
+            Margin="5"
+            HorizontalAlignment="Center"/>
+
+  </Grid>
+
+
+</UserControl>

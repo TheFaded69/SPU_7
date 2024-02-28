@@ -4,6 +4,17 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Configurations>Debug;Release;DebugGUI</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SPU_7.Common\SPU_7.Common.csproj" />
+      <ProjectReference Include="..\SPU_7.Modbus\SPU_7.Modbus.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+    </ItemGroup>
 
 </Project>
