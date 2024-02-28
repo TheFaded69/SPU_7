@@ -145,7 +145,7 @@
                        TextAlignment="Right"/>
 
 
-            <TextBlock  Text="СПУ-5" 
+            <TextBlock  Text="СПУ-7" 
                         DockPanel.Dock="Left"
                         Margin="5"
                         FontSize="20" 

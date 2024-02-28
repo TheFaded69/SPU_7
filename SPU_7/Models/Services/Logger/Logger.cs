@@ -12,13 +12,21 @@ namespace SPU_7.Models.Services.Logger
         {
             var logDirectory = "./AppLogs";
             var path = $"{Directory.GetCurrentDirectory()}/{logDirectory}/AppWork {DateTime.Now:d}.log";
-
+            //var path = $"C:/Test/AppWork {DateTime.Now:d}.log";
             var dir = Path.GetDirectoryName(path);
             if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
-            _streamWriter = new StreamWriter(path, true);
             _logCollections = new List<ObservableCollection<LogMessage>>();
-            
+
+            try
+            {
+                _streamWriter = new StreamWriter(path, true);
+            }
+            catch 
+            {
+                Logging(new LogMessage("Логгирование в файл не доступно", LogLevel.Fatal));
+                // ignored
+            }
             Logging(new LogMessage("Старт приложения", LogLevel.Info));
         }
 
@@ -28,9 +36,10 @@ namespace SPU_7.Models.Services.Logger
 
         public bool Logging(LogMessage logMessage)
         {
+            
             logMessage.Message = (DateTime.Now + " LogLevel: " + logMessage.LogLevel + " " + logMessage.Message);
-            _streamWriter.WriteLine(logMessage.Message);
-            _streamWriter.Flush();
+            _streamWriter?.WriteLine(logMessage.Message);
+            _streamWriter?.Flush();
 
             foreach (var collection in _logCollections)
             {
