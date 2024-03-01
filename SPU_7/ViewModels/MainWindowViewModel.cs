@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Prism.Commands;
@@ -74,7 +75,7 @@ namespace SPU_7.ViewModels
             set => SetProperty(ref _standView, value);
         }
 
-        private void CreateWorkSpace()
+        private async void CreateWorkSpace()
         {
             _standController?.Dispose();
 
@@ -101,7 +102,12 @@ namespace SPU_7.ViewModels
                     _standSettingsService, _standController, _scriptController, _manualOperationService, _timerService, _operationActionService)
             };
 
-
+            ///костыль - ждем пока прогрузится интерфейс в другом потоке
+            await Task.Delay(10000);
+            
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
 
         #endregion
