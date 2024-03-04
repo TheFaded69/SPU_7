@@ -14,4 +14,9 @@
       <ProjectReference Include="..\SPU_7.Modbus\SPU_7.Modbus.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Devices\Device\" />
+      <Folder Include="Devices\MasterDevice\" />
+    </ItemGroup>
+
 </Project>

@@ -47,4 +47,9 @@
       <ProjectReference Include="..\SPU_7.Database\SPU_7.Database.csproj" />
       <ProjectReference Include="..\SPU_7.Domain\SPU_7.Domain.csproj" />
     </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="Models\Stand\Settings\Stand\Devices\" />
+    </ItemGroup>
 </Project>

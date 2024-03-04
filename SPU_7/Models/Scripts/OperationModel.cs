@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Media.Transformation;
 using SPU_7.Common.Scripts;
 using SPU_7.Models.Scripts.Operations.Configurations;
 using SPU_7.Models.Services.ContentServices;
 using SPU_7.Models.Services.Logger;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
-using SPU_7.Models.Stand.Settings.Stand.Devices;
 
 namespace SPU_7.Models.Scripts;
 
@@ -38,7 +36,6 @@ public abstract class OperationModel : IObservable
     protected string Message;
 
     protected BaseOperationConfigurationModel _configuration { get; set; }
-    public BaseDeviceConfiguration DeviceConfiguration { get; set; }
     
     public int NumberOperation { get; set; }
     public string OperationName { get; set; }

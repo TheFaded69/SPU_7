@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Prism.Commands;
-using SPU_7.Models.Services.ContentServices;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
@@ -9,11 +8,9 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
 {
     public class NozzleItemViewModel : ViewModelBase
     {
-        public NozzleItemViewModel(INotificationService notificationService,
-            StandSettingsNozzleModel standSettingsNozzleModel,
+        public NozzleItemViewModel(StandSettingsNozzleModel standSettingsNozzleModel,
             IStandController standController)
         {
-            _notificationService = notificationService;
             _standSettingsNozzleModel = standSettingsNozzleModel;
             _standController = standController;
 
@@ -23,7 +20,6 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             UseNozzleCommand = new DelegateCommand(UseNozzleCommandHandler);
         }
 
-        private readonly INotificationService _notificationService;
         private readonly StandSettingsNozzleModel _standSettingsNozzleModel;
         private readonly IStandController _standController;
 

@@ -1,4 +1,4 @@
-﻿namespace SPU_7.Domain.Devices.UniversalDevices;
+﻿namespace SPU_7.Domain.Devices.Device.UniversalDevice;
 
 public enum PulseMode
 {

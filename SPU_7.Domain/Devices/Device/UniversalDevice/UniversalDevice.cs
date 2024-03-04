@@ -5,7 +5,7 @@ using SPU_7.Domain.Extensions;
 using SPU_7.Domain.Modbus;
 using SPU_7.Modbus.Processor;
 
-namespace SPU_7.Domain.Devices.UniversalDevices;
+namespace SPU_7.Domain.Devices.Device.UniversalDevice;
 
 public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, IUniversalDevice, IPressureSensorObservable, IDeviceObservable
 {
@@ -22,6 +22,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
             2 => PulseMeterChannel.Channel2,
             _ => PulseMeterChannel.None
         };
+        
         _pressureSensor = new PressureSensor(modbusProcessor, new RegisterMapEnum<PressureSensorRegisterMap>(), (byte)pressureSensorAddress);
     }
 

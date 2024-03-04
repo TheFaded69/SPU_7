@@ -18,24 +18,24 @@ public class LineItemViewModel : ViewModelBase
         _notificationService = notificationService;
         _settingsService = settingsService;
         _standController = standController;
-
-        switch (settingsService.StandSettingsModel.LineViewModels[lineIndex].SelectedDeviceLineType)
-        {
-            case DeviceLineType.MembraneDevice:
-                IsMembraneDevice = true;
-                break;
-            case DeviceLineType.JetDevice:
-                IsJetDevice = true;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
         
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels.Count; i++)
         {
             DeviceItemViewModels.Add(new DeviceItemViewModel(standController, settingsService,i, lineIndex));
         }
-
+        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].StandSettingsFanViewModels.Count; i++)
+        {
+            FanItemViewModels.Add(new FanItemViewModel());
+        }
+        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].StandSettingsMasterDeviceViewModels.Count; i++)
+        {
+            MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_standController));
+        }
+        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].StandSettingsNozzleViewModels.Count; i++)
+        {
+            NozzleItemViewModels.Add(new NozzleItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StandSettingsNozzleViewModels[i], _standController));
+        }
+        
         LineNumber = lineIndex + 1;
         
         ReverseFlowCommand = new DelegateCommand(ReverseFlowCommandHandler);
@@ -49,39 +49,29 @@ public class LineItemViewModel : ViewModelBase
     private readonly IStandController _standController;
     
     private bool _isReverseLine;
+    
     private DeviceLineType _selectedDeviceLineType;
     private bool _isLineActive;
     private LineDirectionFlowState _lineDirectionFlowState = LineDirectionFlowState.AllOpen;
     private int _lineNumber;
-    private bool _isMembraneDevice;
-    private bool _isJetDevice;
+    private LineType _selectedLineType;
 
     public ObservableCollection<DeviceItemViewModel> DeviceItemViewModels { get; set; } = new();
-
+    public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = new();
+    public ObservableCollection<NozzleItemViewModel> NozzleItemViewModels { get; set; } = new();
+    public ObservableCollection<FanItemViewModel> FanItemViewModels { get; set; } = new();
+    public ObservableCollection<VacuumItemViewModel> VacuumItemViewModels { get; set; } = new();
     public int LineNumber
     {
         get => _lineNumber;
         set => SetProperty(ref _lineNumber, value);
     }
-
     public bool IsReverseLine
     {
         get => _isReverseLine;
         set => SetProperty(ref _isReverseLine, value);
     }
-
-    public bool IsMembraneDevice
-    {
-        get => _isMembraneDevice;
-        set => SetProperty(ref _isMembraneDevice, value);
-    }
-
-    public bool IsJetDevice
-    {
-        get => _isJetDevice;
-        set => SetProperty(ref _isJetDevice, value);
-    }
-
+    
     public bool IsLineActive
     {
         get => _isLineActive;
@@ -99,7 +89,13 @@ public class LineItemViewModel : ViewModelBase
         get => _selectedDeviceLineType;
         set => SetProperty(ref _selectedDeviceLineType, value);
     }
-    
+
+    public LineType SelectedLineType
+    {
+        get => _selectedLineType;
+        set => SetProperty(ref _selectedLineType, value);
+    }
+
     public DelegateCommand ReverseFlowCommand { get; }
 
     public async void ReverseFlowCommandHandler()

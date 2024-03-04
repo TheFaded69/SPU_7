@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SPU_7.Domain.Devices;
-using SPU_7.Domain.Devices.UniversalDevices;
+using SPU_7.Domain.Devices.Device.UniversalDevice;
 using SPU_7.Domain.Modbus;
 using SPU_7.Modbus.Processor;
 using SPU_7.Models.Services.StandSetting;
@@ -22,4 +22,6 @@ public class StandLine
     }
     
     public List<IDevice> Devices = new();
+
+    public List<IMasterDevice> MasterDevices = new();
 }
