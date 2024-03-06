@@ -7,10 +7,8 @@ public enum LineType
     None = 0,
     
     [Description("Поверка мастер устройствами")]
-    MasterDeviceLine = 1,
+    MasterDeviceLineType = 1,
 
     [Description("Поверка соплами")]
-    NozzleLine = 2,
-    
-    
+    NozzleLineType = 2,
 }

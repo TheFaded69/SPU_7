@@ -32,5 +32,5 @@ public class MasterDeviceItemViewModel : ViewModelBase
         set => SetProperty(ref _stateType, value);
     }
     
-    
+    public string VendorNumber { get; set; }
 }

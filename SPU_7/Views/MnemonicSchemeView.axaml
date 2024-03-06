@@ -77,7 +77,7 @@
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
                             <Rectangle Fill="#00a2e8"
-                                       Height="60"
+                                       Height="{Binding ValidationHeightValue}"
                                        Width="20"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
@@ -87,14 +87,15 @@
 
                             <!-- Мастер устройства -->
                             <ItemsControl DockPanel.Dock="Left"
+                                          IsVisible="{Binding IsMasterDeviceVisible}"
                                           ItemsSource="{Binding MasterDeviceItemViewModels}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <DockPanel>
+                                        <DockPanel Margin="0,5,0,5">
                                             <Rectangle Fill="#00a2e8"
                                                        Height="20"
                                                        Width="20"
-                                                       Margin="-60, 0,0,0"
+                                                       Margin="0, 0,0,0"
                                                        StrokeThickness="0"
                                                        ClipToBounds="True"
                                                        VerticalAlignment="Center"
@@ -102,10 +103,10 @@
                                             <Button Width="100"
                                                     Classes="flat"
                                                     Height="80"
-                                                    Margin="0,0,60,5"
+                                                    Margin="0,0,0,0"
                                                     VerticalAlignment="Center"
                                                     Padding="-5"
-                                                    DockPanel.Dock="Top"
+                                                    DockPanel.Dock="Left"
                                                     Background="Gray"
                                                     IsEnabled="{Binding IsDeviceEnable}"
                                                     CornerRadius="5">
@@ -113,7 +114,7 @@
                                                     <TextBlock Margin="5"
                                                                Text="{Binding VendorNumber}"
                                                                Foreground="Black"
-                                                               DockPanel.Dock="Top" />
+                                                               DockPanel.Dock="Left" />
                                                     <TextBlock Margin="5"
                                                                Text="{Binding Pressure}"
                                                                Foreground="Black"
@@ -123,7 +124,7 @@
                                             <Rectangle Fill="#00a2e8"
                                                        Height="20"
                                                        Width="20"
-                                                       Margin="-60, 0,0,0"
+                                                       Margin="0, 0,0,0"
                                                        StrokeThickness="0"
                                                        ClipToBounds="True"
                                                        VerticalAlignment="Center"
@@ -132,19 +133,28 @@
                                                     Height="70"
                                                     Content="Клапан"
                                                     Padding="-3"
-                                                    Margin="-60, 0,0,0"
-                                                    DockPanel.Dock="Top"
+                                                    Margin="0, 0,0,0"
+                                                    DockPanel.Dock="Left"
                                                     Command="{Binding ValveItemViewModel.UseValveCommand}"
                                                     HorizontalAlignment="Center"
                                                     Background="{Binding ValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                                     Foreground="Black"
                                                     Classes="flat" />
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="20"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
                                         </DockPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                             <!-- Сопла -->
                             <ItemsControl DockPanel.Dock="Left"
+                                          IsVisible="{Binding IsNozzleVisible}"
                                           ItemsSource="{Binding NozzleItemViewModels}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -154,7 +164,7 @@
                             </ItemsControl>
 
                             <Rectangle Fill="#00a2e8"
-                                       Height="60"
+                                       Height="{Binding ValidationHeightValue}"
                                        Width="20"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
@@ -178,8 +188,9 @@
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
 
-                            <!-- Вентиляторы -->
+                            <!-- Вентeляторы -->
                             <ItemsControl DockPanel.Dock="Left"
+                                          IsVisible="{Binding IsFanVisible}"
                                           ItemsSource="{Binding FanItemViewModels}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -189,6 +200,7 @@
                             </ItemsControl>
                             <!-- Вакуумный насос -->
                             <ItemsControl DockPanel.Dock="Left"
+                                          IsVisible="{Binding IsVacuumValveVisible}"
                                           ItemsSource="{Binding VacuumItemViewModels}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>

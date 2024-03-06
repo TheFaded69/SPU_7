@@ -21,8 +21,6 @@ public class StandSettingsModel
     public int PressureResiverSensorAddress { get; set; }
     public int PressureDifferenceSensorAddress { get; set; }
     public int? StandNumber { get; set; }
-    public StandType StandType { get; set; }
-    public NozzleManualType NozzleManualType { get; set; }
     public string ProfileName { get; set; }
     public string SelectedEquipmentPort { get; set; }
     public int SelectedEquipmentBaudRate { get; set; }

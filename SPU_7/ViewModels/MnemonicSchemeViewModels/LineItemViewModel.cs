@@ -18,22 +18,44 @@ public class LineItemViewModel : ViewModelBase
         _notificationService = notificationService;
         _settingsService = settingsService;
         _standController = standController;
+
+        switch (settingsService.StandSettingsModel.LineViewModels[lineIndex].SelectedLineType)
+        {
+            case LineType.None:
+                break;
+            case LineType.MasterDeviceLineType:
+                IsMasterDeviceVisible = true;
+                IsFanVisible = true;
+                ValidationHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count - 1) * 90;
+                break;
+            case LineType.NozzleLineType:
+                IsNozzleVisible = true;
+                IsVacuumValveVisible = true;
+                ValidationHeightValue = settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count * 40;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels.Count; i++)
         {
             DeviceItemViewModels.Add(new DeviceItemViewModel(standController, settingsService,i, lineIndex));
         }
-        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].StandSettingsFanViewModels.Count; i++)
-        {
-            FanItemViewModels.Add(new FanItemViewModel());
-        }
-        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].StandSettingsMasterDeviceViewModels.Count; i++)
+        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count; i++)
         {
             MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_standController));
         }
-        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].StandSettingsNozzleViewModels.Count; i++)
+        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count; i++)
         {
-            NozzleItemViewModels.Add(new NozzleItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StandSettingsNozzleViewModels[i], _standController));
+            NozzleItemViewModels.Add(new NozzleItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels[i], _standController));
+        }
+        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count; i++)
+        {
+            FanItemViewModels.Add(new FanItemViewModel());
+        }
+        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].VacuumValveViewModels.Count; i++)
+        {
+            VacuumItemViewModels.Add(new VacuumItemViewModel());
         }
         
         LineNumber = lineIndex + 1;
@@ -55,7 +77,36 @@ public class LineItemViewModel : ViewModelBase
     private LineDirectionFlowState _lineDirectionFlowState = LineDirectionFlowState.AllOpen;
     private int _lineNumber;
     private LineType _selectedLineType;
+    private bool _isMasterDeviceVisible;
+    private bool _isNozzleVisible;
+    private bool _isFanVisible;
+    private bool _isVacuumValveVisible;
 
+    public bool IsMasterDeviceVisible
+    {
+        get => _isMasterDeviceVisible;
+        set => SetProperty(ref _isMasterDeviceVisible, value);
+    }
+
+    public bool IsNozzleVisible
+    {
+        get => _isNozzleVisible;
+        set => SetProperty(ref _isNozzleVisible, value);
+    }
+
+    public bool IsFanVisible
+    {
+        get => _isFanVisible;
+        set => SetProperty(ref _isFanVisible, value);
+    }
+
+    public bool IsVacuumValveVisible
+    {
+        get => _isVacuumValveVisible;
+        set => SetProperty(ref _isVacuumValveVisible, value);
+    }
+
+    public int ValidationHeightValue { get; set; }
     public ObservableCollection<DeviceItemViewModel> DeviceItemViewModels { get; set; } = new();
     public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = new();
     public ObservableCollection<NozzleItemViewModel> NozzleItemViewModels { get; set; } = new();
@@ -138,6 +189,7 @@ public class LineItemViewModel : ViewModelBase
     
     public DelegateCommand OpenAllCommand { get; set; }
     
+
     private async void  OpenAllCommandHandler()
     {
         await _standController.SetFlowDirectionAsync(LineDirectionFlowState.AllOpen, LineNumber);

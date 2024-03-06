@@ -69,7 +69,12 @@ namespace SPU_7.Models.Mapper
                 .ReverseMap();
             CreateMap<StandSettingsSolenoidValveModel, StandSettingsSolenoidValveViewModel>()
                 .ReverseMap();
-
+            CreateMap<StandSettingsFanModel, StandSettingsFanViewModel>()
+                .ReverseMap();
+            CreateMap<StandSettingsMasterDeviceModel, StandSettingsMasterDeviceViewModel>()
+                .ReverseMap();
+            CreateMap<StandSettingsVacuumValveModel, StandSettingsVacuumValveViewModel>()
+                .ReverseMap();
             #endregion
 
             CreateMap<ValidationPulseMeterConfiguration, ValidationPulseMeterConfigurationViewModel>()

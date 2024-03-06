@@ -1,14 +1,49 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Add Resources Here -->
-    <Style Selector="Button.TriangleButton">
+    <StreamGeometry x:Key="GeometryTriangleButton">
+        M12,24 L36,0 L36,48 Z
+    </StreamGeometry>
+    
+    <RotateTransform x:Key="Rotate090" Angle="090"/>
+    <RotateTransform x:Key="Rotate180" Angle="180"/>
+    <RotateTransform x:Key="Rotate270" Angle="270"/>
+    
+    <ControlTheme x:Key="TriangleButton" 
+                  TargetType="Button">
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+
         <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Path Name="Border"/>
-                </ControlTemplate>
-            </Setter.Value>
+            <ControlTemplate>
+                <Path Name="border"
+                      Stroke="{TemplateBinding BorderBrush}"
+                      Fill="{TemplateBinding Background}"
+                      Data="{StaticResource GeometryTriangleButton}"
+                      Width="48"/>
+            </ControlTemplate>
         </Setter>
-    </Style>
+        
+        <Style Selector="^.accent">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+
+
+        <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="Blue" />
+            <Setter Property="BorderBrush" Value="Blue" />
+        </Style>
+        
+        <Style Selector="^:disabled">
+            <Setter Property="Background" Value="LightCoral" />
+            <Setter Property="BorderBrush" Value="LightCoral" />
+        </Style>
+        
+        <Style Selector="^:pressed">
+            <Setter Property="Background" Value="Green" />
+            <Setter Property="BorderBrush" Value="Green" />
+        </Style>
+    </ControlTheme>
     
 </ResourceDictionary>

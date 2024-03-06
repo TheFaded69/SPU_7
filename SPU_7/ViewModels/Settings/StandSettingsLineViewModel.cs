@@ -12,13 +12,29 @@ public class StandSettingsLineViewModel : ViewModelBase
     public StandSettingsLineViewModel()
     {
         DeviceViewModels = new ObservableCollection<StandSettingsDeviceViewModel>();
-
+        MasterDeviceViewModels = new ObservableCollection<StandSettingsMasterDeviceViewModel>();
+        FanViewModels = new ObservableCollection<StandSettingsFanViewModel>();
+        VacuumValveViewModels = new ObservableCollection<StandSettingsVacuumValveViewModel>();
+        NozzleViewModels = new ObservableCollection<StandSettingsNozzleViewModel>();
+        
         StringDeviceLineTypes = new ObservableCollection<string>(Enum
             .GetValues<DeviceLineType>()
+            .Select(dt => dt.GetDescription()));
+        StringLineTypes = new ObservableCollection<string>(Enum
+            .GetValues<LineType>()
+            .Where(lt => lt != LineType.None)
             .Select(dt => dt.GetDescription()));
 
         AddDeviceCommand = new DelegateCommand(AddDeviceCommandHandler);
         RemoveDeviceCommand = new DelegateCommand(RemoveDeviceCommandHandler);
+        AddMasterDeviceCommand = new DelegateCommand(AddMasterDeviceCommandHandler);
+        RemoveMasterDeviceCommand = new DelegateCommand(RemoveMasterDeviceCommandHandler);
+        AddNozzleCommand = new DelegateCommand(AddNozzleCommandHandler);
+        RemoveNozzleCommand = new DelegateCommand(RemoveNozzleCommandHandler);
+        AddFanCommand = new DelegateCommand(AddFanCommandHandler);
+        RemoveFanCommand = new DelegateCommand(RemoveFanCommandHandler);
+        AddVacuumValveCommand = new DelegateCommand(AddVacuumValveCommandHandler);
+        RemoveVacuumValveCommand = new DelegateCommand(RemoveVacuumValveCommandHandler);
     }
 
     private int _lineNumber;
@@ -26,6 +42,17 @@ public class StandSettingsLineViewModel : ViewModelBase
     private ObservableCollection<StandSettingsDeviceViewModel> _deviceViewModels;
     private string _selectedStringDeviceLineType;
     private bool _isReverseLine;
+    private ObservableCollection<string> _stringDeviceLineTypes;
+    private ObservableCollection<StandSettingsMasterDeviceViewModel> _masterDeviceViewModels;
+    private StandSettingsMasterDeviceViewModel _selectedMasterDeviceViewModel;
+    private ObservableCollection<StandSettingsNozzleViewModel> _nozzleViewModels;
+    private StandSettingsNozzleViewModel _selectedNozzleViewModel;
+    private ObservableCollection<StandSettingsFanViewModel> _fanViewModels;
+    private StandSettingsFanViewModel _selectedFanViewModel;
+    private ObservableCollection<StandSettingsVacuumValveViewModel> _vacuumValveViewModels;
+    private StandSettingsVacuumValveViewModel _selectedVacuumValveViewModel;
+    private ObservableCollection<string> _stringLineTypes;
+    private string _selectedStringLineType;
 
     public int LineNumber
     {
@@ -45,7 +72,31 @@ public class StandSettingsLineViewModel : ViewModelBase
         set => SetProperty(ref _selectedDeviceViewModel, value);
     }
 
-    public ObservableCollection<string> StringDeviceLineTypes { get; set; }
+
+    public ObservableCollection<string> StringLineTypes
+    {
+        get => _stringLineTypes;
+        set => SetProperty(ref _stringLineTypes, value);
+    }
+
+    public string SelectedStringLineType
+    {
+        get => _selectedStringLineType;
+        set
+        {
+            SetProperty(ref _selectedStringLineType, value);
+            SelectedLineType = Enum.GetValues<LineType>()
+                .FirstOrDefault(lt => lt.GetDescription() == value);
+        }
+    }
+
+    public LineType SelectedLineType { get; set; }
+    
+    public ObservableCollection<string> StringDeviceLineTypes
+    {
+        get => _stringDeviceLineTypes;
+        set => SetProperty(ref _stringDeviceLineTypes, value);
+    }
 
     public string SelectedStringDeviceLineType
     {
@@ -65,26 +116,135 @@ public class StandSettingsLineViewModel : ViewModelBase
     }
 
     public DeviceLineType SelectedDeviceLineType { get; set; }
+    
+    public ObservableCollection<StandSettingsMasterDeviceViewModel> MasterDeviceViewModels
+    {
+        get => _masterDeviceViewModels;
+        set => SetProperty(ref _masterDeviceViewModels, value);
+    }
+
+    public StandSettingsMasterDeviceViewModel SelectedMasterDeviceViewModel
+    {
+        get => _selectedMasterDeviceViewModel;
+        set => SetProperty(ref _selectedMasterDeviceViewModel, value);
+    }
+
+    public ObservableCollection<StandSettingsNozzleViewModel> NozzleViewModels
+    {
+        get => _nozzleViewModels;
+        set => SetProperty(ref _nozzleViewModels, value);
+    }
+
+    public StandSettingsNozzleViewModel SelectedNozzleViewModel
+    {
+        get => _selectedNozzleViewModel;
+        set => SetProperty(ref _selectedNozzleViewModel, value);
+    }
+
+    public ObservableCollection<StandSettingsFanViewModel> FanViewModels
+    {
+        get => _fanViewModels;
+        set => SetProperty(ref _fanViewModels, value);
+    }
+
+    public StandSettingsFanViewModel SelectedFanViewModel
+    {
+        get => _selectedFanViewModel;
+        set => SetProperty(ref _selectedFanViewModel, value);
+    }
+
+    public ObservableCollection<StandSettingsVacuumValveViewModel> VacuumValveViewModels
+    {
+        get => _vacuumValveViewModels;
+        set => SetProperty(ref _vacuumValveViewModels, value);
+    }
+
+    public StandSettingsVacuumValveViewModel SelectedVacuumValveViewModel
+    {
+        get => _selectedVacuumValveViewModel;
+        set => SetProperty(ref _selectedVacuumValveViewModel, value);
+    }
+
 
     public bool IsReverseLine
     {
         get => _isReverseLine;
         set => SetProperty(ref _isReverseLine, value);
     }
-
-    public StandSettingsValveViewModel DirectValveViewModel { get; set; } = new();
-    public StandSettingsValveViewModel ReverseValveViewModel { get; set; } = new();
+    
     public DelegateCommand AddDeviceCommand { get; set; }
-
     private void AddDeviceCommandHandler()
     {
-        DeviceViewModels.Add(new StandSettingsDeviceViewModel() { Number = DeviceViewModels.Count + 1, IsValveEnable = !IsReverseLine });
+        DeviceViewModels.Add(new StandSettingsDeviceViewModel()
+        {
+            Number = DeviceViewModels.Count + 1, 
+            IsValveEnable = !IsReverseLine
+        });
     }
 
     public DelegateCommand RemoveDeviceCommand { get; }
-
     private void RemoveDeviceCommandHandler()
     {
         DeviceViewModels.Remove(SelectedDeviceViewModel);
+    }
+    
+    public DelegateCommand AddMasterDeviceCommand { get; set; }
+    private void AddMasterDeviceCommandHandler()
+    {
+        MasterDeviceViewModels.Add(new StandSettingsMasterDeviceViewModel()
+        {
+            Number = MasterDeviceViewModels.Count + 1, 
+        });
+    }
+
+    public DelegateCommand RemoveMasterDeviceCommand { get; }
+    private void RemoveMasterDeviceCommandHandler()
+    {
+        MasterDeviceViewModels.Remove(SelectedMasterDeviceViewModel);
+    }
+    
+    public DelegateCommand AddNozzleCommand { get; set; }
+    private void AddNozzleCommandHandler()
+    {
+        NozzleViewModels.Add(new StandSettingsNozzleViewModel
+        {
+            Number = NozzleViewModels.Count + 1
+        });
+    }
+    
+    public DelegateCommand RemoveNozzleCommand { get; set; }
+    private void RemoveNozzleCommandHandler()
+    {
+        NozzleViewModels.Remove(SelectedNozzleViewModel);
+    }
+    
+    public DelegateCommand AddFanCommand { get; set; }
+    private void AddFanCommandHandler()
+    {
+        FanViewModels.Add(new StandSettingsFanViewModel()
+        {
+            Number = FanViewModels.Count + 1, 
+        });
+    }
+
+    public DelegateCommand RemoveFanCommand { get; }
+    private void RemoveFanCommandHandler()
+    {
+        FanViewModels.Remove(SelectedFanViewModel);
+    }
+    
+    public DelegateCommand AddVacuumValveCommand { get; set; }
+    private void AddVacuumValveCommandHandler()
+    {
+        VacuumValveViewModels.Add(new StandSettingsVacuumValveViewModel()
+        {
+            Number = VacuumValveViewModels.Count + 1, 
+        });
+    }
+
+    public DelegateCommand RemoveVacuumValveCommand { get; }
+    private void RemoveVacuumValveCommandHandler()
+    {
+        VacuumValveViewModels.Remove(SelectedVacuumValveViewModel);
     }
 }

@@ -36,7 +36,7 @@ namespace SPU_7.ViewModels
             _logger = logger;
             _dialogService = dialogService;
 
-            Dispatcher.UIThread.Invoke(() => CreateForm(settingsService.StandSettingsModel.StandType));
+            Dispatcher.UIThread.Invoke(() => CreateForm());
         }
 
         private readonly INotificationService _notificationService;
@@ -89,7 +89,7 @@ namespace SPU_7.ViewModels
             set => SetProperty(ref _userControlExtension, value);
         }
 
-        private void CreateForm(StandType selectedStandType)
+        private void CreateForm()
         {
             UserControlMnemonicSchemeControl = new MnemonicSchemeControlView
             {

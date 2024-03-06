@@ -6,9 +6,10 @@ namespace SPU_7.Models.Stand.Settings.Stand.Extensions;
 public class StandSettingsLineModel 
 {
     public ObservableCollection<StandSettingsDeviceModel> DeviceViewModels { get; set; }
-    public ObservableCollection<StandSettingsMasterDeviceModel> StandSettingsMasterDeviceViewModels { get; set; }
-    public ObservableCollection<StandSettingsFanModel> StandSettingsFanViewModels { get; set; }
-    public ObservableCollection<StandSettingsNozzleModel> StandSettingsNozzleViewModels { get; set; }
+    public ObservableCollection<StandSettingsMasterDeviceModel> MasterDeviceViewModels { get; set; }
+    public ObservableCollection<StandSettingsFanModel> FanViewModels { get; set; }
+    public ObservableCollection<StandSettingsNozzleModel> NozzleViewModels { get; set; }
+    public ObservableCollection<StandSettingsVacuumValveModel> VacuumValveViewModels { get; set; }
     /// <summary>
     /// Клапан прямой подачи воздуха (из СПУ-5)
     /// </summary>
@@ -33,6 +34,11 @@ public class StandSettingsLineModel
     /// Выбранный тип поверяемых устройств линии (строка)
     /// </summary>
     public DeviceLineType SelectedDeviceLineType { get; set; }
+    
+    /// <summary>
+    /// Выбранный тип линии (строка)
+    /// </summary>
+    public string SelectedStringLineType { get; set; }
     
     /// <summary>
     /// Выбранный тип линии
