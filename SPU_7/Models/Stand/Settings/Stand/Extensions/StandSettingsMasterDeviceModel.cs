@@ -16,4 +16,6 @@ public class StandSettingsMasterDeviceModel
     public StopBits SelectedStopBits { get; set; }
     
     public Handshake SelectedHandshake { get; set; }
+    
+    public StandSettingsValveModel ValveViewModel { get; set; }
 }

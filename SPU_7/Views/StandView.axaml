@@ -15,14 +15,15 @@
 
     <TabControl>
         <TabItem Header="Мнемосхема"
-                 FontSize="18">
+                 FontSize="18"
+                 Opacity="1">
             <DockPanel>
 
                 <ContentPresenter Content="{Binding UserControlMnemonicSchemeControl}"
                                   DockPanel.Dock="Right"
                                   Width="400"
                                   Margin="0,0,0,0" />
-                
+
                 <controls:Card Margin="5,5,0,0">
 
                     <Viewbox Stretch="Uniform"
@@ -36,7 +37,7 @@
         </TabItem>
         <TabItem Header="Дополнительные возможности"
                  FontSize="18">
-            <ContentPresenter Content="{Binding UserControlExtension}"/>
+            <ContentPresenter Content="{Binding UserControlExtension}" />
         </TabItem>
     </TabControl>
 </UserControl>

@@ -23,7 +23,8 @@
 
                             <!-- Устройства -->
                             <ItemsControl DockPanel.Dock="Left"
-                                          ItemsSource="{Binding DeviceItemViewModels}">
+                                          ItemsSource="{Binding DeviceItemViewModels}"
+                                          VerticalAlignment="Center">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
@@ -70,7 +71,7 @@
 
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
-                                       Width="60"
+                                       Width="{Binding AfterDeviceWidthValue}"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
@@ -88,7 +89,8 @@
                             <!-- Мастер устройства -->
                             <ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsMasterDeviceVisible}"
-                                          ItemsSource="{Binding MasterDeviceItemViewModels}">
+                                          ItemsSource="{Binding MasterDeviceItemViewModels}"
+                                          VerticalAlignment="Center">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <DockPanel Margin="0,5,0,5">
@@ -155,10 +157,48 @@
                             <!-- Сопла -->
                             <ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsNozzleVisible}"
-                                          ItemsSource="{Binding NozzleItemViewModels}">
+                                          ItemsSource="{Binding NozzleItemViewModels}"
+                                          VerticalAlignment="Center">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        
+                                        <DockPanel Margin="0,5,0,5">
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="140"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
+                                            <Button Theme="{StaticResource TriangleButton}"
+                                                    Margin="-120,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    DockPanel.Dock="Left"
+                                                    CornerRadius="5"
+                                                    Foreground="Black">
+                                                <TextBlock Text="{Binding NozzleValue}"
+                                                           Foreground="Black"/>
+                                            </Button>
+                                            <Button Width="70"
+                                                    Height="70"
+                                                    Content="Клапан"
+                                                    Padding="-3"
+                                                    Margin="0, 0,0,0"
+                                                    DockPanel.Dock="Left"
+                                                    Command="{Binding UseNozzleCommand}"
+                                                    HorizontalAlignment="Center"
+                                                    Background="{Binding StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                                    Foreground="Black"
+                                                    Classes="flat" />
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="20"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
+                                        </DockPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -180,7 +220,7 @@
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
                             <Rectangle Fill="#00a2e8"
-                                       Height="60"
+                                       Height="{Binding ExitHeightValue}"
                                        Width="20"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
@@ -191,17 +231,75 @@
                             <!-- Вентeляторы -->
                             <ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsFanVisible}"
-                                          ItemsSource="{Binding FanItemViewModels}">
+                                          ItemsSource="{Binding FanItemViewModels}"
+                                          VerticalAlignment="Center">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-
+                <DockPanel Margin="0,5,0,5">
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="60"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
+                                            <Button Width="70"
+                                                    Height="70"
+                                                    Content="Клапан"
+                                                    Padding="-3"
+                                                    Margin="0, 0,0,0"
+                                                    DockPanel.Dock="Left"
+                                                    Command="{Binding ValveItemViewModel.UseValveCommand}"
+                                                    HorizontalAlignment="Center"
+                                                    Background="{Binding ValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                                    Foreground="Black"
+                                                    Classes="flat" />
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="60"
+                                                       Margin="0, 0,-2,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
+                                            <Border Width="100"
+                                                    Height="100"
+                                                    CornerRadius="50"
+                                                    BorderBrush="Gray"
+                                                    BorderThickness="5">
+                
+                                                <Path Data="M70.125 30.25c-8.525 0 -13.475 6.188 -20.213 9.763 -0.825 -2.2 -2.613 -3.85 -4.813 -4.538 3.574 -6.875 9.624 -11.963 9.624 -20.488C54.725 8.25 49.363 5.5 42.625 5.5s-12.1 2.888 -12.1 9.488c0 8.525 6.05 13.613 9.625 20.488 -2.2 0.688 -3.85 2.475 -4.675 4.538 -6.738 -3.575 -11.688 -9.763 -20.213 -9.763 -6.738 0 -9.625 5.638 -9.625 12.238s2.888 12.375 9.625 12.375c8.525 0 13.475 -6.188 20.213 -9.763 0.825 2.2 2.475 3.988 4.675 4.675 -3.575 6.738 -9.488 11.825 -9.488 20.35 0 6.738 5.363 9.488 12.1 9.488s12.1 -2.888 12.1 -9.488c0 -8.525 -5.913 -13.613 -9.488 -20.35 2.2 -0.825 3.988 -2.475 4.675 -4.675 6.738 3.575 11.688 9.763 20.213 9.763 6.738 0 9.625 -5.638 9.625 -12.375S76.863 30.25 70.125 30.25z"
+                                                      Stroke="Gray"
+                                                      StrokeThickness="5"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Margin="-5,-5,0,0">
+                                                    <Animation>
+                                                        
+                                                    </Animation>
+                                                </Path>
+                                                
+                                                <Border.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Включить" 
+                                                                  Command="{Binding EnableFanCommand}"
+                                                                  IsEnabled="{Binding !IsFanWorking}"/>
+                                                        <MenuItem Header="Выключить" 
+                                                                  Command="{Binding DisableFanCommand}"
+                                                                  IsEnabled="{Binding IsFanWorking}"/>
+                                                    </ContextMenu>
+                                                </Border.ContextMenu>
+                                            </Border>
+                                        </DockPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                             <!-- Вакуумный насос -->
                             <ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsVacuumValveVisible}"
-                                          ItemsSource="{Binding VacuumItemViewModels}">
+                                          ItemsSource="{Binding VacuumItemViewModels}"
+                                          VerticalAlignment="Center">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
 

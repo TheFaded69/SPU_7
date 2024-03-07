@@ -2,5 +2,5 @@
 
 public class StandSettingsFanModel
 {
-    
+    public StandSettingsValveModel ValveViewModel { get; set; }
 }

@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Add Resources Here -->
-    <StreamGeometry x:Key="GeometryTriangleButton">
-        M12,24 L36,0 L36,48 Z
+    <StreamGeometry x:Key="NozzleButton">
+        M0,0 L40,0 L70,30 L40,60 L0,60 Z
     </StreamGeometry>
     
     <RotateTransform x:Key="Rotate090" Angle="090"/>
@@ -11,39 +11,18 @@
     
     <ControlTheme x:Key="TriangleButton" 
                   TargetType="Button">
-        <Setter Property="Background" Value="Black"/>
-        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="Background" Value="Gray"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
 
         <Setter Property="Template">
             <ControlTemplate>
                 <Path Name="border"
                       Stroke="{TemplateBinding BorderBrush}"
                       Fill="{TemplateBinding Background}"
-                      Data="{StaticResource GeometryTriangleButton}"
-                      Width="48"/>
+                      Data="{StaticResource NozzleButton}">
+                </Path>
             </ControlTemplate>
         </Setter>
-        
-        <Style Selector="^.accent">
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="BorderBrush" Value="White" />
-        </Style>
-
-
-        <Style Selector="^:pointerover">
-            <Setter Property="Background" Value="Blue" />
-            <Setter Property="BorderBrush" Value="Blue" />
-        </Style>
-        
-        <Style Selector="^:disabled">
-            <Setter Property="Background" Value="LightCoral" />
-            <Setter Property="BorderBrush" Value="LightCoral" />
-        </Style>
-        
-        <Style Selector="^:pressed">
-            <Setter Property="Background" Value="Green" />
-            <Setter Property="BorderBrush" Value="Green" />
-        </Style>
     </ControlTheme>
     
 </ResourceDictionary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Prism.Commands;
 using SPU_7.Common.Line;
 using SPU_7.Models.Services.ContentServices;
@@ -19,6 +20,13 @@ public class LineItemViewModel : ViewModelBase
         _settingsService = settingsService;
         _standController = standController;
 
+        var deviceCount = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels.Count;
+        var deviceMaxCount = settingsService.StandSettingsModel.LineViewModels
+            .Select(lineViewModel => lineViewModel.DeviceViewModels.Count)
+            .Prepend(0)
+            .Max();
+
+        AfterDeviceWidthValue = 100 + 160 * (deviceMaxCount - deviceCount);
         switch (settingsService.StandSettingsModel.LineViewModels[lineIndex].SelectedLineType)
         {
             case LineType.None:
@@ -27,11 +35,13 @@ public class LineItemViewModel : ViewModelBase
                 IsMasterDeviceVisible = true;
                 IsFanVisible = true;
                 ValidationHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count - 1) * 90;
+                ExitHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count - 1) * 110;
                 break;
             case LineType.NozzleLineType:
                 IsNozzleVisible = true;
                 IsVacuumValveVisible = true;
-                ValidationHeightValue = settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count * 40;
+                ValidationHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count - 1) * 80;
+                ExitHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].VacuumValveViewModels.Count - 1) * 90;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -43,7 +53,7 @@ public class LineItemViewModel : ViewModelBase
         }
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count; i++)
         {
-            MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_standController));
+            MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_standController, settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].ValveViewModel));
         }
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count; i++)
         {
@@ -51,7 +61,7 @@ public class LineItemViewModel : ViewModelBase
         }
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count; i++)
         {
-            FanItemViewModels.Add(new FanItemViewModel());
+            FanItemViewModels.Add(new FanItemViewModel(_standController, settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].ValveViewModel));
         }
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].VacuumValveViewModels.Count; i++)
         {
@@ -106,7 +116,9 @@ public class LineItemViewModel : ViewModelBase
         set => SetProperty(ref _isVacuumValveVisible, value);
     }
 
+    public int AfterDeviceWidthValue { get; set; }
     public int ValidationHeightValue { get; set; }
+    public int ExitHeightValue { get; set; }
     public ObservableCollection<DeviceItemViewModel> DeviceItemViewModels { get; set; } = new();
     public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = new();
     public ObservableCollection<NozzleItemViewModel> NozzleItemViewModels { get; set; } = new();

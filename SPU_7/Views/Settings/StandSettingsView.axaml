@@ -11,7 +11,8 @@
              xmlns:settings="clr-namespace:SPU_7.ViewModels.Settings"
              xmlns:convertors="clr-namespace:SPU_7.Views.Convertors"
              x:CompileBindings="False"
-             Loaded="Control_OnLoaded">
+             Loaded="Control_OnLoaded"
+             Opacity="0.94">
 
     <Design.DataContext>
         <settings:StandSettingsViewModel />

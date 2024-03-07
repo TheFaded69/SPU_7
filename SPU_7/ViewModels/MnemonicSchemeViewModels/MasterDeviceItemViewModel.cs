@@ -1,19 +1,29 @@
 ﻿using SPU_7.Models.Stand;
+using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
 namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 
 public class MasterDeviceItemViewModel : ViewModelBase
 {
-    public MasterDeviceItemViewModel(IStandController standController)
+    public MasterDeviceItemViewModel(IStandController standController, StandSettingsValveModel valveViewModel)
     {
         _standController = standController;
+
+        ValveItemViewModel = new ValveItemViewModel(valveViewModel, standController);
     }
     private readonly IStandController _standController;
     
     private StateType _stateType;
     private float? _pressure;
     private float? _temperature;
-    
+    private ValveItemViewModel _valveItemViewModel;
+
+    public ValveItemViewModel ValveItemViewModel
+    {
+        get => _valveItemViewModel;
+        set => SetProperty(ref _valveItemViewModel, value);
+    }
+
     public float? Pressure
     {
         get => _pressure;

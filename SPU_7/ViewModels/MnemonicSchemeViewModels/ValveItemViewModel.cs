@@ -16,8 +16,6 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             _standController = standController;
 
             UseValveCommand = new DelegateCommand(UseValveCommandHandler);
-
-            //DeviceInformationView = new DeviceInformationView() { DataContext = new DeviceInformationViewModel() };
         }
 
         public readonly StandSettingsValveModel StandSettingsValveModel;
