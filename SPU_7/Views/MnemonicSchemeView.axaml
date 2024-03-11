@@ -10,6 +10,7 @@
              xmlns:mnemonicSchemeViewModels="clr-namespace:SPU_7.ViewModels.MnemonicSchemeViewModels"
              xmlns:convertors="clr-namespace:SPU_7.Views.Convertors">
 
+
     <Design.DataContext>
         <mnemonicSchemeViewModels:MnemonicSchemeViewModel />
     </Design.DataContext>
@@ -72,6 +73,30 @@
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="{Binding AfterDeviceWidthValue}"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            <Rectangle Fill="#00a2e8"
+                                       Height="20"
+                                       Width="40"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            <Rectangle Fill="IndianRed"
+                                       Height="20"
+                                       Width="20"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            <Rectangle Fill="#00a2e8"
+                                       Height="20"
+                                       Width="40"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
@@ -177,7 +202,7 @@
                                                     CornerRadius="5"
                                                     Foreground="Black">
                                                 <TextBlock Text="{Binding NozzleValue}"
-                                                           Foreground="Black"/>
+                                                           Foreground="Black" />
                                             </Button>
                                             <Button Width="70"
                                                     Height="70"
@@ -213,16 +238,32 @@
                                        DockPanel.Dock="Left" />
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
-                                       Width="60"
+                                       Width="40"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            <Rectangle Fill="IndianRed"
+                                       Height="20"
+                                       Width="20"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
                             <Rectangle Fill="#00a2e8"
-                                       Height="{Binding ExitHeightValue}"
-                                       Width="20"
+                                       Height="20"
+                                       Width="40"
                                        Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            <Rectangle Fill="#00a2e8"
+                                       Height="{Binding FanHeightValue}"
+                                       Width="20"
+                                       Margin="{Binding FanHeightMargin}"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
@@ -235,59 +276,160 @@
                                           VerticalAlignment="Center">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                <DockPanel Margin="0,5,0,5">
+                                        <DockPanel Margin="0,5,0,5">
                                             <Rectangle Fill="#00a2e8"
                                                        Height="20"
-                                                       Width="60"
+                                                       Width="20"
                                                        Margin="0, 0,0,0"
                                                        StrokeThickness="0"
                                                        ClipToBounds="True"
                                                        VerticalAlignment="Center"
                                                        DockPanel.Dock="Left" />
-                                            <Button Width="70"
-                                                    Height="70"
-                                                    Content="Клапан"
-                                                    Padding="-3"
-                                                    Margin="0, 0,0,0"
-                                                    DockPanel.Dock="Left"
-                                                    Command="{Binding ValveItemViewModel.UseValveCommand}"
-                                                    HorizontalAlignment="Center"
-                                                    Background="{Binding ValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
-                                                    Foreground="Black"
-                                                    Classes="flat" />
+
                                             <Rectangle Fill="#00a2e8"
-                                                       Height="20"
-                                                       Width="60"
-                                                       Margin="0, 0,-2,0"
+                                                       Height="{Binding FanHeightValue}"
+                                                       Width="20"
+                                                       Margin="0, 0,0,0"
                                                        StrokeThickness="0"
                                                        ClipToBounds="True"
                                                        VerticalAlignment="Center"
                                                        DockPanel.Dock="Left" />
+
+                                            <Grid RowDefinitions="Auto, Auto"
+                                                  VerticalAlignment="Center"
+                                                  DockPanel.Dock="Left">
+                                                <DockPanel Grid.Row="0"
+                                                           LastChildFill="False"
+                                                           IsVisible="{Binding IsNeedleValveEnable}"
+                                                           Margin="0,5,0,5">
+                                                    <Rectangle Fill="#00a2e8"
+                                                               Height="20"
+                                                               Width="20"
+                                                               Margin="0, 0,0,0"
+                                                               StrokeThickness="0"
+                                                               ClipToBounds="True"
+                                                               VerticalAlignment="Center"
+                                                               DockPanel.Dock="Left" />
+                                                    <Button Width="70"
+                                                            Height="70"
+                                                            Padding="-3"
+                                                            Margin="0, 0,0,0"
+                                                            DockPanel.Dock="Left"
+                                                            Command="{Binding ValveItemViewModel.UseValveCommand}"
+                                                            HorizontalAlignment="Center"
+                                                            Background="{Binding ValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                                            Foreground="Black"
+                                                            Classes="flat"
+                                                            VerticalAlignment="Center">
+                                                        <Button.ContextMenu>
+                                                            <ContextMenu>
+                                                                <DockPanel>
+                                                                    <Slider TickFrequency="1"
+                                                                            IsSnapToTickEnabled="True"
+                                                                            Width="200"
+                                                                            DockPanel.Dock="Left"
+                                                                            Value="{Binding SelectedNeedleValue}" />
+                                                                    <TextBlock Margin="5,5,0,5"
+                                                                               Text="{Binding SelectedNeedleValue}" />
+                                                                    <TextBlock Margin="0,5,0,5"
+                                                                               Text="%" />
+                                                                </DockPanel>
+
+                                                            </ContextMenu>
+                                                        </Button.ContextMenu>
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    VerticalAlignment="Center"
+                                                                    HorizontalAlignment="Center">
+                                                            <TextBlock Margin="5,5,0,5"
+                                                                       Text="{Binding SelectedNeedleValue}"/>
+                                                            <TextBlock Margin="0,5,5,5"
+                                                                       Text="%"/>
+                                                        </StackPanel>
+                                                    </Button>
+                                                    <Rectangle Fill="#00a2e8"
+                                                               Height="20"
+                                                               Width="20"
+                                                               Margin="0, 0,0,0"
+                                                               StrokeThickness="0"
+                                                               ClipToBounds="True"
+                                                               VerticalAlignment="Center"
+                                                               DockPanel.Dock="Left" />
+                                                </DockPanel>
+                                                <DockPanel Grid.Row="1"
+                                                           LastChildFill="False"
+                                                           Margin="0,5,0,5">
+                                                    <Rectangle Fill="#00a2e8"
+                                                               Height="20"
+                                                               Width="20"
+                                                               Margin="0, 0,0,0"
+                                                               StrokeThickness="0"
+                                                               ClipToBounds="True"
+                                                               VerticalAlignment="Center"
+                                                               DockPanel.Dock="Left" />
+                                                    <Button Width="70"
+                                                            Height="70"
+                                                            Content="Клапан"
+                                                            Padding="-3"
+                                                            Margin="0, 0,0,0"
+                                                            DockPanel.Dock="Left"
+                                                            Command="{Binding ValveItemViewModel.UseValveCommand}"
+                                                            HorizontalAlignment="Center"
+                                                            Background="{Binding ValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                                            Foreground="Black"
+                                                            Classes="flat" />
+                                                    <Rectangle Fill="#00a2e8"
+                                                               Height="20"
+                                                               Width="20"
+                                                               Margin="0, 0,0,0"
+                                                               StrokeThickness="0"
+                                                               ClipToBounds="True"
+                                                               VerticalAlignment="Center"
+                                                               DockPanel.Dock="Left" />
+
+                                                </DockPanel>
+                                            </Grid>
+
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="{Binding FanHeightValue}"
+                                                       Width="20"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
+
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="20"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
+
                                             <Border Width="100"
                                                     Height="100"
                                                     CornerRadius="50"
                                                     BorderBrush="Gray"
-                                                    BorderThickness="5">
-                
-                                                <Path Data="M70.125 30.25c-8.525 0 -13.475 6.188 -20.213 9.763 -0.825 -2.2 -2.613 -3.85 -4.813 -4.538 3.574 -6.875 9.624 -11.963 9.624 -20.488C54.725 8.25 49.363 5.5 42.625 5.5s-12.1 2.888 -12.1 9.488c0 8.525 6.05 13.613 9.625 20.488 -2.2 0.688 -3.85 2.475 -4.675 4.538 -6.738 -3.575 -11.688 -9.763 -20.213 -9.763 -6.738 0 -9.625 5.638 -9.625 12.238s2.888 12.375 9.625 12.375c8.525 0 13.475 -6.188 20.213 -9.763 0.825 2.2 2.475 3.988 4.675 4.675 -3.575 6.738 -9.488 11.825 -9.488 20.35 0 6.738 5.363 9.488 12.1 9.488s12.1 -2.888 12.1 -9.488c0 -8.525 -5.913 -13.613 -9.488 -20.35 2.2 -0.825 3.988 -2.475 4.675 -4.675 6.738 3.575 11.688 9.763 20.213 9.763 6.738 0 9.625 -5.638 9.625 -12.375S76.863 30.25 70.125 30.25z"
-                                                      Stroke="Gray"
-                                                      StrokeThickness="5"
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"
-                                                      Margin="-5,-5,0,0">
-                                                    <Animation>
-                                                        
-                                                    </Animation>
-                                                </Path>
-                                                
+                                                    BorderThickness="5"
+                                                    VerticalAlignment="Center">
+
+                                                <Path
+                                                    Data="M70.125 30.25c-8.525 0 -13.475 6.188 -20.213 9.763 -0.825 -2.2 -2.613 -3.85 -4.813 -4.538 3.574 -6.875 9.624 -11.963 9.624 -20.488C54.725 8.25 49.363 5.5 42.625 5.5s-12.1 2.888 -12.1 9.488c0 8.525 6.05 13.613 9.625 20.488 -2.2 0.688 -3.85 2.475 -4.675 4.538 -6.738 -3.575 -11.688 -9.763 -20.213 -9.763 -6.738 0 -9.625 5.638 -9.625 12.238s2.888 12.375 9.625 12.375c8.525 0 13.475 -6.188 20.213 -9.763 0.825 2.2 2.475 3.988 4.675 4.675 -3.575 6.738 -9.488 11.825 -9.488 20.35 0 6.738 5.363 9.488 12.1 9.488s12.1 -2.888 12.1 -9.488c0 -8.525 -5.913 -13.613 -9.488 -20.35 2.2 -0.825 3.988 -2.475 4.675 -4.675 6.738 3.575 11.688 9.763 20.213 9.763 6.738 0 9.625 -5.638 9.625 -12.375S76.863 30.25 70.125 30.25z"
+                                                    Stroke="Gray"
+                                                    StrokeThickness="5"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Margin="-5,-5,0,0" />
+
                                                 <Border.ContextMenu>
                                                     <ContextMenu>
-                                                        <MenuItem Header="Включить" 
+                                                        <MenuItem Header="Включить"
                                                                   Command="{Binding EnableFanCommand}"
-                                                                  IsEnabled="{Binding !IsFanWorking}"/>
-                                                        <MenuItem Header="Выключить" 
+                                                                  IsEnabled="{Binding !IsFanWorking}" />
+                                                        <MenuItem Header="Выключить"
                                                                   Command="{Binding DisableFanCommand}"
-                                                                  IsEnabled="{Binding IsFanWorking}"/>
+                                                                  IsEnabled="{Binding IsFanWorking}" />
                                                     </ContextMenu>
                                                 </Border.ContextMenu>
                                             </Border>

@@ -13,7 +13,6 @@
                   TargetType="Button">
         <Setter Property="Background" Value="Gray"/>
         <Setter Property="BorderBrush" Value="Gray"/>
-
         <Setter Property="Template">
             <ControlTemplate>
                 <Path Name="border"

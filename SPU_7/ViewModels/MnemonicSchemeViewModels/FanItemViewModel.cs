@@ -1,4 +1,6 @@
 ﻿using Prism.Commands;
+using System.Linq;
+using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
@@ -8,7 +10,11 @@ public class FanItemViewModel : ViewModelBase
 {
     private readonly IStandController _standController;
 
-    public FanItemViewModel(IStandController standController, StandSettingsValveModel standSettingsValveModel)
+    public FanItemViewModel(IStandController standController,
+        IStandSettingsService settingsService,
+        StandSettingsValveModel standSettingsValveModel,
+        int lineIndex,
+        int fanIndex)
     {
         _standController = standController;
 
@@ -16,9 +22,17 @@ public class FanItemViewModel : ViewModelBase
 
         EnableFanCommand = new DelegateCommand(EnableFanCommandHandler);
         DisableFanCommand = new DelegateCommand(DisableFanCommandHandler);
+
+        FanHeightValue = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].IsNeedleValveEnable ? 100 : 20;
+
     }
+
+    public int FanHeightValue { get; set; }
+
     private ValveItemViewModel _valveItemViewModel;
     private bool _isFanWorking;
+    private bool _isNeedleValveEnable;
+    private int _selectedNeedleValue;
 
     public ValveItemViewModel ValveItemViewModel
     {
@@ -31,7 +45,13 @@ public class FanItemViewModel : ViewModelBase
         get => _isFanWorking;
         set => SetProperty(ref _isFanWorking, value);
     }
-    
+
+    public bool IsNeedleValveEnable
+    {
+        get => _isNeedleValveEnable;
+        set => SetProperty(ref _isNeedleValveEnable, value);
+    }
+
     public DelegateCommand EnableFanCommand { get; set; }
 
     private void EnableFanCommandHandler()
@@ -40,6 +60,12 @@ public class FanItemViewModel : ViewModelBase
     }
     
     public DelegateCommand DisableFanCommand { get; set; }
+
+    public int SelectedNeedleValue
+    {
+        get => _selectedNeedleValue;
+        set => SetProperty(ref _selectedNeedleValue, value);
+    }
 
     private void DisableFanCommandHandler()
     {

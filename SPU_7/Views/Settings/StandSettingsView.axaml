@@ -218,7 +218,7 @@
             <TabItem Header="Мнемосхема"
                      IsVisible="{Binding IsMnemonicSchemeVisible}">
                 <TabControl>
-                    
+
                     <TabItem Header="Линии">
                         <controls:Card Margin="5">
                             <DockPanel LastChildFill="True">
@@ -530,11 +530,9 @@
                                                                                 <DataTemplate>
                                                                                     <StackPanel
                                                                                         Orientation="Horizontal">
-                                                                                        <ComboBox DockPanel.Dock="Left"
-                                                                                            Width="300"
-                                                                                            Margin="5"
-                                                                                            assists:ComboBoxAssist.Label="Тип вентилятора"
-                                                                                            Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                        <CheckBox Margin="5"
+                                                                                                  Content="Игольчатый клапан"
+                                                                                                  IsChecked="{Binding IsNeedleValveEnable}"/>
                                                                                     </StackPanel>
                                                                                 </DataTemplate>
                                                                             </ListBox.ItemTemplate>
@@ -645,7 +643,7 @@
                             </DockPanel>
                         </controls:Card>
                     </TabItem>
-                    
+
                 </TabControl>
             </TabItem>
 

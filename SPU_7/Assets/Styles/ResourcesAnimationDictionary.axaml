@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Add Resources Here -->
+    
+    <!-- Style Selector="Path.RotatePath">
+        <Style.Animations>
+            <Animation Duration="0:0:3"
+                       Delay="0:0:1"
+                       FillMode="Forward"
+                       IterationCount="5">
+                <KeyFrame Cue="0%">
+                    <Setter Property="RotateTransform.Angle" Value="0.0" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="RotateTransform.Angle" Value="45.0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </-->
+    
+</ResourceDictionary>
