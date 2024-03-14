@@ -39,54 +39,39 @@ public class LineItemViewModel : ViewModelBase
                 ValidationHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count - 1) * 90;
 
             {
-                var topOffsetCount = 0;
-                var botOffsetCount = 0;
+                double firstHeight = 0;
+                double secondHeight = 0;
+                double totalHeight = 0;
+                double fanHeight = 0;
+                double offsetTop = 0;
+                double heightWithoutNeedle = 110;
+                double heightWithNeedle = 155;
 
-                FanHeightValue = 20;
-                if (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count > 1)
+                if (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count != 1)
                 {
-                    FanHeightValue = 20;
-                    
-                    if (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count(fnv => !fnv.IsNeedleValveEnable) > 1)
-                    {
-                        FanHeightValue += (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels
-                            .Count(fnv => !fnv.IsNeedleValveEnable) - 1) * 110;
-                    }
-                    else if (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count((fnv => !fnv.IsNeedleValveEnable)) == 1
-                             && settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count > 1)
-                    {
-                        FanHeightValue += 110;
-                    }
-                    if (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count(fnv => fnv.IsNeedleValveEnable) > 1)
-                    {
-                        FanHeightValue += (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels
-                            .Count(fnv => fnv.IsNeedleValveEnable) - 1) * 170;
-                    }
-                    else if (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count((fnv => fnv.IsNeedleValveEnable)) == 1
-                             && settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count > 1)
-                    {
-                        FanHeightValue += 170;
-                    }
-
-
                     for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count; i++)
                     {
-                        if (i <= settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count / 2 &&
-                            settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable)
+                        if (i == 0 || i == settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count - 1)
                         {
-                            topOffsetCount++;
+                            if (i == 0)
+                            {
+                                firstHeight = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
+                            }
+                            totalHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
+                            fanHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle / 2 : heightWithoutNeedle / 2;
                         }
-
-                        if (i >= settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count / 2 &&
-                            settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable)
+                        else
                         {
-                            botOffsetCount++;
+                            totalHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
+                            fanHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
                         }
                     }
 
-
-                    FanHeightMargin = new Thickness(0, topOffsetCount * 30, 0, botOffsetCount * 30);
+                    offsetTop = (firstHeight / 2) - (totalHeight - fanHeight - 20) / 2;
                 }
+
+                FanHeightValue = fanHeight + 20;
+                //FanHeightMargin = new Thickness(0, offsetTop, 0, 0);
             }
 
 
@@ -185,7 +170,7 @@ public class LineItemViewModel : ViewModelBase
 
     public int AfterDeviceWidthValue { get; set; }
     public int ValidationHeightValue { get; set; }
-    public int FanHeightValue { get; set; }
+    public double FanHeightValue { get; set; }
     public Thickness FanHeightMargin { get; set; }
 
     public ObservableCollection<DeviceItemViewModel> DeviceItemViewModels { get; set; } = new();

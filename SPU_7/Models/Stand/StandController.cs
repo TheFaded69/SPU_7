@@ -162,11 +162,11 @@ namespace SPU_7.Models.Stand
 
             ((ISerialCommunicator)_modbusProcessor.Communicator).AddCollectionToLogger(_portLogMessages);
 
-            _modbusProcessor.Start();
+            //_modbusProcessor.Start();
 
             _requestTaskCancellationTokenSource = new CancellationTokenSource();
             _requestTask = new Task(RequestTaskHandler, _requestTaskCancellationTokenSource.Token);
-            _requestTask.Start();
+            //_requestTask.Start();
         }
 
         public void TestInitialization()

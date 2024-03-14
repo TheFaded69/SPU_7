@@ -23,7 +23,7 @@ public class FanItemViewModel : ViewModelBase
         EnableFanCommand = new DelegateCommand(EnableFanCommandHandler);
         DisableFanCommand = new DelegateCommand(DisableFanCommandHandler);
 
-        FanHeightValue = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].IsNeedleValveEnable ? 100 : 20;
+        FanHeightValue = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].IsNeedleValveEnable ? 95 : 20;
 
     }
 
