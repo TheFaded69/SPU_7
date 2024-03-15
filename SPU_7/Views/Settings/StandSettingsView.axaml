@@ -246,19 +246,10 @@
                                                               Header="{Binding LineNumber, Converter={convertors:IntToStringLineNumberConverter}}">
 
                                                         <DockPanel>
-
-                                                            <DockPanel DockPanel.Dock="Top"
-                                                                       LastChildFill="False">
-                                                                <ComboBox DockPanel.Dock="Left"
-                                                                          Width="300"
-                                                                          Margin="5"
-                                                                          ItemsSource="{Binding StringLineTypes}"
-                                                                          SelectedItem="{Binding SelectedStringLineType}"
-                                                                          assists:ComboBoxAssist.Label="Тип линии"
-                                                                          Theme="{StaticResource MaterialOutlineComboBox}" />
-                                                            </DockPanel>
-
-                                                            <TabControl DockPanel.Dock="Top">
+                                                            <controls:Card DockPanel.Dock="Top"
+                                                                           Height="400"
+                                                                           Margin="5">
+                                                                <TabControl DockPanel.Dock="Top">
 
                                                                 <TabItem Header="Устройства">
                                                                     <DockPanel>
@@ -400,6 +391,7 @@
                                                                             </Button>
                                                                         </StackPanel>
 
+
                                                                         <ListBox
                                                                             ItemsSource="{Binding MasterDeviceViewModels}"
                                                                             SelectedItem="{Binding SelectedMasterDeviceViewModel}">
@@ -531,8 +523,8 @@
                                                                                     <StackPanel
                                                                                         Orientation="Horizontal">
                                                                                         <CheckBox Margin="5"
-                                                                                                  Content="Игольчатый клапан"
-                                                                                                  IsChecked="{Binding IsNeedleValveEnable}"/>
+                                                                                            Content="Игольчатый клапан"
+                                                                                            IsChecked="{Binding IsNeedleValveEnable}" />
                                                                                     </StackPanel>
                                                                                 </DataTemplate>
                                                                             </ListBox.ItemTemplate>
@@ -578,7 +570,240 @@
                                                                 </TabItem>
 
                                                             </TabControl>
+                                                            </controls:Card>
+                                                            
+                                                            <DockPanel DockPanel.Dock="Top"
+                                                                       LastChildFill="False">
+                                                                <ComboBox DockPanel.Dock="Left"
+                                                                          Width="300"
+                                                                          Margin="5"
+                                                                          ItemsSource="{Binding StringLineTypes}"
+                                                                          SelectedItem="{Binding SelectedStringLineType}"
+                                                                          assists:ComboBoxAssist.Label="Тип линии"
+                                                                          Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                            </DockPanel>
+                                                            
+                                                            <StackPanel DockPanel.Dock="Top"
+                                                                        Orientation="Horizontal">
+                                                                <CheckBox Margin="5, 20, 5, 22"
+                                                                          IsChecked="{Binding IsStartCommonValve}"
+                                                                          Content="Общий клапан перед мастер-устройствами" />
 
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartCommonValve}"
+                                                                         assists:TextFieldAssist.Label="Адрес модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         Text="{Binding  StartCommonValveViewModel.Address}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartCommonValve}"
+                                                                         assists:TextFieldAssist.Label="Регистр в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         Text="{Binding StartCommonValveViewModel.RegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartCommonValve}"
+                                                                         assists:TextFieldAssist.Label="Номер бита"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         Text="{Binding StartCommonValveViewModel.BitNumber}" />
+
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartCommonValve}"
+                                                                         assists:TextFieldAssist.Label="Адрес состояния модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         Text="{Binding StartCommonValveViewModel.StateAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartCommonValve}"
+                                                                         assists:TextFieldAssist.Label="Регистр состояния в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         Text="{Binding StartCommonValveViewModel.StateRegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartCommonValve}"
+                                                                         assists:TextFieldAssist.Label="Номер бита состояния"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         Text="{Binding StartCommonValveViewModel.StateBitNumber}" />
+
+                                                                <CheckBox Margin="5"
+                                                                          IsVisible="{Binding IsStartCommonValve}"
+                                                                          IsChecked="{Binding StartCommonValveViewModel.IsControlState}"
+                                                                          Content="Контроль состояния"
+                                                                          VerticalAlignment="Center" />
+                                                            </StackPanel>
+
+                                                            <StackPanel DockPanel.Dock="Top"
+                                                                        Orientation="Horizontal">
+                                                                <CheckBox Margin="5, 20, 5, 22"
+                                                                          IsChecked="{Binding IsEndCommonValve}"
+                                                                          Content="Общий клапан после мастер-устройств" />
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Адрес модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         IsVisible="{Binding IsEndCommonValve}"
+                                                                         Text="{Binding EndCommonValveViewModel.Address}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Регистр в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         IsVisible="{Binding IsEndCommonValve}"
+                                                                         Text="{Binding EndCommonValveViewModel.RegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Номер бита"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         IsVisible="{Binding IsEndCommonValve}"
+                                                                         Text="{Binding EndCommonValveViewModel.BitNumber}" />
+
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Адрес состояния модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         IsVisible="{Binding IsEndCommonValve}"
+                                                                         Text="{Binding EndCommonValveViewModel.StateAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Регистр состояния в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         IsVisible="{Binding IsEndCommonValve}"
+                                                                         Text="{Binding EndCommonValveViewModel.StateRegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Номер бита состояния"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         IsVisible="{Binding IsEndCommonValve}"
+                                                                         Text="{Binding EndCommonValveViewModel.StateBitNumber}" />
+
+                                                                <CheckBox Margin="5"
+                                                                          IsChecked="{Binding EndCommonValveViewModel.IsControlState}"
+                                                                          Content="Контроль состояния"
+                                                                          IsVisible="{Binding IsEndCommonValve}"
+                                                                          VerticalAlignment="Center" />
+                                                            </StackPanel>
+
+                                                            <StackPanel DockPanel.Dock="Top"
+                                                                        Orientation="Horizontal">
+                                                                <CheckBox Margin="5, 20, 5, 22"
+                                                                          IsChecked="{Binding IsStartValveMasterDevice}"
+                                                                          Content="Клапан перед мастер-устройствами" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartValveMasterDevice}"
+                                                                         assists:TextFieldAssist.Label="Адрес модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         Text="{Binding  StartValveMasterDeviceViewModel.Address}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartValveMasterDevice}"
+                                                                         assists:TextFieldAssist.Label="Регистр в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         Text="{Binding StartValveMasterDeviceViewModel.RegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartValveMasterDevice}"
+                                                                         assists:TextFieldAssist.Label="Номер бита"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         Text="{Binding StartValveMasterDeviceViewModel.BitNumber}" />
+
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartValveMasterDevice}"
+                                                                         assists:TextFieldAssist.Label="Адрес состояния модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         Text="{Binding StartValveMasterDeviceViewModel.StateAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartValveMasterDevice}"
+                                                                         assists:TextFieldAssist.Label="Регистр состояния в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         Text="{Binding StartValveMasterDeviceViewModel.StateRegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsStartValveMasterDevice}"
+                                                                         assists:TextFieldAssist.Label="Номер бита состояния"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         Text="{Binding StartValveMasterDeviceViewModel.StateBitNumber}" />
+
+                                                                <CheckBox Margin="5"
+                                                                          IsVisible="{Binding IsStartValveMasterDevice}"
+                                                                          IsChecked="{Binding StartValveMasterDeviceViewModel.IsControlState}"
+                                                                          Content="Контроль состояния"
+                                                                          VerticalAlignment="Center" />
+                                                            </StackPanel>
+
+                                                            <StackPanel DockPanel.Dock="Top"
+                                                                        Orientation="Horizontal">
+                                                                <CheckBox Margin="5, 20, 5, 22"
+                                                                          IsChecked="{Binding IsEndValveMasterDevice}"
+                                                                          Content="Клапан после мастер-устройств" />
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Адрес модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         IsVisible="{Binding IsEndValveMasterDevice}"
+                                                                         Text="{Binding EndValveMasterDeviceViewModel.Address}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Регистр в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         IsVisible="{Binding IsEndValveMasterDevice}"
+                                                                         Text="{Binding EndValveMasterDeviceViewModel.RegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Номер бита"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         IsVisible="{Binding IsEndValveMasterDevice}"
+                                                                         Text="{Binding EndValveMasterDeviceViewModel.BitNumber}" />
+
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Адрес состояния модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         IsVisible="{Binding IsEndValveMasterDevice}"
+                                                                         Text="{Binding EndValveMasterDeviceViewModel.StateAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Регистр состояния в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         IsVisible="{Binding IsEndValveMasterDevice}"
+                                                                         Text="{Binding EndValveMasterDeviceViewModel.StateRegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Номер бита состояния"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         IsVisible="{Binding IsEndValveMasterDevice}"
+                                                                         Text="{Binding EndValveMasterDeviceViewModel.StateBitNumber}" />
+
+                                                                <CheckBox Margin="5"
+                                                                          IsChecked="{Binding EndValveMasterDeviceViewModel.IsControlState}"
+                                                                          Content="Контроль состояния"
+                                                                          IsVisible="{Binding IsEndValveMasterDevice}"
+                                                                          VerticalAlignment="Center" />
+                                                            </StackPanel>
                                                         </DockPanel>
                                                     </Expander>
                                                 </DockPanel>

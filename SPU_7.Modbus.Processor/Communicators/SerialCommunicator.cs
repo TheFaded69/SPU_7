@@ -503,7 +503,7 @@ public class SerialCommunicator : ISerialCommunicator, IDisposable
 
     public void AddCollectionToLogger(ObservableCollection<LogMessage> observableCollection)
     {
-        _logger.AddCollectionToLogger(observableCollection);
+        _logger?.AddCollectionToLogger(observableCollection);
     }
 
     public void Dispose()

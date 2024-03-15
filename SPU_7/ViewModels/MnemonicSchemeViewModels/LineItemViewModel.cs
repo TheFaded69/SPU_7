@@ -45,7 +45,7 @@ public class LineItemViewModel : ViewModelBase
                 double fanHeight = 0;
                 double offsetTop = 0;
                 double heightWithoutNeedle = 110;
-                double heightWithNeedle = 155;
+                double heightWithNeedle = 170;
 
                 if (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count != 1)
                 {
@@ -67,11 +67,11 @@ public class LineItemViewModel : ViewModelBase
                         }
                     }
 
-                    offsetTop = (firstHeight / 2) - (totalHeight - fanHeight - 20) / 2;
+                    offsetTop = (firstHeight / 2) - (totalHeight - fanHeight) / 2;
                 }
 
                 FanHeightValue = fanHeight + 20;
-                //FanHeightMargin = new Thickness(0, offsetTop, 0, 0);
+                FanHeightMargin = new Thickness(0, offsetTop * 2, 0, 0);
             }
 
 
@@ -91,6 +91,14 @@ public class LineItemViewModel : ViewModelBase
             DeviceItemViewModels.Add(new DeviceItemViewModel(standController, settingsService, i, lineIndex));
         }
 
+        if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsStartCommonValve)
+            StartCommonValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StartCommonValveViewModel,
+                _standController);
+        
+        if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsStartValveMasterDevice)
+            StartValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StartValveMasterDeviceViewModel,
+                _standController);
+        
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count; i++)
         {
             MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_standController,
@@ -102,6 +110,14 @@ public class LineItemViewModel : ViewModelBase
             NozzleItemViewModels.Add(
                 new NozzleItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels[i], _standController));
         }
+        
+        if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsEndValveMasterDevice)
+            EndValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].EndValveMasterDeviceViewModel,
+                _standController);
+        
+        if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsEndCommonValve)
+            EndCommonValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].EndCommonValveViewModel,
+                _standController);
 
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count; i++)
         {
@@ -172,10 +188,15 @@ public class LineItemViewModel : ViewModelBase
     public int ValidationHeightValue { get; set; }
     public double FanHeightValue { get; set; }
     public Thickness FanHeightMargin { get; set; }
-
     public ObservableCollection<DeviceItemViewModel> DeviceItemViewModels { get; set; } = new();
+    
+    public ValveItemViewModel StartCommonValveViewModel { get; set; }
+    public ValveItemViewModel StartValveViewModel { get; set; }
     public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = new();
     public ObservableCollection<NozzleItemViewModel> NozzleItemViewModels { get; set; } = new();
+    public ValveItemViewModel EndValveViewModel { get; set; }
+    
+    public ValveItemViewModel EndCommonValveViewModel { get; set; }
     public ObservableCollection<FanItemViewModel> FanItemViewModels { get; set; } = new();
     public ObservableCollection<VacuumItemViewModel> VacuumItemViewModels { get; set; } = new();
 

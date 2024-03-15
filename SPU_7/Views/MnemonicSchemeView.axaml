@@ -78,25 +78,73 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
+                            
                             <Rectangle Fill="#00a2e8"
-                                       Height="20"
-                                       Width="40"
-                                       Margin="0, 0,0,0"
-                                       StrokeThickness="0"
-                                       ClipToBounds="True"
-                                       VerticalAlignment="Center"
-                                       DockPanel.Dock="Left" />
-                            <Rectangle Fill="IndianRed"
                                        Height="20"
                                        Width="20"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
+                                       IsVisible="{Binding StartCommonValveViewModel, Converter={x:Static ObjectConverters.IsNull}}"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
+                            
+                            <DockPanel DockPanel.Dock="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,0,-275"
+                                       IsVisible="{Binding StartCommonValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <Rectangle Fill="#00a2e8"
+                                           Height="112"
+                                           Width="20"
+                                           Margin="0, 0,0,0"
+                                           StrokeThickness="0"
+                                           ClipToBounds="True"
+                                           VerticalAlignment="Center"
+                                           DockPanel.Dock="Top" />
+                                <Button Width="70"
+                                        Height="70"
+                                        Content="КШ"
+                                        Padding="-3"
+                                        Margin="-25, 0,-25,0"
+                                        DockPanel.Dock="Top"
+                                        Command="{Binding StartCommonValveViewModel.UseValveCommand}"
+                                        HorizontalAlignment="Center"
+                                        Background="{Binding StartCommonValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                        Foreground="Black"
+                                        Classes="flat" />
+                                <Rectangle Fill="#00a2e8"
+                                           Height="112"
+                                           Width="20"
+                                           Margin="0, 0,0,0"
+                                           StrokeThickness="0"
+                                           ClipToBounds="True"
+                                           VerticalAlignment="Center"
+                                           DockPanel.Dock="Top" />
+                            </DockPanel>
+                            
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="40"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            <Button Width="70"
+                                    Height="70"
+                                    Content="КШ"
+                                    Padding="-3"
+                                    Margin="0, 0,0,0"
+                                    IsVisible="{Binding StartValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    DockPanel.Dock="Left"
+                                    Command="{Binding StartValveViewModel.UseValveCommand}"
+                                    HorizontalAlignment="Center"
+                                    Background="{Binding StartValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                    Foreground="Black"
+                                    Classes="flat" />
+                            <Rectangle Fill="#00a2e8"
+                                       Height="20"
+                                       Width="20"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
@@ -158,7 +206,7 @@
                                                        DockPanel.Dock="Left" />
                                             <Button Width="70"
                                                     Height="70"
-                                                    Content="Клапан"
+                                                    Content="КШ"
                                                     Padding="-3"
                                                     Margin="0, 0,0,0"
                                                     DockPanel.Dock="Left"
@@ -206,7 +254,7 @@
                                             </Button>
                                             <Button Width="70"
                                                     Height="70"
-                                                    Content="Клапан"
+                                                    Content="КШ"
                                                     Padding="-3"
                                                     Margin="0, 0,0,0"
                                                     DockPanel.Dock="Left"
@@ -238,13 +286,25 @@
                                        DockPanel.Dock="Left" />
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
-                                       Width="40"
+                                       Width="20"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            <Rectangle Fill="IndianRed"
+                            <Button Width="70"
+                                    Height="70"
+                                    Content="КШ"
+                                    Padding="-3"
+                                    Margin="0, 0,0,0"
+                                    IsVisible="{Binding EndValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    DockPanel.Dock="Left"
+                                    Command="{Binding EndValveViewModel.UseValveCommand}"
+                                    HorizontalAlignment="Center"
+                                    Background="{Binding EndValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                    Foreground="Black"
+                                    Classes="flat" />
+                            <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="20"
                                        Margin="0, 0,0,0"
@@ -252,6 +312,48 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
+                            <Rectangle Fill="#00a2e8"
+                                       Height="20"
+                                       Width="20"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       IsVisible="{Binding EndCommonValveViewModel, Converter={x:Static ObjectConverters.IsNull}}"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            
+                            <DockPanel DockPanel.Dock="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,0,-275"
+                                       IsVisible="{Binding EndCommonValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <Rectangle Fill="#00a2e8"
+                                           Height="112"
+                                           Width="20"
+                                           Margin="0, 0,0,0"
+                                           StrokeThickness="0"
+                                           ClipToBounds="True"
+                                           VerticalAlignment="Center"
+                                           DockPanel.Dock="Top" />
+                                <Button Width="70"
+                                        Height="70"
+                                        Content="КШ"
+                                        Padding="-3"
+                                        Margin="-25, 0,-25,0"
+                                        DockPanel.Dock="Top"
+                                        Command="{Binding EndCommonValveViewModel.UseValveCommand}"
+                                        HorizontalAlignment="Center"
+                                        Background="{Binding EndCommonValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                        Foreground="Black"
+                                        Classes="flat" />
+                                <Rectangle Fill="#00a2e8"
+                                           Height="112"
+                                           Width="20"
+                                           Margin="0, 0,0,0"
+                                           StrokeThickness="0"
+                                           ClipToBounds="True"
+                                           VerticalAlignment="Center"
+                                           DockPanel.Dock="Top" />
+                            </DockPanel>
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="40"
@@ -301,7 +403,7 @@
                                                 <DockPanel Grid.Row="0"
                                                            LastChildFill="False"
                                                            IsVisible="{Binding IsNeedleValveEnable}"
-                                                           Margin="0,0,0,5">
+                                                           Margin="0,5,0,5">
                                                     <Rectangle Fill="#00a2e8"
                                                                Height="20"
                                                                Width="20"
@@ -357,7 +459,7 @@
                                                 </DockPanel>
                                                 <DockPanel Grid.Row="1"
                                                            LastChildFill="False"
-                                                           Margin="0,0,0,0">
+                                                           Margin="0,5,0,5">
                                                     <Rectangle Fill="#00a2e8"
                                                                Height="20"
                                                                Width="20"
@@ -368,7 +470,7 @@
                                                                DockPanel.Dock="Left" />
                                                     <Button Width="70"
                                                             Height="70"
-                                                            Content="Клапан"
+                                                            Content="КШ"
                                                             Padding="-3"
                                                             Margin="0, 0,0,0"
                                                             DockPanel.Dock="Left"
@@ -409,6 +511,7 @@
 
                                             <Border Width="100"
                                                     Height="100"
+                                                    Margin="-2,0,0,0"
                                                     CornerRadius="50"
                                                     BorderBrush="Gray"
                                                     BorderThickness="5"
@@ -420,7 +523,7 @@
                                                     StrokeThickness="5"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
-                                                    Margin="-5,-5,0,0" />
+                                                    Margin="-6,-6,0,0" />
 
                                                 <Border.ContextMenu>
                                                     <ContextMenu>

@@ -48,9 +48,6 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         SolenoidValveViewModels = new ObservableCollection<StandSettingsSolenoidValveViewModel>();
         LineViewModels = new ObservableCollection<StandSettingsLineViewModel>();
         PulseMeterViewModels = new ObservableCollection<StandSettingsPulseMeterViewModel>();
-        if (_standSettingsService.StandSettingsModel != null)
-            _mapper.Map(_standSettingsService.StandSettingsModel, this);
-        
         
         AddNozzleCommand = new DelegateCommand(AddNozzleCommandHandler);
         RemoveNozzleCommand = new DelegateCommand(RemoveNozzleCommandHandler);
@@ -105,6 +102,16 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         {
             IsMnemonicSchemeVisible = true;
             IsDeviceVisible = true;
+        }
+
+        if (_standSettingsService.StandSettingsModel != null)
+        {
+            _mapper.Map(_standSettingsService.StandSettingsModel, this);
+            
+            var selectedProfile = StandSettingsProfiles.FirstOrDefault(sp => sp.Name == ProfileName);
+
+            if (selectedProfile != null)
+                SelectedSettingsProfile = selectedProfile;
         }
     }
 

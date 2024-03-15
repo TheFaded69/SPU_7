@@ -53,6 +53,14 @@ public class StandSettingsLineViewModel : ViewModelBase
     private StandSettingsVacuumValveViewModel _selectedVacuumValveViewModel;
     private ObservableCollection<string> _stringLineTypes;
     private string _selectedStringLineType;
+    private bool _isStartValveMasterDevice;
+    private bool _isEndValveMasterDevice;
+    private StandSettingsValveViewModel _startValveMasterDeviceViewModel;
+    private StandSettingsValveViewModel _endValveMasterDeviceViewModel;
+    private bool _isStartCommonValve;
+    private bool _isEndCommonValve;
+    private StandSettingsValveViewModel _startCommonValveViewModel;
+    private StandSettingsValveViewModel _endCommonValveViewModel;
 
     public int LineNumber
     {
@@ -60,6 +68,70 @@ public class StandSettingsLineViewModel : ViewModelBase
         set => SetProperty(ref _lineNumber, value);
     }
 
+    public bool IsStartCommonValve
+    {
+        get => _isStartCommonValve;
+        set
+        {
+            SetProperty(ref _isStartCommonValve, value);
+            StartCommonValveViewModel = new StandSettingsValveViewModel();
+        }
+    }
+
+    public bool IsEndCommonValve
+    {
+        get => _isEndCommonValve;
+        set
+        {
+            SetProperty(ref _isEndCommonValve, value);
+            EndCommonValveViewModel = new StandSettingsValveViewModel();
+        }
+    }
+
+    public StandSettingsValveViewModel StartCommonValveViewModel
+    {
+        get => _startCommonValveViewModel;
+        set => SetProperty(ref _startCommonValveViewModel, value);
+    }
+
+    public StandSettingsValveViewModel EndCommonValveViewModel
+    {
+        get => _endCommonValveViewModel;
+        set => SetProperty(ref _endCommonValveViewModel, value);
+    }
+
+    public bool IsStartValveMasterDevice
+    {
+        get => _isStartValveMasterDevice;
+        set
+        {
+            SetProperty(ref _isStartValveMasterDevice, value);
+            StartValveMasterDeviceViewModel = new StandSettingsValveViewModel();
+        }
+    }
+
+    public bool IsEndValveMasterDevice
+    {
+        get => _isEndValveMasterDevice;
+        set
+        {
+            SetProperty(ref _isEndValveMasterDevice, value);
+            EndValveMasterDeviceViewModel = new StandSettingsValveViewModel();
+        }
+    }
+
+    public StandSettingsValveViewModel StartValveMasterDeviceViewModel
+    {
+        get => _startValveMasterDeviceViewModel;
+        set => SetProperty(ref _startValveMasterDeviceViewModel, value);
+    }
+
+    public StandSettingsValveViewModel EndValveMasterDeviceViewModel
+    {
+        get => _endValveMasterDeviceViewModel;
+        set => SetProperty(ref _endValveMasterDeviceViewModel, value);
+    }
+    
     public ObservableCollection<StandSettingsDeviceViewModel> DeviceViewModels
     {
         get => _deviceViewModels;
