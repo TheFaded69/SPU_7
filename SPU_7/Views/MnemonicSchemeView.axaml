@@ -181,6 +181,7 @@
                                                     Margin="0,0,0,0"
                                                     VerticalAlignment="Center"
                                                     Padding="-5"
+                                                    Command="{Binding OpenMasterDeviceInfoCommand}"
                                                     DockPanel.Dock="Left"
                                                     Background="Gray"
                                                     IsEnabled="{Binding IsDeviceEnable}"

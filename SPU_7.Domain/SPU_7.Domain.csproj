@@ -16,7 +16,6 @@
 
     <ItemGroup>
       <Folder Include="Devices\Device\" />
-      <Folder Include="Devices\MasterDevice\" />
     </ItemGroup>
 
 </Project>

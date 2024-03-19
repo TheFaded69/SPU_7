@@ -1,0 +1,58 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:DataType="viewModels:MasterDeviceInfoViewModel"
+             x:Class="SPU_7.Views.MasterDeviceInfoView"
+             MinHeight="600"
+             MinWidth="1000"
+             Loaded="Control_OnLoaded">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top"
+                   LastChildFill="False">
+            <Button DockPanel.Dock="Right"
+                    Width="46"
+                    Height="46"
+                    Command="{Binding CloseWindowCommand}"
+                    ToolTip.Tip="Закрыть"
+                    Classes="flat">
+                <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black" />
+            </Button>
+
+            <TextBlock Margin="5"
+                       FontSize="20"
+                       Text="{Binding Title}"
+                       DockPanel.Dock="Left"
+                       VerticalAlignment="Center" />
+        </DockPanel>
+        
+        <Grid RowDefinitions="*,100">
+            <lvc:CartesianChart
+                Grid.Row="0"
+                Margin="5"
+                Series="{Binding Series}"
+                XAxes="{Binding ScrollableAxes}"
+                ZoomMode="X"
+                UpdateStartedCommand="{Binding ChartUpdatedCommand}">
+            </lvc:CartesianChart>
+
+            <lvc:CartesianChart
+                Margin="5"
+                x:Name="ScrollBarChart"
+                Grid.Row="1"
+                Series="{Binding ScrollbarSeries}"
+                Sections="{Binding Thumbs}"
+                XAxes="{Binding InvisibleX}"
+                YAxes="{Binding InvisibleY}"
+                PointerPressedCommand="{Binding PointerDownCommand}"
+                PointerMoveCommand="{Binding PointerMoveCommand}"
+                PointerReleasedCommand="{Binding PointerUpCommand}"
+                TooltipPosition="Hidden">
+            </lvc:CartesianChart>
+        </Grid>
+    </DockPanel>
+</UserControl>

@@ -35,7 +35,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             LineViewModels = new ObservableCollection<LineItemViewModel>();
             foreach (var lineViewModel in settingsService.StandSettingsModel.LineViewModels)
             {
-                LineViewModels.Add(new LineItemViewModel(notificationService, settingsService, standController, LineViewModels.Count)
+                LineViewModels.Add(new LineItemViewModel(dialogService, notificationService, settingsService, standController, LineViewModels.Count)
                 {
                     IsReverseLine = lineViewModel.IsReverseLine,
                     SelectedDeviceLineType = lineViewModel.SelectedDeviceLineType,

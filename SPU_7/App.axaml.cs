@@ -2,10 +2,14 @@ using System;
 using AutoMapper;
 using Avalonia;
 using Avalonia.Markup.Xaml;
+using LiveChartsCore;
+using LiveChartsCore.Kernel;
+using LiveChartsCore.SkiaSharpView;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Prism.DryIoc;
 using Prism.Ioc;
+using SkiaSharp;
 using SPU_7.Database.DbContext;
 using SPU_7.Database.Models;
 using SPU_7.Database.Repository;
@@ -107,10 +111,23 @@ public partial class App : PrismApplication
             containerRegistry.RegisterDialog<ResultViewerView, ResultViewerViewModel>();
             containerRegistry.RegisterDialog<NozzleSelectorView, NozzleSelectorViewModel>();
             containerRegistry.RegisterDialog<PdfViewerView, PdfViewerViewModel>();
+            containerRegistry.RegisterDialog<MasterDeviceInfoView, MasterDeviceInfoViewModel>();
+            
+            
         }
 
         protected override void OnInitialized()
         {
+            LiveCharts.Configure(config => 
+                    config 
+                        .AddDarkTheme()  
+                        .HasGlobalSKTypeface(SKFontManager.Default.MatchCharacter('Ж'))  // <- Russian 
+                        
+                // here we use the index as X, and the population as Y 
+                        .HasMap<Flow>((flow, index) => new Coordinate(index, flow.flowValue == null ? 0 : (double)flow.flowValue)) 
+            ); 
             
         }
+
+        public record Flow(int measureNumber, float? flowValue);
 }

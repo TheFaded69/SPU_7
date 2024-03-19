@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SPU_7.Views.ScriptViews.ScriptMenuView"
-             
+
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              x:CompileBindings="False"
@@ -16,88 +16,88 @@
              MinHeight="700"
              MaxHeight="700"
              Loaded="Control_OnLoaded">
-    
+
     <Design.DataContext>
-        <scriptViewModels:ScriptMenuViewModel/>
+        <scriptViewModels:ScriptMenuViewModel />
     </Design.DataContext>
-    
+
     <controls:Card Margin="0">
-    <DockPanel>
-        <DockPanel DockPanel.Dock="Top"
-                   LastChildFill="False">
-            <Button DockPanel.Dock="Right" 
-                    Width="46" 
-                    Height="46"
-                    Command="{Binding CloseWindowCommand}"
-                    ToolTip.Tip="Закрыть"
-                    Classes="flat">
-                <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black"/>
-            </Button>
-                  
-            <TextBlock Margin="5"
-                       FontSize="20"
-                       Text="{Binding Title}"
-                       DockPanel.Dock="Left"
-                       VerticalAlignment="Center"/>
-        </DockPanel>
-        <DockPanel DockPanel.Dock="Right"
-                   Width="150"
-                   LastChildFill="False">
-        <Button Margin="5"
-                Content="Создать"
-                Command="{Binding CreateScriptCommand}"
-                DockPanel.Dock="Top"/>
-        <Button Margin="5"
-                Content="Редактировать"
-                Command="{Binding EditScriptCommand}"
-                IsEnabled="{Binding SelectedScript, Converter={x:Static ObjectConverters.IsNotNull}}"
-                DockPanel.Dock="Top"/>
-        <Button Margin="5"
-                Content="Удалить"
-                Command="{Binding DeleteScriptCommand}"
-                IsEnabled="{Binding SelectedScript, Converter={x:Static ObjectConverters.IsNotNull}}"
-                DockPanel.Dock="Top"/>
-        
-        <Button Margin="5"
-                Content="Копировать"
-                Command="{Binding CopyScriptCommand}"
-                IsEnabled="{Binding SelectedScript, Converter={x:Static ObjectConverters.IsNotNull}}"
-                DockPanel.Dock="Top"/>
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Top"
+                       LastChildFill="False">
+                <Button DockPanel.Dock="Right"
+                        Width="46"
+                        Height="46"
+                        Command="{Binding CloseWindowCommand}"
+                        ToolTip.Tip="Закрыть"
+                        Classes="flat">
+                    <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black" />
+                </Button>
 
-        <Button Margin="5"
-                Content="Выбрать"
-                Command="{Binding ChooseScriptCommand}"
-                IsEnabled="{Binding SelectedScript, Converter={x:Static ObjectConverters.IsNotNull}}"
-                DockPanel.Dock="Bottom"/>
+                <TextBlock Margin="5"
+                           FontSize="20"
+                           Text="{Binding Title}"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center" />
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Right"
+                       Width="150"
+                       LastChildFill="False">
+                <Button Margin="5"
+                        Content="Создать"
+                        Command="{Binding CreateScriptCommand}"
+                        DockPanel.Dock="Top" />
+                <Button Margin="5"
+                        Content="Редактировать"
+                        Command="{Binding EditScriptCommand}"
+                        IsEnabled="{Binding SelectedScript, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        DockPanel.Dock="Top" />
+                <Button Margin="5"
+                        Content="Удалить"
+                        Command="{Binding DeleteScriptCommand}"
+                        IsEnabled="{Binding SelectedScript, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        DockPanel.Dock="Top" />
 
-      </DockPanel>
-      <DataGrid ItemsSource="{Binding Scripts}"
-                SelectedItem="{Binding SelectedScript}"
-                Margin="5"
-                SelectionMode="Single">
-        <DataGrid.Columns>
-          <DataGridTextColumn Binding="{Binding Name}"
-                              Header="Название"
-                              IsReadOnly="True"/>
-          <!--DataGridTextColumn Binding="{Binding TargetStandType, Converter={convertors:StandTypeToStringConverter}}"
+                <Button Margin="5"
+                        Content="Копировать"
+                        Command="{Binding CopyScriptCommand}"
+                        IsEnabled="{Binding SelectedScript, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        DockPanel.Dock="Top" />
+
+                <Button Margin="5"
+                        Content="Выбрать"
+                        Command="{Binding ChooseScriptCommand}"
+                        IsEnabled="{Binding SelectedScript, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        DockPanel.Dock="Bottom" />
+
+            </DockPanel>
+            <DataGrid ItemsSource="{Binding Scripts}"
+                      SelectedItem="{Binding SelectedScript}"
+                      Margin="5"
+                      SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Name}"
+                                        Header="Название"
+                                        IsReadOnly="True" />
+                    <!--DataGridTextColumn Binding="{Binding TargetStandType, Converter={convertors:StandTypeToStringConverter}}"
                               Header="Тип стенда"
                               IsReadOnly="True"/>
           <DataGridTextColumn Binding="{Binding DeviceType, Converter={convertors:DeviceTypeToStringConverter}}"
                               Header="Тип устройства"
                               IsReadOnly="True"/-->
-          <DataGridTemplateColumn  Header="Описание"
-                                   IsReadOnly="True"
-                                   Width="300">
-              <DataGridTemplateColumn.CellTemplate>
-                  <DataTemplate>
-                      <TextBlock Margin="5"
-                                 Text="{Binding Description}"
-                                 TextWrapping="Wrap"/>
-                  </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-          </DataGridTemplateColumn>
-        </DataGrid.Columns>    
-      </DataGrid>
-    </DockPanel> 
-  </controls:Card>
+                    <DataGridTemplateColumn Header="Описание"
+                                            IsReadOnly="True"
+                                            Width="300">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="5"
+                                           Text="{Binding Description}"
+                                           TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </controls:Card>
 </UserControl>

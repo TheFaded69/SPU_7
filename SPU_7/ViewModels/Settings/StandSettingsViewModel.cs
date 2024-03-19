@@ -55,8 +55,6 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         RemoveValveCommand = new DelegateCommand(RemoveValveCommandHandler);
         AddSolenoidValveCommand = new DelegateCommand(AddSolenoidValveCommandHandler);
         RemoveSolenoidValveCommand = new DelegateCommand(RemoveSolenoidValveCommandHandler);
-        AddComparatorCommand = new DelegateCommand(AddComparatorCommandHandler);
-        RemoveComparatorCommand = new DelegateCommand(RemoveComparatorCommandHandler);
         AddDeviceCommand = new DelegateCommand(AddDeviceCommandHandler);
         RemoveDeviceCommand = new DelegateCommand(RemoveDeviceCommandHandler);
         AddLineCommand = new DelegateCommand(AddLineCommandHandler);
@@ -817,22 +815,6 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     {
         get => _pauseForCheckingOutsideValve;
         set => SetProperty(ref _pauseForCheckingOutsideValve, value);
-    }
-
-    public DelegateCommand AddComparatorCommand { get; set; }
-    private void AddComparatorCommandHandler()
-    {
-        ComparatorSettingsViewModels.Add(new ComparatorSettingsViewModel
-        {
-            Number = ValveViewModels.Count + 1
-        });
-    }
-    
-    
-    public DelegateCommand RemoveComparatorCommand { get; set; }
-    private void RemoveComparatorCommandHandler()
-    {
-        ComparatorSettingsViewModels.Remove(SelectedComparatorSettingsViewModel);
     }
     
     #endregion

@@ -4,6 +4,7 @@ using System.Linq;
 using Avalonia;
 using Material.Styles.Converters;
 using Prism.Commands;
+using Prism.Services.Dialogs;
 using SPU_7.Common.Line;
 using SPU_7.Models.Services.ContentServices;
 using SPU_7.Models.Services.StandSetting;
@@ -13,11 +14,13 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 
 public class LineItemViewModel : ViewModelBase
 {
-    public LineItemViewModel(INotificationService notificationService,
+    public LineItemViewModel(IDialogService dialogService,
+        INotificationService notificationService,
         IStandSettingsService settingsService,
         IStandController standController,
         int lineIndex)
     {
+        _dialogService = dialogService;
         _notificationService = notificationService;
         _settingsService = settingsService;
         _standController = standController;
@@ -101,8 +104,10 @@ public class LineItemViewModel : ViewModelBase
         
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count; i++)
         {
-            MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_standController,
-                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].ValveViewModel));
+            MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_dialogService,
+                _standController,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].ValveViewModel,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i]));
         }
 
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count; i++)
@@ -144,6 +149,7 @@ public class LineItemViewModel : ViewModelBase
         OpenAllCommand = new DelegateCommand(OpenAllCommandHandler);
     }
 
+    private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
     private readonly IStandSettingsService _settingsService;
     private readonly IStandController _standController;
