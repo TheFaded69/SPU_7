@@ -18,8 +18,9 @@ public class ValidationDeviceResult
     public double? FlowDifference { get; set; }
     ////////
     public string VendorNumber { get; set; }
+    public string OwnerName { get; set; }
+    public string DeviceInfo { get; set; }
     public int ProtocolNumber { get; set; }
     ////////
     public float? PressureDifference { get; set; }
-    
 }

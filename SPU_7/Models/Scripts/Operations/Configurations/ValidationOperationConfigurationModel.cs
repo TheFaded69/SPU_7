@@ -13,12 +13,6 @@ public class ValidationOperationConfigurationModel : BaseOperationConfigurationM
     public bool IsProtocolNeed { get; set; }
     
     public bool IsAutoPulseMeasure { get; set; }
-    
-    public string DeviceName { get; set; }
-    
-    public string VendorName { get; set; }
-    
-    public string VendorAddress { get; set; }
 
     public ValidationType ValidationType { get; set; }
     public double? MinimumFlow { get; set; }

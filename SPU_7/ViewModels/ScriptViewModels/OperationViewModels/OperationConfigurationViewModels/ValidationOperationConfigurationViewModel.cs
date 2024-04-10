@@ -62,9 +62,6 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
             ValidationType = validationOperationConfigurationModel.ValidationType;
             IsAutoPulseMeasure = validationOperationConfigurationModel.IsAutoPulseMeasure;
             IsProtocolNeed = validationOperationConfigurationModel.IsProtocolNeed;
-            VendorName = validationOperationConfigurationModel.VendorName;
-            VendorAddress = validationOperationConfigurationModel.VendorAddress;
-            DeviceName = validationOperationConfigurationModel.DeviceName;
             MaximumFlow = validationOperationConfigurationModel.MaximumFlow;
             MinimumFlow = validationOperationConfigurationModel.MinimumFlow;
             NominalFlow = validationOperationConfigurationModel.NominalFlow;
@@ -92,9 +89,6 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
     private PointConfigurationViewModel _selectedPoint;
     private bool _isProtocolNeed = true;
     private bool _isAutoPulseMeasure;
-    private string _vendorName;
-    private string _vendorAddress;
-    private string _deviceName;
     private string _selectedStringValidationType;
     private double? _minimumFlow;
     private double? _maximumFlow;
@@ -133,24 +127,6 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
     {
         get => _isAutoPulseMeasure;
         set => SetProperty(ref _isAutoPulseMeasure, value);
-    }
-
-    public string VendorName
-    {
-        get => _vendorName;
-        set => SetProperty(ref _vendorName, value);
-    }
-
-    public string VendorAddress
-    {
-        get => _vendorAddress;
-        set => SetProperty(ref _vendorAddress, value);
-    }
-
-    public string DeviceName
-    {
-        get => _deviceName;
-        set => SetProperty(ref _deviceName, value);
     }
 
     public double? MinimumFlow
@@ -204,9 +180,6 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
             PulseMeterConfigurations = pulseMeterConfig,
             IsProtocolNeed = IsProtocolNeed,
             IsAutoPulseMeasure = IsAutoPulseMeasure,
-            DeviceName = string.IsNullOrEmpty(DeviceName)? "-" : DeviceName,
-            VendorName = string.IsNullOrEmpty(VendorName)? "-" : VendorName,
-            VendorAddress = string.IsNullOrEmpty(VendorAddress)? "-" : VendorAddress,
             ValidationType = ValidationType,
             MaximumFlow = MaximumFlow,
             MinimumFlow = MinimumFlow,

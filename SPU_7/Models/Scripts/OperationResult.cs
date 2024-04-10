@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Avalonia.Media.Transformation;
 using SPU_7.Common.Scripts;
 using SPU_7.Models.Scripts.Operations.Results;
 

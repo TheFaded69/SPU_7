@@ -6,7 +6,6 @@ using LiveChartsCore;
 using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Prism.DryIoc;
 using Prism.Ioc;
 using SkiaSharp;
@@ -65,6 +64,7 @@ public partial class App : PrismApplication
             containerRegistry.RegisterSingleton<IManualOperationService, ManualOperationService>();
             containerRegistry.RegisterSingleton<ITimerService, TimerService>();
             containerRegistry.RegisterSingleton<IOperationActionService, OperationActionService>();
+            //containerRegistry.RegisterInstance(typeof(ITimerService), new TimerService());
 
 
             //Db
@@ -121,9 +121,7 @@ public partial class App : PrismApplication
             LiveCharts.Configure(config => 
                     config 
                         .AddDarkTheme()  
-                        .HasGlobalSKTypeface(SKFontManager.Default.MatchCharacter('Ж'))  // <- Russian 
-                        
-                // here we use the index as X, and the population as Y 
+                        .HasGlobalSKTypeface(SKFontManager.Default.MatchCharacter('Ж'))
                         .HasMap<Flow>((flow, index) => new Coordinate(index, flow.flowValue == null ? 0 : (double)flow.flowValue)) 
             ); 
             

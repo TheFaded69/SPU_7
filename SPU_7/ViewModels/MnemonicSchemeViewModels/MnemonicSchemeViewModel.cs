@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Prism.Commands;
+﻿using System.Collections.ObjectModel;
 using Prism.Services.Dialogs;
-using SPU_7.Common.Stand;
 using SPU_7.Extensions;
 using SPU_7.Models.Scripts;
 using SPU_7.Models.Services.ContentServices;
 using SPU_7.Models.Services.Logger;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
-using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
 namespace SPU_7.ViewModels.MnemonicSchemeViewModels
 {

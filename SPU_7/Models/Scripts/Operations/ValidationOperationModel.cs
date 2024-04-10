@@ -44,9 +44,6 @@ public class ValidationOperationModel : OperationModel
         {
             _validationOperationResult = new ValidationOperationResult()
             {
-                VendorAddress = ((ValidationOperationConfigurationModel)_configuration).VendorAddress,
-                VendorName = ((ValidationOperationConfigurationModel)_configuration).VendorName,
-                DeviceName = ((ValidationOperationConfigurationModel)_configuration).DeviceName,
                 ValidationType = ((ValidationOperationConfigurationModel)_configuration).ValidationType,
                 MinimumFlow = ((ValidationOperationConfigurationModel)_configuration).MinimumFlow,
                 MaximumFlow = ((ValidationOperationConfigurationModel)_configuration).MaximumFlow,
@@ -227,6 +224,9 @@ public class ValidationOperationModel : OperationModel
                                     TargetVolumeDifference = point.Inaccuracy,
                                     ValidationVolumeTime = ((double)timeValidation * 3600),
                                     VendorNumber = _standController.GetVendorNumber(deviceIndex),
+                                    OwnerName = _standController.GetVendorName((int)activeLine, deviceIndex),
+                                    DeviceInfo = _standController.GetDeviceInfoType((int)activeLine, deviceIndex)
+                                        .DeviceTypeInfo,
                                     PressureDifference = _standController.PressureDifference,
                                     TargetFlow = point.TargetConsumption
                                 };
@@ -762,10 +762,10 @@ public class ValidationOperationModel : OperationModel
 
                     deviceList.Add(new DeviceInformation()
                     {
-                        VendorAddress = ((ValidationOperationConfigurationModel)_configuration).VendorAddress,
+                        VendorAddress = "-",
                         VendorNumber = _standController.GetVendorNumber(i),
-                        VendorName = ((ValidationOperationConfigurationModel)_configuration).VendorName,
-                        DeviceName = ((ValidationOperationConfigurationModel)_configuration).DeviceName,
+                        VendorName = _standController.GetVendorName((int)activeLine, i),
+                        DeviceName = _standController.GetDeviceName(i),
                         ProtocolNumber = protocolNumber
                     });
                 }

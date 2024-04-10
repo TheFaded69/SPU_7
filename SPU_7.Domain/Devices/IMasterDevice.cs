@@ -8,4 +8,6 @@ public interface IMasterDevice
     IPressureSensor PressureSensor { get; set; }
     
     ITemperatureSensor TemperatureSensor { get; set; }
+
+    //Task<float?> ReadCurrentFlow();
 }

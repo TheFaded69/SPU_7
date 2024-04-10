@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
-using Avalonia.Media.Transformation;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Scripts;

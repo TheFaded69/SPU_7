@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Prism.Commands;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;

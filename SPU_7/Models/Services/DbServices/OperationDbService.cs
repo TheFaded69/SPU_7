@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using SPU_7.Common.Scripts;
 using SPU_7.Database.Models;
 using SPU_7.Database.Repository;
 using SPU_7.Models.Scripts.Operations.Configurations;

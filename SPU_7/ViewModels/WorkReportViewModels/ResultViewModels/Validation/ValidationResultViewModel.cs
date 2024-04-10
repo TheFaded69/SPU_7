@@ -71,8 +71,12 @@ public class ValidationResultViewModel : ViewModelBase
         {
             SetProperty(ref _selectedVendorNumber, value);
 
-            VendorName = _validationOperationResult.VendorName;
-            DeviceName = _validationOperationResult.DeviceName;
+            VendorName = _validationOperationResult.ValidationPointResults.First()
+                .ValidationMeasureResults.First()
+                .ValidationDeviceResults[(int)SelectedIndex].OwnerName;
+            DeviceName = _validationOperationResult.ValidationPointResults.First()
+                .ValidationMeasureResults.First()
+                .ValidationDeviceResults[(int)SelectedIndex].DeviceInfo;
 
             ValidationDeviceResultViewModels = new ObservableCollection<ValidationDeviceResultViewModel>();
 

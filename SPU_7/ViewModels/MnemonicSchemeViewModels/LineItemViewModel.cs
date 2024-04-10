@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
-using Material.Styles.Converters;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Line;

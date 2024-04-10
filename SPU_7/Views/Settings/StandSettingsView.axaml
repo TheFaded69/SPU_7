@@ -876,69 +876,145 @@
                      IsVisible="{Binding IsDeviceVisible}">
                 <controls:Card Margin="5">
                     <DockPanel LastChildFill="False">
-                        <Grid RowDefinitions="Auto, Auto, Auto"
+                        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                               ColumnDefinitions="0.25*, 0.25*, 0.25*, 0.25*"
                               DockPanel.Dock="Top">
-                            <TextBlock Grid.Row="0"
-                                       Grid.Column="0"
-                                       Text="Порт управления стендом"
-                                       VerticalAlignment="Center"
-                                       Margin="5" />
                             <ComboBox Grid.Row="0"
-                                      Grid.Column="1"
-                                      assists:ComboBoxAssist.Label="Порт"
+                                      Grid.Column="0"
                                       Theme="{StaticResource MaterialOutlineComboBox}"
                                       Margin="5"
-                                      ItemsSource="{Binding ComPorts}"
-                                      SelectedItem="{Binding SelectedEquipmentPort}" />
-                            <TextBlock Grid.Row="0"
-                                       Grid.Column="2"
-                                       Text="Скорость порта"
-                                       VerticalAlignment="Center"
-                                       Margin="5" />
-                            <ComboBox Grid.Row="0"
-                                      Grid.Column="3"
-                                      Margin="5"
-                                      assists:ComboBoxAssist.Label="Скорость"
-                                      Theme="{StaticResource MaterialOutlineComboBox}"
-                                      ItemsSource="{Binding BaudRates}"
-                                      SelectedItem="{Binding SelectedEquipmentBaudRate}" />
-                            <TextBox Grid.Row="1"
-                                     Grid.Column="0"
+                                      ItemsSource="{Binding PortNames}"
+                                      SelectedItem="{Binding SelectedEquipmentPortName}"
+                                      assists:ComboBoxAssist.Label="Порт управления стендом" />
+                            <TextBox Grid.Row="0"
+                                     Grid.Column="1"
                                      Margin="5"
-                                     Text="{Binding TemperatureSensorAddress}"
                                      UseFloatingWatermark="True"
+                                     Watermark="хз"
+                                     assists:TextFieldAssist.Label="Запасное поле" />
+                            <ComboBox Grid.Row="0"
+                                      Grid.Column="2"
+                                      Theme="{StaticResource MaterialOutlineComboBox}"
+                                      Margin="5"
+                                      ItemsSource="{Binding PortNames}"
+                                      SelectedItem="{Binding SelectedPressureSensorPortName}"
+                                      assists:ComboBoxAssist.Label="Порт датчика давления" />
+                            <TextBox Grid.Row="0"
+                                     Grid.Column="3"
+                                     Margin="5"
+                                     UseFloatingWatermark="True"
+                                     Text="{Binding PressureSensorAddress}"
                                      Watermark="Введите адрес"
-                                     assists:TextFieldAssist.Label="Адрес датчика температуры" />
+                                     assists:TextFieldAssist.Label="Адрес датчика давления" />
+                            <ComboBox Grid.Row="1"
+                                      Grid.Column="0"
+                                      Margin="5"
+                                      Theme="{StaticResource MaterialOutlineComboBox}"
+                                      ItemsSource="{Binding PortNames}"
+                                      SelectedItem="{Binding SelectedPressureDifferenceSensorPortName}"
+                                      assists:ComboBoxAssist.Label="Порт управления датчиком перепада" />
                             <TextBox Grid.Row="1"
                                      Grid.Column="1"
                                      Margin="5"
-                                     Text="{Binding PressureSensorAddress}"
                                      UseFloatingWatermark="True"
                                      Watermark="Введите адрес"
-                                     assists:TextFieldAssist.Label="Адрес датчика давления" />
-                            <TextBox Grid.Row="1"
-                                     Grid.Column="2"
-                                     Margin="5"
-                                     Text="{Binding PressureResiverSensorAddress}"
-                                     UseFloatingWatermark="True"
-                                     Watermark="Введите адрес"
-                                     assists:TextFieldAssist.Label="Адрес датчика давления ресивер" />
+                                     Text="{Binding PressureDifferenceSensorAddress}"
+                                     assists:TextFieldAssist.Label="Адрес датчика перепада" />
+                            <ComboBox Grid.Row="1"
+                                      Grid.Column="2"
+                                      Margin="5"
+                                      Theme="{StaticResource MaterialOutlineComboBox}"
+                                      ItemsSource="{Binding PortNames}"
+                                      SelectedItem="{Binding SelectedPressureResiverSensorPortName}"
+                                      assists:ComboBoxAssist.Label="Порт датчика давления ресивера" />
                             <TextBox Grid.Row="1"
                                      Grid.Column="3"
                                      Margin="5"
-                                     Text="{Binding PressureDifferenceSensorAddress}"
+                                     UseFloatingWatermark="True"
+                                     Text="{Binding PressureResiverSensorAddress}"
+                                     Watermark="Введите адрес"
+                                     assists:TextFieldAssist.Label="Адрес датчика давления ресивера" />
+                            <ComboBox Grid.Row="2"
+                                      Grid.Column="0"
+                                      Margin="5"
+                                      Theme="{StaticResource MaterialOutlineComboBox}"
+                                      ItemsSource="{Binding PortNames}"
+                                      SelectedItem="{Binding SelectedTemperatureSensorPortName}"
+                                      assists:ComboBoxAssist.Label="Порт датчика температуры" />
+                            <TextBox Grid.Row="2"
+                                     Grid.Column="1"
+                                     Margin="5"
                                      UseFloatingWatermark="True"
                                      Watermark="Введите адрес"
-                                     assists:TextFieldAssist.Label="Адрес датчика перепада давления" />
+                                     Text="{Binding TemperatureSensorAddress}"
+                                     assists:TextFieldAssist.Label="Адрес датчика температуры" />
+                            <ComboBox Grid.Row="2"
+                                      Grid.Column="2"
+                                      Margin="5"
+                                      Theme="{StaticResource MaterialOutlineComboBox}"
+                                      ItemsSource="{Binding PortNames}"
+                                      SelectedItem="{Binding SelectedTHMeterPortName}"
+                                      assists:ComboBoxAssist.Label="Порт датчика ИВА" />
                             <TextBox Grid.Row="2"
-                                     Grid.Column="0"
+                                     Grid.Column="3"
                                      Margin="5"
-                                     Text="{Binding THMeterAddress}"
                                      UseFloatingWatermark="True"
+                                     Text="{Binding THMeterAddress}"
                                      Watermark="Введите адрес"
                                      assists:TextFieldAssist.Label="Адрес датчика ИВА" />
                         </Grid>
+
+                        <StackPanel DockPanel.Dock="Bottom"
+                                    HorizontalAlignment="Center"
+                                    Orientation="Horizontal">
+                            <Button Margin="5"
+                                    Command="{Binding AddPortCommand}">
+                                <materialIcons:MaterialIcon Kind="Add" />
+                            </Button>
+
+                            <Button Margin="5"
+                                    Command="{Binding RemovePortCommand}"
+                                    IsEnabled="{Binding SelectedPortViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <materialIcons:MaterialIcon Kind="Delete" />
+                            </Button>
+                        </StackPanel>
+
+                        <TextBlock DockPanel.Dock="Top"
+                                   Margin="5"
+                                   HorizontalAlignment="Center"
+                                   Text="Настройка портов" />
+
+                        <ListBox Margin="5"
+                                 ItemsSource="{Binding PortViewModels}"
+                                 SelectedItem="{Binding SelectedPortViewModel}"
+                                 HorizontalAlignment="Center"
+                                 DockPanel.Dock="Top">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ComboBox Margin="5"
+                                                  ItemsSource="{Binding PortNames}"
+                                                  SelectedItem="{Binding PortName}"
+                                                  assists:ComboBoxAssist.Label="Порт"
+                                                  Width="300"
+                                                  Theme="{StaticResource MaterialOutlineComboBox}" />
+                                        <ComboBox Margin="5"
+                                                  ItemsSource="{Binding PortBaudRates}"
+                                                  SelectedItem="{Binding PortBaudRate}"
+                                                  assists:ComboBoxAssist.Label="Скорость порта"
+                                                  Width="300"
+                                                  Theme="{StaticResource MaterialOutlineComboBox}" />
+                                        
+                                        <ComboBox Margin="5"
+                                                  ItemsSource="{Binding StopBits}"
+                                                  SelectedItem="{Binding SelectedStopBitDouble}"
+                                                  assists:ComboBoxAssist.Label="Стоп бит"
+                                                  Width="300"
+                                                  Theme="{StaticResource MaterialOutlineComboBox}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </DockPanel>
                 </controls:Card>
             </TabItem>

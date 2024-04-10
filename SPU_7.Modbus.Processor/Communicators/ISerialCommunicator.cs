@@ -28,6 +28,4 @@ public interface ISerialCommunicator : ICommunicator
     /// Прочитать имя порта коммуникатора
     /// </summary>
     string GetPortName();
-    
-    public void AddCollectionToLogger(ObservableCollection<LogMessage> observableCollection);
 }

@@ -1,6 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.ReactiveUI;
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SPU_7;

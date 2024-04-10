@@ -48,6 +48,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         SolenoidValveViewModels = new ObservableCollection<StandSettingsSolenoidValveViewModel>();
         LineViewModels = new ObservableCollection<StandSettingsLineViewModel>();
         PulseMeterViewModels = new ObservableCollection<StandSettingsPulseMeterViewModel>();
+        PortViewModels = new ObservableCollection<StandSettingsPortViewModel>();
         
         AddNozzleCommand = new DelegateCommand(AddNozzleCommandHandler);
         RemoveNozzleCommand = new DelegateCommand(RemoveNozzleCommandHandler);
@@ -61,30 +62,15 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         RemoveLineCommand = new DelegateCommand(RemoveLineCommandHandler);
         AddPulseMeterCommand = new DelegateCommand(AddPulseMeterCommandHandler);
         RemovePulseMeterCommand = new DelegateCommand(RemovePulseMeterCommandHandler);
+        AddPortCommand = new DelegateCommand(AddPortCommandHandler);
+        RemovePortCommand = new DelegateCommand(RemovePortCommandHandler);
         SaveSettingsCommand = new DelegateCommand(SaveSettingsCommandHandler);
         CancelCommand = new DelegateCommand(CancelCommandHandler);
         CreateNewSettingsProfile = new DelegateCommand(CreateNewSettingsProfileHandler);
         CreateNewSettingsProfileFromOtherCommand = new DelegateCommand(CreateNewSettingsProfileFromOtherCommandHandler);
         DeleteSettingsProfileCommand = new DelegateCommand(DeleteSettingsProfileCommandHandler);
         CloseWindowCommand = new DelegateCommand(CloseWindowCommandHandler);
-
-        ComPorts = new ObservableCollection<string>(SerialPort.GetPortNames());
-        BaudRates = new ObservableCollection<int>
-        {
-            300,
-            600,
-            1200,
-            2400,
-            4800,
-            9600,
-            19200,
-            38400,
-            57600,
-            115200,
-            230400,
-            460800,
-            921600
-        };
+        
         
         StringStandTypes = new ObservableCollection<string>(Enum
             .GetValues<StandType>()
@@ -190,9 +176,15 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     private string _validationVendorType;
     private string _validationVendorShortName;
     private ObservableCollection<StandSettingsLineViewModel> _lineViewModels;
-    private StandSettingsLineViewModel _selectedLineViewModel;
+    private ObservableCollection<StandSettingsPortViewModel> _portViewModels;
+    private StandSettingsPortViewModel _selectedPortViewModel;
     private ObservableCollection<StandSettingsPulseMeterViewModel> _pulseMeterViewModels;
     private StandSettingsPulseMeterViewModel _selectedPulseMeterViewModel;
+    private string _selectedTemperatureSensorPortName;
+    private string _selectedPressureSensorPortName;
+    private string _selectedThMeterPortName;
+    private string _selectedPressureDifferenceSensorPortName;
+    private string _selectedPressureResiverSensorPortName;
 
     #region Profiles
 
@@ -487,6 +479,12 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         get => _pulseMeterViewModels;
         set => SetProperty(ref _pulseMeterViewModels, value);
     }
+    
+    public ObservableCollection<StandSettingsPortViewModel> PortViewModels
+    {
+        get => _portViewModels;
+        set => SetProperty(ref _portViewModels, value);
+    }
 
     public StandSettingsPulseMeterViewModel SelectedPulseMeterViewModel
     {
@@ -576,23 +574,42 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     #endregion
 
     #region Equipment
+    public ObservableCollection<string> PortNames { get; set; }  = new(SerialPort.GetPortNames());
+    
+    public DelegateCommand AddPortCommand { get; }
 
-    public ObservableCollection<string> ComPorts { get; set; }
+    private void AddPortCommandHandler()
+    {
+        PortViewModels.Add(new StandSettingsPortViewModel
+        {
+            Number = PortViewModels.Count + 1,
+        });
+    }
 
-    public ObservableCollection<int> BaudRates { get; set; }
+    public DelegateCommand RemovePortCommand { get; }
 
-    public string SelectedEquipmentPort
+    private void RemovePortCommandHandler()
+    {
+        PortViewModels.Remove(SelectedPortViewModel);
+    }
+
+    public StandSettingsPortViewModel SelectedPortViewModel
+    {
+        get => _selectedPortViewModel;
+        set => SetProperty(ref _selectedPortViewModel, value);
+    }
+    public string SelectedEquipmentPortName
     {
         get => _selectedEquipmentPort;
         set => SetProperty(ref _selectedEquipmentPort, value);
     }
-
-    public int SelectedEquipmentBaudRate
+    
+    public int SelectedEquipmentPortBaudRate
     {
         get => _selectedEquipmentBaudRate;
         set => SetProperty(ref _selectedEquipmentBaudRate, value);
     }
-
+    
     public int TemperatureSensorAddress
     {
         get => _temperatureSensorAddress;
@@ -623,6 +640,36 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         set => SetProperty(ref _pressureDifferenceSensorAddress, value);
     }
 
+    public string SelectedTemperatureSensorPortName
+    {
+        get => _selectedTemperatureSensorPortName;
+        set => SetProperty(ref _selectedTemperatureSensorPortName, value);
+    }
+
+    public string SelectedPressureSensorPortName
+    {
+        get => _selectedPressureSensorPortName;
+        set => SetProperty(ref _selectedPressureSensorPortName, value);
+    }
+
+    public string SelectedTHMeterPortName
+    {
+        get => _selectedThMeterPortName;
+        set => SetProperty(ref _selectedThMeterPortName, value);
+    }
+
+    public string SelectedPressureResiverSensorPortName
+    {
+        get => _selectedPressureResiverSensorPortName;
+        set => SetProperty(ref _selectedPressureResiverSensorPortName, value);
+    }
+
+    public string SelectedPressureDifferenceSensorPortName
+    {
+        get => _selectedPressureDifferenceSensorPortName;
+        set => SetProperty(ref _selectedPressureDifferenceSensorPortName, value);
+    }
+
 
     public ObservableCollection<StandSettingsDeviceViewModel> DeviceViewModels { get; set; }
 
@@ -631,7 +678,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         get => _selectedDevice;
         set => SetProperty(ref _selectedDevice, value);
     }
-    
+
     public DelegateCommand AddDeviceCommand { get; }
 
     private void AddDeviceCommandHandler()
@@ -641,14 +688,14 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
             Number = DeviceViewModels.Count + 1
         });
     }
-    
+
     public DelegateCommand RemoveDeviceCommand { get; }
 
     private void RemoveDeviceCommandHandler()
     {
         DeviceViewModels.Remove(SelectedDevice);
     }
-    
+
     #endregion
     
     #region SPI settings

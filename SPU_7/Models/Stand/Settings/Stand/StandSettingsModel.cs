@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using SPU_7.Common.Settings;
-using SPU_7.Common.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
 namespace SPU_7.Models.Stand.Settings.Stand;
@@ -14,12 +12,19 @@ public class StandSettingsModel
     public ObservableCollection<StandSettingsSolenoidValveModel> SolenoidValveViewModels { get; set; }
     public ObservableCollection<StandSettingsPulseMeterModel> PulseMeterViewModels { get; set; }
     public ObservableCollection<StandSettingsLineModel> LineViewModels { get; set; }
-
+    public ObservableCollection<StandSettingsPortModel> PortViewModels { get; set; }
+    public StandSettingsFrequencyRegulatorModel FrequencyRegulatorViewModel { get; set; }
+    public string SelectedEquipmentPortName { get; set; }
     public int TemperatureSensorAddress { get; set; }
     public int PressureSensorAddress { get; set; }
     public int THMeterAddress { get; set; }
     public int PressureResiverSensorAddress { get; set; }
     public int PressureDifferenceSensorAddress { get; set; }
+    public string SelectedTemperatureSensorPortName { get; set; }
+    public string SelectedPressureSensorPortName { get; set; }
+    public string SelectedTHMeterPortName { get; set; }
+    public string SelectedPressureResiverSensorPortName { get; set; }
+    public string SelectedPressureDifferenceSensorPortName { get; set; }
     public int? StandNumber { get; set; }
     public string ProfileName { get; set; }
     public string SelectedEquipmentPort { get; set; }

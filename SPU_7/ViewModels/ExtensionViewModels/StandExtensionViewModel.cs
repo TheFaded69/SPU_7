@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Prism.Commands;
+﻿using Prism.Commands;
 using SPU_7.Common.Stand;
 using SPU_7.Models.Services.ContentServices;
 using SPU_7.Models.Services.Logger;

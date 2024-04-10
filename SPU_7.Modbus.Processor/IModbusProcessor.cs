@@ -34,6 +34,11 @@ public interface IModbusProcessor
     ProtocolSettings ProtocolSettings { get; set; }
 
     /// <summary>
+    /// Port name
+    /// </summary>
+    string PortName { get; set; }
+
+    /// <summary>
     /// Позволяет сменить коммуникатор (асинхронный)
     /// </summary>
     /// <param name="communicator">Класс, реализующий соединение</param>

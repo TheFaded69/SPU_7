@@ -69,6 +69,8 @@ public class ModbusProcessor : IModbusProcessor
     /// </summary>
     public ProtocolSettings ProtocolSettings { get; set; }
 
+    public string PortName { get; set; }
+
     #endregion
 
     #region Methods

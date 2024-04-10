@@ -42,20 +42,19 @@ namespace SPU_7.Models.Stand
         private readonly ILogger _logger;
         private readonly IStandSettingsService _settingsService;
 
-        private IModbusProcessor _modbusProcessor;
+        private List<IModbusProcessor> _modbusProcessors = new();
         
         private List<StandLine> _lines = new();
         private StandLine _line => SelectedLineIndex == null ? null : _lines[(int)SelectedLineIndex];
         
         private List<StandDevice> _standDevices = new();
-        //private List<IDevice> _devices = new();
-        private List<IPulseMeter2Channel> _pulseMeter2Channels = new();
+        
         private IFrequencyRegulatorDevice _frequencyRegulatorDevice;
         private IPressureSensor _pressureSensor;
         private IPressureSensor _pressureDifferenceSensor;
-        private IPressureSensor415M _pressureSensor415M;
+        private IPressureSensor415M _pressureResiverSensor;
         private ITemperatureSensor _temperatureSensor;
-        private ITHMeter _thMeter;
+        private ITHMeter _temperatureHumiditySensor;
 
         private ObservableCollection<LogMessage> _portLogMessages;
 
@@ -72,26 +71,35 @@ namespace SPU_7.Models.Stand
         /// </summary>
         public void Initialization()
         {
-            _modbusProcessor = new ModbusProcessor(new RequestSerializer(), new ResponseDeserializer())
+            foreach (var portViewModel in _settingsService.StandSettingsModel.PortViewModels)
             {
-                Communicator = new SerialCommunicator()
-            };
-
-
-            ((ISerialCommunicator)_modbusProcessor.Communicator).SetSerialPort(_settingsService.StandSettingsModel.SelectedEquipmentPort,
-                _settingsService.StandSettingsModel.SelectedEquipmentBaudRate,
-                8, Parity.None, StopBits.Two, Handshake.None, false, false);
-            _modbusProcessor.ProtocolSettings = new ProtocolSettings
-            {
-                Preamble = new byte[] { 0xFF, },
-                DelayAfterPreamble = 10,
-                IsPreambleNeed = false,
-                ReadTimeout = 3000,
-                WriteTimeout = 3000,
-                AttemptCount = 3,
-                IsPoolingNeed = false,
-                PoolingPeriod = 5000
-            };
+                var modbusProcessor = new ModbusProcessor(new RequestSerializer(), new ResponseDeserializer())
+                {
+                    Communicator = new SerialCommunicator(),
+                    PortName = portViewModel.PortName,
+                };
+                ((ISerialCommunicator)modbusProcessor.Communicator).SetSerialPort(portViewModel.PortName,
+                    portViewModel.PortBaudRate,
+                    8,
+                    Parity.None,
+                    portViewModel.SelectedStopBit,
+                    Handshake.None,
+                    false,
+                    false);
+                modbusProcessor.ProtocolSettings = new ProtocolSettings
+                {
+                    Preamble = new byte[] { 0xFF, },
+                    DelayAfterPreamble = 10,
+                    IsPreambleNeed = false,
+                    ReadTimeout = 5000,
+                    WriteTimeout = 5000,
+                    AttemptCount = 3,
+                    IsPoolingNeed = false,
+                    PoolingPeriod = 5000
+                };
+                _modbusProcessors.Add(modbusProcessor);
+            }
+            
             IRegisterMapEnum<StandDeviceRegisterMap> standDeviceRegisterMap = new RegisterMapEnum<StandDeviceRegisterMap>();
 
             var addressList = new List<int>();
@@ -134,100 +142,64 @@ namespace SPU_7.Models.Stand
             
             for (var i = 0; i < _settingsService.StandSettingsModel.LineViewModels.Count; i++)
             {
-                _lines.Add(new StandLine(_settingsService, _modbusProcessor, i));
+                _lines.Add(new StandLine(_settingsService, _modbusProcessors, i));
             }
             
             _standDevices = new List<StandDevice>();
             foreach (var address in addressList)
             {
-                _standDevices.Add(new StandDevice(_modbusProcessor, standDeviceRegisterMap, address));
+                _standDevices.Add(new StandDevice(
+                    _modbusProcessors.First(modbus =>
+                        modbus.PortName == _settingsService.StandSettingsModel.SelectedEquipmentPortName),
+                    standDeviceRegisterMap,
+                    address));
             }
 
-            _temperatureSensor = new TemperatureSensor(_modbusProcessor, new RegisterMapEnum<TemperatureSensorRegisterMap>(),
+            _temperatureSensor = new TemperatureSensor(
+                _modbusProcessors.First(mb =>
+                    mb.PortName == _settingsService.StandSettingsModel.SelectedTemperatureSensorPortName),
+                new RegisterMapEnum<TemperatureSensorRegisterMap>(),
                 _settingsService.StandSettingsModel.TemperatureSensorAddress);
-            _pressureSensor = new PressureSensor(_modbusProcessor, new RegisterMapEnum<PressureSensorRegisterMap>(),
+            _pressureSensor = new PressureSensor(
+                _modbusProcessors.First(mb =>
+                    mb.PortName == _settingsService.StandSettingsModel.SelectedPressureSensorPortName),
+                new RegisterMapEnum<PressureSensorRegisterMap>(),
                 _settingsService.StandSettingsModel.PressureSensorAddress);
-            _pressureDifferenceSensor = new PressureSensor(_modbusProcessor, new RegisterMapEnum<PressureSensorRegisterMap>(),
+            _pressureDifferenceSensor = new PressureSensor(
+                _modbusProcessors.First(mb =>
+                    mb.PortName == _settingsService.StandSettingsModel.SelectedPressureDifferenceSensorPortName),
+                new RegisterMapEnum<PressureSensorRegisterMap>(),
                 _settingsService.StandSettingsModel.PressureDifferenceSensorAddress);
-            _pressureSensor415M = new PressureSensor415M(_modbusProcessor, new RegisterMapEnum<PressureSensor415MRegisterMap>(),
+            _pressureResiverSensor = new PressureSensor415M(
+                _modbusProcessors.First(mb =>
+                    mb.PortName == _settingsService.StandSettingsModel.SelectedPressureResiverSensorPortName),
+                new RegisterMapEnum<PressureSensor415MRegisterMap>(),
                 _settingsService.StandSettingsModel.PressureResiverSensorAddress);
-            _thMeter = new THMeter(_modbusProcessor, new RegisterMapEnum<THMeterRegisterMap>(),
+            _temperatureHumiditySensor = new TemperatureHumiditySensor(
+                _modbusProcessors.First(
+                    mb => mb.PortName == _settingsService.StandSettingsModel.SelectedTHMeterPortName),
+                new RegisterMapEnum<TemperatureHumiditySensorRegisterMap>(),
                 _settingsService.StandSettingsModel.THMeterAddress);
 
-            _frequencyRegulatorDevice = new FrequencyRegulatorDevice(_modbusProcessor, new RegisterMapEnum<FrequencyRegulatorRegisterMap>(),
+            _frequencyRegulatorDevice = new FrequencyRegulatorDevice(
+                _modbusProcessors.First(mb =>
+                    mb.PortName == _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.PortName),
+                new RegisterMapEnum<FrequencyRegulatorRegisterMap>(),
                 GetPressureResiver,
-                -80,
-                129);
-            _frequencyRegulatorDevice?.SetPidParameters(10, 0.1, 0.01, 100, 0, 50, 0);
-
-            ((ISerialCommunicator)_modbusProcessor.Communicator).AddCollectionToLogger(_portLogMessages);
-
-            //_modbusProcessor.Start();
-
+                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.TargetPressure,
+                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.ModuleAddress);
+            _frequencyRegulatorDevice?.SetPidParameters(
+                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.kP,
+                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.kI,
+                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.kD,
+                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.pvMax,
+                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.pvMin,
+                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.outMax,
+                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.outMin);
+            
             _requestTaskCancellationTokenSource = new CancellationTokenSource();
             _requestTask = new Task(RequestTaskHandler, _requestTaskCancellationTokenSource.Token);
             //_requestTask.Start();
-        }
-
-        public void TestInitialization()
-        {
-            _modbusProcessor = new ModbusProcessor(new RequestSerializer(), new ResponseDeserializer())
-            {
-                Communicator = new SerialCommunicator()
-            };
-
-            var addressList = new List<int>();
-
-            foreach (var valveViewModel in _settingsService.StandSettingsModel.NozzleViewModels)
-            {
-                if (valveViewModel.Address != null && !addressList.Contains((int)valveViewModel.Address))
-                    addressList.Add((int)valveViewModel.Address);
-
-                if (valveViewModel.StateAddress != null && !addressList.Contains((int)valveViewModel.StateAddress))
-                    addressList.Add((int)valveViewModel.StateAddress);
-            }
-
-            foreach (var nozzleViewModel in _settingsService.StandSettingsModel.ValveViewModels)
-            {
-                if (nozzleViewModel.Address != null && !addressList.Contains((int)nozzleViewModel.Address))
-                    addressList.Add((int)nozzleViewModel.Address);
-
-                if (nozzleViewModel.StateAddress != null && !addressList.Contains((int)nozzleViewModel.StateAddress))
-                    addressList.Add((int)nozzleViewModel.StateAddress);
-            }
-
-            foreach (var solenoidValveModel in _settingsService.StandSettingsModel.SolenoidValveViewModels)
-            {
-                if (solenoidValveModel.Address != null && !addressList.Contains((int)solenoidValveModel.Address))
-                    addressList.Add((int)solenoidValveModel.Address);
-            }
-
-            for (var i = 0; i < _settingsService.StandSettingsModel.LineViewModels.Count; i++)
-            {
-                _lines.Add(new StandLine(_settingsService, _modbusProcessor, i));
-            }
-            
-
-            _standDevices = new List<StandDevice>();
-            foreach (var address in addressList)
-            {
-                _standDevices.Add(new StandDevice(_modbusProcessor, new RegisterMapEnum<StandDeviceRegisterMap>(), address));
-            }
-
-            _temperatureSensor = new TemperatureSensor(_modbusProcessor, new RegisterMapEnum<TemperatureSensorRegisterMap>(),
-                _settingsService.StandSettingsModel.TemperatureSensorAddress);
-            _pressureSensor = new PressureSensor(_modbusProcessor, new RegisterMapEnum<PressureSensorRegisterMap>(),
-                _settingsService.StandSettingsModel.PressureSensorAddress);
-            _pressureDifferenceSensor = new PressureSensor(_modbusProcessor, new RegisterMapEnum<PressureSensorRegisterMap>(),
-                _settingsService.StandSettingsModel.PressureDifferenceSensorAddress);
-            _pressureSensor415M = new PressureSensor415M(_modbusProcessor, new RegisterMapEnum<PressureSensor415MRegisterMap>(),
-                _settingsService.StandSettingsModel.PressureResiverSensorAddress);
-            _thMeter = new THMeter(_modbusProcessor, new RegisterMapEnum<THMeterRegisterMap>(),
-                _settingsService.StandSettingsModel.THMeterAddress);
-
-            _requestTaskCancellationTokenSource = new CancellationTokenSource();
-            _requestTask = new Task(RequestTaskHandler, _requestTaskCancellationTokenSource.Token);
-            _requestTask.Start();
         }
         
         public async Task<bool> SetModeMeasureAsync(ModeMeasure modeMeasure)
@@ -288,11 +260,11 @@ namespace SPU_7.Models.Stand
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                         PressureDifference = _pressureDifferenceSensor == null ? null : await _pressureDifferenceSensor.ReadPressureAsync();
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        PressureResiver = _pressureSensor415M == null ? null : await _pressureSensor415M.ReadPressureAsync();
+                        PressureResiver = _pressureResiverSensor == null ? null : await _pressureResiverSensor.ReadPressureAsync();
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        Temperature = _thMeter == null ? null : await _thMeter.ReadTemperatureAsync() / 100f;
+                        Temperature = _temperatureHumiditySensor == null ? null : await _temperatureHumiditySensor.ReadTemperatureAsync() / 100f;
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        Humidity = _thMeter == null ? null : await _thMeter.ReadHumidityAsync() / 100f;
+                        Humidity = _temperatureHumiditySensor == null ? null : await _temperatureHumiditySensor.ReadHumidityAsync() / 100f;
 
                     if (_line != null)
                         foreach (var device in _line.Devices)
@@ -822,6 +794,16 @@ namespace SPU_7.Models.Stand
         public async Task<int?> ReadPulseCountAsync(int deviceIndex)
         {
             return await _line.Devices[deviceIndex].ReadPulseCountAsync();
+        }
+
+        public string GetVendorName(int activeLine, int i)
+        {
+            return _lines[activeLine].Devices[i].VendorName;
+        }
+
+        public DeviceNameViewModel GetDeviceInfoType(int activeLine, int deviceIndex)
+        {
+            return new DeviceNameViewModel() { DeviceTypeInfo = _lines[activeLine].Devices[deviceIndex].DeviceTypeInfo };
         }
 
         public async Task<bool> SetConsumptionWithoutSelectionAsync(ObservableCollection<StandSettingsNozzleModel> pointSelectedNozzles)
@@ -1384,7 +1366,11 @@ namespace SPU_7.Models.Stand
                 Task.Delay(1000);
             }
 
-            _modbusProcessor?.ShutDown();
+            for (var i = _modbusProcessors.Count - 1; i >= 0; i--)
+            {
+                var modbusProcessor = _modbusProcessors[i];
+                modbusProcessor.ShutDown();
+            }
         }
 
         public async Task<bool> ResetToZeroPressureDifferenceAsync()

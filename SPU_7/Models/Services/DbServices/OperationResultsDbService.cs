@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Newtonsoft.Json;
-using SPU_7.Common.Scripts;
 using SPU_7.Common.Stand;
 using SPU_7.Database.Models;
 using SPU_7.Database.Repository;

@@ -1,5 +1,4 @@
 ﻿using Prism.Commands;
-using System.Linq;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;

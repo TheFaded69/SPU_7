@@ -346,4 +346,8 @@ public class PulseMeter2Channel : ModbusUnitProcessor<PulseMeter2ChannelRegister
     /// Получить время измерения кол-ва импульсов, ms
     /// </summary>
     public async Task<float?> GetMeasureCounterTimeAsync() => (float?) await ReadRegisterAsync(PulseMeter2ChannelRegisterMap.MeasureCounterTime);
+
+    public async Task<bool> SetTimeOutValueAsync(int timeSeconds)=>
+        await WriteRegisterAsync(PulseMeter2ChannelRegisterMap.PulseWaitingTimeout,
+            BitConverter.GetBytes((uint)timeSeconds).SwapBytes());
 }
