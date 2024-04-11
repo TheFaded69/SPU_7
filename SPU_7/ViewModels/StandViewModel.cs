@@ -103,7 +103,7 @@ namespace SPU_7.ViewModels
 
             UserControlExtension = new ExtensionView()
             {
-                DataContext = new ExtensionViewModel(_standController, _settingsService, _logger, _notificationService)
+                DataContext = new ExtensionViewModel(_standController, _settingsService, _logger, _notificationService, _dialogService)
             };
         }
     }

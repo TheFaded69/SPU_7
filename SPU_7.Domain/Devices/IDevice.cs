@@ -34,6 +34,8 @@ namespace SPU_7.Domain.Devices
         /// </summary>
         public string DeviceTypeInfo { get; set; }
 
+        public int PulseMeterNumber { get; set; }
+
 
         /// <summary>
         /// Сброс ДД на ноль
@@ -72,6 +74,16 @@ namespace SPU_7.Domain.Devices
         
         Task<uint?> GetEndMeasureTimeAsync();
 
-        Task<bool> SetPulseTimeOutAsync(int i);
+        /// <summary>
+        /// Считать коэффициенты калибровки БИПЧ
+        /// </summary>
+        /// <returns>1 и 2 коэффициенты</returns>
+        Task<(float?, float?)> ReadPulseCoefficientsAsync();
+        
+        /// <summary>
+        /// Записать 1 и 2 коэффициенты
+        /// </summary>
+        /// <returns>Получилось ли отправить запросы</returns>
+        Task<bool> WritePulseCoefficientsAsync(float firstCoefficient, float secondCoefficient);
     }
 }

@@ -1,0 +1,64 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:extensionViewModels="clr-namespace:SPU_7.ViewModels.ExtensionViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="extensionViewModels:PulseMeterCoefficientSettingsViewModel"
+             x:Class="SPU_7.Views.ExtensionViews.PulseMeterCoefficientSettingsView"
+             Loaded="Control_OnLoaded">
+    
+    <Design.DataContext>
+        <extensionViewModels:PulseMeterCoefficientSettingsViewModel/>
+    </Design.DataContext>
+    
+    <controls:Card>
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Top"
+                       LastChildFill="False">
+                <Button DockPanel.Dock="Right" 
+                        Width="46" 
+                        Height="46"
+                        Command="{Binding CloseWindowCommand}"
+                        ToolTip.Tip="Закрыть"
+                        Classes="flat">
+                    <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black"/>
+                </Button>
+                  
+                <TextBlock Margin="5"
+                           FontSize="20"
+                           Text="{Binding Title}"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center"/>
+            </DockPanel>
+            
+            <StackPanel DockPanel.Dock="Bottom"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button Content="Считать"
+                        Margin="5"
+                        Command="{Binding ReadCoefficientCommand}"/>
+                <Button Content="Записать"
+                        Margin="5"/>
+            </StackPanel>
+            
+            <DataGrid ItemsSource="{Binding PulseMeterCoefficientViewModels}"
+                      Margin="5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№"
+                                        Binding="{Binding Number}"/>
+                    <DataGridTextColumn Header="K1 считанный"
+                                        Binding="{Binding FirstCoefficientRead}"/>
+                    <DataGridTextColumn Header="K2 считанный"
+                                        Binding="{Binding SecondCoefficientRead}"/>
+                    <DataGridTextColumn Header="K1 запись"
+                                        Binding="{Binding FirstCoefficientWrite}"/>
+                    <DataGridTextColumn Header="K2 запись"
+                                        Binding="{Binding SecondCoefficientWrite}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </controls:Card>
+</UserControl>

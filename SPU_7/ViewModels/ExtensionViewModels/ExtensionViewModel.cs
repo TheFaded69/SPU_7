@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Prism.Services.Dialogs;
 using SPU_7.Models.Services.ContentServices;
 using SPU_7.Models.Services.Logger;
 using SPU_7.Models.Services.StandSetting;
@@ -10,12 +11,17 @@ namespace SPU_7.ViewModels.ExtensionViewModels;
 
 public class ExtensionViewModel : ViewModelBase
 {
-    public ExtensionViewModel(IStandController standController, IStandSettingsService settingsService, ILogger logger, INotificationService notificationService)
+    public ExtensionViewModel(IStandController standController, 
+        IStandSettingsService settingsService, 
+        ILogger logger, 
+        INotificationService notificationService,
+        IDialogService dialogService)
     {
         _standController = standController;
         _settingsService = settingsService;
         _logger = logger;
         _notificationService = notificationService;
+        _dialogService = dialogService;
 
         Init();
     }
@@ -23,10 +29,12 @@ public class ExtensionViewModel : ViewModelBase
     private readonly IStandSettingsService _settingsService;
     private readonly ILogger _logger;
     private readonly INotificationService _notificationService;
+    private readonly IDialogService _dialogService;
 
     private UserControl _standExtensionUserControl;
     private UserControl _vacuumCreatorExtensionUserControl;
     private UserControl _userControlWorkResult;
+    private UserControl _pulseMeterExtensionUserControl;
 
     public UserControl UserControlWorkResult
     {
@@ -46,6 +54,12 @@ public class ExtensionViewModel : ViewModelBase
         set => SetProperty(ref _vacuumCreatorExtensionUserControl, value);
     }
 
+    public UserControl PulseMeterExtensionUserControl
+    {
+        get => _pulseMeterExtensionUserControl;
+        set => SetProperty(ref _pulseMeterExtensionUserControl, value);
+    }
+    
     private void Init()
     {
         
@@ -60,6 +74,10 @@ public class ExtensionViewModel : ViewModelBase
         UserControlWorkResult = new WorkResultView
         {
             DataContext = new WorkResultViewModel(_logger, _standController, _settingsService)
+        };
+        PulseMeterExtensionUserControl = new PulseMeterExtensionView()
+        {
+            DataContext = new PulseMeterExtensionViewModel(_dialogService)
         };
     }
 }

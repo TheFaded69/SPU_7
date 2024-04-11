@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using SPU_7.Common.Line;
@@ -285,5 +286,12 @@ namespace SPU_7.Models.Stand
 
         string GetVendorName(int activeLine, int i);
         DeviceNameViewModel GetDeviceInfoType(int activeLine, int deviceIndex);
+        
+        
+        /// <summary>
+        /// Считать коэффициенты калибровки БИПЧ
+        /// </summary>
+        /// <returns></returns>
+        Task<List<(float?, float?)>> ReadPulseCoefficientsAsync();
     }
 }

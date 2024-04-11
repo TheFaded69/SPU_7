@@ -22,6 +22,7 @@ using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
 using SPU_7.ViewModels;
 using SPU_7.ViewModels.DeviceInformationViewModels;
+using SPU_7.ViewModels.ExtensionViewModels;
 using SPU_7.ViewModels.ScriptViewModels;
 using SPU_7.ViewModels.ScriptViewModels.OperationViewModels;
 using SPU_7.ViewModels.ScriptViewModels.OperationViewModels.OperationConfigurationViewModels;
@@ -29,6 +30,7 @@ using SPU_7.ViewModels.ScriptViewModels.OperationViewModels.OperationExecutingVi
 using SPU_7.ViewModels.Settings;
 using SPU_7.ViewModels.WorkReportViewModels;
 using SPU_7.Views;
+using SPU_7.Views.ExtensionViews;
 using SPU_7.Views.ScriptViews;
 using SPU_7.Views.ScriptViews.OperationResultViews;
 using SPU_7.Views.ScriptViews.OperationViews;
@@ -112,7 +114,8 @@ public partial class App : PrismApplication
             containerRegistry.RegisterDialog<NozzleSelectorView, NozzleSelectorViewModel>();
             containerRegistry.RegisterDialog<PdfViewerView, PdfViewerViewModel>();
             containerRegistry.RegisterDialog<MasterDeviceInfoView, MasterDeviceInfoViewModel>();
-            
+            containerRegistry.RegisterDialog<DeviceNamesView, DeviceNamesViewModel>();
+            containerRegistry.RegisterDialog<PulseMeterCoefficientSettingsView, PulseMeterCoefficientSettingsViewModel>();
             
         }
 

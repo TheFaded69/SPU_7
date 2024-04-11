@@ -18,6 +18,9 @@
             <ContentPresenter Width="400"
                               VerticalAlignment="Top"
                               Content="{Binding VacuumCreatorExtensionUserControl}" />
+            <ContentPresenter Width="400"
+                              VerticalAlignment="Top"
+                              Content="{Binding PulseMeterExtensionUserControl}" /> 
         </StackPanel>
     </DockPanel>
 </UserControl>

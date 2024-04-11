@@ -806,6 +806,25 @@ namespace SPU_7.Models.Stand
             return new DeviceNameViewModel() { DeviceTypeInfo = _lines[activeLine].Devices[deviceIndex].DeviceTypeInfo };
         }
 
+        public async Task<List<(float?, float?)>> ReadPulseCoefficientsAsync()
+        {
+            var coefficientList = new List<(float?, float?)>();
+
+            foreach (var pulseMeterViewModel in _settingsService.StandSettingsModel.PulseMeterViewModels)
+            {
+                coefficientList.Add(await ReadPulseCoefficientAsync(pulseMeterViewModel));
+            }
+
+            return coefficientList;
+        }
+        
+        private async Task<(float?, float?)> ReadPulseCoefficientAsync(StandSettingsPulseMeterModel settingsPulseMeterModel)
+        {
+            return await _lines.First(l => l.Devices.Any(device => device.PulseMeterNumber == settingsPulseMeterModel.Number))
+                .Devices.First(device => device.PulseMeterNumber == settingsPulseMeterModel.Number)
+                .ReadPulseCoefficientsAsync();
+        }
+
         public async Task<bool> SetConsumptionWithoutSelectionAsync(ObservableCollection<StandSettingsNozzleModel> pointSelectedNozzles)
         {
             foreach (var standSettingsNozzleModel in pointSelectedNozzles)

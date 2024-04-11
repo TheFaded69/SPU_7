@@ -74,6 +74,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
 
     public string VendorName { get; set; }
     public string DeviceTypeInfo { get; set; }
+    public int PulseMeterNumber { get; set; }
 
     public async Task<bool> ResetToZeroAsync() => await _pressureSensor.ResetToZeroAsync();
 
@@ -98,6 +99,19 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
 
     public async Task<uint?> GetEndMeasureTimeAsync()
         => await _pulseMeter2Channel.GetEndMeasureTimeAsync(_pulseMeterChannelType);
+
+    public async Task<(float?, float?)> ReadPulseCoefficientsAsync()
+    {
+        var firstCoefficient = await _pulseMeter2Channel.GetCorrectedAveargePeriodAsync(PulseMeterChannel.Channel1);
+        var secondCoefficient = await _pulseMeter2Channel.GetCorrectedAveargePeriodAsync(PulseMeterChannel.Channel2);
+
+        return (firstCoefficient, secondCoefficient);
+    }
+
+    public Task<bool> WritePulseCoefficientsAsync(float firstCoefficient, float secondCoefficient)
+    {
+        throw new NotImplementedException();
+    }
 
     public async Task<bool> SetPulseTimeOutAsync(int i)
     {
