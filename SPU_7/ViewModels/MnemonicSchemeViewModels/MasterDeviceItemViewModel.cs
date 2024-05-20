@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Services.Dialogs;
+using SPU_7.Common.Extensions;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
@@ -14,7 +15,9 @@ public class MasterDeviceItemViewModel : ViewModelBase
         _masterDeviceModel = masterDeviceModel;
 
         ValveItemViewModel = new ValveItemViewModel(valveViewModel, standController);
-
+        DeviceName = masterDeviceModel.SelectedMasterDeviceType.GetDescription();
+        VendorNumber = "№" + masterDeviceModel.VendorNumber;
+        
         OpenMasterDeviceInfoCommand = new DelegateCommand(OpenMasterDeviceInfoCommandHandler);
     }
 
@@ -26,7 +29,9 @@ public class MasterDeviceItemViewModel : ViewModelBase
     private float? _pressure;
     private float? _temperature;
     private ValveItemViewModel _valveItemViewModel;
-
+    
+    public string DeviceName { get; set; }
+    
     public ValveItemViewModel ValveItemViewModel
     {
         get => _valveItemViewModel;

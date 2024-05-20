@@ -251,43 +251,232 @@
                                                                            Margin="5">
                                                                 <TabControl DockPanel.Dock="Top">
 
-                                                                <TabItem Header="Устройства">
-                                                                    <DockPanel>
-                                                                        <DockPanel DockPanel.Dock="Left"
-                                                                            LastChildFill="False">
-                                                                            <ComboBox
-                                                                                ItemsSource="{Binding StringDeviceLineTypes}"
-                                                                                SelectedItem="{Binding SelectedStringDeviceLineType}"
-                                                                                DockPanel.Dock="Top"
-                                                                                Width="200"
-                                                                                assists:ComboBoxAssist.Label="Тип СГ"
-                                                                                Theme="{StaticResource MaterialOutlineComboBox}"
-                                                                                Margin="5" />
-                                                                            <CheckBox Content="Наличие реверса"
-                                                                                DockPanel.Dock="Top"
-                                                                                Margin="5"
-                                                                                IsChecked="{Binding IsReverseLine}" />
+                                                                    <TabItem Header="Устройства">
+                                                                        <DockPanel>
+                                                                            <DockPanel DockPanel.Dock="Left"
+                                                                                LastChildFill="False">
+                                                                                <ComboBox
+                                                                                    ItemsSource="{Binding StringDeviceLineTypes}"
+                                                                                    SelectedItem="{Binding SelectedStringDeviceLineType}"
+                                                                                    DockPanel.Dock="Top"
+                                                                                    Width="200"
+                                                                                    assists:ComboBoxAssist.Label="Тип СГ"
+                                                                                    Theme="{StaticResource MaterialOutlineComboBox}"
+                                                                                    Margin="5" />
+                                                                                <CheckBox Content="Наличие реверса"
+                                                                                    DockPanel.Dock="Top"
+                                                                                    Margin="5"
+                                                                                    IsChecked="{Binding IsReverseLine}" />
+                                                                            </DockPanel>
+                                                                            <DockPanel DockPanel.Dock="Right">
+
+                                                                                <StackPanel Orientation="Horizontal"
+                                                                                    HorizontalAlignment="Center"
+                                                                                    DockPanel.Dock="Bottom">
+                                                                                    <Button Margin="5"
+                                                                                        Command="{Binding AddDeviceCommand}">
+                                                                                        <materialIcons:MaterialIcon
+                                                                                            Kind="Add" />
+                                                                                    </Button>
+                                                                                    <Button Margin="5"
+                                                                                        Command="{Binding RemoveDeviceCommand}">
+                                                                                        <materialIcons:MaterialIcon
+                                                                                            Kind="Delete" />
+                                                                                    </Button>
+                                                                                </StackPanel>
+
+                                                                                <ListBox
+                                                                                    ItemsSource="{Binding DeviceViewModels}"
+                                                                                    SelectedItem="{Binding SelectedDeviceViewModel}">
+                                                                                    <ListBox.ItemTemplate>
+                                                                                        <DataTemplate>
+                                                                                            <StackPanel
+                                                                                                Orientation="Horizontal">
+                                                                                                <TextBlock Margin="5"
+                                                                                                    Text="{Binding Number, Converter={convertors:IntToStringNumberConverter}}"
+                                                                                                    VerticalAlignment="Center" />
+
+                                                                                                <TextBox
+                                                                                                    Text="{Binding PressureSensorAddress}"
+                                                                                                    Margin="5"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите адрес (0-255)"
+                                                                                                    assists:TextFieldAssist.Label="Адрес датчика давления" />
+
+                                                                                                <TextBox
+                                                                                                    Text="{Binding PulseMeterNumber}"
+                                                                                                    Margin="5"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите номер"
+                                                                                                    assists:TextFieldAssist.Label="Адрес БИПЧ" />
+
+                                                                                                <TextBox
+                                                                                                    Text="{Binding PulseMeterChannelNumber}"
+                                                                                                    Margin="5"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите номер"
+                                                                                                    assists:TextFieldAssist.Label="Номер канала БИПЧ" />
+
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Адрес модуля"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите адрес"
+                                                                                                    IsVisible="{Binding IsValveEnable}"
+                                                                                                    Text="{Binding Address}" />
+
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Регистр в модуле"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите hex"
+                                                                                                    IsVisible="{Binding IsValveEnable}"
+                                                                                                    Text="{Binding RegisterAddress}" />
+
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Номер бита"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark=""
+                                                                                                    IsVisible="{Binding IsValveEnable}"
+                                                                                                    Text="{Binding BitNumber}" />
+
+
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Адрес состояния модуля"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите адрес"
+                                                                                                    IsVisible="{Binding IsValveEnable}"
+                                                                                                    Text="{Binding StateAddress}" />
+
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Регистр состояния в модуле"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите hex"
+                                                                                                    IsVisible="{Binding IsValveEnable}"
+                                                                                                    Text="{Binding StateRegisterAddress}" />
+
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Номер бита состояния"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    IsVisible="{Binding IsValveEnable}"
+                                                                                                    Text="{Binding StateBitNumber}" />
+
+                                                                                                <CheckBox Margin="5"
+                                                                                                    IsChecked="{Binding IsControlState}"
+                                                                                                    Content="Контроль состояния"
+                                                                                                    IsVisible="{Binding IsValveEnable}"
+                                                                                                    VerticalAlignment="Center" />
+
+                                                                                            </StackPanel>
+                                                                                        </DataTemplate>
+                                                                                    </ListBox.ItemTemplate>
+                                                                                </ListBox>
+                                                                            </DockPanel>
                                                                         </DockPanel>
+                                                                    </TabItem>
+
+                                                                    <TabItem Header="Мастер-устройства">
                                                                         <DockPanel DockPanel.Dock="Right">
 
                                                                             <StackPanel Orientation="Horizontal"
                                                                                 HorizontalAlignment="Center"
                                                                                 DockPanel.Dock="Bottom">
                                                                                 <Button Margin="5"
-                                                                                    Command="{Binding AddDeviceCommand}">
+                                                                                    Command="{Binding AddMasterDeviceCommand}">
                                                                                     <materialIcons:MaterialIcon
                                                                                         Kind="Add" />
                                                                                 </Button>
                                                                                 <Button Margin="5"
-                                                                                    Command="{Binding RemoveDeviceCommand}">
+                                                                                    Command="{Binding RemoveMasterDeviceCommand}">
                                                                                     <materialIcons:MaterialIcon
                                                                                         Kind="Delete" />
                                                                                 </Button>
                                                                             </StackPanel>
 
+
                                                                             <ListBox
-                                                                                ItemsSource="{Binding DeviceViewModels}"
-                                                                                SelectedItem="{Binding SelectedDeviceViewModel}">
+                                                                                ItemsSource="{Binding MasterDeviceViewModels}"
+                                                                                SelectedItem="{Binding SelectedMasterDeviceViewModel}">
+                                                                                <ListBox.ItemTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <StackPanel
+                                                                                            Orientation="Horizontal">
+                                                                                            <ComboBox
+                                                                                                DockPanel.Dock="Left"
+                                                                                                Width="300"
+                                                                                                ItemsSource="{Binding MasterDeviceTypesString}"
+                                                                                                SelectedItem="{Binding SelectedMasterDeviceTypeString}"
+                                                                                                Margin="5"
+                                                                                                assists:ComboBoxAssist.Label="Тип мастера-устройства"
+                                                                                                Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                            <TextBox Margin="5"
+                                                                                                assists:TextFieldAssist.Label="Заводской номер"
+                                                                                                UseFloatingWatermark="True"
+                                                                                                Text="{Binding VendorNumber}"  />
+                                                                                            <ComboBox IsVisible="{Binding IsConnectionInfoVisible}"
+                                                                                                DockPanel.Dock="Left"
+                                                                                                Width="300"
+                                                                                                ItemsSource="{Binding PortNames}"
+                                                                                                SelectedItem="{Binding SelectedComPort}"
+                                                                                                Margin="5"
+                                                                                                assists:ComboBoxAssist.Label="Порт мастер-устройства"
+                                                                                                Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                            <TextBox Margin="5"
+                                                                                                assists:TextFieldAssist.Label="Адрес мастер-устройства"
+                                                                                                UseFloatingWatermark="True"
+                                                                                                IsVisible="{Binding IsConnectionInfoVisible}"
+                                                                                                Text="{Binding MasterDeviceAddress}"  />
+                                                                                            <ComboBox
+                                                                                                DockPanel.Dock="Left"
+                                                                                                Width="300"
+                                                                                                ItemsSource="{Binding PortNames}"
+                                                                                                SelectedItem="{Binding SelectedPressureSensorComPort}"
+                                                                                                Margin="5"
+                                                                                                assists:ComboBoxAssist.Label="Порт ДД"
+                                                                                                Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                            <TextBox Margin="5"
+                                                                                                assists:TextFieldAssist.Label="Адрес ДД"
+                                                                                                UseFloatingWatermark="True"
+                                                                                                Text="{Binding PressureSensorAddress}"  />
+                                                                                            <ComboBox
+                                                                                                DockPanel.Dock="Left"
+                                                                                                Width="300"
+                                                                                                ItemsSource="{Binding PortNames}"
+                                                                                                SelectedItem="{Binding SelectedTemperatureSensorComPort}"
+                                                                                                Margin="5"
+                                                                                                assists:ComboBoxAssist.Label="Порт ДТ"
+                                                                                                Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                            <TextBox Margin="5"
+                                                                                                assists:TextFieldAssist.Label="Адрес ДТ"
+                                                                                                UseFloatingWatermark="True"
+                                                                                                Text="{Binding TemperatureSensorAddress}"  />
+                                                                                        </StackPanel>
+                                                                                    </DataTemplate>
+                                                                                </ListBox.ItemTemplate>
+                                                                            </ListBox>
+                                                                        </DockPanel>
+                                                                    </TabItem>
+
+                                                                    <TabItem Header="Сопла">
+                                                                        <DockPanel>
+                                                                            <StackPanel DockPanel.Dock="Bottom"
+                                                                                HorizontalAlignment="Center"
+                                                                                Orientation="Horizontal">
+                                                                                <Button Margin="5"
+                                                                                    Command="{Binding AddNozzleCommand}">
+                                                                                    <materialIcons:MaterialIcon
+                                                                                        Kind="Add" />
+                                                                                </Button>
+
+                                                                                <Button Margin="5"
+                                                                                    Command="{Binding RemoveNozzleCommand}"
+                                                                                    IsEnabled="{Binding SelectedNozzleViewModels, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                                                                    <materialIcons:MaterialIcon
+                                                                                        Kind="Delete" />
+                                                                                </Button>
+                                                                            </StackPanel>
+
+                                                                            <ListBox Margin="5"
+                                                                                ItemsSource="{Binding NozzleViewModels}"
+                                                                                SelectedItem="{Binding SelectedNozzleViewModel}">
                                                                                 <ListBox.ItemTemplate>
                                                                                     <DataTemplate>
                                                                                         <StackPanel
@@ -296,282 +485,139 @@
                                                                                                 Text="{Binding Number, Converter={convertors:IntToStringNumberConverter}}"
                                                                                                 VerticalAlignment="Center" />
 
-                                                                                            <TextBox
-                                                                                                Text="{Binding PressureSensorAddress}"
-                                                                                                Margin="5"
+                                                                                            <TextBox Margin="5"
+                                                                                                assists:TextFieldAssist.Label="Расход сопла, м3/ч"
                                                                                                 UseFloatingWatermark="True"
-                                                                                                Watermark="Введите адрес (0-255)"
-                                                                                                assists:TextFieldAssist.Label="Адрес датчика давления" />
-
-                                                                                            <TextBox
-                                                                                                Text="{Binding PulseMeterNumber}"
-                                                                                                Margin="5"
+                                                                                                Watermark="Введите расход"
+                                                                                                Text="{Binding NozzleValue}" />
+                                                                                            <TextBox Margin="5"
+                                                                                                assists:TextFieldAssist.Label="Расход сопла фактический, м3/ч"
                                                                                                 UseFloatingWatermark="True"
-                                                                                                Watermark="Введите номер"
-                                                                                                assists:TextFieldAssist.Label="Адрес БИПЧ" />
-
-                                                                                            <TextBox
-                                                                                                Text="{Binding PulseMeterChannelNumber}"
-                                                                                                Margin="5"
-                                                                                                UseFloatingWatermark="True"
-                                                                                                Watermark="Введите номер"
-                                                                                                assists:TextFieldAssist.Label="Номер канала БИПЧ" />
-
+                                                                                                Watermark="Введите расход"
+                                                                                                Text="{Binding NozzleFactValue}" />
                                                                                             <TextBox Margin="5"
                                                                                                 assists:TextFieldAssist.Label="Адрес модуля"
                                                                                                 UseFloatingWatermark="True"
                                                                                                 Watermark="Введите адрес"
-                                                                                                IsVisible="{Binding IsValveEnable}"
                                                                                                 Text="{Binding Address}" />
 
                                                                                             <TextBox Margin="5"
                                                                                                 assists:TextFieldAssist.Label="Регистр в модуле"
                                                                                                 UseFloatingWatermark="True"
                                                                                                 Watermark="Введите hex"
-                                                                                                IsVisible="{Binding IsValveEnable}"
                                                                                                 Text="{Binding RegisterAddress}" />
 
                                                                                             <TextBox Margin="5"
                                                                                                 assists:TextFieldAssist.Label="Номер бита"
                                                                                                 UseFloatingWatermark="True"
                                                                                                 Watermark=""
-                                                                                                IsVisible="{Binding IsValveEnable}"
                                                                                                 Text="{Binding BitNumber}" />
-
 
                                                                                             <TextBox Margin="5"
                                                                                                 assists:TextFieldAssist.Label="Адрес состояния модуля"
                                                                                                 UseFloatingWatermark="True"
                                                                                                 Watermark="Введите адрес"
-                                                                                                IsVisible="{Binding IsValveEnable}"
                                                                                                 Text="{Binding StateAddress}" />
 
                                                                                             <TextBox Margin="5"
                                                                                                 assists:TextFieldAssist.Label="Регистр состояния в модуле"
                                                                                                 UseFloatingWatermark="True"
                                                                                                 Watermark="Введите hex"
-                                                                                                IsVisible="{Binding IsValveEnable}"
                                                                                                 Text="{Binding StateRegisterAddress}" />
 
                                                                                             <TextBox Margin="5"
                                                                                                 assists:TextFieldAssist.Label="Номер бита состояния"
                                                                                                 UseFloatingWatermark="True"
-                                                                                                IsVisible="{Binding IsValveEnable}"
+                                                                                                Watermark=""
                                                                                                 Text="{Binding StateBitNumber}" />
 
                                                                                             <CheckBox Margin="5"
                                                                                                 IsChecked="{Binding IsControlState}"
                                                                                                 Content="Контроль состояния"
-                                                                                                IsVisible="{Binding IsValveEnable}"
                                                                                                 VerticalAlignment="Center" />
-
                                                                                         </StackPanel>
                                                                                     </DataTemplate>
                                                                                 </ListBox.ItemTemplate>
                                                                             </ListBox>
                                                                         </DockPanel>
-                                                                    </DockPanel>
-                                                                </TabItem>
+                                                                    </TabItem>
 
-                                                                <TabItem Header="Мастер-устройства">
-                                                                    <DockPanel DockPanel.Dock="Right">
+                                                                    <TabItem Header="Вентиляторы">
+                                                                        <DockPanel DockPanel.Dock="Right">
 
-                                                                        <StackPanel Orientation="Horizontal"
-                                                                            HorizontalAlignment="Center"
-                                                                            DockPanel.Dock="Bottom">
-                                                                            <Button Margin="5"
-                                                                                Command="{Binding AddMasterDeviceCommand}">
-                                                                                <materialIcons:MaterialIcon
-                                                                                    Kind="Add" />
-                                                                            </Button>
-                                                                            <Button Margin="5"
-                                                                                Command="{Binding RemoveMasterDeviceCommand}">
-                                                                                <materialIcons:MaterialIcon
-                                                                                    Kind="Delete" />
-                                                                            </Button>
-                                                                        </StackPanel>
+                                                                            <StackPanel Orientation="Horizontal"
+                                                                                HorizontalAlignment="Center"
+                                                                                DockPanel.Dock="Bottom">
+                                                                                <Button Margin="5"
+                                                                                    Command="{Binding AddFanCommand}">
+                                                                                    <materialIcons:MaterialIcon
+                                                                                        Kind="Add" />
+                                                                                </Button>
+                                                                                <Button Margin="5"
+                                                                                    Command="{Binding RemoveFanCommand}">
+                                                                                    <materialIcons:MaterialIcon
+                                                                                        Kind="Delete" />
+                                                                                </Button>
+                                                                            </StackPanel>
 
+                                                                            <ListBox
+                                                                                ItemsSource="{Binding FanViewModels}"
+                                                                                SelectedItem="{Binding SelectedFanViewModel}">
+                                                                                <ListBox.ItemTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <StackPanel
+                                                                                            Orientation="Horizontal">
+                                                                                            <CheckBox Margin="5"
+                                                                                                Content="Игольчатый клапан"
+                                                                                                IsChecked="{Binding IsNeedleValveEnable}" />
+                                                                                        </StackPanel>
+                                                                                    </DataTemplate>
+                                                                                </ListBox.ItemTemplate>
+                                                                            </ListBox>
+                                                                        </DockPanel>
+                                                                    </TabItem>
 
-                                                                        <ListBox
-                                                                            ItemsSource="{Binding MasterDeviceViewModels}"
-                                                                            SelectedItem="{Binding SelectedMasterDeviceViewModel}">
-                                                                            <ListBox.ItemTemplate>
-                                                                                <DataTemplate>
-                                                                                    <StackPanel
-                                                                                        Orientation="Horizontal">
-                                                                                        <ComboBox DockPanel.Dock="Left"
-                                                                                            Width="300"
-                                                                                            Margin="5"
-                                                                                            assists:ComboBoxAssist.Label="Тип мастера-устройства"
-                                                                                            Theme="{StaticResource MaterialOutlineComboBox}" />
-                                                                                    </StackPanel>
-                                                                                </DataTemplate>
-                                                                            </ListBox.ItemTemplate>
-                                                                        </ListBox>
-                                                                    </DockPanel>
-                                                                </TabItem>
+                                                                    <TabItem Header="Вакуумные насосы">
+                                                                        <DockPanel DockPanel.Dock="Right">
 
-                                                                <TabItem Header="Сопла">
-                                                                    <DockPanel>
-                                                                        <StackPanel DockPanel.Dock="Bottom"
-                                                                            HorizontalAlignment="Center"
-                                                                            Orientation="Horizontal">
-                                                                            <Button Margin="5"
-                                                                                Command="{Binding AddNozzleCommand}">
-                                                                                <materialIcons:MaterialIcon Kind="Add" />
-                                                                            </Button>
+                                                                            <StackPanel Orientation="Horizontal"
+                                                                                HorizontalAlignment="Center"
+                                                                                DockPanel.Dock="Bottom">
+                                                                                <Button Margin="5"
+                                                                                    Command="{Binding AddVacuumValveCommand}">
+                                                                                    <materialIcons:MaterialIcon
+                                                                                        Kind="Add" />
+                                                                                </Button>
+                                                                                <Button Margin="5"
+                                                                                    Command="{Binding RemoveVacuumValveCommand}">
+                                                                                    <materialIcons:MaterialIcon
+                                                                                        Kind="Delete" />
+                                                                                </Button>
+                                                                            </StackPanel>
 
-                                                                            <Button Margin="5"
-                                                                                Command="{Binding RemoveNozzleCommand}"
-                                                                                IsEnabled="{Binding SelectedNozzleViewModels, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                                                                <materialIcons:MaterialIcon
-                                                                                    Kind="Delete" />
-                                                                            </Button>
-                                                                        </StackPanel>
+                                                                            <ListBox
+                                                                                ItemsSource="{Binding VacuumValveViewModels}"
+                                                                                SelectedItem="{Binding SelectedVacuumValveViewModel}">
+                                                                                <ListBox.ItemTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <StackPanel
+                                                                                            Orientation="Horizontal">
+                                                                                            <ComboBox
+                                                                                                DockPanel.Dock="Left"
+                                                                                                Width="300"
+                                                                                                Margin="5"
+                                                                                                assists:ComboBoxAssist.Label="Тип вакуумного насоса"
+                                                                                                Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                        </StackPanel>
+                                                                                    </DataTemplate>
+                                                                                </ListBox.ItemTemplate>
+                                                                            </ListBox>
+                                                                        </DockPanel>
+                                                                    </TabItem>
 
-                                                                        <ListBox Margin="5"
-                                                                            ItemsSource="{Binding NozzleViewModels}"
-                                                                            SelectedItem="{Binding SelectedNozzleViewModel}">
-                                                                            <ListBox.ItemTemplate>
-                                                                                <DataTemplate>
-                                                                                    <StackPanel
-                                                                                        Orientation="Horizontal">
-                                                                                        <TextBlock Margin="5"
-                                                                                            Text="{Binding Number, Converter={convertors:IntToStringNumberConverter}}"
-                                                                                            VerticalAlignment="Center" />
-
-                                                                                        <TextBox Margin="5"
-                                                                                            assists:TextFieldAssist.Label="Расход сопла, м3/ч"
-                                                                                            UseFloatingWatermark="True"
-                                                                                            Watermark="Введите расход"
-                                                                                            Text="{Binding NozzleValue}" />
-                                                                                        <TextBox Margin="5"
-                                                                                            assists:TextFieldAssist.Label="Расход сопла фактический, м3/ч"
-                                                                                            UseFloatingWatermark="True"
-                                                                                            Watermark="Введите расход"
-                                                                                            Text="{Binding NozzleFactValue}" />
-                                                                                        <TextBox Margin="5"
-                                                                                            assists:TextFieldAssist.Label="Адрес модуля"
-                                                                                            UseFloatingWatermark="True"
-                                                                                            Watermark="Введите адрес"
-                                                                                            Text="{Binding Address}" />
-
-                                                                                        <TextBox Margin="5"
-                                                                                            assists:TextFieldAssist.Label="Регистр в модуле"
-                                                                                            UseFloatingWatermark="True"
-                                                                                            Watermark="Введите hex"
-                                                                                            Text="{Binding RegisterAddress}" />
-
-                                                                                        <TextBox Margin="5"
-                                                                                            assists:TextFieldAssist.Label="Номер бита"
-                                                                                            UseFloatingWatermark="True"
-                                                                                            Watermark=""
-                                                                                            Text="{Binding BitNumber}" />
-
-                                                                                        <TextBox Margin="5"
-                                                                                            assists:TextFieldAssist.Label="Адрес состояния модуля"
-                                                                                            UseFloatingWatermark="True"
-                                                                                            Watermark="Введите адрес"
-                                                                                            Text="{Binding StateAddress}" />
-
-                                                                                        <TextBox Margin="5"
-                                                                                            assists:TextFieldAssist.Label="Регистр состояния в модуле"
-                                                                                            UseFloatingWatermark="True"
-                                                                                            Watermark="Введите hex"
-                                                                                            Text="{Binding StateRegisterAddress}" />
-
-                                                                                        <TextBox Margin="5"
-                                                                                            assists:TextFieldAssist.Label="Номер бита состояния"
-                                                                                            UseFloatingWatermark="True"
-                                                                                            Watermark=""
-                                                                                            Text="{Binding StateBitNumber}" />
-
-                                                                                        <CheckBox Margin="5"
-                                                                                            IsChecked="{Binding IsControlState}"
-                                                                                            Content="Контроль состояния"
-                                                                                            VerticalAlignment="Center" />
-                                                                                    </StackPanel>
-                                                                                </DataTemplate>
-                                                                            </ListBox.ItemTemplate>
-                                                                        </ListBox>
-                                                                    </DockPanel>
-                                                                </TabItem>
-
-                                                                <TabItem Header="Вентиляторы">
-                                                                    <DockPanel DockPanel.Dock="Right">
-
-                                                                        <StackPanel Orientation="Horizontal"
-                                                                            HorizontalAlignment="Center"
-                                                                            DockPanel.Dock="Bottom">
-                                                                            <Button Margin="5"
-                                                                                Command="{Binding AddFanCommand}">
-                                                                                <materialIcons:MaterialIcon
-                                                                                    Kind="Add" />
-                                                                            </Button>
-                                                                            <Button Margin="5"
-                                                                                Command="{Binding RemoveFanCommand}">
-                                                                                <materialIcons:MaterialIcon
-                                                                                    Kind="Delete" />
-                                                                            </Button>
-                                                                        </StackPanel>
-
-                                                                        <ListBox
-                                                                            ItemsSource="{Binding FanViewModels}"
-                                                                            SelectedItem="{Binding SelectedFanViewModel}">
-                                                                            <ListBox.ItemTemplate>
-                                                                                <DataTemplate>
-                                                                                    <StackPanel
-                                                                                        Orientation="Horizontal">
-                                                                                        <CheckBox Margin="5"
-                                                                                            Content="Игольчатый клапан"
-                                                                                            IsChecked="{Binding IsNeedleValveEnable}" />
-                                                                                    </StackPanel>
-                                                                                </DataTemplate>
-                                                                            </ListBox.ItemTemplate>
-                                                                        </ListBox>
-                                                                    </DockPanel>
-                                                                </TabItem>
-
-                                                                <TabItem Header="Вакуумные насосы">
-                                                                    <DockPanel DockPanel.Dock="Right">
-
-                                                                        <StackPanel Orientation="Horizontal"
-                                                                            HorizontalAlignment="Center"
-                                                                            DockPanel.Dock="Bottom">
-                                                                            <Button Margin="5"
-                                                                                Command="{Binding AddVacuumValveCommand}">
-                                                                                <materialIcons:MaterialIcon
-                                                                                    Kind="Add" />
-                                                                            </Button>
-                                                                            <Button Margin="5"
-                                                                                Command="{Binding RemoveVacuumValveCommand}">
-                                                                                <materialIcons:MaterialIcon
-                                                                                    Kind="Delete" />
-                                                                            </Button>
-                                                                        </StackPanel>
-
-                                                                        <ListBox
-                                                                            ItemsSource="{Binding VacuumValveViewModels}"
-                                                                            SelectedItem="{Binding SelectedVacuumValveViewModel}">
-                                                                            <ListBox.ItemTemplate>
-                                                                                <DataTemplate>
-                                                                                    <StackPanel
-                                                                                        Orientation="Horizontal">
-                                                                                        <ComboBox DockPanel.Dock="Left"
-                                                                                            Width="300"
-                                                                                            Margin="5"
-                                                                                            assists:ComboBoxAssist.Label="Тип вакуумного насоса"
-                                                                                            Theme="{StaticResource MaterialOutlineComboBox}" />
-                                                                                    </StackPanel>
-                                                                                </DataTemplate>
-                                                                            </ListBox.ItemTemplate>
-                                                                        </ListBox>
-                                                                    </DockPanel>
-                                                                </TabItem>
-
-                                                            </TabControl>
+                                                                </TabControl>
                                                             </controls:Card>
-                                                            
+
                                                             <DockPanel DockPanel.Dock="Top"
                                                                        LastChildFill="False">
                                                                 <ComboBox DockPanel.Dock="Left"
@@ -582,7 +628,7 @@
                                                                           assists:ComboBoxAssist.Label="Тип линии"
                                                                           Theme="{StaticResource MaterialOutlineComboBox}" />
                                                             </DockPanel>
-                                                            
+
                                                             <StackPanel DockPanel.Dock="Top"
                                                                         Orientation="Horizontal">
                                                                 <CheckBox Margin="5, 20, 5, 22"
@@ -1004,7 +1050,7 @@
                                                   assists:ComboBoxAssist.Label="Скорость порта"
                                                   Width="300"
                                                   Theme="{StaticResource MaterialOutlineComboBox}" />
-                                        
+
                                         <ComboBox Margin="5"
                                                   ItemsSource="{Binding StopBits}"
                                                   SelectedItem="{Binding SelectedStopBitDouble}"

@@ -23,7 +23,7 @@
                 <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black" />
             </Button>
 
-            <TextBlock Margin="5"
+            <TextBlock Margin="10,5,5,5"
                        FontSize="20"
                        Text="{Binding Title}"
                        DockPanel.Dock="Left"

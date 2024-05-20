@@ -36,11 +36,12 @@ public class LineItemViewModel : ViewModelBase
             case LineType.None:
                 break;
             case LineType.MasterDeviceLineType:
+            {
                 IsMasterDeviceVisible = true;
                 IsFanVisible = true;
-                ValidationHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count - 1) * 90;
+                ValidationHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count - 1) * 110;
 
-            {
+            
                 double firstHeight = 0;
                 double secondHeight = 0;
                 double totalHeight = 0;

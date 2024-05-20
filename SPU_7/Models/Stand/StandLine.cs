@@ -35,7 +35,7 @@ public class StandLine
                             mp.PortName == masterDeviceModel.SelectedComPort), new RegisterMapEnum<GFGRegisterMap>()),
                         MasterDeviceType.Rabo => new RaboDevice(),
                         MasterDeviceType.RGT => new RGTDevice(),
-                        _ => throw new ArgumentOutOfRangeException()
+                        _ => new RaboDevice()
                     });
                 }
                 break;
