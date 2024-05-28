@@ -14,7 +14,7 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:operationViewModels="clr-namespace:SPU_7.ViewModels.ScriptViewModels.OperationViewModels"
              Height="900"
-             Width="1100"
+             Width="1300"
              
              Loaded="Control_OnLoaded">
     

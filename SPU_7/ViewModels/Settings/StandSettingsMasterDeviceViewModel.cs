@@ -23,6 +23,7 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     private int _temperatureSensorAddress;
     private string _selectedPressureSensorComPort;
     private string _selectedTemperatureSensorComPort;
+    private string _masterDeviceName;
 
     public ObservableCollection<string> MasterDeviceTypesString { get; set; } = new(Enum
         .GetValues<MasterDeviceType>()
@@ -100,4 +101,6 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
         get => _number;
         set => SetProperty(ref _number, value);
     }
+
+    public string MasterDeviceName { get => _masterDeviceName; set => SetProperty(ref _masterDeviceName, value); }
 }

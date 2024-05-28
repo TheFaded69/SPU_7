@@ -146,6 +146,18 @@
                                      UseFloatingWatermark="True"
                                      Watermark="Введите погрешность"
                                      Text="{Binding Inaccuracy}" />
+							<ComboBox extension:ComboBoxAssist.Label="Номер линии"
+                                        Theme="{StaticResource MaterialOutlineComboBox}"
+                                        ItemsSource="{Binding LineNumbers}"
+                                        SelectedItem="{Binding SelectedLineNumber}"
+                                        Width="150"
+                                        Margin="5"/>
+							<ComboBox extension:ComboBoxAssist.Label="Устройство"
+                                        Theme="{StaticResource MaterialOutlineComboBox}"
+                                        ItemsSource="{Binding MasterDeviceNames}"
+                                        SelectedItem="{Binding SelectedMasterDeviceName}"
+                                        Width="350"
+                                        Margin="5"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

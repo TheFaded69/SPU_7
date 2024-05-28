@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Prism.Commands;
 using Prism.Services.Dialogs;
+using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
 using SPU_7.ViewModels.Settings;
 
@@ -10,11 +11,19 @@ public class PointConfigurationViewModel : ViewModelBase
 {
     private readonly IStandController _standController;
     private readonly IDialogService _dialogService;
+    private readonly IStandSettingsService _standSettingsService;
 
-    public PointConfigurationViewModel(IStandController standController, IDialogService dialogService)
+    public PointConfigurationViewModel(IStandController standController, IDialogService dialogService, IStandSettingsService standSettingsService)
     {
         _standController = standController;
         _dialogService = dialogService;
+        _standSettingsService =standSettingsService;
+
+        LineNumbers = new ObservableCollection<int>();
+        foreach(var line in _standSettingsService.StandSettingsModel.LineViewModels)
+        {
+            LineNumbers.Add(line.LineNumber); 
+        }
 
         ShowNozzleSelectorCommand = new DelegateCommand(ShowNozzleSelectorCommandHandler);
     }
@@ -26,6 +35,8 @@ public class PointConfigurationViewModel : ViewModelBase
     private int? _measureCount;
     private double? _targetVolume;
     private double? _inaccuracy;
+    private int _selectedLineNumber;
+    private string _selectedMasterDeviceName;
     private ObservableCollection<StandSettingsNozzleViewModel> _selectedNozzles;
 
     public int Number
@@ -72,6 +83,27 @@ public class PointConfigurationViewModel : ViewModelBase
         get => _inaccuracy;
         set => SetProperty(ref _inaccuracy, value);
     }
+
+    public ObservableCollection<int> LineNumbers { get;set; }
+
+    public int SelectedLineNumber 
+    { 
+        get => _selectedLineNumber; 
+        set
+        {
+            SetProperty(ref _selectedLineNumber, value);
+            MasterDeviceNames.Clear();
+
+            foreach (var masterDeviceModel in _standSettingsService.StandSettingsModel.LineViewModels[value - 1].MasterDeviceViewModels)
+            {
+                MasterDeviceNames.Add(masterDeviceModel.MasterDeviceName);
+            }
+        } 
+    }
+
+    public ObservableCollection<string> MasterDeviceNames { get; set; } = new();
+
+    public string SelectedMasterDeviceName { get => _selectedMasterDeviceName; set => SetProperty(ref _selectedMasterDeviceName, value); }
 
     public ObservableCollection<StandSettingsNozzleViewModel> SelectedNozzles
     {

@@ -18,6 +18,10 @@ public class ValidationPointModel
     public double TargetVolume { get; set; }
     
     public double Inaccuracy { get; set; }
+
+    public int SelectedLineNumber { get; set; }
+
+    public string SelectedMasterDeviceName { get; set; }
     
     public ObservableCollection<StandSettingsNozzleModel> SelectedNozzles { get; set; }
 }

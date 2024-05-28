@@ -21,4 +21,6 @@ public class StandSettingsMasterDeviceModel
 
     public string SelectedTemperatureSensorComPort { get; set; }
 
+    public string MasterDeviceName { get; set; }
+
 }

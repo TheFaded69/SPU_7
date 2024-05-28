@@ -407,6 +407,10 @@
                                                                                                 Margin="5"
                                                                                                 assists:ComboBoxAssist.Label="Тип мастера-устройства"
                                                                                                 Theme="{StaticResource MaterialOutlineComboBox}" />
+																							<TextBox Margin="5"
+                                                                                                assists:TextFieldAssist.Label="Наименование"
+                                                                                                UseFloatingWatermark="True"
+                                                                                                Text="{Binding MasterDeviceName}"  />
                                                                                             <TextBox Margin="5"
                                                                                                 assists:TextFieldAssist.Label="Заводской номер"
                                                                                                 UseFloatingWatermark="True"

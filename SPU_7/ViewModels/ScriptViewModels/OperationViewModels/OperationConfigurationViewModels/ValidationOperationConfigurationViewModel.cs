@@ -45,7 +45,7 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
             Points = new ObservableCollection<PointConfigurationViewModel>();
             foreach (var point in validationOperationConfigurationModel.Points)
             {
-                Points.Add(new PointConfigurationViewModel(_standController, _dialogService)
+                Points.Add(new PointConfigurationViewModel(_standController, _dialogService, _standSettingsService)
                 {
                     Delay = point.Delay,
                     Number = point.Number,
@@ -54,7 +54,9 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
                     IsValveUse = point.IsValveUse,
                     TargetVolume = point.TargetVolume,
                     Inaccuracy = point.Inaccuracy,
-                    SelectedNozzles = _mapper.Map<ObservableCollection<StandSettingsNozzleViewModel>>(point.SelectedNozzles)
+                    SelectedNozzles = _mapper.Map<ObservableCollection<StandSettingsNozzleViewModel>>(point.SelectedNozzles),
+                    SelectedLineNumber = point.SelectedLineNumber,
+                    SelectedMasterDeviceName = point.SelectedMasterDeviceName,
                 });
             }
 
@@ -161,7 +163,9 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
                 IsValveUse = point.IsValveUse,
                 TargetVolume = point.TargetVolume ?? 0,
                 Inaccuracy = point.Inaccuracy ?? 0,
-                SelectedNozzles = _mapper.Map<ObservableCollection<StandSettingsNozzleModel>>(point.SelectedNozzles)
+                SelectedNozzles = _mapper.Map<ObservableCollection<StandSettingsNozzleModel>>(point.SelectedNozzles),
+                SelectedMasterDeviceName = point.SelectedMasterDeviceName,
+                SelectedLineNumber = point.SelectedLineNumber,
             })
             .ToList();
 
@@ -190,10 +194,9 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
     public DelegateCommand AddPointCommand { get; }
     private void AddPointCommandHandler()
     {
-        Points.Add(new PointConfigurationViewModel(_standController, _dialogService)
+        Points.Add(new PointConfigurationViewModel(_standController, _dialogService, _standSettingsService)
         {
             Number = Points.Count + 1,
-            SelectedNozzles = new ObservableCollection<StandSettingsNozzleViewModel>()
         });
     }
     
