@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              xmlns:validation="clr-namespace:SPU_7.ViewModels.WorkReportViewModels.ResultViewModels.Validation"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SPU_7.Views.WorkReportViews.ResultView.ValidationResultView"
              x:DataType="validation:ValidationResultViewModel">
@@ -97,6 +98,17 @@
                                     Binding="{Binding TargetVolumeDifference}" />
                 <DataGridTextColumn Header="Отклонение факт"
                                     Binding="{Binding VolumeDifference}" />
+                <DataGridTemplateColumn Header="Изображение"
+                                        IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button IsEnabled="{Binding CameraPictureResult, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Command="{Binding OpenPicturePreviewCommand}">
+                                <avalonia:MaterialIcon Kind="Picture" Width="40" Height="40" Foreground="Black"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

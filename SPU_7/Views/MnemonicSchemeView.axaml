@@ -72,6 +72,17 @@
 
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
+                                       IsVisible="{Binding IsDeviceOnLine}"
+                                       Width="{Binding AfterDeviceWidthValue}"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            
+                            <Rectangle Fill="#fefefe"
+                                       IsVisible="{Binding !IsDeviceOnLine}"
+                                       Height="20"
                                        Width="{Binding AfterDeviceWidthValue}"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
@@ -91,10 +102,10 @@
                             
                             <DockPanel DockPanel.Dock="Left"
                                        VerticalAlignment="Center"
-                                       Margin="0,0,0,-310"
+                                       Margin="0,0,0,-440"
                                        IsVisible="{Binding StartCommonValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <Rectangle Fill="#00a2e8"
-                                           Height="130"
+                                           Height="195"
                                            Width="20"
                                            Margin="0, 0,0,0"
                                            StrokeThickness="0"
@@ -113,7 +124,7 @@
                                         Foreground="Black"
                                         Classes="flat" />
                                 <Rectangle Fill="#00a2e8"
-                                           Height="130"
+                                           Height="195"
                                            Width="20"
                                            Margin="0, 0,0,0"
                                            StrokeThickness="0"

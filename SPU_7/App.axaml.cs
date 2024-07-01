@@ -116,6 +116,7 @@ public partial class App : PrismApplication
             containerRegistry.RegisterDialog<MasterDeviceInfoView, MasterDeviceInfoViewModel>();
             //containerRegistry.RegisterDialog<DeviceNamesView, DeviceNamesViewModel>();
             containerRegistry.RegisterDialog<PulseMeterCoefficientSettingsView, PulseMeterCoefficientSettingsViewModel>();
+            containerRegistry.RegisterDialog<PicturePreviewView, PicturePreviewViewModel>();
             
         }
 

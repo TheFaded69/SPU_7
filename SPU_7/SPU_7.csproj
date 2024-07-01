@@ -16,6 +16,9 @@
 
 
     <ItemGroup>
+        <PackageReference Include="AForge" Version="2.2.5" />
+        <PackageReference Include="AForge.Video" Version="2.2.5" />
+        <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
         <PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="Avalonia" Version="11.0.9" />
         <PackageReference Include="Avalonia.Desktop" Version="11.0.9" />
@@ -24,6 +27,7 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.9" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.9" />
+        <PackageReference Include="DirectShowLib" Version="1.0.0" />
         <PackageReference Include="itext" Version="8.0.3" />
         <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.3" />
         <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc2" />

@@ -8,4 +8,11 @@
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AForge" Version="2.2.5" />
+      <PackageReference Include="AForge.Video" Version="2.2.5" />
+      <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
+      <PackageReference Include="DirectShowLib" Version="1.0.0" />
+    </ItemGroup>
+
 </Project>

@@ -1,12 +1,16 @@
-﻿namespace SPU_7.ViewModels.Settings;
+﻿using System.Collections.ObjectModel;
+using AForge.Video.DirectShow;
+using SPU_7.Common.Extensions;
+
+namespace SPU_7.ViewModels.Settings;
 
 public class StandSettingsDeviceViewModel : ViewModelBase
 {
     public StandSettingsDeviceViewModel()
     {
-        
+
     }
-    
+
     private int _number;
     private int? _pressureSensorAddress;
     private int? _pulseMeterNumber;
@@ -20,6 +24,7 @@ public class StandSettingsDeviceViewModel : ViewModelBase
     private string _stateRegisterAddress;
     private int? _stateBitNumber;
     private bool _isControlState;
+    private string _selectedCameraName;
 
     public int Number
     {
@@ -95,4 +100,13 @@ public class StandSettingsDeviceViewModel : ViewModelBase
         get => _isControlState;
         set => SetProperty(ref _isControlState, value);
     }
+
+    public string SelectedCameraName
+    {
+        get => _selectedCameraName;
+        set => SetProperty(ref _selectedCameraName, value);
+    }
+    
+    public ObservableCollection<string> CameraNames { get; set; }
+        = new ObservableCollection<string>(new FilterInfoCollection(FilterCategory.VideoInputDevice).GetMonikerNames());
 }

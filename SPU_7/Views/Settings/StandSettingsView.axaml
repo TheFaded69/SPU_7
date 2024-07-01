@@ -365,6 +365,13 @@
                                                                                                     IsVisible="{Binding IsValveEnable}"
                                                                                                     VerticalAlignment="Center" />
 
+                                                                                                <ComboBox Margin="5"
+                                                                                                          Width="300"
+                                                                                                          SelectedItem="{Binding SelectedCameraName}"
+                                                                                                          ItemsSource="{Binding CameraNames}"
+                                                                                                          assists:ComboBoxAssist.Label="Название камеры"
+                                                                                                          Theme="{StaticResource MaterialOutlineComboBox}"/>
+                                                                                                
                                                                                             </StackPanel>
                                                                                         </DataTemplate>
                                                                                     </ListBox.ItemTemplate>

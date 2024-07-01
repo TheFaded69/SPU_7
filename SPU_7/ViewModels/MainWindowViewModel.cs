@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Stand;
@@ -296,6 +298,10 @@ namespace SPU_7.ViewModels
 
         public void CloseWindowCommandHandler(Window window)
         {
+            /*var buff = System.IO.File.ReadAllBytes(@"D:\TestPicture.bmp");
+            using var ms = new MemoryStream(buff);
+            var bmp = new Bitmap(ms);
+            PicturePreviewViewModel.Show(_dialogService, bmp, null, null);*/
             Dispose();
 
             window.Close();

@@ -1,7 +1,22 @@
-﻿namespace SPU_7.ViewModels.WorkReportViewModels.ResultViewModels.Validation;
+﻿
+
+using Avalonia.Media.Imaging;
+using Prism.Commands;
+using Prism.Services.Dialogs;
+
+namespace SPU_7.ViewModels.WorkReportViewModels.ResultViewModels.Validation;
 
 public class ValidationDeviceResultViewModel : ViewModelBase
 {
+    private readonly IDialogService _dialogService;
+
+    public ValidationDeviceResultViewModel(IDialogService dialogService)
+    {
+        _dialogService = dialogService;
+
+        OpenPicturePreviewCommand = new DelegateCommand(OpenPicturePreviewCommandHandler);
+    }
+    
     private int _pointNumber;
     private int _measureNumber;
     private double _validationVolumeTime;
@@ -14,6 +29,7 @@ public class ValidationDeviceResultViewModel : ViewModelBase
     private double? _calculateFlow;
     private double? _validationFlowTime;
     private double? _flowDifference;
+    private Bitmap? _cameraPictureResult;
 
     public int PointNumber
     {
@@ -85,5 +101,18 @@ public class ValidationDeviceResultViewModel : ViewModelBase
     {
         get => _flowDifference;
         set => SetProperty(ref _flowDifference, value);
+    }
+
+    public Bitmap? CameraPictureResult
+    {
+        get => _cameraPictureResult;
+        set => SetProperty(ref _cameraPictureResult, value);
+    }
+    
+    public DelegateCommand OpenPicturePreviewCommand { get; set; }
+
+    private void OpenPicturePreviewCommandHandler()
+    {
+        PicturePreviewViewModel.Show(_dialogService, CameraPictureResult, null, null);
     }
 }

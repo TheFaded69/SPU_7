@@ -80,29 +80,23 @@ public class ValidationResultViewModel : ViewModelBase
 
             ValidationDeviceResultViewModels = new ObservableCollection<ValidationDeviceResultViewModel>();
 
-            foreach (var validationPointResult in _validationOperationResult.ValidationPointResults)
+            foreach (var validationDeviceResult in _validationOperationResult.ValidationPointResults.SelectMany(validationPointResult => validationPointResult.ValidationMeasureResults.SelectMany(validationMeasureResult => validationMeasureResult.ValidationDeviceResults.Where(d => d.VendorNumber == value))))
             {
-                foreach (var validationMeasureResult in validationPointResult.ValidationMeasureResults)
+                ValidationDeviceResultViewModels.Add(new ValidationDeviceResultViewModel(_dialogService)
                 {
-                    foreach (var validationDeviceResult in validationMeasureResult.ValidationDeviceResults.Where(d => d.VendorNumber == value))
-                    {
-                        ValidationDeviceResultViewModels.Add(new ValidationDeviceResultViewModel()
-                        {
-                            PointNumber = validationDeviceResult.PointNumber,
-                            MeasureNumber = validationDeviceResult.MeasureNumber,
-                            TargetVolume = validationDeviceResult.TargetVolume,
-                            StartVolumeValue = validationDeviceResult.StartVolumeValue,
-                            EndVolumeValue = validationDeviceResult.EndVolumeValue,
-                            TargetFlow = validationDeviceResult.TargetFlow,
-                            TargetVolumeDifference = validationDeviceResult.TargetVolumeDifference,
-                            ValidationVolumeTime = validationDeviceResult.ValidationVolumeTime,
-                            CalculateFlow = validationDeviceResult.CalculateFlow,
-                            FlowDifference = validationDeviceResult.FlowDifference,
-                            VolumeDifference = validationDeviceResult.VolumeDifference,
-                            ValidationFlowTime = validationDeviceResult.ValidationFlowTime
-                        });
-                    }
-                }
+                    PointNumber = validationDeviceResult.PointNumber,
+                    MeasureNumber = validationDeviceResult.MeasureNumber,
+                    TargetVolume = validationDeviceResult.TargetVolume,
+                    StartVolumeValue = validationDeviceResult.StartVolumeValue,
+                    EndVolumeValue = validationDeviceResult.EndVolumeValue,
+                    TargetFlow = validationDeviceResult.TargetFlow,
+                    TargetVolumeDifference = validationDeviceResult.TargetVolumeDifference,
+                    ValidationVolumeTime = validationDeviceResult.ValidationVolumeTime,
+                    CalculateFlow = validationDeviceResult.CalculateFlow,
+                    FlowDifference = validationDeviceResult.FlowDifference,
+                    VolumeDifference = validationDeviceResult.VolumeDifference,
+                    ValidationFlowTime = validationDeviceResult.ValidationFlowTime
+                });
             }
             
             GoodDevice = ValidationDeviceResultViewModels.Any(vd => Math.Abs((double)vd.VolumeDifference) > vd.TargetVolumeDifference) ? "Не годен" : "Годен";
