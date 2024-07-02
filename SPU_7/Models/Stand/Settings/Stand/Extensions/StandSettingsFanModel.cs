@@ -2,9 +2,10 @@
 
 public class StandSettingsFanModel
 {
+    public bool IsValveEnable { get; set; }
     public StandSettingsValveModel ValveViewModel { get; set; }
-    
+
     public bool IsNeedleValveEnable { get; set; }
-    
+
     public StandSettingsNeedleValveModel NeedleValveViewModel { get; set; }
 }

@@ -1,0 +1,90 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Add Resources Here -->
+    <StreamGeometry x:Key="NozzleHorizontalButton">
+        M0,0 L40,0 L70,30 L40,60 L0,60 Z
+    </StreamGeometry>
+    
+    <StreamGeometry x:Key="NozzleVerticalButton">
+        M0,0 L60,0 L60,40 L30,70 L0,40 Z
+    </StreamGeometry>
+
+    <StreamGeometry x:Key="ReplaceNozzleHorizontalButton">
+        M0,0 L80,0 L130,40 L80,80 L0,80 Z
+    </StreamGeometry>
+    
+    <RotateTransform x:Key="Rotate090" Angle="090" />
+    <RotateTransform x:Key="Rotate180" Angle="180" />
+    <RotateTransform x:Key="Rotate270" Angle="270" />
+
+
+    <!-- Горизонтальная кнопка сопла (без анимаций нажатия) -->
+    <ControlTheme x:Key="NozzleButtonHorizontalTheme"
+                  TargetType="Button">
+        <Setter Property="Background" Value="#cfcfcf" />
+        <Setter Property="BorderBrush" Value="#cfcfcf" />
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Path Stroke="{TemplateBinding BorderBrush}"
+                          Fill="{TemplateBinding Background}"
+                          Data="{StaticResource NozzleHorizontalButton}">
+                    </Path>
+                    <ContentPresenter x:Name="PART_ContentPresenter"
+                                      Content="{TemplateBinding Content}"
+                                      Margin="-90,0,0,0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+    
+    <!-- Вертикальная кнопка сопла (без анимаций нажатия) -->
+    <ControlTheme x:Key="NozzleButtonVerticalTheme"
+                  TargetType="Button">
+        <Setter Property="Background" Value="#cfcfcf" />
+        <Setter Property="BorderBrush" Value="#cfcfcf" />
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Path Stroke="{TemplateBinding BorderBrush}"
+                          Fill="{TemplateBinding Background}"
+                          Data="{StaticResource NozzleVerticalButton}">
+                    </Path>
+                    <ContentPresenter x:Name="PART_ContentPresenter"
+                                      Content="{TemplateBinding Content}"
+                                      Margin="0,-40,0,0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+    
+    <!-- Горизонтальная кнопка заменяемого сопла (без анимаций нажатия) -->
+    <ControlTheme x:Key="ReplaceNozzleButtonHorizontalTheme"
+                  TargetType="Button">
+        <Setter Property="Background" Value="#cfcfcf" />
+        <Setter Property="BorderBrush" Value="#cfcfcf" />
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Path Stroke="{TemplateBinding BorderBrush}"
+                          Fill="{TemplateBinding Background}"
+                          Data="{StaticResource ReplaceNozzleHorizontalButton}">
+                    </Path>
+                    <ContentPresenter x:Name="PART_ContentPresenter"
+                                      Content="{TemplateBinding Content}"
+                                      Margin="-45,0,0,0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+</ResourceDictionary>

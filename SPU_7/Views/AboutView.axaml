@@ -15,10 +15,10 @@
                Width="400"/>
         <TextBlock DockPanel.Dock="Top"
                    Margin="5"
-                   Text="Установка поверочная СПУ-5"/>
+                   Text="Установка поверочная СПУ-7"/>
         <TextBlock DockPanel.Dock="Top"
                    Margin="5"
-                   Text="Наименование ПО: SPU_5"/>
+                   Text="Наименование ПО: SPU_7"/>
         <TextBlock DockPanel.Dock="Top"
                    Margin="5"
                    Text="Версия ПО: 1.1"/>

@@ -1,0 +1,16 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:SPU_7.Assets.Styles.CustomControls">
+    <Design.PreviewWith>
+        <controls:BottomDrawer />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|BottomDrawer">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <TextBlock Text="Templated Control" />
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

@@ -15,8 +15,10 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
 
             _nozzleValue = standSettingsNozzleModel.NozzleValue;
             _nozzleFactValue = standSettingsNozzleModel.NozzleFactValue;
+            _isReplaceNozzle = standSettingsNozzleModel.IsReplaceNozzle;
 
             UseNozzleCommand = new DelegateCommand(UseNozzleCommandHandler);
+            SetNozzleValueCommand = new DelegateCommand(SetNozzleValueCommandHandler);
         }
 
         private readonly StandSettingsNozzleModel _standSettingsNozzleModel;
@@ -26,6 +28,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
         private double? _nozzleValue;
         private double? _nozzleFactValue;
         private StateType _stateType = StateType.Open;
+        private bool _isReplaceNozzle;
 
         public int NozzleNumber
         {
@@ -51,6 +54,24 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             set => SetProperty(ref _stateType, value);
         }
 
+        public bool IsReplaceNozzle
+        {
+            get => _isReplaceNozzle;
+            set => SetProperty(ref _isReplaceNozzle, value);
+        }
+
+        public DelegateCommand SetNozzleValueCommand { get; }
+
+        private void SetNozzleValueCommandHandler()
+        {
+            
+        }
+
+        private void SetNozzleValue(double? value)
+        {
+            NozzleValue = value;
+            NozzleFactValue = value;
+        }
         public DelegateCommand UseNozzleCommand { get; }
 
         private async void UseNozzleCommandHandler()

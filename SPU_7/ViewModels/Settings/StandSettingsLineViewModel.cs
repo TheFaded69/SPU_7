@@ -61,11 +61,27 @@ public class StandSettingsLineViewModel : ViewModelBase
     private bool _isEndCommonValve;
     private StandSettingsValveViewModel _startCommonValveViewModel;
     private StandSettingsValveViewModel _endCommonValveViewModel;
+    private bool _isAfterDeviceValve;
+    private StandSettingsValveViewModel _afterDeviceValveViewModel;
+    private bool _isOpenNormalSolenoidValve;
+    private StandSettingsSolenoidValveViewModel _openNormalSolenoidValveViewModel;
+    private bool _isCloseNormalSolenoidValve;
+    private StandSettingsSolenoidValveViewModel _closeNormalSolenoidValveViewModel;
 
     public int LineNumber
     {
         get => _lineNumber;
         set => SetProperty(ref _lineNumber, value);
+    }
+
+    public bool IsAfterDeviceValve
+    {
+        get => _isAfterDeviceValve;
+        set
+        {
+            SetProperty(ref _isAfterDeviceValve, value);
+            AfterDeviceValveViewModel = new StandSettingsValveViewModel();
+        }
     }
 
     public bool IsStartCommonValve
@@ -88,6 +104,12 @@ public class StandSettingsLineViewModel : ViewModelBase
         }
     }
 
+    public StandSettingsValveViewModel AfterDeviceValveViewModel
+    {
+        get => _afterDeviceValveViewModel;
+        set => SetProperty(ref _afterDeviceValveViewModel, value);
+    }
+
     public StandSettingsValveViewModel StartCommonValveViewModel
     {
         get => _startCommonValveViewModel;
@@ -98,6 +120,38 @@ public class StandSettingsLineViewModel : ViewModelBase
     {
         get => _endCommonValveViewModel;
         set => SetProperty(ref _endCommonValveViewModel, value);
+    }
+
+    public bool IsOpenNormalSolenoidValve
+    {
+        get => _isOpenNormalSolenoidValve;
+        set
+        {
+            SetProperty(ref _isOpenNormalSolenoidValve, value);
+            OpenNormalSolenoidValveViewModel = new StandSettingsSolenoidValveViewModel();
+        }
+    }
+
+    public StandSettingsSolenoidValveViewModel OpenNormalSolenoidValveViewModel
+    {
+        get => _openNormalSolenoidValveViewModel;
+        set => SetProperty(ref _openNormalSolenoidValveViewModel, value);
+    }
+
+    public bool IsCloseNormalSolenoidValve
+    {
+        get => _isCloseNormalSolenoidValve;
+        set
+        {
+            SetProperty(ref _isCloseNormalSolenoidValve, value);
+            CloseNormalSolenoidValveViewModel = new StandSettingsSolenoidValveViewModel();
+        }
+    }
+
+    public StandSettingsSolenoidValveViewModel CloseNormalSolenoidValveViewModel
+    {
+        get => _closeNormalSolenoidValveViewModel;
+        set => SetProperty(ref _closeNormalSolenoidValveViewModel, value);
     }
 
     public bool IsStartValveMasterDevice
@@ -143,7 +197,6 @@ public class StandSettingsLineViewModel : ViewModelBase
         get => _selectedDeviceViewModel;
         set => SetProperty(ref _selectedDeviceViewModel, value);
     }
-
 
     public ObservableCollection<string> StringLineTypes
     {

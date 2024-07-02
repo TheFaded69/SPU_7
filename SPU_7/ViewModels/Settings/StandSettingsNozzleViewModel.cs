@@ -13,6 +13,7 @@ public class StandSettingsNozzleViewModel : ViewModelBase
     private int? _stateBitNumber;
     private bool _isControlState;
     private bool _isChecked;
+    private bool _isReplaceNozzle;
 
     public int Number
     {
@@ -78,5 +79,11 @@ public class StandSettingsNozzleViewModel : ViewModelBase
     {
         get => _isChecked;
         set => SetProperty(ref _isChecked, value);
+    }
+
+    public bool IsReplaceNozzle
+    {
+        get => _isReplaceNozzle;
+        set => SetProperty(ref _isReplaceNozzle, value);
     }
 }

@@ -60,10 +60,10 @@
                           Content="Протокол поверки"
                           HorizontalAlignment="Left" />
                 <CheckBox DockPanel.Dock="Top"
-                          IsEnabled="False"
+                          IsEnabled="True"
                           Margin="5"
-                          IsVisible="False"
-                          Content="Использовать компьютерное зрение"
+                          IsVisible="True"
+                          Content="Использовать веб-камеры для снятия показаний СГ"
                           HorizontalAlignment="Left" />
                 <Grid DockPanel.Dock="Top"
                       ColumnDefinitions="0.33*, 0.33*, 0.33*">

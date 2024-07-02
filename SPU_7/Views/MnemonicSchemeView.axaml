@@ -90,6 +90,39 @@
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
                             
+                            <Button Width="70"
+                                    Height="70"
+                                    Content="КШ"
+                                    Padding="-3"
+                                    Margin="0, 0,0,0"
+                                    IsVisible="{Binding AfterDeviceValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    DockPanel.Dock="Left"
+                                    Command="{Binding AfterDeviceValveViewModel.UseValveCommand}"
+                                    HorizontalAlignment="Center"
+                                    Background="{Binding AfterDeviceValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                    Foreground="Black"
+                                    Classes="flat" />
+                            
+                            <Rectangle Fill="#00a2e8"
+                                       Height="20"
+                                       Width="20"
+                                       IsVisible="{Binding AfterDeviceValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            
+                            <Rectangle Fill="#00a2e8"
+                                       Height="20"
+                                       Width="90"
+                                       IsVisible="{Binding AfterDeviceValveViewModel, Converter={x:Static ObjectConverters.IsNull}}"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="20"
@@ -102,10 +135,10 @@
                             
                             <DockPanel DockPanel.Dock="Left"
                                        VerticalAlignment="Center"
-                                       Margin="0,0,0,-440"
+                                       Margin="0,0,0,-350"
                                        IsVisible="{Binding StartCommonValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <Rectangle Fill="#00a2e8"
-                                           Height="195"
+                                           Height="150"
                                            Width="20"
                                            Margin="0, 0,0,0"
                                            StrokeThickness="0"
@@ -124,7 +157,7 @@
                                         Foreground="Black"
                                         Classes="flat" />
                                 <Rectangle Fill="#00a2e8"
-                                           Height="195"
+                                           Height="150"
                                            Width="20"
                                            Margin="0, 0,0,0"
                                            StrokeThickness="0"
@@ -135,12 +168,46 @@
                             
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
-                                       Width="40"
+                                       Width="60"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
+                            
+                            <DockPanel DockPanel.Dock="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,0,-350"
+                                       IsVisible="{Binding StartCommonValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <Rectangle Fill="#00a2e8"
+                                           Height="150"
+                                           Width="20"
+                                           Margin="0, 0,0,0"
+                                           StrokeThickness="0"
+                                           ClipToBounds="True"
+                                           VerticalAlignment="Center"
+                                           DockPanel.Dock="Top" />
+                                <Button Width="70"
+                                        Height="70"
+                                        Content="КШ"
+                                        Padding="-3"
+                                        Margin="-25, 0,-25,0"
+                                        DockPanel.Dock="Top"
+                                        Command="{Binding StartCommonValveViewModel.UseValveCommand}"
+                                        HorizontalAlignment="Center"
+                                        Background="{Binding StartCommonValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                        Foreground="Black"
+                                        Classes="flat" />
+                                <Rectangle Fill="#00a2e8"
+                                           Height="150"
+                                           Width="20"
+                                           Margin="0, 0,0,0"
+                                           StrokeThickness="0"
+                                           ClipToBounds="True"
+                                           VerticalAlignment="Center"
+                                           DockPanel.Dock="Top" />
+                            </DockPanel>
+                            
                             <Button Width="70"
                                     Height="70"
                                     Content="КШ"
@@ -153,24 +220,82 @@
                                     Background="{Binding StartValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                     Foreground="Black"
                                     Classes="flat" />
+                            
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
-                                       Width="20"
+                                       Width="40"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            
+                            <Rectangle Fill="#00a2e8"
+                                       Height="145"
+                                       Width="20"
+                                       Margin="0, 0,0,125"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       IsVisible="{Binding NormalCloseSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
                             <Rectangle Fill="#00a2e8"
-                                       Height="{Binding ValidationHeightValue}"
+                                       Height="20"
+                                       Width="120"
+                                       Margin="0, 0,0,250"
+                                       StrokeThickness="0"
+                                       IsVisible="{Binding NormalCloseSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            <Button Width="30"
+                                    Height="70"
+                                    Classes="flat"
+                                    Foreground="Black"
+                                    Content="НЗК"
+                                    IsVisible="{Binding NormalCloseSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Command="{Binding NormalCloseSolenoidValveItemViewModel.UseSolenoidCommand}"
+                                    Background="{Binding  NormalCloseSolenoidValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                    Margin="-130, 0,0,250"/>
+                            <Rectangle Fill="#00a2e8"
+                                       Height="20"
+                                       Width="120"
+                                       Margin="-120, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       IsVisible="{Binding NormalOpenSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            <Button Width="30"
+                                    Height="70"
+                                    Classes="flat"
+                                    Foreground="Black"
+                                    Content="НЗК"
+                                    IsVisible="{Binding NormalOpenSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Command="{Binding NormalOpenSolenoidValveItemViewModel.UseSolenoidCommand}"
+                                    Background="{Binding  NormalOpenSolenoidValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                    Margin="-130, 0,0,0"/>
+                            
+                            <Rectangle Fill="#00a2e8"
+                                       Height="20"
+                                       Width="40"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            
+
+                            <!-- Мастер устройства -->
+                            <Rectangle Fill="#00a2e8"
+                                       Height="{Binding MasterDeviceHeightValue}"
+                                       IsVisible="{Binding IsMasterDeviceVisible}"
                                        Width="20"
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-
-                            <!-- Мастер устройства -->
                             <ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsMasterDeviceVisible}"
                                           ItemsSource="{Binding MasterDeviceItemViewModels}"
@@ -251,8 +376,18 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <!-- Сопла -->
-                            <ItemsControl DockPanel.Dock="Left"
+                            <Rectangle Fill="#00a2e8"
+                                       Height="{Binding MasterDeviceHeightValue}"
+                                       Width="20"
+                                       Margin="0, 0,0,0"
+                                       StrokeThickness="0"
+                                       IsVisible="{Binding IsMasterDeviceVisible}"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
+                            
+                            <!-- Сопла вертикально расположенные -->
+                            <!--ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsNozzleVisible}"
                                           ItemsSource="{Binding NozzleItemViewModels}"
                                           VerticalAlignment="Center">
@@ -267,26 +402,58 @@
                                                        ClipToBounds="True"
                                                        VerticalAlignment="Center"
                                                        DockPanel.Dock="Left" />
-                                            <Button Theme="{StaticResource TriangleButton}"
+                                            <Button Theme="{StaticResource NozzleButtonTheme}"
                                                     Margin="-120,0,0,0"
                                                     VerticalAlignment="Center"
                                                     DockPanel.Dock="Left"
-                                                    CornerRadius="5"
+                                                    Content="{Binding NozzleValue}"
                                                     Foreground="Black">
-                                                <TextBlock Text="{Binding NozzleValue}"
-                                                           Foreground="Black" />
+                                                <ToolTip.Tip>
+                                                    <Grid RowDefinitions="Auto, Auto, Auto"
+                                                          ColumnDefinitions="0.6*, 0.4*">
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="0"
+                                                                   Text="Расход сопла"
+                                                                   Margin="5" />
+
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="1"
+                                                                   Text="{Binding NozzleValue}"
+                                                                   Margin="5" />
+
+                                                        <TextBlock Grid.Row="2"
+                                                                   Grid.Column="0"
+                                                                   Text="Фактический расход сопла"
+                                                                   Margin="5" />
+
+                                                        <TextBlock Grid.Row="2"
+                                                                   Grid.Column="1"
+                                                                   Text="{Binding NozzleFactValue}"
+                                                                   Margin="5" />
+                                                    </Grid>
+                                                </ToolTip.Tip>
                                             </Button>
                                             <Button Width="70"
                                                     Height="70"
                                                     Content="КШ"
                                                     Padding="-3"
                                                     Margin="0, 0,0,0"
+                                                    IsVisible="{Binding !IsReplaceNozzle}"
                                                     DockPanel.Dock="Left"
                                                     Command="{Binding UseNozzleCommand}"
                                                     HorizontalAlignment="Center"
                                                     Background="{Binding StateType, Converter={convertors:StateTypeToColorConverter}}"
                                                     Foreground="Black"
                                                     Classes="flat" />
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="70"
+                                                       IsVisible="{Binding IsReplaceNozzle}"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
                                             <Rectangle Fill="#00a2e8"
                                                        Height="20"
                                                        Width="20"
@@ -298,16 +465,189 @@
                                         </DockPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-
-                            <Rectangle Fill="#00a2e8"
-                                       Height="{Binding ValidationHeightValue}"
+                            </ItemsControl-->
+                            
+                            <!-- Сопла горизонтально расположенные -->
+                            <Rectangle DockPanel.Dock="Left"
+                                       IsVisible="{Binding IsNozzleVisible}"
                                        Width="20"
-                                       Margin="0, 0,0,0"
+                                       Height="145"
+                                       Fill="#00a2e8"
+                                       Margin="0, 0,0,125"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
-                                       VerticalAlignment="Center"
-                                       DockPanel.Dock="Left" />
+                                       VerticalAlignment="Center"/>
+                            <Rectangle DockPanel.Dock="Left"
+                                       IsVisible="{Binding IsNozzleVisible}"
+                                       Width="1010"
+                                       Height="20"
+                                       Fill="#00a2e8"
+                                       Margin="0, 0,-1010,250"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"/>
+                            <ItemsControl DockPanel.Dock="Left"
+                                          IsVisible="{Binding IsNozzleVisible}"
+                                          ItemsSource="{Binding NozzleItemViewModels}"
+                                          VerticalAlignment="Center">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel Margin="5,20,5,20">
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="140"
+                                                       Width="20"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Top" />
+                                            <Button Theme="{StaticResource NozzleButtonVerticalTheme}"
+                                                    Margin="0,-120,0,0"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    DockPanel.Dock="Top"
+                                                    Content="{Binding NozzleValue}"
+                                                    Foreground="Black">
+                                                <ToolTip.Tip>
+                                                    <Grid RowDefinitions="Auto, Auto, Auto"
+                                                          ColumnDefinitions="0.6*, 0.4*">
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="0"
+                                                                   Text="Расход сопла"
+                                                                   Margin="5" />
+
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="1"
+                                                                   Text="{Binding NozzleValue}"
+                                                                   Margin="5" />
+
+                                                        <TextBlock Grid.Row="2"
+                                                                   Grid.Column="0"
+                                                                   Text="Фактический расход сопла"
+                                                                   Margin="5" />
+
+                                                        <TextBlock Grid.Row="2"
+                                                                   Grid.Column="1"
+                                                                   Text="{Binding NozzleFactValue}"
+                                                                   Margin="5" />
+                                                    </Grid>
+                                                </ToolTip.Tip>
+                                            </Button>
+                                            <Button Width="70"
+                                                    Height="70"
+                                                    Content="КШ"
+                                                    Padding="-3"
+                                                    Margin="0, 0,0,0"
+                                                    IsVisible="{Binding !IsReplaceNozzle}"
+                                                    DockPanel.Dock="Top"
+                                                    Command="{Binding UseNozzleCommand}"
+                                                    HorizontalAlignment="Center"
+                                                    Background="{Binding StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                                    Foreground="Black"
+                                                    Classes="flat" />
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="70"
+                                                       Width="20"
+                                                       IsVisible="{Binding IsReplaceNozzle}"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Top" />
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="20"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Top" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Rectangle DockPanel.Dock="Left"
+                                       IsVisible="{Binding IsNozzleVisible}"
+                                       Width="1010"
+                                       Height="20"
+                                       Fill="#00a2e8"
+                                       Margin="-1010, 250,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"/>
+                            <Rectangle DockPanel.Dock="Left"
+                                       IsVisible="{Binding IsNozzleVisible}"
+                                       Width="20"
+                                       Height="145"
+                                       Fill="#00a2e8"
+                                       Margin="0, 125,0,0"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       VerticalAlignment="Center"/>
+                            
+                            <!-- Ручное заменяемое сопло IsReplaceNozzleVisible todo -->
+                            <ItemsControl DockPanel.Dock="Left"
+                                          IsVisible="{Binding IsReplaceNozzleVisible}"
+                                          ItemsSource="{Binding NozzleItemViewModels}"
+                                          VerticalAlignment="Center">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel LastChildFill="False">
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="500"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
+                                            <Button Theme="{StaticResource ReplaceNozzleButtonHorizontalTheme}"
+                                                    Margin="-200,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    DockPanel.Dock="Left"
+                                                    Command="{Binding SetNozzleValueCommand}"
+                                                    Content="{Binding NozzleValue}"
+                                                    Foreground="Black">
+                                                <ToolTip.Tip>
+                                                    <Grid RowDefinitions="Auto, Auto, Auto"
+                                                          ColumnDefinitions="0.6*, 0.4*">
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="0"
+                                                                   Text="Расход сопла"
+                                                                   Margin="5" />
+
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="1"
+                                                                   Text="{Binding NozzleValue}"
+                                                                   Margin="5" />
+
+                                                        <TextBlock Grid.Row="2"
+                                                                   Grid.Column="0"
+                                                                   Text="Фактический расход сопла"
+                                                                   Margin="5" />
+
+                                                        <TextBlock Grid.Row="2"
+                                                                   Grid.Column="1"
+                                                                   Text="{Binding NozzleFactValue}"
+                                                                   Margin="5" />
+                                                    </Grid>
+                                                </ToolTip.Tip>
+                                            </Button>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="20"
@@ -495,6 +835,7 @@
                                                     <Button Width="70"
                                                             Height="70"
                                                             Content="КШ"
+                                                            IsVisible="{Binding IsValveEnable}"
                                                             Padding="-3"
                                                             Margin="0, 0,0,0"
                                                             DockPanel.Dock="Left"

@@ -23,15 +23,23 @@ public class FanItemViewModel : ViewModelBase
         DisableFanCommand = new DelegateCommand(DisableFanCommandHandler);
 
         FanHeightValue = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].IsNeedleValveEnable ? 100 : 20;
-
+        
+        _isValveEnable = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].IsValveEnable;
     }
 
     public int FanHeightValue { get; set; }
-
+    
     private ValveItemViewModel _valveItemViewModel;
     private bool _isFanWorking;
     private bool _isNeedleValveEnable;
     private int _selectedNeedleValue;
+    private bool _isValveEnable;
+
+    public bool IsValveEnable
+    {
+        get => _isValveEnable;
+        set => SetProperty(ref _isValveEnable, value);
+    }
 
     public ValveItemViewModel ValveItemViewModel
     {

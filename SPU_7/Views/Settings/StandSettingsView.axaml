@@ -484,7 +484,17 @@
                                                                                         Kind="Delete" />
                                                                                 </Button>
                                                                             </StackPanel>
-
+                                                                            
+                                                                            <StackPanel DockPanel.Dock="Top"
+                                                                                        Orientation="Horizontal">
+                                                                                
+                                                                            </StackPanel>
+                                                                            
+                                                                            <StackPanel DockPanel.Dock="Top"
+                                                                                        Orientation="Horizontal">
+                                                                                
+                                                                            </StackPanel>
+                                                                            
                                                                             <ListBox Margin="5"
                                                                                 ItemsSource="{Binding NozzleViewModels}"
                                                                                 SelectedItem="{Binding SelectedNozzleViewModel}">
@@ -546,6 +556,11 @@
                                                                                                 IsChecked="{Binding IsControlState}"
                                                                                                 Content="Контроль состояния"
                                                                                                 VerticalAlignment="Center" />
+                                                                                            
+                                                                                            <CheckBox Margin="5"
+                                                                                                IsChecked="{Binding IsReplaceNozzle}"
+                                                                                                Content="Заменяемое сопло"
+                                                                                                VerticalAlignment="Center" />
                                                                                         </StackPanel>
                                                                                     </DataTemplate>
                                                                                 </ListBox.ItemTemplate>
@@ -579,8 +594,12 @@
                                                                                         <StackPanel
                                                                                             Orientation="Horizontal">
                                                                                             <CheckBox Margin="5"
+                                                                                                Content="Шаровой кран"
+                                                                                                IsChecked="{Binding IsValveEnable}" />
+                                                                                            <CheckBox Margin="5"
                                                                                                 Content="Игольчатый клапан"
                                                                                                 IsChecked="{Binding IsNeedleValveEnable}" />
+                                                                                            
                                                                                         </StackPanel>
                                                                                     </DataTemplate>
                                                                                 </ListBox.ItemTemplate>
@@ -643,8 +662,64 @@
                                                             <StackPanel DockPanel.Dock="Top"
                                                                         Orientation="Horizontal">
                                                                 <CheckBox Margin="5, 20, 5, 22"
+                                                                          IsChecked="{Binding IsAfterDeviceValve}"
+                                                                          Content="Кран после линии устройств" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsAfterDeviceValve}"
+                                                                         assists:TextFieldAssist.Label="Адрес модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         Text="{Binding  AfterDeviceValveViewModel.Address}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsAfterDeviceValve}"
+                                                                         assists:TextFieldAssist.Label="Регистр в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         Text="{Binding AfterDeviceValveViewModel.RegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsAfterDeviceValve}"
+                                                                         assists:TextFieldAssist.Label="Номер бита"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         Text="{Binding AfterDeviceValveViewModel.BitNumber}" />
+
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsAfterDeviceValve}"
+                                                                         assists:TextFieldAssist.Label="Адрес состояния модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         Text="{Binding AfterDeviceValveViewModel.StateAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsAfterDeviceValve}"
+                                                                         assists:TextFieldAssist.Label="Регистр состояния в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         Text="{Binding AfterDeviceValveViewModel.StateRegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         IsVisible="{Binding IsAfterDeviceValve}"
+                                                                         assists:TextFieldAssist.Label="Номер бита состояния"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         Text="{Binding AfterDeviceValveViewModel.StateBitNumber}" />
+
+                                                                <CheckBox Margin="5"
+                                                                          IsVisible="{Binding IsAfterDeviceValve}"
+                                                                          IsChecked="{Binding AfterDeviceValveViewModel.IsControlState}"
+                                                                          Content="Контроль состояния"
+                                                                          VerticalAlignment="Center" />
+                                                            </StackPanel>
+                                                            
+                                                            <StackPanel DockPanel.Dock="Top"
+                                                                        Orientation="Horizontal">
+                                                                <CheckBox Margin="5, 20, 5, 22"
                                                                           IsChecked="{Binding IsStartCommonValve}"
-                                                                          Content="Общий клапан перед мастер-устройствами" />
+                                                                          Content="Общий кран перед мастер-устройствами" />
 
                                                                 <TextBox Margin="5"
                                                                          IsVisible="{Binding IsStartCommonValve}"
@@ -700,7 +775,7 @@
                                                                         Orientation="Horizontal">
                                                                 <CheckBox Margin="5, 20, 5, 22"
                                                                           IsChecked="{Binding IsEndCommonValve}"
-                                                                          Content="Общий клапан после мастер-устройств" />
+                                                                          Content="Общий кран после мастер-устройств" />
                                                                 <TextBox Margin="5"
                                                                          assists:TextFieldAssist.Label="Адрес модуля"
                                                                          UseFloatingWatermark="True"
@@ -755,7 +830,7 @@
                                                                         Orientation="Horizontal">
                                                                 <CheckBox Margin="5, 20, 5, 22"
                                                                           IsChecked="{Binding IsStartValveMasterDevice}"
-                                                                          Content="Клапан перед мастер-устройствами" />
+                                                                          Content="Кран перед мастер-устройствами" />
 
                                                                 <TextBox Margin="5"
                                                                          IsVisible="{Binding IsStartValveMasterDevice}"
@@ -811,7 +886,7 @@
                                                                         Orientation="Horizontal">
                                                                 <CheckBox Margin="5, 20, 5, 22"
                                                                           IsChecked="{Binding IsEndValveMasterDevice}"
-                                                                          Content="Клапан после мастер-устройств" />
+                                                                          Content="Кран после мастер-устройств" />
                                                                 <TextBox Margin="5"
                                                                          assists:TextFieldAssist.Label="Адрес модуля"
                                                                          UseFloatingWatermark="True"
@@ -860,6 +935,74 @@
                                                                           Content="Контроль состояния"
                                                                           IsVisible="{Binding IsEndValveMasterDevice}"
                                                                           VerticalAlignment="Center" />
+                                                            </StackPanel>
+                                                            
+                                                            <StackPanel DockPanel.Dock="Top"
+                                                                        Orientation="Horizontal">
+                                                                <CheckBox Margin="5, 20, 5, 22"
+                                                                          IsChecked="{Binding IsOpenNormalSolenoidValve}"
+                                                                          Content="Нормально открытый соленоид перед группой расхода" />
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Адрес модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         IsVisible="{Binding IsOpenNormalSolenoidValve}"
+                                                                         Text="{Binding OpenNormalSolenoidValveViewModel.Address}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Регистр в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         IsVisible="{Binding IsOpenNormalSolenoidValve}"
+                                                                         Text="{Binding OpenNormalSolenoidValveViewModel.RegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Номер бита"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         IsVisible="{Binding IsOpenNormalSolenoidValve}"
+                                                                         Text="{Binding OpenNormalSolenoidValveViewModel.BitNumber}" />
+                                                                
+                                                                <ComboBox Margin="5"
+                                                                          Width="300"
+                                                                          ItemsSource="{Binding OpenNormalSolenoidValveViewModel.StringSolenoidValveTypes}"
+                                                                          SelectedItem="{Binding OpenNormalSolenoidValveViewModel.SelectedStringSolenoidValveType}"
+                                                                          assists:ComboBoxAssist.Label="Тип соленоидного клапана"
+                                                                          Theme="{StaticResource MaterialOutlineComboBox}"/> 
+                                                            </StackPanel>
+                                                            
+                                                            <StackPanel DockPanel.Dock="Top"
+                                                                        Orientation="Horizontal">
+                                                                <CheckBox Margin="5, 20, 5, 22"
+                                                                          IsChecked="{Binding IsCloseNormalSolenoidValve}"
+                                                                          Content="Нормально закрытый соленоид перед группой расхода" />
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Адрес модуля"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите адрес"
+                                                                         IsVisible="{Binding IsCloseNormalSolenoidValve}"
+                                                                         Text="{Binding CloseNormalSolenoidValveViewModel.Address}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Регистр в модуле"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark="Введите hex"
+                                                                         IsVisible="{Binding IsCloseNormalSolenoidValve}"
+                                                                         Text="{Binding CloseNormalSolenoidValveViewModel.RegisterAddress}" />
+
+                                                                <TextBox Margin="5"
+                                                                         assists:TextFieldAssist.Label="Номер бита"
+                                                                         UseFloatingWatermark="True"
+                                                                         Watermark=""
+                                                                         IsVisible="{Binding IsCloseNormalSolenoidValve}"
+                                                                         Text="{Binding CloseNormalSolenoidValveViewModel.BitNumber}" />
+                                                                
+                                                                <ComboBox Margin="5"
+                                                                          Width="300"
+                                                                          ItemsSource="{Binding CloseNormalSolenoidValveViewModel.StringSolenoidValveTypes}"
+                                                                          SelectedItem="{Binding CloseNormalSolenoidValveViewModel.SelectedStringSolenoidValveType}"
+                                                                          assists:ComboBoxAssist.Label="Тип соленоидного клапана"
+                                                                          Theme="{StaticResource MaterialOutlineComboBox}"/> 
                                                             </StackPanel>
                                                         </DockPanel>
                                                     </Expander>

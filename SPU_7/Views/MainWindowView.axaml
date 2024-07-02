@@ -16,7 +16,7 @@
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
-        Opacity="0.94">
+        Opacity="1">
 
     <Design.DataContext>
         <viewModels:MainWindowViewModel />
@@ -154,7 +154,8 @@
 
             </DockPanel>
         </controls:ColorZone>
-
+        
+        
         <!-- Основная часть окна -->
         <ContentPresenter Content="{Binding StandView}" />
     </DockPanel>

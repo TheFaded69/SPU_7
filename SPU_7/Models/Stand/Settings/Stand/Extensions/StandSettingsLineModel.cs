@@ -109,4 +109,23 @@ public class StandSettingsLineModel
     /// Доступен ли обратный ход воздуха (и соответственно клапана направления потока)
     /// </summary>
     public bool IsReverseLine { get; set; }
+
+    /// <summary>
+    /// Есть ли кран после линии устройств
+    /// </summary>
+    public bool IsAfterDeviceValve { get; set; }
+
+    /// <summary>
+    /// Модель настроек крана после устройств
+    /// </summary>
+    public StandSettingsValveModel AfterDeviceValveViewModel { get; set; }
+    
+    public bool IsOpenNormalSolenoidValve { get; set; }
+    
+    public StandSettingsSolenoidValveModel OpenNormalSolenoidValveViewModel { get; set; }
+    
+    public bool IsCloseNormalSolenoidValve { get; set; }
+    
+    public StandSettingsSolenoidValveModel CloseNormalSolenoidValveViewModel { get; set; }
+
 }

@@ -31,7 +31,7 @@ public class LineItemViewModel : ViewModelBase
             .Max();
 
         IsDeviceOnLine = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels.Count != 0;
-        AfterDeviceWidthValue = 100 + 160 * (deviceMaxCount - deviceCount);
+        AfterDeviceWidthValue = 40 + 160 * (deviceMaxCount - deviceCount);
         
         switch (settingsService.StandSettingsModel.LineViewModels[lineIndex].SelectedLineType)
         {
@@ -41,7 +41,7 @@ public class LineItemViewModel : ViewModelBase
             {
                 IsMasterDeviceVisible = true;
                 IsFanVisible = true;
-                ValidationHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count - 1) * 110;
+                MasterDeviceHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count - 1) * 110;
 
             
                 double firstHeight = 0;
@@ -83,9 +83,10 @@ public class LineItemViewModel : ViewModelBase
                 break;
             case LineType.NozzleLineType:
             {
-                IsNozzleVisible = true;
+                IsNozzleVisible = !settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Any(noz => noz.IsReplaceNozzle);
+                IsReplaceNozzleVisible = settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Any(noz => noz.IsReplaceNozzle);
                 IsFanVisible = true;
-                ValidationHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count - 1) * 80;
+                MasterDeviceHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count - 1) * 80;
                 
                 double firstHeight = 0;
                 double secondHeight = 0;
@@ -131,6 +132,10 @@ public class LineItemViewModel : ViewModelBase
             DeviceItemViewModels.Add(new DeviceItemViewModel(standController, settingsService, i, lineIndex));
         }
 
+        if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsAfterDeviceValve)
+            AfterDeviceValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].AfterDeviceValveViewModel,
+                _standController);
+        
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsStartCommonValve)
             StartCommonValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StartCommonValveViewModel,
                 _standController);
@@ -138,6 +143,14 @@ public class LineItemViewModel : ViewModelBase
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsStartValveMasterDevice)
             StartValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StartValveMasterDeviceViewModel,
                 _standController);
+        
+        if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsOpenNormalSolenoidValve)
+            NormalOpenSolenoidValveItemViewModel = new SolenoidValveItemViewModel(_standController,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].OpenNormalSolenoidValveViewModel);
+        
+        if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsCloseNormalSolenoidValve)
+            NormalCloseSolenoidValveItemViewModel = new SolenoidValveItemViewModel(_standController,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].CloseNormalSolenoidValveViewModel);
         
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count; i++)
         {
@@ -202,6 +215,7 @@ public class LineItemViewModel : ViewModelBase
     private bool _isNozzleVisible;
     private bool _isFanVisible;
     private bool _isVacuumValveVisible;
+    private bool _isReplaceNozzleVisible;
 
     public bool IsMasterDeviceVisible
     {
@@ -213,6 +227,12 @@ public class LineItemViewModel : ViewModelBase
     {
         get => _isNozzleVisible;
         set => SetProperty(ref _isNozzleVisible, value);
+    }
+
+    public bool IsReplaceNozzleVisible
+    {
+        get => _isReplaceNozzleVisible;
+        set => SetProperty(ref _isReplaceNozzleVisible, value);
     }
 
     public bool IsFanVisible
@@ -230,14 +250,20 @@ public class LineItemViewModel : ViewModelBase
     public int AfterDeviceWidthValue { get; set; }
     
     public bool IsDeviceOnLine { get; set; }
-    public int ValidationHeightValue { get; set; }
+    public int MasterDeviceHeightValue { get; set; }
+    
+    public int NozzleWidthValue { get; set; }
+    
     public double FanHeightValue { get; set; }
     public Thickness FanHeightMargin { get; set; }
-    public ObservableCollection<DeviceItemViewModel> DeviceItemViewModels { get; set; } = new();
+    public ObservableCollection<DeviceItemViewModel> DeviceItemViewModels { get; set; } = [];
     
+    public ValveItemViewModel AfterDeviceValveViewModel { get; set; }
     public ValveItemViewModel StartCommonValveViewModel { get; set; }
     public ValveItemViewModel StartValveViewModel { get; set; }
     public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = new();
+    public SolenoidValveItemViewModel NormalOpenSolenoidValveItemViewModel { get; set; }
+    public SolenoidValveItemViewModel NormalCloseSolenoidValveItemViewModel { get; set; }
     public ObservableCollection<NozzleItemViewModel> NozzleItemViewModels { get; set; } = new();
     public ValveItemViewModel EndValveViewModel { get; set; }
     

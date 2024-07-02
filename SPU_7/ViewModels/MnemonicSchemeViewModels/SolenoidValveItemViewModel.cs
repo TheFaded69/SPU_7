@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Prism.Commands;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
@@ -19,6 +20,8 @@ public class SolenoidValveItemViewModel : ViewModelBase
             SolenoidValveType.NormalClose => StateType.Close,
             _ => throw new ArgumentOutOfRangeException()
         };
+
+        UseSolenoidCommand = new DelegateCommand(UseSolenoidCommandHandler);
     }
 
     private readonly StandSettingsSolenoidValveModel _standSettingsSolenoidValveModel;
@@ -45,6 +48,29 @@ public class SolenoidValveItemViewModel : ViewModelBase
         await _standController.CloseSolenoidValveAsync(_standSettingsSolenoidValveModel);
 
         StateType = StateType.Close;
+    }
+    
+    public DelegateCommand UseSolenoidCommand { get; set; }
+
+    private async void UseSolenoidCommandHandler()
+    {
+        switch (StateType)
+        {
+            case StateType.None:
+                break;
+            case StateType.Open:
+                await _standController.CloseSolenoidValveAsync(_standSettingsSolenoidValveModel);
+                StateType = StateType.Close;
+                break;
+            case StateType.Close:
+                await _standController.OpenSolenoidValveAsync(_standSettingsSolenoidValveModel);
+                StateType = StateType.Open;
+                break;
+            case StateType.Work:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
     
 }

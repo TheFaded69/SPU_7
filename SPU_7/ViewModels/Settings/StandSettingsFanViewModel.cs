@@ -4,6 +4,7 @@ public class StandSettingsFanViewModel : ViewModelBase
 {
     private int _number;
     private bool _isNeedleValveEnable;
+    private bool _isValveEnable;
 
     public int Number
     {
@@ -15,5 +16,11 @@ public class StandSettingsFanViewModel : ViewModelBase
     {
         get => _isNeedleValveEnable;
         set => SetProperty(ref _isNeedleValveEnable, value);
+    }
+
+    public bool IsValveEnable
+    {
+        get => _isValveEnable;
+        set => SetProperty(ref _isValveEnable, value);
     }
 }

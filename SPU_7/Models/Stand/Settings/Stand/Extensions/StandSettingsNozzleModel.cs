@@ -12,4 +12,5 @@ public class StandSettingsNozzleModel
     public int? StateAddress;
     public string StateRegisterAddress;
     public int? StateBitNumber;
+    public bool IsReplaceNozzle;
 }

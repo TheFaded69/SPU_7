@@ -18,7 +18,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="Assets/Styles/ResourcesStyleDictionary.axaml"/>
+                <ResourceInclude Source="Assets/Styles/NozzleButtonResourcesStyleDictionary.axaml"/>
                 <ResourceInclude Source="Assets/Styles/ResourcesAnimationDictionary.axaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
