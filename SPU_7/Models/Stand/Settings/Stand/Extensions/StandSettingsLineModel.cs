@@ -36,6 +36,36 @@ public class StandSettingsLineModel
     public bool IsStartCommonValve { get; set; }
     
     /// <summary>
+    /// Есть ли линия проверки герметичности
+    /// </summary>
+    public bool IsCheckTightnessLine { get; set; }
+    
+    /// <summary>
+    /// Настройки клапана для проверки герметичности текущей линии
+    /// </summary>
+    public StandSettingsValveModel FirstTightnessValveViewModel { get; set; }
+    
+    /// <summary>
+    /// Настройки клапана для проверки герметичности следующей линии
+    /// </summary>
+    public StandSettingsValveModel SecondTightnessValveViewModel { get; set; }
+    
+    /// <summary>
+    /// Настройки клапана для проверки герметичности
+    /// </summary>
+    public StandSettingsValveModel TightnessValveViewModel { get; set; }
+    
+    /// <summary>
+    /// Есть ли линия проверки герметичности
+    /// </summary>
+    public bool IsDropValveEnable { get; set; }
+    
+    /// <summary>
+    /// Настройки клапана для проверки герметичности
+    /// </summary>
+    public StandSettingsValveModel DropValveViewModel { get; set; }
+    
+    /// <summary>
     /// Есть ли общий клапан после поверочного блока со следующей линией
     /// </summary>
     public bool IsEndCommonValve { get; set; }

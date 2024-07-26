@@ -1004,6 +1004,20 @@
                                                                           assists:ComboBoxAssist.Label="Тип соленоидного клапана"
                                                                           Theme="{StaticResource MaterialOutlineComboBox}"/> 
                                                             </StackPanel>
+                                                            
+                                                            <StackPanel DockPanel.Dock="Top"
+                                                                        Orientation="Horizontal">
+                                                                <CheckBox Margin="5, 20, 5, 22"
+                                                                          IsChecked="{Binding IsCheckTightnessLine}"
+                                                                          Content="Линия проверки герметичности" />
+                                                            </StackPanel>
+                                                            
+                                                            <StackPanel DockPanel.Dock="Top"
+                                                                        Orientation="Horizontal">
+                                                                <CheckBox Margin="5, 20, 5, 22"
+                                                                          IsChecked="{Binding IsDropValveEnable}"
+                                                                          Content="Кран сброса расхода" />
+                                                            </StackPanel>
                                                         </DockPanel>
                                                     </Expander>
                                                 </DockPanel>

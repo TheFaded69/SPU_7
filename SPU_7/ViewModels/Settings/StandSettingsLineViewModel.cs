@@ -67,6 +67,12 @@ public class StandSettingsLineViewModel : ViewModelBase
     private StandSettingsSolenoidValveViewModel _openNormalSolenoidValveViewModel;
     private bool _isCloseNormalSolenoidValve;
     private StandSettingsSolenoidValveViewModel _closeNormalSolenoidValveViewModel;
+    private bool _isCheckTightnessLine;
+    private StandSettingsValveViewModel _firstTightnessValveViewModel;
+    private StandSettingsValveViewModel _secondTightnessValveViewModel;
+    private StandSettingsValveViewModel _tightnessValveViewModel;
+    private bool _isDropValveEnable;
+    private StandSettingsValveViewModel _dropValveViewModel;
 
     public int LineNumber
     {
@@ -290,6 +296,69 @@ public class StandSettingsLineViewModel : ViewModelBase
         set => SetProperty(ref _selectedVacuumValveViewModel, value);
     }
 
+    /// <summary>
+    /// Есть ли линия проверки герметичности
+    /// </summary>
+    public bool IsCheckTightnessLine
+    {
+        get => _isCheckTightnessLine;
+        set
+        {
+            SetProperty(ref _isCheckTightnessLine, value);
+            FirstTightnessValveViewModel = new StandSettingsValveViewModel();
+            SecondTightnessValveViewModel = new StandSettingsValveViewModel();
+            TightnessValveViewModel = new StandSettingsValveViewModel();
+        }
+    }
+
+    /// <summary>
+    /// Настройки клапана для проверки герметичности текущей линии
+    /// </summary>
+    public StandSettingsValveViewModel FirstTightnessValveViewModel
+    {
+        get => _firstTightnessValveViewModel;
+        set => SetProperty(ref _firstTightnessValveViewModel, value);
+    }
+
+    /// <summary>
+    /// Настройки клапана для проверки герметичности следующей линии
+    /// </summary>
+    public StandSettingsValveViewModel SecondTightnessValveViewModel
+    {
+        get => _secondTightnessValveViewModel;
+        set => SetProperty(ref _secondTightnessValveViewModel, value);
+    }
+
+    /// <summary>
+    /// Настройки клапана для проверки герметичности
+    /// </summary>
+    public StandSettingsValveViewModel TightnessValveViewModel
+    {
+        get => _tightnessValveViewModel;
+        set => SetProperty(ref _tightnessValveViewModel, value);
+    }
+
+    /// <summary>
+    /// Есть ли линия проверки герметичности
+    /// </summary>
+    public bool IsDropValveEnable
+    {
+        get => _isDropValveEnable;
+        set
+        {
+            SetProperty(ref _isDropValveEnable, value);
+            DropValveViewModel = new StandSettingsValveViewModel();
+        }
+    }
+
+    /// <summary>
+    /// Настройки клапана для проверки герметичности
+    /// </summary>
+    public StandSettingsValveViewModel DropValveViewModel
+    {
+        get => _dropValveViewModel;
+        set => SetProperty(ref _dropValveViewModel, value);
+    }
 
     public bool IsReverseLine
     {

@@ -191,6 +191,9 @@ public class LineItemViewModel : ViewModelBase
             VacuumItemViewModels.Add(new VacuumItemViewModel());
         }
 
+        IsCheckTightnessLine = _settingsService.StandSettingsModel.LineViewModels[lineIndex].IsCheckTightnessLine;
+        IsDropValveEnable = _settingsService.StandSettingsModel.LineViewModels[lineIndex].IsDropValveEnable;
+        
         LineNumber = lineIndex + 1;
 
         ReverseFlowCommand = new DelegateCommand(ReverseFlowCommandHandler);
@@ -260,6 +263,17 @@ public class LineItemViewModel : ViewModelBase
     
     public ValveItemViewModel AfterDeviceValveViewModel { get; set; }
     public ValveItemViewModel StartCommonValveViewModel { get; set; }
+    
+    public bool IsCheckTightnessLine { get; set; }
+    
+    public ValveItemViewModel FirstTightnessValveViewModel { get; set; }
+    
+    public ValveItemViewModel SecondTightnessValveViewModel { get; set; }
+    
+    public ValveItemViewModel TightnessValveViewModel { get; set; }
+    
+    public bool IsDropValveEnable { get; set; }
+    public ValveItemViewModel DropValveViewModel { get; set; }
     public ValveItemViewModel StartValveViewModel { get; set; }
     public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = new();
     public SolenoidValveItemViewModel NormalOpenSolenoidValveItemViewModel { get; set; }
