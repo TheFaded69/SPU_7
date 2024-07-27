@@ -95,7 +95,7 @@ namespace SPU_7.ViewModels
 #if DEBUGGUI
             _standController.TestInitialization();
 #else
-            //_standController.Initialization();
+            _standController.Initialization();
 #endif
 
             StandView = new StandView

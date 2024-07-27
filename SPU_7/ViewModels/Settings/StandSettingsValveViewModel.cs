@@ -6,12 +6,16 @@ public class StandSettingsValveViewModel : ViewModelBase
     private int? _address;
     private string _registerAddress;
     private int? _bitNumber;
-    private int? _stateAddress;
-    private string _stateRegisterAddress;
-    private int? _stateBitNumber;
+    private int? _stateOnAddress;
+    private string _stateOnRegisterAddress;
+    private int? _stateOnBitNumber;
     private bool _isControlState;
     private bool _isTubeValve;
     private bool _isPressureDifferenceValve;
+    private int? _stateOffAddress;
+    private string _stateOffRegisterAddress;
+    private int? _stateOffBitNumber;
+    private bool _isReverseValve;
 
     public int Number
     {
@@ -39,22 +43,40 @@ public class StandSettingsValveViewModel : ViewModelBase
 
     }
 
-    public int? StateAddress
+    public int? StateOnAddress
     {
-        get => _stateAddress;
-        set => SetProperty(ref _stateAddress, value);
+        get => _stateOnAddress;
+        set => SetProperty(ref _stateOnAddress, value);
     }
 
-    public string StateRegisterAddress
+    public string StateOnRegisterAddress
     {
-        get => _stateRegisterAddress;
-        set => SetProperty(ref _stateRegisterAddress, value);
+        get => _stateOnRegisterAddress;
+        set => SetProperty(ref _stateOnRegisterAddress, value);
     }
 
-    public int? StateBitNumber
+    public int? StateOnBitNumber
     {
-        get => _stateBitNumber;
-        set => SetProperty(ref _stateBitNumber, value);
+        get => _stateOnBitNumber;
+        set => SetProperty(ref _stateOnBitNumber, value);
+    }
+
+    public int? StateOffAddress
+    {
+        get => _stateOffAddress;
+        set => SetProperty(ref _stateOffAddress, value);
+    }
+
+    public string StateOffRegisterAddress
+    {
+        get => _stateOffRegisterAddress;
+        set => SetProperty(ref _stateOffRegisterAddress, value);
+    }
+
+    public int? StateOffBitNumber
+    {
+        get => _stateOffBitNumber;
+        set => SetProperty(ref _stateOffBitNumber, value);
     }
 
     public bool IsControlState
@@ -73,5 +95,11 @@ public class StandSettingsValveViewModel : ViewModelBase
     {
         get => _isPressureDifferenceValve;
         set => SetProperty(ref _isPressureDifferenceValve, value);
+    }
+
+    public bool IsReverseValve
+    {
+        get => _isReverseValve;
+        set => SetProperty(ref _isReverseValve, value);
     }
 }

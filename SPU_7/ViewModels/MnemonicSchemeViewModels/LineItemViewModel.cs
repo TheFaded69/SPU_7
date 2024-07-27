@@ -134,15 +134,15 @@ public class LineItemViewModel : ViewModelBase
 
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsAfterDeviceValve)
             AfterDeviceValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].AfterDeviceValveViewModel,
-                _standController);
+                _standController, StateType.Open);
         
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsStartCommonValve)
             StartCommonValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StartCommonValveViewModel,
-                _standController);
+                _standController, StateType.Open);
         
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsStartValveMasterDevice)
             StartValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StartValveMasterDeviceViewModel,
-                _standController);
+                _standController, StateType.Open);
         
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsOpenNormalSolenoidValve)
             NormalOpenSolenoidValveItemViewModel = new SolenoidValveItemViewModel(_standController,
@@ -156,7 +156,8 @@ public class LineItemViewModel : ViewModelBase
         {
             MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_dialogService,
                 _standController,
-                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].ValveViewModel,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].MasterDeviceValveViewModel,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].PressureSensorValveViewModel,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i]));
         }
 
@@ -168,17 +169,17 @@ public class LineItemViewModel : ViewModelBase
         
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsEndValveMasterDevice)
             EndValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].EndValveMasterDeviceViewModel,
-                _standController);
+                _standController, StateType.Open);
         
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsEndCommonValve)
             EndCommonValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].EndCommonValveViewModel,
-                _standController);
+                _standController, StateType.Open);
 
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count; i++)
         {
             FanItemViewModels.Add(new FanItemViewModel(_standController,
                 _settingsService,
-                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].ValveViewModel,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].FanValveViewModel,
                 lineIndex,
                 i)
             {

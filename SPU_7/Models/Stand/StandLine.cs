@@ -27,7 +27,7 @@ public class StandLine
         switch (settingsService.StandSettingsModel.LineViewModels[i].SelectedLineType)
         {
             case LineType.MasterDeviceLineType:
-                foreach (var masterDeviceModel in settingsService.StandSettingsModel.LineViewModels[i].MasterDeviceViewModels)
+                /*foreach (var masterDeviceModel in settingsService.StandSettingsModel.LineViewModels[i].MasterDeviceViewModels)
                 {
                     MasterDevices.Add(masterDeviceModel.SelectedMasterDeviceType switch
                     {
@@ -37,7 +37,7 @@ public class StandLine
                         MasterDeviceType.RGT => new RGTDevice(),
                         _ => new RaboDevice()
                     });
-                }
+                }*/
                 break;
             case LineType.NozzleLineType:
                 break;

@@ -3,7 +3,6 @@
 public class StandSettingsFrequencyRegulatorModel
 {
     public string PortName { get; set; }
-    public float TargetPressure { get; set; }
     public int ModuleAddress { get; set; }
     public double kP { get; set; }
     public double kI { get; set; }

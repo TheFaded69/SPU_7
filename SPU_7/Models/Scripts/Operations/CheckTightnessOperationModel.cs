@@ -32,12 +32,12 @@ public class CheckTightnessOperationModel : OperationModel
             //Закрыть М21
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
-                if (!await _standController.CloseValveAsync(_standSettingsService.StandSettingsModel.ValveViewModels
+                /*if (!await _standController.CloseValveAsync(_standSettingsService.StandSettingsModel.ValveViewModels
                         .FirstOrDefault(valve => valve.IsTubeValve)))
                 {
                     _logger.Logging(new LogMessage("Не удалось закрыть клапан №21", LogLevel.Error));
                     return new OperationResult(OperationResultType.Error, "Не удалось закрыть клапан №21", result);
-                }
+                }*/
             }
             else
             {
@@ -63,12 +63,12 @@ public class CheckTightnessOperationModel : OperationModel
             //Открыть М23
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
-                if (!await _standController.OpenValveAsync(_standSettingsService.StandSettingsModel.ValveViewModels
+                /*if (!await _standController.OpenValveAsync(_standSettingsService.StandSettingsModel.ValveViewModels
                         .FirstOrDefault(valve => valve.IsPressureDifferenceValve)))
                 {
                     _logger.Logging(new LogMessage("Не удалось открыть клапан №23", LogLevel.Error));
                     return new OperationResult(OperationResultType.Error, "Не удалось открыть клапан №23", result);
-                }
+                }*/
             }
             else
             {
@@ -94,11 +94,11 @@ public class CheckTightnessOperationModel : OperationModel
             _standController.PidEnable();
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
-                if (!await _standController.EnableVacuumCreator())
+                /*if (!await _standController.EnableFrequencyRegulatorAsync())
                 {
                     _logger.Logging(new LogMessage("Не удалось включить вакуумный насос", LogLevel.Error));
                     return new OperationResult(OperationResultType.Error, "Не удалось включить вакуумный насос", result);
-                }
+                }*/
             }
             else
             {
@@ -176,11 +176,11 @@ public class CheckTightnessOperationModel : OperationModel
             _standController.PidDisable();
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
-                if (!await _standController.DisableVacuumCreator())
+                /*if (!await _standController.DisableFrequencyRegulatorAsync())
                 {
                     _logger.Logging(new LogMessage("Не удалось выключить вакуумный насос", LogLevel.Error));
                     return new OperationResult(OperationResultType.Error, "Не удалось выключить вакуумный насос", result);
-                }
+                }*/
             }
             else
             {

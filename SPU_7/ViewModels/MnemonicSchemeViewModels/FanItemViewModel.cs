@@ -8,6 +8,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 public class FanItemViewModel : ViewModelBase
 {
     private readonly IStandController _standController;
+    private readonly int _fanIndex;
 
     public FanItemViewModel(IStandController standController,
         IStandSettingsService settingsService,
@@ -16,8 +17,20 @@ public class FanItemViewModel : ViewModelBase
         int fanIndex)
     {
         _standController = standController;
+        _fanIndex = fanIndex;
 
-        ValveItemViewModel = new ValveItemViewModel(standSettingsValveModel, standController);
+        if (lineIndex > 0)
+        {
+            for (var i = settingsService.StandSettingsModel.LineViewModels.Count - lineIndex - 1; i >= 0; i--)
+            {
+                foreach (var fanViewModel in settingsService.StandSettingsModel.LineViewModels[i].FanViewModels)
+                {
+                    _fanIndex++;
+                }
+            }
+        }
+        
+        ValveItemViewModel = new ValveItemViewModel(standSettingsValveModel, standController, StateType.Open);
 
         EnableFanCommand = new DelegateCommand(EnableFanCommandHandler);
         DisableFanCommand = new DelegateCommand(DisableFanCommandHandler);
@@ -34,6 +47,7 @@ public class FanItemViewModel : ViewModelBase
     private bool _isNeedleValveEnable;
     private int _selectedNeedleValue;
     private bool _isValveEnable;
+    private float _fanFrequencyValue;
 
     public bool IsValveEnable
     {
@@ -59,10 +73,18 @@ public class FanItemViewModel : ViewModelBase
         set => SetProperty(ref _isNeedleValveEnable, value);
     }
 
+    public float FanFrequencyValue
+    {
+        get => _fanFrequencyValue;
+        set => SetProperty(ref _fanFrequencyValue, value);
+    }
+
     public DelegateCommand EnableFanCommand { get; set; }
 
-    private void EnableFanCommandHandler()
+    private async void EnableFanCommandHandler()
     {
+        await _standController.SetRegulatorFrequencyAsync(_fanIndex, FanFrequencyValue);
+        await _standController.EnableFrequencyRegulatorAsync(_fanIndex);
         IsFanWorking = true;
     }
     
@@ -74,8 +96,9 @@ public class FanItemViewModel : ViewModelBase
         set => SetProperty(ref _selectedNeedleValue, value);
     }
 
-    private void DisableFanCommandHandler()
+    private async void DisableFanCommandHandler()
     {
+        await _standController.DisableFrequencyRegulatorAsync(_fanIndex);
         IsFanWorking = false;
     }
 }

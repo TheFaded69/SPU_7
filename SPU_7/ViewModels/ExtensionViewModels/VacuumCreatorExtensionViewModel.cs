@@ -24,7 +24,7 @@ public class VacuumCreatorExtensionViewModel : ViewModelBase
     {
 #if !DEBUGGUI
             _standController.PidEnable();
-            await _standController.EnableVacuumCreator();
+            //await _standController.EnableFrequencyRegulatorAsync();
 #endif
     }
 
@@ -34,7 +34,7 @@ public class VacuumCreatorExtensionViewModel : ViewModelBase
     {
 #if !DEBUGGUI
             _standController.PidDisable();
-            await _standController.DisableVacuumCreator();
+            //await _standController.DisableFrequencyRegulatorAsync();
 #endif
     }
 

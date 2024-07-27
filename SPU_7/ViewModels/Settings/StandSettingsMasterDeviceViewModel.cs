@@ -24,6 +24,8 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     private string _selectedPressureSensorComPort;
     private string _selectedTemperatureSensorComPort;
     private string _masterDeviceName;
+    private StandSettingsValveViewModel _pressureSensorValveViewModel;
+    private StandSettingsValveViewModel _masterDeviceValveViewModel;
 
     public ObservableCollection<string> MasterDeviceTypesString { get; set; } = new(Enum
         .GetValues<MasterDeviceType>()
@@ -103,4 +105,16 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     }
 
     public string MasterDeviceName { get => _masterDeviceName; set => SetProperty(ref _masterDeviceName, value); }
+
+    public StandSettingsValveViewModel PressureSensorValveViewModel
+    {
+        get => _pressureSensorValveViewModel;
+        set => SetProperty(ref _pressureSensorValveViewModel, value);
+    }
+
+    public StandSettingsValveViewModel MasterDeviceValveViewModel
+    {
+        get => _masterDeviceValveViewModel;
+        set => SetProperty(ref _masterDeviceValveViewModel, value);
+    }
 }

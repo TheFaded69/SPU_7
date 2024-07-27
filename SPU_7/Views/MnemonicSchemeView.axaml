@@ -330,6 +330,25 @@
                                                        ClipToBounds="True"
                                                        VerticalAlignment="Center"
                                                        DockPanel.Dock="Left" />
+                                            <Button Width="50"
+                                                    Height="50"
+                                                    Content="P"
+                                                    Padding="-3"
+                                                    Margin="0, 0,0,0"
+                                                    DockPanel.Dock="Left"
+                                                    Command="{Binding PressureValveItemViewModel.UseValveCommand}"
+                                                    HorizontalAlignment="Center"
+                                                    Background="{Binding PressureValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                                    Foreground="Black"
+                                                    Classes="flat" />
+                                            <Rectangle Fill="#00a2e8"
+                                                       Height="20"
+                                                       Width="20"
+                                                       Margin="0, 0,0,0"
+                                                       StrokeThickness="0"
+                                                       ClipToBounds="True"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left" />
                                             <Button Width="100"
                                                     Classes="flat"
                                                     Height="100"
@@ -973,6 +992,16 @@
                                                     Margin="-6,-6,0,0" />
                                                 <Border.ContextMenu>
                                                     <ContextMenu>
+                                                         <DockPanel LastChildFill="True">
+                                                             <TextBox Text="Гц"
+                                                                      Margin="5"
+                                                                      HorizontalAlignment="Stretch"
+                                                                      DockPanel.Dock="Right"/>
+                                                             <TextBox Text="{Binding FanFrequencyValue}"
+                                                                      Margin="5"
+                                                                      HorizontalAlignment="Stretch"/>
+                                                         </DockPanel>
+                                                        
                                                         <MenuItem Header="Включить"
                                                                   Command="{Binding EnableFanCommand}"
                                                                   IsEnabled="{Binding !IsFanWorking}" />

@@ -9,8 +9,10 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
     public class ValveItemViewModel : ViewModelBase
     {
         public ValveItemViewModel(StandSettingsValveModel standSettingsValveModel,
-            IStandController standController)
+            IStandController standController, 
+            StateType stateType)
         {
+            StateType = stateType;
             StandSettingsValveModel = standSettingsValveModel;
             _standController = standController;
 
@@ -29,7 +31,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
         }
 
         private DeviceViewModel _device;
-        private StateType _stateType = StateType.Open;
+        private StateType _stateType;
 
         public DeviceViewModel Device
         {

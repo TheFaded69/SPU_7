@@ -11,7 +11,9 @@ public class StandSettingsMasterDeviceModel
     
     public int MasterDeviceAddress { get; set; }
     public string VendorNumber { get; set; }
-    public StandSettingsValveModel ValveViewModel { get; set; }
+    public StandSettingsValveModel PressureSensorValveViewModel { get; set; }
+    
+    public StandSettingsValveModel MasterDeviceValveViewModel { get; set; }
     
     public int PressureSensorAddress { get; set; }
     

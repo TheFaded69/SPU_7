@@ -372,7 +372,7 @@ public class StandSettingsLineViewModel : ViewModelBase
         DeviceViewModels.Add(new StandSettingsDeviceViewModel()
         {
             Number = DeviceViewModels.Count + 1, 
-            IsValveEnable = !IsReverseLine
+            IsValveEnable = !IsReverseLine,
         });
     }
 
@@ -388,6 +388,8 @@ public class StandSettingsLineViewModel : ViewModelBase
         MasterDeviceViewModels.Add(new StandSettingsMasterDeviceViewModel()
         {
             Number = MasterDeviceViewModels.Count + 1, 
+            PressureSensorValveViewModel = new StandSettingsValveViewModel(),
+            MasterDeviceValveViewModel = new StandSettingsValveViewModel(),
         });
     }
 
@@ -418,6 +420,8 @@ public class StandSettingsLineViewModel : ViewModelBase
         FanViewModels.Add(new StandSettingsFanViewModel()
         {
             Number = FanViewModels.Count + 1, 
+            FanValveViewModel = new StandSettingsValveViewModel(),
+            FrequencyRegulatorViewModel = new StandSettingsFrequencyRegulatorViewModel(),
         });
     }
 

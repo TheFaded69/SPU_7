@@ -67,12 +67,12 @@ public class SetStandWorkModeOperationModel : OperationModel
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
                 //Закрыть М23
-                if (!await _standController.CloseValveAsync(_standSettingsService.StandSettingsModel.ValveViewModels
+                /*if (!await _standController.CloseValveAsync(_standSettingsService.StandSettingsModel.ValveViewModels
                         .FirstOrDefault(valve => valve.IsPressureDifferenceValve)))
                 {
                     _logger.Logging(new LogMessage("Не удалось закрыть клапан №23", LogLevel.Error));
                     return new OperationResult(OperationResultType.Error, "Не удалось закрыть клапан №23", result);
-                }
+                }*/
             }
             else
             {
@@ -82,12 +82,12 @@ public class SetStandWorkModeOperationModel : OperationModel
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
                 //Закрыть М21
-                if (!await _standController.CloseValveAsync(_standSettingsService.StandSettingsModel.ValveViewModels
+                /*if (!await _standController.CloseValveAsync(_standSettingsService.StandSettingsModel.ValveViewModels
                         .FirstOrDefault(valve => valve.IsTubeValve)))
                 {
                     _logger.Logging(new LogMessage("Не удалось закрыть клапан №21", LogLevel.Error));
                     return new OperationResult(OperationResultType.Error, "Не удалось закрыть клапан №21", result);
-                }
+                }*/
             }
             else
             {

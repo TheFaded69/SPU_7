@@ -25,13 +25,13 @@ public class DeviceItemViewModel : ViewModelBase, IPressureSensorObserver, IDevi
             Address = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].Address,
             RegisterAddress = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].RegisterAddress,
             BitNumber = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].BitNumber,
-            StateAddress = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].StateAddress,
-            StateRegisterAddress = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].StateRegisterAddress,
-            StateBitNumber = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].StateBitNumber,
+            StateOnAddress = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].StateAddress,
+            StateOnRegisterAddress = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].StateRegisterAddress,
+            StateOnBitNumber = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].StateBitNumber,
             IsControlState = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels[deviceIndex].IsControlState,
             LineNumber = lineIndex + 1,
         };
-        ValveItemViewModel = new ValveItemViewModel(valveSettings, standController);
+        ValveItemViewModel = new ValveItemViewModel(valveSettings, standController, StateType.Open);
         UseValveCommand = new DelegateCommand(UseValveCommandHandler);
     }
 

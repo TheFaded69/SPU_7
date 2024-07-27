@@ -8,37 +8,17 @@ public class FrequencyRegulatorDevice : ModbusUnitProcessor<FrequencyRegulatorRe
 {
     public FrequencyRegulatorDevice(IModbusProcessor modbusProcessor, 
         IRegisterMapEnum<FrequencyRegulatorRegisterMap> registerMap, 
-        Func<float?> readCurrentPressure, 
-        float readTargetPressure,
         int moduleAddress) : base(modbusProcessor, registerMap)
     {
-        _readCurrentPressure = readCurrentPressure;
-        _readTargetPressure = readTargetPressure;
-        
         ModuleAddress = (byte)moduleAddress;
     }
 
     private PidController _pid;
-    private readonly Func<float?> _readCurrentPressure;
-    private readonly float _readTargetPressure;
     
     public void SetPidParameters(double pG, double iG, double dG, double pMax, double pMin, double oMax, double oMin)
     {
-        _pid = new PidController(pG, iG, dG, pMax, pMin,  oMax,  oMin, ReadPV, ReadSP, WriteOV);
+        //_pid = new PidController(pG, iG, dG, pMax, pMin,  oMax,  oMin, ReadPV, ReadSP, WriteOV);
     }
-
-    /// <summary>
-    /// Записать текущее значение в ПИД регулятор (давление)
-    /// </summary>
-    /// <returns></returns>
-    private double? ReadPV() => _readCurrentPressure();
-
-    /// <summary>
-    /// Записать требуемое значение в ПИД регулятор (давление)
-    /// </summary>
-    /// <returns></returns>
-    private  double ReadSP() =>  -_readTargetPressure;
-
     
     /// <summary>
     /// Записать полученное значение из ПИД регулятора (делегат который вызывается ПИД регулятором после расчетов)
@@ -48,14 +28,13 @@ public class FrequencyRegulatorDevice : ModbusUnitProcessor<FrequencyRegulatorRe
     private async Task WriteOV(double value) => await SetOutputValueAsync(value);
 
     public async Task<bool> SetOutputValueAsync(double value)
-        => await WriteRegisterAsync(FrequencyRegulatorRegisterMap.FrequencyValueRegister, BitConverter.GetBytes((ushort)value).Reverse().ToArray());
+        => await WriteRegisterAsync(FrequencyRegulatorRegisterMap.FrequencyValueRegister, BitConverter.GetBytes((ushort)(value / 0.1)).Reverse().ToArray());
     
     public async Task<ushort?> GetCurrentFrequencyValueAsync()
         => (ushort?)await ReadRegisterAsync(FrequencyRegulatorRegisterMap.PA02);
 
     public async Task<bool> StartFrequencyWorkAsync()
     {
-      
         return await WriteRegisterAsync(FrequencyRegulatorRegisterMap.CommandRegister, BitConverter.GetBytes((ushort)2).Reverse().ToArray());
     }
 

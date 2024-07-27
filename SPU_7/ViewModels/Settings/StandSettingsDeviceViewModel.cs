@@ -15,7 +15,6 @@ public class StandSettingsDeviceViewModel : ViewModelBase
     private int? _pressureSensorAddress;
     private int? _pulseMeterNumber;
     private int? _pulseMeterChannelNumber;
-    private StandSettingsValveViewModel _standSettingsValveViewModel;
     private bool _isValveEnable;
     private int? _address;
     private string _registerAddress;
@@ -106,7 +105,9 @@ public class StandSettingsDeviceViewModel : ViewModelBase
         get => _selectedCameraName;
         set => SetProperty(ref _selectedCameraName, value);
     }
+
     
+
     public ObservableCollection<string> CameraNames { get; set; }
         = new ObservableCollection<string>(new FilterInfoCollection(FilterCategory.VideoInputDevice).GetMonikerNames());
 }

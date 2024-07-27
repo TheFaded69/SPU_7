@@ -185,11 +185,11 @@ namespace SPU_7.Models.Stand
         Task<bool> CloseAllNozzleAsync();
         Task<bool> OpenSolenoidValveAsync(StandSettingsSolenoidValveModel solenoidValveModel);
         Task<bool> CloseSolenoidValveAsync(StandSettingsSolenoidValveModel solenoidValveModel);
-        Task<bool> EnableVacuumCreator();
-        Task<bool> DisableVacuumCreator();
+        Task<bool> EnableFrequencyRegulatorAsync(int regulatorIndex);
+        Task<bool> SetRegulatorFrequencyAsync(int regulatorIndex ,float frequency);
+        Task<bool> DisableFrequencyRegulatorAsync(int regulatorIndex);
         public void PidEnable();
         public void PidDisable();
-        Task<bool> SetFrequencyRegulatorFrequencyAsync(double value);
         Task<bool> EndWorkAsync();
 
         float? TemperatureTube { get; set; }

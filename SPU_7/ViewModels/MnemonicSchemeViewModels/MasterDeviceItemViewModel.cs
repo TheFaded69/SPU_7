@@ -8,13 +8,18 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 
 public class MasterDeviceItemViewModel : ViewModelBase
 {
-    public MasterDeviceItemViewModel(IDialogService dialogService,IStandController standController, StandSettingsValveModel valveViewModel, StandSettingsMasterDeviceModel masterDeviceModel)
+    public MasterDeviceItemViewModel(IDialogService dialogService, 
+        IStandController standController, 
+        StandSettingsValveModel valveViewModel, 
+        StandSettingsValveModel pressureValveViewModel,
+        StandSettingsMasterDeviceModel masterDeviceModel)
     {
         _dialogService = dialogService;
         _standController = standController;
         _masterDeviceModel = masterDeviceModel;
 
-        ValveItemViewModel = new ValveItemViewModel(valveViewModel, standController);
+        ValveItemViewModel = new ValveItemViewModel(valveViewModel, standController, StateType.Open);
+        PressureValveItemViewModel = new ValveItemViewModel(pressureValveViewModel, standController, StateType.Close);
         DeviceName = masterDeviceModel.SelectedMasterDeviceType.GetDescription();
         VendorNumber = "№" + masterDeviceModel.VendorNumber;
         
@@ -29,13 +34,20 @@ public class MasterDeviceItemViewModel : ViewModelBase
     private float? _pressure;
     private float? _temperature;
     private ValveItemViewModel _valveItemViewModel;
-    
+    private ValveItemViewModel _pressureValveItemViewModel;
+
     public string DeviceName { get; set; }
     
     public ValveItemViewModel ValveItemViewModel
     {
         get => _valveItemViewModel;
         set => SetProperty(ref _valveItemViewModel, value);
+    }
+
+    public ValveItemViewModel PressureValveItemViewModel
+    {
+        get => _pressureValveItemViewModel;
+        set => SetProperty(ref _pressureValveItemViewModel, value);
     }
 
     public float? Pressure
