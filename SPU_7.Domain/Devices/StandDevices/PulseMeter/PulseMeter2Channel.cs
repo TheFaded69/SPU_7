@@ -9,7 +9,9 @@ namespace SPU_7.Domain.Devices.StandDevices.PulseMeter;
 /// </summary>
 public class PulseMeter2Channel : ModbusUnitProcessor<PulseMeter2ChannelRegisterMap>, IPulseMeter2Channel
 {
-    public PulseMeter2Channel(IModbusProcessor modbusProcessor, IRegisterMapEnum<PulseMeter2ChannelRegisterMap> registerMap, int pulseMeterAddress) : base(modbusProcessor, registerMap)
+    public PulseMeter2Channel(IModbusProcessor modbusProcessor,
+        IRegisterMapEnum<PulseMeter2ChannelRegisterMap> registerMap,
+        int pulseMeterAddress) : base(modbusProcessor, registerMap)
     {
         ModuleAddress = (byte)pulseMeterAddress;
     }

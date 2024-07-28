@@ -24,6 +24,8 @@ public class StandSettingsDeviceViewModel : ViewModelBase
     private int? _stateBitNumber;
     private bool _isControlState;
     private string _selectedCameraName;
+    private int? _pulseCountMeterModuleNumber;
+    private int? _pulseCountMeterModuleChannelNumber;
 
     public int Number
     {
@@ -106,7 +108,17 @@ public class StandSettingsDeviceViewModel : ViewModelBase
         set => SetProperty(ref _selectedCameraName, value);
     }
 
-    
+    public int? PulseCountMeterModuleNumber
+    {
+        get => _pulseCountMeterModuleNumber;
+        set => SetProperty(ref _pulseCountMeterModuleNumber, value);
+    }
+
+    public int? PulseCountMeterModuleChannelNumber
+    {
+        get => _pulseCountMeterModuleChannelNumber;
+        set => SetProperty(ref _pulseCountMeterModuleChannelNumber, value);
+    }
 
     public ObservableCollection<string> CameraNames { get; set; }
         = new ObservableCollection<string>(new FilterInfoCollection(FilterCategory.VideoInputDevice).GetMonikerNames());

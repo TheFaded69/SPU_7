@@ -11,6 +11,7 @@ public class StandSettingsModel
     public ObservableCollection<StandSettingsValveModel> ValveViewModels { get; set; }
     public ObservableCollection<StandSettingsSolenoidValveModel> SolenoidValveViewModels { get; set; }
     public ObservableCollection<StandSettingsPulseMeterModel> PulseMeterViewModels { get; set; }
+    public ObservableCollection<StandSettingsPulseCountMeterModuleModel> PulseCountMeterModuleViewModels { get; set; }
     public ObservableCollection<StandSettingsLineModel> LineViewModels { get; set; }
     public ObservableCollection<StandSettingsPortModel> PortViewModels { get; set; }
     public StandSettingsFrequencyRegulatorModel FrequencyRegulatorViewModel { get; set; }
@@ -29,7 +30,7 @@ public class StandSettingsModel
     public string ProfileName { get; set; }
     public string SelectedEquipmentPort { get; set; }
     public int SelectedEquipmentBaudRate { get; set; }
-    
+
     public string ValidationVendorType { get; set; }
     public string ValidationVendorName { get; set; }
     public string ValidationVendorShortName { get; set; }

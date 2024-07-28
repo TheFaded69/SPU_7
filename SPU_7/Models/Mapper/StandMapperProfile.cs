@@ -79,6 +79,8 @@ namespace SPU_7.Models.Mapper
                 .ReverseMap();
             CreateMap<StandSettingsFrequencyRegulatorModel, StandSettingsFrequencyRegulatorViewModel>()
                 .ReverseMap();
+            CreateMap<StandSettingsPulseCountMeterModuleModel, StandSettingsPulseCountMeterModuleViewModel>()
+                .ReverseMap();
             #endregion
 
             CreateMap<ValidationPulseMeterConfiguration, ValidationPulseMeterConfigurationViewModel>()

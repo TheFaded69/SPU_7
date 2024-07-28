@@ -62,6 +62,8 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         RemoveLineCommand = new DelegateCommand(RemoveLineCommandHandler);
         AddPulseMeterCommand = new DelegateCommand(AddPulseMeterCommandHandler);
         RemovePulseMeterCommand = new DelegateCommand(RemovePulseMeterCommandHandler);
+        AddPulseCountMeterModuleCommand = new DelegateCommand(AddPulseCountMeterModuleCommandHandler);
+        RemovePulseCountMeterModuleCommand = new DelegateCommand(RemovePulseCountMeterModuleCommandHandler);
         AddPortCommand = new DelegateCommand(AddPortCommandHandler);
         RemovePortCommand = new DelegateCommand(RemovePortCommandHandler);
         SaveSettingsCommand = new DelegateCommand(SaveSettingsCommandHandler);
@@ -185,6 +187,8 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     private string _selectedThMeterPortName;
     private string _selectedPressureDifferenceSensorPortName;
     private string _selectedPressureResiverSensorPortName;
+    private ObservableCollection<StandSettingsPulseCountMeterModuleViewModel> _pulseCountMeterModuleViewModels;
+    private StandSettingsPulseCountMeterModuleViewModel _selectedPulseCountMeterModuleViewModel;
 
     #region Profiles
 
@@ -479,7 +483,19 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         get => _pulseMeterViewModels;
         set => SetProperty(ref _pulseMeterViewModels, value);
     }
-    
+
+    public ObservableCollection<StandSettingsPulseCountMeterModuleViewModel> PulseCountMeterModuleViewModels
+    {
+        get => _pulseCountMeterModuleViewModels;
+        set => SetProperty(ref _pulseCountMeterModuleViewModels, value);
+    }
+
+    public StandSettingsPulseCountMeterModuleViewModel SelectedPulseCountMeterModuleViewModel
+    {
+        get => _selectedPulseCountMeterModuleViewModel;
+        set => SetProperty(ref _selectedPulseCountMeterModuleViewModel, value);
+    }
+
     public ObservableCollection<StandSettingsPortViewModel> PortViewModels
     {
         get => _portViewModels;
@@ -569,6 +585,23 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     private void RemovePulseMeterCommandHandler()
     {
         PulseMeterViewModels.Remove(SelectedPulseMeterViewModel);
+    }
+    
+    public DelegateCommand AddPulseCountMeterModuleCommand { get; }
+
+    private void AddPulseCountMeterModuleCommandHandler()
+    {
+        PulseCountMeterModuleViewModels.Add(new StandSettingsPulseCountMeterModuleViewModel()
+        {
+            Number = PulseCountMeterModuleViewModels.Count + 1,
+        });
+    }
+    
+    public DelegateCommand RemovePulseCountMeterModuleCommand { get; }
+
+    private void RemovePulseCountMeterModuleCommandHandler()
+    {
+        PulseCountMeterModuleViewModels.Remove(SelectedPulseCountMeterModuleViewModel);
     }
     
     #endregion

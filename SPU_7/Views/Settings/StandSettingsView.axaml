@@ -290,7 +290,10 @@
                                                                                     SelectedItem="{Binding SelectedDeviceViewModel}">
                                                                                     <ListBox.ItemTemplate>
                                                                                         <DataTemplate>
-                                                                                            <StackPanel
+                                                                                            <DockPanel>
+                                                                                                
+                                                                                            
+                                                                                            <StackPanel DockPanel.Dock="Top"
                                                                                                 Orientation="Horizontal">
                                                                                                 <TextBlock Margin="5"
                                                                                                     Text="{Binding Number, Converter={convertors:IntToStringNumberConverter}}"
@@ -373,6 +376,20 @@
                                                                                                     Theme="{StaticResource MaterialOutlineComboBox}" />
 
                                                                                             </StackPanel>
+                                                                                                <StackPanel DockPanel.Dock="Top"
+                                                                                                    Orientation="Horizontal">
+                                                                                                    <TextBox Margin="5"
+                                                                                                        assists:TextFieldAssist.Label="Номер МПКИ"
+                                                                                                        UseFloatingWatermark="True"
+                                                                                                        Watermark="Введите номер"
+                                                                                                        Text="{Binding PulseCountMeterModuleNumber}" />
+                                                                                                    <TextBox Margin="5"
+                                                                                                        assists:TextFieldAssist.Label="Канал МПКИ"
+                                                                                                        UseFloatingWatermark="True"
+                                                                                                        Watermark="Введите номер"
+                                                                                                        Text="{Binding PulseCountMeterModuleChannelNumber}" />
+                                                                                                </StackPanel>
+                                                                                            </DockPanel>
                                                                                         </DataTemplate>
                                                                                     </ListBox.ItemTemplate>
                                                                                 </ListBox>
@@ -600,6 +617,19 @@
                                                                                                     IsChecked="{Binding PressureSensorValveViewModel.IsReverseValve}"
                                                                                                     Content="Обратное управление"
                                                                                                     VerticalAlignment="Center" />
+                                                                                            </StackPanel>
+                                                                                            <StackPanel DockPanel.Dock="Top"
+                                                                                                        Orientation="Horizontal">
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Номер МПКИ"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите номер"
+                                                                                                    Text="{Binding PulseCountMeterModuleNumber}" />
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Канал МПКИ"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите номер"
+                                                                                                    Text="{Binding PulseCountMeterModuleChannelNumber}" />
                                                                                             </StackPanel>
                                                                                         </DockPanel>
 
@@ -1493,6 +1523,55 @@
                         </controls:Card>
                     </TabItem>
 
+                    <TabItem Header="МПКИ">
+                        <controls:Card Margin="5">
+                            <DockPanel>
+
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            DockPanel.Dock="Bottom">
+                                    <Button Margin="5"
+                                            Command="{Binding AddPulseCountMeterModuleCommand}">
+                                        <materialIcons:MaterialIcon Kind="Add" />
+                                    </Button>
+                                    <Button Margin="5"
+                                            Command="{Binding RemovePulseCountMeterModuleCommand}">
+                                        <materialIcons:MaterialIcon Kind="Delete" />
+                                    </Button>
+                                </StackPanel>
+
+                                <ListBox Margin="5"
+                                         ItemsSource="{Binding PulseCountMeterModuleViewModels}"
+                                         SelectedItem="{Binding SelectedPulseCountMeterModuleViewModel}"
+                                         HorizontalAlignment="Stretch">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Margin="5"
+                                                           Text="{Binding Number, Converter={convertors:IntToStringNumberConverter}}"
+                                                           VerticalAlignment="Center" />
+                                                <TextBox Margin="5"
+                                                         assists:TextFieldAssist.Label="Адрес МПКИ"
+                                                         UseFloatingWatermark="True"
+                                                         Watermark="Введите адрес"
+                                                         Text="{Binding ModuleAddress}" />
+                                                
+                                                <ComboBox Margin="5"
+                                                          Width="300"
+                                                          ItemsSource="{Binding PortNames}"
+                                                          SelectedItem="{Binding PortName}"
+                                                          assists:ComboBoxAssist.Label="Порт подключения МПКИ"
+                                                          Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ListBox>
+
+                            </DockPanel>
+                        </controls:Card>
+                    </TabItem>
+                    
                 </TabControl>
             </TabItem>
 

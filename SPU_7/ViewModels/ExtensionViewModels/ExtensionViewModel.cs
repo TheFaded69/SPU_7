@@ -35,6 +35,8 @@ public class ExtensionViewModel : ViewModelBase
     private UserControl _vacuumCreatorExtensionUserControl;
     private UserControl _userControlWorkResult;
     private UserControl _pulseMeterExtensionUserControl;
+    private UserControl _pulseCountMeterModuleExtensionUserControl;
+
 
     public UserControl UserControlWorkResult
     {
@@ -60,6 +62,12 @@ public class ExtensionViewModel : ViewModelBase
         set => SetProperty(ref _pulseMeterExtensionUserControl, value);
     }
     
+    public UserControl PulseCountMeterModuleExtensionUserControl
+    {
+        get => _pulseCountMeterModuleExtensionUserControl;
+        set => SetProperty(ref _pulseCountMeterModuleExtensionUserControl, value);
+    }
+    
     private void Init()
     {
         
@@ -67,17 +75,21 @@ public class ExtensionViewModel : ViewModelBase
         {
             DataContext = new StandExtensionViewModel(_standController, _notificationService, _settingsService, _logger)
         };
-        VacuumCreatorExtensionUserControl = new VacuumCreatorExtensionView()
+        /*VacuumCreatorExtensionUserControl = new VacuumCreatorExtensionView()
         {
             DataContext = new VacuumCreatorExtensionViewModel(_standController)
-        };
+        };*/
         UserControlWorkResult = new WorkResultView
         {
             DataContext = new WorkResultViewModel(_logger, _standController, _settingsService)
         };
-        PulseMeterExtensionUserControl = new PulseMeterExtensionView()
+        /*PulseMeterExtensionUserControl = new PulseMeterExtensionView()
         {
             DataContext = new PulseMeterExtensionViewModel(_dialogService)
+        };*/
+        PulseCountMeterModuleExtensionUserControl = new PulseCountMeterModuleExtensionView()
+        {
+            DataContext = new PulseCountMeterModuleExtensionViewModel(_dialogService)
         };
     }
 }

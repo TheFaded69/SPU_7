@@ -13,4 +13,8 @@ public class StandSettingsDeviceModel
     public int? StateBitNumber{ get; set; }
     public bool IsControlState { get; set; }
     public int? Address { get; set; }
+    
+    public int? PulseCountMeterModuleNumber { get; set; }
+
+    public int? PulseCountMeterModuleChannelNumber { get; set; }
 }

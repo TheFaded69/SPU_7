@@ -21,6 +21,9 @@
             <ContentPresenter Width="400"
                               VerticalAlignment="Top"
                               Content="{Binding PulseMeterExtensionUserControl}" /> 
+            <ContentPresenter Width="400"
+                              VerticalAlignment="Top"
+                              Content="{Binding PulseCountMeterModuleExtensionUserControl}" /> 
         </StackPanel>
     </DockPanel>
 </UserControl>

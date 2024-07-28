@@ -22,6 +22,10 @@ public class StandSettingsMasterDeviceModel
     public string SelectedPressureSensorComPort { get; set; }
 
     public string SelectedTemperatureSensorComPort { get; set; }
+    
+    public int? PulseCountMeterModuleNumber { get; set; }
+
+    public int? PulseCountMeterModuleChannelNumber { get; set; }
 
     public string MasterDeviceName { get; set; }
 

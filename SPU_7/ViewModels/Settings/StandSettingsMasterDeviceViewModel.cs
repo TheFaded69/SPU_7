@@ -26,11 +26,21 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     private string _masterDeviceName;
     private StandSettingsValveViewModel _pressureSensorValveViewModel;
     private StandSettingsValveViewModel _masterDeviceValveViewModel;
-
-    public ObservableCollection<string> MasterDeviceTypesString { get; set; } = new(Enum
+    private ObservableCollection<string> _masterDeviceTypesString = new(Enum
         .GetValues<MasterDeviceType>()
         .Where(mdt => mdt != MasterDeviceType.None)
         .Select(mdt => mdt.GetDescription()));
+
+    private MasterDeviceType _selectedMasterDeviceType;
+    private ObservableCollection<string> _portNames = new(SerialPort.GetPortNames());
+    private int? _pulseCountMeterModuleNumber;
+    private int? _pulseCountMeterModuleChannelNumber;
+
+    public ObservableCollection<string> MasterDeviceTypesString
+    {
+        get => _masterDeviceTypesString;
+        set => SetProperty(ref _masterDeviceTypesString, value);
+    }
 
     public string SelectedMasterDeviceTypeString
     {
@@ -46,9 +56,17 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
         }
     }
 
-    public MasterDeviceType SelectedMasterDeviceType { get; set; }
+    public MasterDeviceType SelectedMasterDeviceType
+    {
+        get => _selectedMasterDeviceType;
+        set => SetProperty(ref _selectedMasterDeviceType, value);
+    }
 
-    public ObservableCollection<string> PortNames { get; set; } = new(SerialPort.GetPortNames());
+    public ObservableCollection<string> PortNames
+    {
+        get => _portNames;
+        set => SetProperty(ref _portNames, value);
+    }
 
     public string SelectedComPort
     {
@@ -116,5 +134,17 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     {
         get => _masterDeviceValveViewModel;
         set => SetProperty(ref _masterDeviceValveViewModel, value);
+    }
+
+    public int? PulseCountMeterModuleNumber
+    {
+        get => _pulseCountMeterModuleNumber;
+        set => SetProperty(ref _pulseCountMeterModuleNumber, value);
+    }
+
+    public int? PulseCountMeterModuleChannelNumber
+    {
+        get => _pulseCountMeterModuleChannelNumber;
+        set => SetProperty(ref _pulseCountMeterModuleChannelNumber, value);
     }
 }
