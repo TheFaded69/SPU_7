@@ -22,6 +22,9 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
         StartPulseCountCommand = new DelegateCommand(StartPulseCountCommandHandler);
         StartPulseDurationCommand = new DelegateCommand(StartPulseDurationCommandHandler);
+        StopPulseCountCommand = new DelegateCommand(StopPulseCountCommandHandler);
+        StopPulseDurationCommand = new DelegateCommand(StopPulseDurationCommandHandler);
+        
         CloseWindowCommand = new DelegateCommand(CloseWindowCommandHandler);
     }
 
@@ -29,8 +32,10 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
     private int? _channelNumber;
     private int? _pulseCount;
     private float? _pulseDuration;
+    private bool _isPulseCountWork;
+    private bool _isPulseDurationWork;
 
-    
+
     public int? PulseCountMeterModuleNumber
     {
         get => _pulseCountMeterModuleNumber;
@@ -55,6 +60,18 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         set => SetProperty(ref _pulseDuration, value);
     }
 
+    public bool IsPulseCountWork
+    {
+        get => _isPulseCountWork;
+        set => SetProperty(ref _isPulseCountWork, value);
+    }
+
+    public bool IsPulseDurationWork
+    {
+        get => _isPulseDurationWork;
+        set => SetProperty(ref _isPulseDurationWork, value);
+    }
+
     public DelegateCommand CloseWindowCommand { get; }
 
     private void CloseWindowCommandHandler()
@@ -66,14 +83,40 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
     private async void StartPulseCountCommandHandler()
     {
+        await _standController.StartPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
         
+        IsPulseCountWork = true;
     }
     
     public DelegateCommand StartPulseDurationCommand { get; }
 
     private async void StartPulseDurationCommandHandler()
     {
+        await _standController.StartPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
         
+        IsPulseDurationWork = true;
+    }
+    
+    public DelegateCommand StopPulseCountCommand { get; }
+
+    private async void StopPulseCountCommandHandler()
+    {
+        await _standController.StopPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
+        
+        IsPulseCountWork = false;
+        
+        PulseCount = (int?)await _standController.ReadPulseCountFromPulseCountMeterAsync(PulseCountMeterModuleNumber - 1, ChannelNumber);
+    }
+    
+    public DelegateCommand StopPulseDurationCommand { get; }
+
+    private async void StopPulseDurationCommandHandler()
+    {
+        await _standController.StopPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
+
+        IsPulseDurationWork = false;
+        
+        PulseDuration = await _standController.ReadPulseDurationFromPulseCountMeterAsync(PulseCountMeterModuleNumber - 1, ChannelNumber);
     }
     
     public bool CanCloseDialog() => true;
@@ -85,7 +128,7 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
     public void OnDialogOpened(IDialogParameters parameters)
     {
-        
+        //todo переделать текстбокс выбора МПКИ и канала на комбобокс исходя из настроек
     }
 
     public event Action<IDialogResult>? RequestClose;

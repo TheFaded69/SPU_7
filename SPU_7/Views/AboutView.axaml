@@ -21,12 +21,12 @@
                    Text="Наименование ПО: SPU_7"/>
         <TextBlock DockPanel.Dock="Top"
                    Margin="5"
-                   Text="Версия ПО: 1.1"/>
+                   Text="Версия ПО: 1.1.0"/>
         <TextBlock DockPanel.Dock="Top"
                    Margin="5"
                    Text="ООО НПО Турбулентность-ДОН"/>
         <TextBlock DockPanel.Dock="Top"
                    Margin="5"
-                   Text="Цифровой идентификатор ПО: 0х03b31d0"/>
+                   Text="Цифровой идентификатор ПО: 0х7DE06E98"/>
     </DockPanel>
 </UserControl>

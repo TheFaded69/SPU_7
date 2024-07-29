@@ -3,7 +3,10 @@ using SPU_7.Modbus.Processor;
 
 namespace SPU_7.Domain.Devices.StandDevices.THMeter
 {
-    public class TemperatureHumiditySensor : ModbusUnitProcessor<TemperatureHumiditySensorRegisterMap>, ITHMeter
+    /// <summary>
+    /// 
+    /// </summary>
+    public class TemperatureHumiditySensor : ModbusUnitProcessor<TemperatureHumiditySensorRegisterMap>, ITemperatureHumiditySensor
     {
         public TemperatureHumiditySensor(IModbusProcessor modbusProcessor, 
             IRegisterMapEnum<TemperatureHumiditySensorRegisterMap> registerMap,

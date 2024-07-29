@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using SPU_7.Common.Line;
 using SPU_7.Common.Stand;
+using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
 using SPU_7.Domain.Extensions;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 using SPU_7.ViewModels;
@@ -293,5 +294,11 @@ namespace SPU_7.Models.Stand
         /// </summary>
         /// <returns></returns>
         Task<List<(float?, float?)>> ReadPulseCoefficientsAsync();
+
+        Task<CommonCommandStatus?> ReadCommonCommandStatusPulseCountMeterAsync(int? pulseCountMeterModuleIndex);
+        Task<bool> StartPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex);
+        Task<bool> StopPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex);
+        Task<uint?> ReadPulseCountFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber);
+        Task<float?> ReadPulseDurationFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber);
     }
 }

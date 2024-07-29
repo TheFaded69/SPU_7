@@ -55,13 +55,31 @@
                 <DockPanel Grid.Row="1"
                            Grid.Column="0"
                            LastChildFill="False">
-                    <Button DockPanel.Dock="Bottom"
-                            Classes="flat"
-                            Margin="5"
-                            Command="{Binding StartPulseCountCommand}">
-                        <avalonia:MaterialIcon Kind="Play"/>
-                    </Button>
-                    <TextBlock DockPanel.Dock="Top"
+                    <Grid DockPanel.Dock="Bottom"
+                          ColumnDefinitions="0.5*, 0.5*">
+                        <Button DockPanel.Dock="Bottom"
+                                Grid.Column="0"
+                                Classes="flat"
+                                Width="60"
+                                Height="60"
+                                Margin="5"
+                                IsEnabled="{Binding !IsPulseCountWork}"
+                                Command="{Binding StartPulseCountCommand}">
+                            <avalonia:MaterialIcon Kind="Play" Width="50" Height="50"/>
+                        </Button>
+                        <Button DockPanel.Dock="Bottom"
+                                Grid.Column="1"
+                                Width="50"
+                                Height="50"
+                                Classes="flat"
+                                Margin="5"
+                                IsEnabled="{Binding IsPulseCountWork}"
+                                Command="{Binding StopPulseCountCommand}">
+                            <avalonia:MaterialIcon Kind="Stop" Width="50" Height="50"/>
+                        </Button>
+                    </Grid>
+                    
+                    <TextBlock DockPanel.Dock="Bottom"
                                VerticalAlignment="Center"
                                Margin="5"
                                Text="{Binding PulseCount, StringFormat='Количество импульсов: {0}'}"/>
@@ -70,13 +88,30 @@
                 <DockPanel Grid.Row="1"
                            Grid.Column="1"
                            LastChildFill="False">
-                    <Button DockPanel.Dock="Bottom"
-                            Classes="flat"
-                            Margin="5"
-                            Command="{Binding StartPulseDurationCommand}">
-                        <avalonia:MaterialIcon Kind="Play"/>
-                    </Button>
-                    <TextBlock DockPanel.Dock="Top"
+                    <Grid DockPanel.Dock="Bottom"
+                          ColumnDefinitions="0.5*, 0.5*">
+                        <Button DockPanel.Dock="Bottom"
+                                Grid.Column="0"
+                                Classes="flat"
+                                Width="60"
+                                Height="60"
+                                Margin="5"
+                                IsEnabled="{Binding !IsPulseDurationWork}"
+                                Command="{Binding StartPulseDurationCommand}">
+                            <avalonia:MaterialIcon Kind="Play" Width="50" Height="50"/>
+                        </Button>
+                        <Button DockPanel.Dock="Bottom"
+                                Grid.Column="1"
+                                Width="60"
+                                Height="60"
+                                Classes="flat"
+                                Margin="5"
+                                IsEnabled="{Binding IsPulseDurationWork}"
+                                Command="{Binding StopPulseDurationCommand}">
+                            <avalonia:MaterialIcon Kind="Stop" Width="50" Height="50"/>
+                        </Button>
+                    </Grid>
+                    <TextBlock DockPanel.Dock="Bottom"
                                VerticalAlignment="Center"
                                Margin="5"
                                Text="{Binding PulseDuration, StringFormat='Длительность импульса: {0}'}"/>

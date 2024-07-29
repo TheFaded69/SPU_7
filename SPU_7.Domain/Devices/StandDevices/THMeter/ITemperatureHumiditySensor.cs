@@ -1,6 +1,6 @@
 ﻿namespace SPU_7.Domain.Devices.StandDevices.THMeter
 {
-    public interface ITHMeter
+    public interface ITemperatureHumiditySensor
     {
         Task<short?> ReadTemperatureAsync();
 

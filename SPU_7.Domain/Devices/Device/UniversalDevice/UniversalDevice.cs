@@ -1,13 +1,14 @@
 ﻿using SPU_7.Common.Device;
 using SPU_7.Domain.Devices.StandDevices.PressureSensor;
 using SPU_7.Domain.Devices.StandDevices.PulseMeter;
+using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
 using SPU_7.Domain.Extensions;
 using SPU_7.Domain.Modbus;
 using SPU_7.Modbus.Processor;
 
 namespace SPU_7.Domain.Devices.Device.UniversalDevice;
 
-public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, IUniversalDevice, IPressureSensorObservable, IDeviceObservable
+public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, IUniversalDevice,   IDeviceObservable
 {
     public UniversalDevice(IModbusProcessor modbusProcessor, IRegisterMapEnum<UniversalDeviceRegisterMap> registerMap) : base(modbusProcessor, registerMap)
     {
@@ -37,6 +38,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
                 (byte)pressureSensorAddress);}
 
     private readonly IPressureSensor _pressureSensor;
+    private readonly ITemperatureSensor _temperatureSensor;
     private readonly IPulseMeter2Channel? _pulseMeter2Channel;
     private readonly PulseMeterChannel _pulseMeterChannelType;
 

@@ -17,13 +17,50 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
     }
 
 
-    public Task<bool> StartMeasurePulseCountAsync(ChannelNumber channelNumber)
+    public async Task<bool> StartMeasurePulseCountAsync()
+    {
+        return await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
+            BitConverter.GetBytes((uint)1).Reverse().ToArray());
+    }
+
+    public async Task<bool> StartMeasurePulseCountAsync(ChannelNumber channelNumber)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> StopMeasurePulseCountAsync(ChannelNumber channelNumber)
+    public async Task<bool> StopMeasurePulseCountAsync()
+    {
+        return await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
+            BitConverter.GetBytes((uint)0).Reverse().ToArray());
+    }
+
+    public async Task<bool> StopMeasurePulseCountAsync(ChannelNumber channelNumber)
     {
         throw new NotImplementedException();
     }
+
+    public async Task<CommonCommandStatus?> GetCommonCommandStatusAsync()
+    {
+        var status = (uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandStatusRegister);
+
+        return status != null ? (CommonCommandStatus)status : null;
+    }
+
+    public async Task<uint?> ReadPulseCountAsync(ChannelNumber channelNumber) => channelNumber switch
+    {
+        ChannelNumber.First => (uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.Register1),
+        ChannelNumber.Second => (uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.Register1),
+        ChannelNumber.Third => (uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.Register1),
+        ChannelNumber.Fourth => (uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.Register1),
+        _ => throw new ArgumentOutOfRangeException(nameof(channelNumber), channelNumber, "Не поддерживаемый номер канала у МПКИ")
+    };
+
+    public async Task<float?> ReadPulseDurationAsync(ChannelNumber channelNumber) => channelNumber switch
+        {
+            ChannelNumber.First => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.Register1),
+            ChannelNumber.Second => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.Register1),
+            ChannelNumber.Third => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.Register1),
+            ChannelNumber.Fourth => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.Register1),
+            _ => throw new ArgumentOutOfRangeException(nameof(channelNumber), channelNumber, "Не поддерживаемый номер канала у МПКИ")
+        };
 }
