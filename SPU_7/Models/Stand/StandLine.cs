@@ -45,10 +45,9 @@ public class StandLine
                     
                     MasterDevices.Add(masterDeviceModel.SelectedMasterDeviceType switch
                     {
-                        MasterDeviceType.GFG => new GFGDevice(null, new RegisterMapEnum<GFGRegisterMap>(), pressureSensor, temperatureSensor),
+                        MasterDeviceType.GFG => new GfgDevice(null, new RegisterMapEnum<GFGRegisterMap>(), pressureSensor, temperatureSensor),
                         MasterDeviceType.Rabo => new RaboDevice( pressureSensor, temperatureSensor),
                         MasterDeviceType.RGT => new RGTDevice( pressureSensor, temperatureSensor),
-                        _ => new RaboDevice()
                     });
                 }
                 break;
@@ -61,7 +60,7 @@ public class StandLine
         
     }
     
-    public List<IDevice> Devices = new();
+    public readonly List<IDevice> Devices = [];
 
-    public List<IMasterDevice> MasterDevices = new();
+    public readonly List<IMasterDevice> MasterDevices = [];
 }

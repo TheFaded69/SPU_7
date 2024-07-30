@@ -8,7 +8,7 @@ using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
 namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 
-public class DeviceItemViewModel : ViewModelBase, IPressureSensorObserver, IDeviceObserver
+public class DeviceItemViewModel : ViewModelBase, IPressureSensorObserver, IDeviceObserver, ITemperatureSensorObserver
 {
     public DeviceItemViewModel(IStandController standController, IStandSettingsService settingsService, int deviceIndex, int lineIndex)
     {
@@ -45,6 +45,7 @@ public class DeviceItemViewModel : ViewModelBase, IPressureSensorObserver, IDevi
     private float? _pressure;
     private bool _isDeviceEnable;
     private ValveItemViewModel _valveItemViewModel;
+    private float? _temperature;
 
     public string VendorNumber
     {
@@ -70,6 +71,12 @@ public class DeviceItemViewModel : ViewModelBase, IPressureSensorObserver, IDevi
         set => SetProperty(ref _pressure, value == null ? value : (float?)Math.Round((float)value / 1000, 3));
     }
 
+    public float? Temperature
+    {
+        get => _temperature;
+        set => SetProperty(ref _temperature, value == null ? value : (float?)Math.Round((float)value, 2));
+    }
+    
     public bool IsDeviceEnable
     {
         get => _isDeviceEnable;
@@ -93,6 +100,19 @@ public class DeviceItemViewModel : ViewModelBase, IPressureSensorObserver, IDevi
                 break;
         }
     }
+    
+    public void UpdateTemperature(object? obj)
+    {
+        switch (obj)
+        {
+            case null:
+                return;
+            case float temperature:
+                Temperature = temperature;
+                break;
+        }
+    }
+
 
     public void UpdateDeviceInformation(object? obj)
     {
@@ -143,4 +163,6 @@ public class DeviceItemViewModel : ViewModelBase, IPressureSensorObserver, IDevi
                 throw new ArgumentOutOfRangeException();
         }
     }
+
+    
 }

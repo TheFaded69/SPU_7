@@ -14,4 +14,7 @@ public enum MasterDeviceType
     
     [Description("RGT")]
     RGT = 3,
+    
+    [Description("СГ-16")]
+    SG16 = 4,
 }

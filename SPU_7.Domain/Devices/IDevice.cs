@@ -1,12 +1,13 @@
 ﻿using SPU_7.Common.Device;
 using SPU_7.Domain.Devices.StandDevices.PulseMeter;
+using SPU_7.Domain.Extensions;
 
 namespace SPU_7.Domain.Devices
 {
     /// <summary>
     /// Интерфейс устройств (общие свойства и методы для всех видов устройств)
     /// </summary>
-    public interface IDevice
+    public interface IDevice :  IPressureSensorObservable, ITemperatureSensorObservable
     {
       
         /// <summary>
@@ -85,5 +86,17 @@ namespace SPU_7.Domain.Devices
         /// </summary>
         /// <returns>Получилось ли отправить запросы</returns>
         Task<bool> WritePulseCoefficientsAsync(float firstCoefficient, float secondCoefficient);
+        
+        /// <summary>
+        /// Считать давление с ДД привязанного к позиции СГ
+        /// </summary>
+        /// <returns></returns>
+        Task<float?> ReadPressureAsync();
+    
+        /// <summary>
+        /// Считать температуру с ДT привязанного к позиции СГ
+        /// </summary>
+        /// <returns></returns>
+        Task<float?> ReadTemperatureAsync();
     }
 }

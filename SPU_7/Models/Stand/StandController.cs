@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SPU_7.Common.Device;
 using SPU_7.Common.Line;
 using SPU_7.Common.Modbus;
 using SPU_7.Common.Stand;
@@ -334,18 +335,20 @@ namespace SPU_7.Models.Stand
                             ? null
                             : await _temperatureHumiditySensor.ReadHumidityAsync() / 100f;
 
-                    /*if (_line != null)
-                        foreach (var device in _line.Devices)
-                        {
-                            await ((IUniversalDevice)device).ReadPressureAsync();
-                        }*/
-
-                    /*foreach (var device in _devices)
+                    foreach (var standLine in _lines)
                     {
-                        if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                            if (device != null)
-                                await ((IUniversalDevice)device).ReadPressureAsync();
-                    }*/
+                        foreach (var device in standLine.Devices)
+                        {
+                            await device.ReadPressureAsync();
+                            await device.ReadTemperatureAsync();
+                        }
+                        
+                        foreach (var masterDevice in standLine.MasterDevices)
+                        {
+                            await masterDevice.ReadTemperatureAsync();
+                            await masterDevice.ReadPressureAsync();
+                        }
+                    }
 #endif
 
                     await Task.Delay(3000);
@@ -1326,9 +1329,40 @@ namespace SPU_7.Models.Stand
             //_devicePortLogMessages = portLogMessages;
         }
 
-        public void RegisterPressureSensorObserver(IPressureSensorObserver observer, int deviceNumber, int lineNumber)
-            => ((IPressureSensorObservable)_lines[lineNumber].Devices[deviceNumber])
-                .RegisterPressureSensorObserver(observer);
+        public void RegisterPressureSensorObserver(IPressureSensorObserver observer, DevicePurpose devicePurpose,
+            int deviceIndex, int lineIndex)
+        {
+            switch (devicePurpose)
+            {
+                case DevicePurpose.MasterDevice:
+                    _lines[lineIndex].MasterDevices[deviceIndex]
+                        .RegisterPressureSensorObserver(observer);
+                    break;
+                case DevicePurpose.ValidationDevice:
+                    ((IPressureSensorObservable)_lines[lineIndex].Devices[deviceIndex])
+                        .RegisterPressureSensorObserver(observer);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(devicePurpose), devicePurpose, null);
+            }
+        }
+
+        public void RegisterTemperatureSensorObserver(ITemperatureSensorObserver observer, DevicePurpose devicePurpose, int deviceIndex, int lineIndex)
+        {
+            switch (devicePurpose)
+            {
+                case DevicePurpose.MasterDevice:
+                    _lines[lineIndex].MasterDevices[deviceIndex]
+                        .RegisterTemperatureSensorObserver(observer);
+                    break;
+                case DevicePurpose.ValidationDevice:
+                    ((ITemperatureSensorObservable)_lines[lineIndex].Devices[deviceIndex])
+                        .RegisterTemperatureSensorObserver(observer);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(devicePurpose), devicePurpose, null);
+            }
+        }
 
         public void RegisterDeviceObserver(IDeviceObserver observer, int deviceNumber, int lineNumber) =>
             ((IDeviceObservable)_lines[lineNumber].Devices[deviceNumber]).RegisterDeviceObserver(observer);

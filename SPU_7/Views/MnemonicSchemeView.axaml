@@ -58,7 +58,11 @@
                                                                Foreground="Black"
                                                                DockPanel.Dock="Top" />
                                                     <TextBlock Margin="5"
-                                                               Text="{Binding Pressure}"
+                                                               Text="{Binding Pressure, StringFormat='P = {0} кПа'}"
+                                                               Foreground="Black"
+                                                               DockPanel.Dock="Top" />
+                                                    <TextBlock Margin="5"
+                                                               Text="{Binding Temperature, StringFormat='T = {0} C'}"
                                                                Foreground="Black"
                                                                DockPanel.Dock="Top" />
                                                 </DockPanel>

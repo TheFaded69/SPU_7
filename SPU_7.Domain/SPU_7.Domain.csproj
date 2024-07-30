@@ -16,7 +16,6 @@
 
     <ItemGroup>
       <Folder Include="Devices\Device\" />
-      <Folder Include="Devices\MasterDevice\SG16\" />
     </ItemGroup>
 
 </Project>

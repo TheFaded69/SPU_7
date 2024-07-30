@@ -4,6 +4,7 @@ using System.Linq;
 using Avalonia;
 using Prism.Commands;
 using Prism.Services.Dialogs;
+using SPU_7.Common.Device;
 using SPU_7.Common.Line;
 using SPU_7.Models.Services.ContentServices;
 using SPU_7.Models.Services.StandSetting;
@@ -130,6 +131,9 @@ public class LineItemViewModel : ViewModelBase
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels.Count; i++)
         {
             DeviceItemViewModels.Add(new DeviceItemViewModel(standController, settingsService, i, lineIndex));
+            
+            _standController.RegisterPressureSensorObserver(DeviceItemViewModels[i], DevicePurpose.ValidationDevice, i, lineIndex);
+            _standController.RegisterTemperatureSensorObserver(DeviceItemViewModels[i], DevicePurpose.ValidationDevice, i, lineIndex);
         }
 
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsAfterDeviceValve)
@@ -159,6 +163,9 @@ public class LineItemViewModel : ViewModelBase
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].MasterDeviceValveViewModel,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].PressureSensorValveViewModel,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i]));
+            
+            _standController.RegisterPressureSensorObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
+            _standController.RegisterTemperatureSensorObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
         }
 
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count; i++)

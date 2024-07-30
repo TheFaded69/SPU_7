@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using SPU_7.Common.Device;
 using SPU_7.Common.Line;
 using SPU_7.Common.Stand;
 using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
@@ -174,8 +175,19 @@ namespace SPU_7.Models.Stand
         /// Зарегистрировать наблюдателя за ДД на стенде с СГ
         /// </summary>
         /// <param name="observer">Наблюдатель</param>
-        /// <param name="deviceNumber">Номер СГ (от 0)</param>
-        void RegisterPressureSensorObserver(IPressureSensorObserver observer, int deviceNumber, int lineNumber);
+        /// <param name="devicePurpose"></param>
+        /// <param name="deviceIndex">Номер СГ (от 0)</param>
+        /// <param name="lineIndex"></param>
+        void RegisterPressureSensorObserver(IPressureSensorObserver observer, DevicePurpose devicePurpose, int deviceIndex, int lineIndex);
+
+        /// <summary>
+        /// Зарегистрировать наблюдателя за ДТ на стенде с СГ
+        /// </summary>
+        /// <param name="observer">Наблюдатель</param>
+        /// <param name="devicePurpose"></param>
+        /// <param name="deviceIndex">Номер СГ (от 0)</param>
+        /// <param name="lineIndex"></param>
+        void RegisterTemperatureSensorObserver(ITemperatureSensorObserver observer, DevicePurpose devicePurpose, int deviceIndex, int lineIndex);
 
         /// <summary>
         /// Установить рабочий режим стенда

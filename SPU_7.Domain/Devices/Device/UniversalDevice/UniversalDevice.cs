@@ -8,7 +8,7 @@ using SPU_7.Modbus.Processor;
 
 namespace SPU_7.Domain.Devices.Device.UniversalDevice;
 
-public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, IUniversalDevice,   IDeviceObservable
+public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, IUniversalDevice,  IDeviceObservable
 {
     public UniversalDevice(IModbusProcessor modbusProcessor, IRegisterMapEnum<UniversalDeviceRegisterMap> registerMap) : base(modbusProcessor, registerMap)
     {
@@ -49,6 +49,16 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
         {
             _pressure = value;
             NotifyPressureSensorObservers(value);
+        }
+    }
+
+    private float? Temperature
+    {
+        get => _temperature;
+        set
+        {
+            _temperature = value;
+            NotifyTemperatureSensorObservers(value);
         }
     }
 
@@ -129,6 +139,15 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
 #endif
     }
 
+    public async Task<float?> ReadTemperatureAsync()
+    {
+#if DEBUGGUI
+        return Pressure = (float?)new Random().NextDouble() * 1000;
+#else
+        return Temperature = await _temperatureSensor.ReadTemperatureAsync();
+#endif
+    }
+
     #region PresureSensorObserve
 
     private List<IPressureSensorObserver> _pressureObservers = new();
@@ -136,7 +155,12 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     public void RegisterPressureSensorObserver(IPressureSensorObserver observer) => _pressureObservers.Add(observer);
     public void RemovePressureSensorObserver(IPressureSensorObserver observer) => _pressureObservers.Remove(observer);
     public void NotifyPressureSensorObservers(object? obj) => _pressureObservers.ForEach(ob => ob.UpdatePressure(obj));
-
+    
+    private List<ITemperatureSensorObserver> _temperatureSensorObservers = [];
+    public void RegisterTemperatureSensorObserver(ITemperatureSensorObserver observer) => _temperatureSensorObservers.Add(observer);
+    public void RemoveTemperatureSensorObserver(ITemperatureSensorObserver observer) => _temperatureSensorObservers.Remove(observer);
+    public void NotifyTemperatureSensorObservers(object? obj) => _temperatureSensorObservers.ForEach(ob => ob.UpdateTemperature(obj));
+    
     #endregion
 
     #region DeviceObserve
@@ -144,6 +168,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     private List<IDeviceObserver> _deviceObservers = new();
     private string _vendorNumberString;
     private bool _isManualEnabled;
+    private float? _temperature;
     public void RegisterDeviceObserver(IDeviceObserver observer) => _deviceObservers.Add(observer);
     public void RemoveDeviceObserver(IDeviceObserver observer) => _deviceObservers.Remove(observer);
     public void NotifyDeviceObservers(object? obj) => _deviceObservers.ForEach(ob => ob.UpdateDeviceInformation(obj));

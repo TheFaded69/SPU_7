@@ -1,12 +1,13 @@
 ﻿using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Extensions;
+using SPU_7.Domain.Extensions;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
 namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 
-public class MasterDeviceItemViewModel : ViewModelBase
+public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver, ITemperatureSensorObserver
 {
     public MasterDeviceItemViewModel(IDialogService dialogService, 
         IStandController standController, 
@@ -75,5 +76,15 @@ public class MasterDeviceItemViewModel : ViewModelBase
     private void OpenMasterDeviceInfoCommandHandler()
     {
         MasterDeviceInfoViewModel.Show(_dialogService, _masterDeviceModel, null, null);
+    }
+
+    public void UpdatePressure(object? obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void UpdateTemperature(object? obj)
+    {
+        throw new System.NotImplementedException();
     }
 }
