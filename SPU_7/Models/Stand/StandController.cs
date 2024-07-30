@@ -83,7 +83,7 @@ namespace SPU_7.Models.Stand
                 ((ISerialCommunicator)modbusProcessor.Communicator).SetSerialPort(portViewModel.PortName,
                     portViewModel.PortBaudRate,
                     8,
-                    Parity.None,
+                    portViewModel.SelectedParity,
                     portViewModel.SelectedStopBit,
                     Handshake.None,
                     false,

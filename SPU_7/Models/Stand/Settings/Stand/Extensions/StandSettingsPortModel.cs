@@ -9,6 +9,8 @@ public class StandSettingsPortModel
     public int PortBaudRate { get; set; }
 
     public StopBits SelectedStopBit { get; set; }
+    
+    public Parity SelectedParity { get; set; }
 
     public double SelectedStopBitDouble { get; set; }
 }

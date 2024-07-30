@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.IO.Ports;
 
 namespace SPU_7.ViewModels.Settings;
@@ -9,7 +10,11 @@ public class StandSettingsPortViewModel : ViewModelBase
     private int _portBaudRate;
     private int _number;
     private double _selectedStopBitDouble;
+    private Parity _selectedParity;
 
+    public ObservableCollection<Parity> Parities { get; set; } =
+        new ObservableCollection<Parity>(Enum.GetValues<Parity>());
+    
     public ObservableCollection<string> PortNames { get; set; } = new(SerialPort.GetPortNames());
 
     public ObservableCollection<int> PortBaudRates { get; set; } = new()
@@ -72,5 +77,11 @@ public class StandSettingsPortViewModel : ViewModelBase
     {
         get => _number;
         set => SetProperty(ref _number, value);
+    }
+
+    public Parity SelectedParity
+    {
+        get => _selectedParity;
+        set => SetProperty(ref _selectedParity, value);
     }
 }

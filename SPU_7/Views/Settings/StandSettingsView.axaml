@@ -1734,7 +1734,12 @@
                                                   assists:ComboBoxAssist.Label="Скорость порта"
                                                   Width="300"
                                                   Theme="{StaticResource MaterialOutlineComboBox}" />
-
+                                        <ComboBox Margin="5"
+                                                  ItemsSource="{Binding Parities}"
+                                                  SelectedItem="{Binding SelectedParity}"
+                                                  assists:ComboBoxAssist.Label="Контроль четности"
+                                                  Width="300"
+                                                  Theme="{StaticResource MaterialOutlineComboBox}" />
                                         <ComboBox Margin="5"
                                                   ItemsSource="{Binding StopBits}"
                                                   SelectedItem="{Binding SelectedStopBitDouble}"
