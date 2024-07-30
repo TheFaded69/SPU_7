@@ -14,6 +14,15 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     {
         
     }
+
+    public UniversalDevice(IModbusProcessor modbusProcessor, 
+        IRegisterMapEnum<UniversalDeviceRegisterMap> registerMap,
+        IPressureSensor pressureSensor, 
+        ITemperatureSensor temperatureSensor) : base(modbusProcessor, registerMap)
+    {
+        _pressureSensor = pressureSensor;
+        _temperatureSensor = temperatureSensor;
+    }
     public UniversalDevice(IModbusProcessor modbusProcessor,
         IRegisterMapEnum<UniversalDeviceRegisterMap> registerMap,
         IModbusProcessor? pressureSensorModbusProcessor,
@@ -144,7 +153,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
 #if DEBUGGUI
         return Pressure = (float?)new Random().NextDouble() * 1000;
 #else
-        return Temperature = await _temperatureSensor.ReadTemperatureAsync();
+        return Temperature = await _temperatureSensor.ReadTemperatureAsync(true);
 #endif
     }
 

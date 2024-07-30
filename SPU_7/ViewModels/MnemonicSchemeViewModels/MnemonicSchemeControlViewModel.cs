@@ -66,12 +66,9 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
         private ObservableCollection<OperationViewModel> _operations;
         private string _scriptName = "Не выбран";
         private ScriptViewModel _selectedScript;
-        private float? _temperatureTube;
         private float? _temperature;
         private float? _humidity;
         private float? _pressure;
-        private float? _pressureDifference;
-        private float? _pressureResiver;
         private int _timeSeconds;
         private string _message;
         private string _operationName;
@@ -116,11 +113,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
 
         #region Параметры среды
 
-        public float? TemperatureTube
-        {
-            get => _temperatureTube;
-            set => SetProperty(ref _temperatureTube, value == null ? value : (float?)Math.Round((float)value, 2));
-        }
+       
 
         public float? Pressure
         {
@@ -140,17 +133,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             set => SetProperty(ref _humidity, value == null ? value : (float?)Math.Round((float)value, 2));
         }
 
-        public float? PressureDifference
-        {
-            get => _pressureDifference;
-            set => SetProperty(ref _pressureDifference, value == null ? value : (float?)Math.Round((float)value / 1000, 3));
-        }
-
-        public float? PressureResiver
-        {
-            get => _pressureResiver;
-            set => SetProperty(ref _pressureResiver, value == null ? value : (float?)Math.Round((float)value, 3));
-        }
+        
 
         public double? TargetFlow
         {
@@ -385,16 +368,16 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             switch (dataPair.DataType)
             {
                 case DeviceInfoParameterType.TemperatureTube:
-                    TemperatureTube = (float)dataPair.Data;
+                    //TemperatureTube = (float)dataPair.Data;
                     break;
                 case DeviceInfoParameterType.Pressure:
                     Pressure = (float)dataPair.Data;
                     break;
                 case DeviceInfoParameterType.PressureResiver:
-                    PressureResiver = (float)dataPair.Data;
+                    //PressureResiver = (float)dataPair.Data;
                     break;
                 case DeviceInfoParameterType.PressureDifference:
-                    PressureDifference = (float)dataPair.Data;
+                    //PressureDifference = (float)dataPair.Data;
                     break;
                 case DeviceInfoParameterType.Temperature:
                     Temperature = (float)dataPair.Data;

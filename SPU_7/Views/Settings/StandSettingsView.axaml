@@ -299,12 +299,34 @@
                                                                                                     Text="{Binding Number, Converter={convertors:IntToStringNumberConverter}}"
                                                                                                     VerticalAlignment="Center" />
 
-                                                                                                <TextBox
-                                                                                                    Text="{Binding PressureSensorAddress}"
+                                                                                               <ComboBox
+                                                                                                    DockPanel.Dock="Left"
+                                                                                                    Width="300"
+                                                                                                    ItemsSource="{Binding PortNames}"
+                                                                                                    SelectedItem="{Binding SelectedPressureSensorComPort}"
                                                                                                     Margin="5"
+                                                                                                    assists:ComboBoxAssist.Label="Порт ДД"
+                                                                                                    Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Адрес ДД"
                                                                                                     UseFloatingWatermark="True"
-                                                                                                    Watermark="Введите адрес (0-255)"
-                                                                                                    assists:TextFieldAssist.Label="Адрес датчика давления" />
+                                                                                                    Text="{Binding PressureSensorAddress}" />
+                                                                                                <ComboBox
+                                                                                                    DockPanel.Dock="Left"
+                                                                                                    Width="300"
+                                                                                                    ItemsSource="{Binding PortNames}"
+                                                                                                    SelectedItem="{Binding SelectedTemperatureSensorComPort}"
+                                                                                                    Margin="5"
+                                                                                                    assists:ComboBoxAssist.Label="Порт ДТ"
+                                                                                                    Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Адрес ДТ"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Text="{Binding TemperatureSensorAddress}" />
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Канал ДТ"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Text="{Binding TemperatureChannelNumber}" />
 
                                                                                                 <TextBox
                                                                                                     Text="{Binding PulseMeterNumber}"
@@ -441,7 +463,7 @@
                                                                                                     assists:TextFieldAssist.Label="Заводской номер"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Text="{Binding VendorNumber}" />
-                                                                                                <ComboBox
+                                                                                                <!--ComboBox
                                                                                                     IsVisible="{Binding IsConnectionInfoVisible}"
                                                                                                     DockPanel.Dock="Left"
                                                                                                     Width="300"
@@ -450,11 +472,12 @@
                                                                                                     Margin="5"
                                                                                                     assists:ComboBoxAssist.Label="Порт мастер-устройства"
                                                                                                     Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                                
                                                                                                 <TextBox Margin="5"
                                                                                                     assists:TextFieldAssist.Label="Адрес мастер-устройства"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     IsVisible="{Binding IsConnectionInfoVisible}"
-                                                                                                    Text="{Binding MasterDeviceAddress}" />
+                                                                                                    Text="{Binding MasterDeviceAddress}" /-->
                                                                                                 <ComboBox
                                                                                                     DockPanel.Dock="Left"
                                                                                                     Width="300"
@@ -479,6 +502,10 @@
                                                                                                     assists:TextFieldAssist.Label="Адрес ДТ"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Text="{Binding TemperatureSensorAddress}" />
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Канал ДТ"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Text="{Binding TemperatureChannelNumber}" />
                                                                                             </StackPanel>
                                                                                             <StackPanel
                                                                                                 DockPanel.Dock="Top"

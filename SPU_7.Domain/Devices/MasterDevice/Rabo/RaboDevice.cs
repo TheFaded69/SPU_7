@@ -12,20 +12,7 @@ public class RaboDevice : IRaboDevice
     {
         
     }
-
-    public RaboDevice(IModbusProcessor? pressureSensorModbusProcessor,
-        int pressureSensorAddress,
-        IModbusProcessor? temperatureModbusProcessor,
-        int temperatureSensorAddress)
-    {
-        if (pressureSensorModbusProcessor != null)
-            _pressureSensor = new PressureSensor(pressureSensorModbusProcessor,
-                new RegisterMapEnum<PressureSensorRegisterMap>(), pressureSensorAddress);
-
-        if (temperatureModbusProcessor != null)
-            _temperatureSensor = new TemperatureSensor(temperatureModbusProcessor,
-                new RegisterMapEnum<TemperatureSensorRegisterMap>(), temperatureSensorAddress);
-    }
+    
     
     public RaboDevice(IPressureSensor pressureSensor, ITemperatureSensor temperatureSensor)
     {
@@ -73,7 +60,7 @@ public class RaboDevice : IRaboDevice
 #if DEBUGGUI
         return Pressure = (float?)new Random().NextDouble() * 1000;
 #else
-        return Temperature = await _temperatureSensor.ReadTemperatureAsync();
+        return Temperature = await _temperatureSensor.ReadTemperatureAsync(true);
 #endif
     }
     

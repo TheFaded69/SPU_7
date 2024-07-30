@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO.Ports;
 using AForge.Video.DirectShow;
 using SPU_7.Common.Extensions;
 
@@ -26,7 +27,14 @@ public class StandSettingsDeviceViewModel : ViewModelBase
     private string _selectedCameraName;
     private int? _pulseCountMeterModuleNumber;
     private int? _pulseCountMeterModuleChannelNumber;
+    private int? _temperatureChannelNumber;
+    private string _selectedTemperatureSensorComPort;
+    private string _selectedPressureSensorComPort;
+    private int _temperatureSensorAddress;
 
+    public ObservableCollection<string> PortNames { get; set; } = new ObservableCollection<string>(SerialPort.GetPortNames());
+    
+    
     public int Number
     {
         get => _number;
@@ -39,6 +47,11 @@ public class StandSettingsDeviceViewModel : ViewModelBase
         set => SetProperty(ref _pressureSensorAddress, value);
     }
 
+    public int TemperatureSensorAddress
+    {
+        get => _temperatureSensorAddress;
+        set => SetProperty(ref _temperatureSensorAddress, value);
+    }
 
     public int? PulseMeterNumber
     {
@@ -119,7 +132,25 @@ public class StandSettingsDeviceViewModel : ViewModelBase
         get => _pulseCountMeterModuleChannelNumber;
         set => SetProperty(ref _pulseCountMeterModuleChannelNumber, value);
     }
+    
+    public string SelectedTemperatureSensorComPort
+    {
+        get => _selectedTemperatureSensorComPort;
+        set => SetProperty(ref _selectedTemperatureSensorComPort, value);
+    }
+
+    public int? TemperatureChannelNumber
+    {
+        get => _temperatureChannelNumber;
+        set => SetProperty(ref _temperatureChannelNumber, value);
+    }
 
     public ObservableCollection<string> CameraNames { get; set; }
         = new ObservableCollection<string>(new FilterInfoCollection(FilterCategory.VideoInputDevice).GetMonikerNames());
+
+    public string SelectedPressureSensorComPort
+    {
+        get => _selectedPressureSensorComPort;
+        set => SetProperty(ref _selectedPressureSensorComPort, value);
+    }
 }

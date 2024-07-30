@@ -22,8 +22,21 @@ public class StandLine
     {
         foreach (var deviceViewModel in settingsService.StandSettingsModel.LineViewModels[i].DeviceViewModels)
         {
+            var pressureSensor = string.IsNullOrEmpty(deviceViewModel.SelectedPressureSensorComPort)
+                ? null
+                : new PressureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedPressureSensorComPort), 
+                    new RegisterMapEnum<PressureSensorRegisterMap>(),
+                    deviceViewModel.PressureSensorAddress);
+                    
+            var temperatureSensor = string.IsNullOrEmpty(deviceViewModel.SelectedTemperatureSensorComPort)
+                ? null
+                : new TemperatureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedTemperatureSensorComPort), 
+                    new RegisterMapEnum<TemperatureSensorRegisterMap>(),
+                    deviceViewModel.TemperatureSensorAddress,
+                    (int)deviceViewModel.TemperatureChannelNumber);
+            
             Devices.Add(new UniversalDevice(null,
-                new RegisterMapEnum<UniversalDeviceRegisterMap>()));
+                new RegisterMapEnum<UniversalDeviceRegisterMap>(), pressureSensor, temperatureSensor));
         }
 
         switch (settingsService.StandSettingsModel.LineViewModels[i].SelectedLineType)
@@ -41,7 +54,8 @@ public class StandLine
                         ? null
                         : new TemperatureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == masterDeviceModel.SelectedTemperatureSensorComPort), 
                             new RegisterMapEnum<TemperatureSensorRegisterMap>(),
-                            masterDeviceModel.TemperatureSensorAddress);
+                            masterDeviceModel.TemperatureSensorAddress,
+                            (int)masterDeviceModel.TemperatureChannelNumber);
                     
                     MasterDevices.Add(masterDeviceModel.SelectedMasterDeviceType switch
                     {

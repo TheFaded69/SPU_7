@@ -12,22 +12,6 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
         : base(modbusProcessor, registerMap)
     {
     }
-
-    public GfgDevice(IModbusProcessor modbusProcessor,
-        IRegisterMapEnum<GFGRegisterMap> registerMap,
-        IModbusProcessor? pressureSensorModbusProcessor,
-        int pressureSensorAddress,
-        IModbusProcessor? temperatureModbusProcessor,
-        int temperatureSensorAddress) : base(modbusProcessor, registerMap)
-    {
-        if (pressureSensorModbusProcessor != null)
-            _pressureSensor = new PressureSensor(pressureSensorModbusProcessor,
-                new RegisterMapEnum<PressureSensorRegisterMap>(), pressureSensorAddress);
-
-        if (temperatureModbusProcessor != null)
-            _temperatureSensor = new TemperatureSensor(temperatureModbusProcessor,
-                new RegisterMapEnum<TemperatureSensorRegisterMap>(), temperatureSensorAddress);
-    }
     
     public GfgDevice(IModbusProcessor modbusProcessor,
         IRegisterMapEnum<GFGRegisterMap> registerMap, 
@@ -77,7 +61,7 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
 #if DEBUGGUI
         return Pressure = (float?)new Random().NextDouble() * 1000;
 #else
-        return Temperature = await _temperatureSensor.ReadTemperatureAsync();
+        return Temperature = await _temperatureSensor.ReadTemperatureAsync(true);
 #endif
     }
     

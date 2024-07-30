@@ -23,6 +23,8 @@ public class StandSettingsMasterDeviceModel
 
     public string SelectedTemperatureSensorComPort { get; set; }
     
+    public int? TemperatureChannelNumber { get; set; }
+    
     public int? PulseCountMeterModuleNumber { get; set; }
 
     public int? PulseCountMeterModuleChannelNumber { get; set; }

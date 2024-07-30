@@ -4,6 +4,7 @@ public class StandSettingsDeviceModel
 {
     public int Number;
     public int PressureSensorAddress;
+    public int TemperatureSensorAddress;
     public int PulseMeterNumber;
     public int PulseMeterChannelNumber;
     public string RegisterAddress{ get; set; }
@@ -17,4 +18,10 @@ public class StandSettingsDeviceModel
     public int? PulseCountMeterModuleNumber { get; set; }
 
     public int? PulseCountMeterModuleChannelNumber { get; set; }
+    
+    public string SelectedPressureSensorComPort { get; set; }
+
+    public string SelectedTemperatureSensorComPort { get; set; }
+    
+    public int? TemperatureChannelNumber { get; set; }
 }

@@ -32,16 +32,7 @@
                        Margin="5,5,5,0">
             <Grid ColumnDefinitions="0.75*, 0.25*"
                   RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto">
-                <TextBlock Grid.Row="0"
-                           Grid.Column="0"
-                           Margin="5"
-                           FontSize="18"
-                           Text="Температура, °C" />
-                <TextBlock Grid.Row="0"
-                           Grid.Column="1"
-                           FontSize="18"
-                           Text="{Binding TemperatureTube}"
-                           Margin="5" />
+                
                 <TextBlock Grid.Row="1"
                            Margin="5"
                            Grid.Column="0"
@@ -73,26 +64,7 @@
                            Grid.Column="1"
                            FontSize="18"
                            Text="{Binding Humidity}" />
-                <TextBlock Grid.Row="4"
-                           Margin="5"
-                           Grid.Column="0"
-                           FontSize="18"
-                           Text="Давление перепад, кПа" />
-                <TextBlock Grid.Row="4"
-                           Margin="5"
-                           Grid.Column="1"
-                           FontSize="18"
-                           Text="{Binding PressureDifference}" />
-                <TextBlock Grid.Row="5"
-                           Margin="5"
-                           Grid.Column="0"
-                           FontSize="18"
-                           Text="Давление ресивер, кПа" />
-                <TextBlock Grid.Row="5"
-                           Margin="5"
-                           Grid.Column="1"
-                           FontSize="18"
-                           Text="{Binding PressureResiver}" />
+                
                 <TextBlock Grid.Row="6"
                            Margin="5"
                            Grid.Column="0"

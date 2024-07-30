@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using System;
+using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Extensions;
 using SPU_7.Domain.Extensions;
@@ -54,13 +55,13 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
     public float? Pressure
     {
         get => _pressure;
-        set => SetProperty(ref _pressure, value);
+        set => SetProperty(ref _pressure, value == null ? value : (float?)Math.Round((float)value / 1000, 3));
     }
 
     public float? Temperature
     {
         get => _temperature;
-        set => SetProperty(ref _temperature, value);
+        set => SetProperty(ref _temperature, value == null ? value : (float?)Math.Round((float)value, 2));
     }
 
     public StateType StateType
@@ -80,11 +81,25 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
 
     public void UpdatePressure(object? obj)
     {
-        throw new System.NotImplementedException();
+        switch (obj)
+        {
+            case null:
+                return;
+            case float pressure:
+                Pressure = pressure;
+                break;
+        }
     }
 
     public void UpdateTemperature(object? obj)
     {
-        throw new System.NotImplementedException();
+        switch (obj)
+        {
+            case null:
+                return;
+            case float temperature:
+                Temperature = temperature;
+                break;
+        }
     }
 }

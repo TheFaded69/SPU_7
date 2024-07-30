@@ -56,9 +56,6 @@ namespace SPU_7.Models.Stand
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
         
         private IPressureSensor _pressureSensor;
-        private IPressureSensor _pressureDifferenceSensor;
-        private IPressureSensor415M _pressureResiverSensor;
-        private ITemperatureSensor _temperatureSensor;
         private ITemperatureHumiditySensor _temperatureHumiditySensor;
 
         private ObservableCollection<LogMessage> _portLogMessages;
@@ -213,52 +210,21 @@ namespace SPU_7.Models.Stand
                     standDeviceRegisterMap,
                     address));
             }
-
-            /*_temperatureSensor = new TemperatureSensor(
-                _modbusProcessors.First(mb =>
-                    mb.PortName == _settingsService.StandSettingsModel.SelectedTemperatureSensorPortName),
-                new RegisterMapEnum<TemperatureSensorRegisterMap>(),
-                _settingsService.StandSettingsModel.TemperatureSensorAddress);
-            _pressureSensor = new PressureSensor(
-                _modbusProcessors.First(mb =>
-                    mb.PortName == _settingsService.StandSettingsModel.SelectedPressureSensorPortName),
-                new RegisterMapEnum<PressureSensorRegisterMap>(),
-                _settingsService.StandSettingsModel.PressureSensorAddress);
-            _pressureDifferenceSensor = new PressureSensor(
-                _modbusProcessors.First(mb =>
-                    mb.PortName == _settingsService.StandSettingsModel.SelectedPressureDifferenceSensorPortName),
-                new RegisterMapEnum<PressureSensorRegisterMap>(),
-                _settingsService.StandSettingsModel.PressureDifferenceSensorAddress);
-            _pressureResiverSensor = new PressureSensor415M(
+            
+            /*_pressureResiverSensor = new PressureSensor415M(
                 _modbusProcessors.First(mb =>
                     mb.PortName == _settingsService.StandSettingsModel.SelectedPressureResiverSensorPortName),
                 new RegisterMapEnum<PressureSensor415MRegisterMap>(),
-                _settingsService.StandSettingsModel.PressureResiverSensorAddress);
+                _settingsService.StandSettingsModel.PressureResiverSensorAddress);*/
             _temperatureHumiditySensor = new TemperatureHumiditySensor(
                 _modbusProcessors.First(
                     mb => mb.PortName == _settingsService.StandSettingsModel.SelectedTHMeterPortName),
                 new RegisterMapEnum<TemperatureHumiditySensorRegisterMap>(),
                 _settingsService.StandSettingsModel.THMeterAddress);
 
-            _frequencyRegulatorDevice = new FrequencyRegulatorDevice(
-                _modbusProcessors.First(mb =>
-                    mb.PortName == _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.PortName),
-                new RegisterMapEnum<FrequencyRegulatorRegisterMap>(),
-                GetPressureResiver,
-                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.TargetPressure,
-                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.ModuleAddress);
-            _frequencyRegulatorDevice?.SetPidParameters(
-                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.kP,
-                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.kI,
-                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.kD,
-                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.pvMax,
-                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.pvMin,
-                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.outMax,
-                _settingsService.StandSettingsModel.FrequencyRegulatorViewModel.outMin);*/
-
             _requestTaskCancellationTokenSource = new CancellationTokenSource();
             _requestTask = new Task(RequestTaskHandler, _requestTaskCancellationTokenSource.Token);
-            //_requestTask.Start();
+            _requestTask.Start();
         }
 
         public async Task<bool> SetModeMeasureAsync(ModeMeasure modeMeasure)
@@ -312,34 +278,24 @@ namespace SPU_7.Models.Stand
 
 
 #else
-                    if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        TemperatureTube = _temperatureSensor == null
-                            ? null
-                            : await _temperatureSensor.ReadTemperatureAsync();
-                    if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        PressureAtmosphere = _pressureSensor == null ? null : await _pressureSensor.ReadPressureAsync();
-                    if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        PressureDifference = _pressureDifferenceSensor == null
-                            ? null
-                            : await _pressureDifferenceSensor.ReadPressureAsync();
-                    if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        PressureResiver = _pressureResiverSensor == null
-                            ? null
-                            : await _pressureResiverSensor.ReadPressureAsync();
-                    if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
+                   
+                    //if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
+                    //    PressureAtmosphere = _pressureSensor == null ? null : await _pressureSensor.ReadPressureAsync();
+                   
+                    /*if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                         Temperature = _temperatureHumiditySensor == null
                             ? null
                             : await _temperatureHumiditySensor.ReadTemperatureAsync() / 100f;
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                         Humidity = _temperatureHumiditySensor == null
                             ? null
-                            : await _temperatureHumiditySensor.ReadHumidityAsync() / 100f;
+                            : await _temperatureHumiditySensor.ReadHumidityAsync() / 100f;*/
 
                     foreach (var standLine in _lines)
                     {
                         foreach (var device in standLine.Devices)
                         {
-                            await device.ReadPressureAsync();
+                            //await device.ReadPressureAsync();
                             await device.ReadTemperatureAsync();
                         }
                         
@@ -1648,7 +1604,7 @@ namespace SPU_7.Models.Stand
 
         public async Task<bool> ResetToZeroPressureDifferenceAsync()
         {
-            return await _pressureDifferenceSensor.ResetToZeroAsync();
+            return true;
         }
 
         #endregion

@@ -35,6 +35,7 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     private ObservableCollection<string> _portNames = new(SerialPort.GetPortNames());
     private int? _pulseCountMeterModuleNumber;
     private int? _pulseCountMeterModuleChannelNumber;
+    private int? _temperatureChannelNumber;
 
     public ObservableCollection<string> MasterDeviceTypesString
     {
@@ -146,5 +147,11 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     {
         get => _pulseCountMeterModuleChannelNumber;
         set => SetProperty(ref _pulseCountMeterModuleChannelNumber, value);
+    }
+
+    public int? TemperatureChannelNumber
+    {
+        get => _temperatureChannelNumber;
+        set => SetProperty(ref _temperatureChannelNumber, value);
     }
 }

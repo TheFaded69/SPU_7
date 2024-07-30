@@ -376,12 +376,12 @@
                                                                HorizontalAlignment="Center"
                                                                DockPanel.Dock="Top" />
                                                     <TextBlock Margin="5,5,5,0"
-                                                               Text="{Binding Pressure}"
+                                                               Text="{Binding Pressure, StringFormat='P = {0} кПа'}"
                                                                HorizontalAlignment="Center"
                                                                Foreground="Black"
                                                                DockPanel.Dock="Top" />
                                                     <TextBlock Margin="5,5,5,0"
-                                                               Text="{Binding Temperature}"
+                                                               Text="{Binding Temperature, StringFormat='T = {0} C'}"
                                                                HorizontalAlignment="Center"
                                                                Foreground="Black"
                                                                DockPanel.Dock="Top" />

@@ -12,21 +12,7 @@ public class RGTDevice : IRGTDevice
     {
         
     }
-
-    public RGTDevice(IModbusProcessor? pressureSensorModbusProcessor,
-        int pressureSensorAddress,
-        IModbusProcessor? temperatureModbusProcessor,
-        int temperatureSensorAddress)
-    {
-        if (pressureSensorModbusProcessor != null)
-            _pressureSensor = new PressureSensor(pressureSensorModbusProcessor,
-                new RegisterMapEnum<PressureSensorRegisterMap>(), pressureSensorAddress);
-
-        if (temperatureModbusProcessor != null)
-            _temperatureSensor = new TemperatureSensor(temperatureModbusProcessor,
-                new RegisterMapEnum<TemperatureSensorRegisterMap>(), temperatureSensorAddress);
-    }
-
+    
     public RGTDevice(IPressureSensor pressureSensor, ITemperatureSensor temperatureSensor)
     {
         _pressureSensor = pressureSensor;
@@ -73,7 +59,7 @@ public class RGTDevice : IRGTDevice
 #if DEBUGGUI
         return Pressure = (float?)new Random().NextDouble() * 1000;
 #else
-        return Temperature = await _temperatureSensor.ReadTemperatureAsync();
+        return Temperature = await _temperatureSensor.ReadTemperatureAsync(true);
 #endif
     }
     
