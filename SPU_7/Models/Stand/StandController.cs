@@ -282,14 +282,14 @@ namespace SPU_7.Models.Stand
                     //if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                     //    PressureAtmosphere = _pressureSensor == null ? null : await _pressureSensor.ReadPressureAsync();
                    
-                    /*if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
+                    if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                         Temperature = _temperatureHumiditySensor == null
                             ? null
                             : await _temperatureHumiditySensor.ReadTemperatureAsync() / 100f;
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                         Humidity = _temperatureHumiditySensor == null
                             ? null
-                            : await _temperatureHumiditySensor.ReadHumidityAsync() / 100f;*/
+                            : await _temperatureHumiditySensor.ReadHumidityAsync() / 100f;
 
                     foreach (var standLine in _lines)
                     {

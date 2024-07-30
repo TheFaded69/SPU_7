@@ -18,15 +18,15 @@
                    Text="Установка поверочная СПУ-7"/>
         <TextBlock DockPanel.Dock="Top"
                    Margin="5"
-                   Text="Наименование ПО: SPU_7"/>
+                   Text="Идентификационное наименование ПО: SPU_7_Gas_Meter"/>
         <TextBlock DockPanel.Dock="Top"
                    Margin="5"
-                   Text="Версия ПО: 1.1.0"/>
+                   Text="Версия ПО: 1.2.0"/>
         <TextBlock DockPanel.Dock="Top"
                    Margin="5"
                    Text="ООО НПО Турбулентность-ДОН"/>
-        <TextBlock DockPanel.Dock="Top"
+        <TextBlock DockPanel.Dock="Top" 
                    Margin="5"
-                   Text="Цифровой идентификатор ПО: 0х7DE06E98"/>
+                   Text="Цифровой идентификатор ПО (CRC32): 0х7DE06E98"/>
     </DockPanel>
 </UserControl>

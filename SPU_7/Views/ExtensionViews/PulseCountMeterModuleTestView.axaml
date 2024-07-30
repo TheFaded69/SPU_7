@@ -45,13 +45,13 @@
                          Watermark="Введите номер МПКИ" 
                          assists:TextFieldAssist.Label="Номер МПКИ"
                          Text="{Binding PulseCountMeterModuleNumber }"/>
-                <TextBox Grid.Row="0"
+                <!--TextBox Grid.Row="0"
                          Grid.Column="1"
                          Margin="5"
                          UseFloatingWatermark="True" 
                          Watermark="Введите номер канала МПКИ" 
                          assists:TextFieldAssist.Label="Номер канала МПКИ"
-                         Text="{Binding ChannelNumber }"/>
+                         Text="{Binding ChannelNumber }"/-->
                 <DockPanel Grid.Row="1"
                            Grid.Column="0"
                            LastChildFill="False">

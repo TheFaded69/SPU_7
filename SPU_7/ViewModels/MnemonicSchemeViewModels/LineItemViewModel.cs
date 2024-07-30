@@ -132,8 +132,11 @@ public class LineItemViewModel : ViewModelBase
         {
             DeviceItemViewModels.Add(new DeviceItemViewModel(standController, settingsService, i, lineIndex));
             
+#if !DEBUGGUI
+            
             _standController.RegisterPressureSensorObserver(DeviceItemViewModels[i], DevicePurpose.ValidationDevice, i, lineIndex);
             _standController.RegisterTemperatureSensorObserver(DeviceItemViewModels[i], DevicePurpose.ValidationDevice, i, lineIndex);
+#endif
         }
 
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsAfterDeviceValve)
@@ -163,9 +166,12 @@ public class LineItemViewModel : ViewModelBase
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].MasterDeviceValveViewModel,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].PressureSensorValveViewModel,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i]));
-            
+#if !DEBUGGUI
+    
             _standController.RegisterPressureSensorObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
             _standController.RegisterTemperatureSensorObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
+
+#endif
         }
 
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count; i++)

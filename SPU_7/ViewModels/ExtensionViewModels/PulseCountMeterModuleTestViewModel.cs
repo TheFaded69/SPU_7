@@ -14,7 +14,7 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
     public PulseCountMeterModuleTestViewModel(IStandController standController, IStandSettingsService standSettingsService)
     {
-        Title = "Тест МПКИ";
+        Title = "Поверка импульсного канала";
         
         _standController = standController;
         _standSettingsService = standSettingsService;
@@ -29,7 +29,7 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
     }
 
     private int? _pulseCountMeterModuleNumber;
-    private int? _channelNumber;
+    private int? _channelNumber = 1;
     private int? _pulseCount;
     private float? _pulseDuration;
     private bool _isPulseCountWork;
