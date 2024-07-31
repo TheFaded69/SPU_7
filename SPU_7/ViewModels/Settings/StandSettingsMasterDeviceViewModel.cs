@@ -36,6 +36,7 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     private int? _pulseCountMeterModuleNumber;
     private int? _pulseCountMeterModuleChannelNumber;
     private int? _temperatureChannelNumber;
+    private float? _maximumFlow;
 
     public ObservableCollection<string> MasterDeviceTypesString
     {
@@ -91,6 +92,12 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     {
         get => _vendorNumber;
         set => SetProperty(ref _vendorNumber, value);
+    }
+
+    public float? MaximumFlow
+    {
+        get => _maximumFlow;
+        set => SetProperty(ref _maximumFlow, value);
     }
 
     public int PressureSensorAddress

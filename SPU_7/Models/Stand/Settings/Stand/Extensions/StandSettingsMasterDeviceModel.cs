@@ -7,10 +7,9 @@ public class StandSettingsMasterDeviceModel
 {
     public string SelectedMasterDeviceTypeString { get; set; }
     public MasterDeviceType SelectedMasterDeviceType { get; set; }
-    public string SelectedComPort { get; set; }
-    
-    public int MasterDeviceAddress { get; set; }
     public string VendorNumber { get; set; }
+    
+    public float? MaximumFlow { get; set; }
     public StandSettingsValveModel PressureSensorValveViewModel { get; set; }
     
     public StandSettingsValveModel MasterDeviceValveViewModel { get; set; }

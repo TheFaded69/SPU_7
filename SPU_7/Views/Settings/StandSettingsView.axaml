@@ -463,6 +463,11 @@
                                                                                                     assists:TextFieldAssist.Label="Заводской номер"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Text="{Binding VendorNumber}" />
+                                                                                                
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Макс. расход"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Text="{Binding MaximumFlow}" />
                                                                                                 <!--ComboBox
                                                                                                     IsVisible="{Binding IsConnectionInfoVisible}"
                                                                                                     DockPanel.Dock="Left"
@@ -907,28 +912,40 @@
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.kD}" />
                                                                                                 
                                                                                                 <TextBox Margin="5"
-                                                                                                    assists:TextFieldAssist.Label="Минимальное входное значение"
+                                                                                                    assists:TextFieldAssist.Label="Мин. входное значение"
                                                                                                     UseFloatingWatermark="True"
-                                                                                                    Watermark="Введите адрес"
+                                                                                                    Watermark=""
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.pvMin}" />
                                                                                                 
                                                                                                 <TextBox Margin="5"
-                                                                                                    assists:TextFieldAssist.Label="Максимальное входное значение"
+                                                                                                    assists:TextFieldAssist.Label="Макс. входное значение"
                                                                                                     UseFloatingWatermark="True"
-                                                                                                    Watermark="Введите адрес"
+                                                                                                    Watermark=""
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.pvMax}" />
                                                                                                 
                                                                                                 <TextBox Margin="5"
-                                                                                                    assists:TextFieldAssist.Label="Минимальное выходное значение"
+                                                                                                    assists:TextFieldAssist.Label="Мин. выходное значение"
                                                                                                     UseFloatingWatermark="True"
-                                                                                                    Watermark="Введите адрес"
+                                                                                                    Watermark=""
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.outMin}" />
                                                                                                 
                                                                                                 <TextBox Margin="5"
-                                                                                                    assists:TextFieldAssist.Label="Максимальное выходное значение"
+                                                                                                    assists:TextFieldAssist.Label="Макс. выходное значение"
                                                                                                     UseFloatingWatermark="True"
-                                                                                                    Watermark="Введите адрес"
+                                                                                                    Watermark=""
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.outMax}" />
+                                                                                                
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Мин. расход"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark=""
+                                                                                                    Text="{Binding  MinimumFlow}" />
+                                                                                                
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Макс. расход"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark=""
+                                                                                                    Text="{Binding  MaximumFlow}" />
                                                                                                 
                                                                                             </StackPanel>
                                                                                         </DockPanel>

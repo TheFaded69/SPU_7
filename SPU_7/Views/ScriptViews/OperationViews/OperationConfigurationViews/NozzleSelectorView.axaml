@@ -32,7 +32,7 @@
                         <TextBlock Text="{Binding NozzleFactValue}"
                                    Margin="5"
                                    VerticalAlignment="Center"/>
-                        <TextBlock Text="м3/ч"
+                        <TextBlock Text="м³/ч"
                                    Margin="5"
                                    VerticalAlignment="Center"/>
                     </StackPanel>

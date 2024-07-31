@@ -114,10 +114,10 @@ public partial class App : PrismApplication
             containerRegistry.RegisterDialog<NozzleSelectorView, NozzleSelectorViewModel>();
             containerRegistry.RegisterDialog<PdfViewerView, PdfViewerViewModel>();
             containerRegistry.RegisterDialog<MasterDeviceInfoView, MasterDeviceInfoViewModel>();
-            //containerRegistry.RegisterDialog<DeviceNamesView, DeviceNamesViewModel>();
             containerRegistry.RegisterDialog<PulseMeterCoefficientSettingsView, PulseMeterCoefficientSettingsViewModel>();
             containerRegistry.RegisterDialog<PicturePreviewView, PicturePreviewViewModel>();
             containerRegistry.RegisterDialog<PulseCountMeterModuleTestView, PulseCountMeterModuleTestViewModel>();
+            containerRegistry.RegisterDialog<CheckTightnessView, CheckTightnessViewModel>();
             
         }
 

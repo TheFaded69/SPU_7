@@ -1,0 +1,181 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:extensionViewModels1="clr-namespace:SPU_7.ViewModels.ExtensionViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="extensionViewModels1:CheckTightnessViewModel"
+             x:Class="SPU_7.Views.ExtensionViews.CheckTightnessView"
+             Loaded="Control_OnLoaded"
+             Width="800">
+    <Design.DataContext>
+        <extensionViewModels1:CheckTightnessViewModel />
+    </Design.DataContext>
+
+    <controls:Card>
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Top"
+                       LastChildFill="False">
+                <Button DockPanel.Dock="Right"
+                        Width="46"
+                        Height="46"
+                        Command="{Binding CloseWindowCommand}"
+                        ToolTip.Tip="Закрыть"
+                        IsEnabled="{Binding !IsChecking}"
+                        Classes="flat">
+                    <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black" />
+                </Button>
+
+                <TextBlock Margin="5"
+                           FontSize="20"
+                           Text="{Binding Title}"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center" />
+            </DockPanel>
+
+            <StackPanel DockPanel.Dock="Bottom"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button Content="Старт"
+                        Margin="5"
+                        IsEnabled="{Binding !IsChecking}"
+                        Command="{Binding StartCheckTightnessCommand}" />
+                <Button Content="Стоп"
+                        Command="{Binding StopCheckTightnessCommand}"
+                        IsEnabled="{Binding IsChecking}"
+                        Margin="5" />
+            </StackPanel>
+
+            <controls:Card Margin="0,5,0,5"
+                           DockPanel.Dock="Bottom">
+                <Grid ColumnDefinitions="0.5*, 0.5*"
+                      RowDefinitions="Auto,Auto, Auto, Auto, Auto, Auto">
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Margin="5"
+                               Grid.ColumnSpan="2"
+                               Text="{Binding NowActionString, StringFormat='Текущий этап проверки - {0}'}"/>
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               Margin="5"
+                               Text="{Binding StartPressureDifference, StringFormat='Начальное значение перепада - {0} кПа'}"/>
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="1"
+                               Margin="5"
+                               Text="{Binding EndPressureDifference, StringFormat='Конечное значение перепада - {0} кПа'}"/>
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               Margin="5"
+                               Text="{Binding StartTemperature, StringFormat='Начальная температура - {0} °С'}"/>
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="1"
+                               Margin="5"
+                               Text="{Binding EndTemperature, StringFormat='Конечная температура - {0} °С'}"/>
+                    <TextBlock Grid.Row="3"
+                               Grid.Column="0"
+                               Margin="5"
+                               Text="{Binding FlowLeak, StringFormat='Объем утечки - {0} м³/ч'}"/>
+                    <TextBlock Grid.Row="4"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               Margin="5"
+                               Text="{Binding PressureDifference, StringFormat='Результат проверки - {0} кПа'}"/>
+                    <TextBlock Grid.Row="5"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               Margin="5"
+                               Text="{Binding MetrologyCalculateForTightness, StringFormat='Условие герметичности - {0} кПа'}"/>
+                </Grid>
+            </controls:Card>
+            <controls:Card Margin="0,5,0,5">
+                <Grid ColumnDefinitions="0.5*, 0.5*"
+                      RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+                    <TextBox Grid.Row="0"
+                             Grid.Column="0"
+                             Text="{Binding PressureDifferenceMinimum}"
+                             Margin="5"
+                             UseFloatingWatermark="True"
+                             Watermark="Введите давление"
+                             assists:TextFieldAssist.Label="Необходимое давление перепада, кПа" />
+
+                    
+
+                    <TextBox Grid.Row="0"
+                             Grid.Column="1"
+                             Text="{Binding StabilizationTime}"
+                             Margin="5"
+                             UseFloatingWatermark="True"
+                             Watermark="Введите время"
+                             assists:TextFieldAssist.Label="Время стабилизации, сек" />
+
+                    <TextBox Grid.Row="2"
+                             Grid.Column="0"
+                             Text="{Binding PressureDifferenceMaximum}"
+                             Margin="5"
+                             UseFloatingWatermark="True"
+                             Watermark="Введите давление"
+                             assists:TextFieldAssist.Label="Максимальная разница давления перепада, кПа" />
+
+                    <TextBox Grid.Row="2"
+                             Grid.Column="1"
+                             Text="{Binding TestTime}"
+                             Margin="5"
+                             UseFloatingWatermark="True"
+                             Watermark="Введите время"
+                             assists:TextFieldAssist.Label="Время теста, сек" />
+
+                    <TextBox Grid.Row="3"
+                             Grid.Column="0"
+                             Text="{Binding VolumeMinimum}"
+                             Margin="5"
+                             UseFloatingWatermark="True"
+                             Watermark="Введите давление"
+                             assists:TextFieldAssist.Label="Наименьший объемный расход, м³/ч" />
+
+                    <TextBox Grid.Row="3"
+                             Grid.Column="1"
+                             Text="{Binding InsideVolumeOfStand}"
+                             Margin="5"
+                             UseFloatingWatermark="True"
+                             Watermark="Введите время"
+                             assists:TextFieldAssist.Label="Внутренний объем магистрали, м³" />
+
+                    <TextBox Grid.Row="4"
+                             Grid.Column="0"
+                             Text="{Binding GoodRange}"
+                             Margin="5"
+                             UseFloatingWatermark="True"
+                             Watermark="Введите значение"
+                             assists:TextFieldAssist.Label="Доверительные границы" />
+                    
+                    <TextBox Grid.Row="4"
+                             Grid.Column="1"
+                             Text="{Binding TargetFlow}"
+                             Margin="5"
+                             UseFloatingWatermark="True"
+                             Watermark="Введите значение"
+                             assists:TextFieldAssist.Label="Требуемый расход, м³/ч" />
+                    
+                    <ComboBox Grid.Row="7"
+                              Grid.Column="0"
+                              ItemsSource="{Binding LineNumbers}"
+                              SelectedItem="{Binding SelectedLineNumber}"
+                              Margin="5"
+                              assists:ComboBoxAssist.Label="Номер линии"
+                              Theme="{StaticResource MaterialOutlineComboBox}" />
+                    <ComboBox Grid.Row="7"
+                              Grid.Column="1"
+                              ItemsSource="{Binding MasterDeviceNames}"
+                              SelectedItem="{Binding SelectedDeviceName}"
+                              Margin="5"
+                              assists:ComboBoxAssist.Label="Название устройства"
+                              Theme="{StaticResource MaterialOutlineComboBox}" />
+                </Grid>
+            </controls:Card>
+
+        </DockPanel>
+    </controls:Card>
+</UserControl>

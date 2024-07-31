@@ -9,4 +9,8 @@ public class StandSettingsFanModel
     public StandSettingsNeedleValveModel NeedleValveViewModel { get; set; }
     
     public StandSettingsFrequencyRegulatorModel FrequencyRegulatorViewModel { get; set; }
+    
+    public float? MinimumFlow { get; set; }
+    
+    public float? MaximumFlow { get; set; }
 }

@@ -22,7 +22,7 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
 
         ValveItemViewModel = new ValveItemViewModel(valveViewModel, standController, StateType.Open);
         PressureValveItemViewModel = new ValveItemViewModel(pressureValveViewModel, standController, StateType.Close);
-        DeviceName = masterDeviceModel.SelectedMasterDeviceType.GetDescription();
+        DeviceName = masterDeviceModel.MasterDeviceName;
         VendorNumber = "№" + masterDeviceModel.VendorNumber;
         
         OpenMasterDeviceInfoCommand = new DelegateCommand(OpenMasterDeviceInfoCommandHandler);

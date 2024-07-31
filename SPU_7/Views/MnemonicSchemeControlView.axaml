@@ -69,7 +69,7 @@
                            Margin="5"
                            Grid.Column="0"
                            FontSize="18"
-                           Text="Выставленный расход, м3/ч" />
+                           Text="Выставленный расход, м³/ч" />
                 <TextBlock Grid.Row="6"
                            Margin="5"
                            Grid.Column="1"

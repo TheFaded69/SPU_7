@@ -72,21 +72,21 @@
                              UseFloatingWatermark="True"
                              Grid.Column="0"
                              HorizontalAlignment="Stretch"
-                             extension:TextFieldAssist.Label="Минимальный расход, м3/ч"
+                             extension:TextFieldAssist.Label="Минимальный расход, м³/ч"
                              Watermark="Введите расход" />
                     <TextBox Margin="5"
                              Text="{Binding NominalFlow}"
                              UseFloatingWatermark="True"
                              Grid.Column="1"
                              HorizontalAlignment="Stretch"
-                             extension:TextFieldAssist.Label="Номинальный расход, м3/ч"
+                             extension:TextFieldAssist.Label="Номинальный расход, м³/ч"
                              Watermark="Введите расход" />
                     <TextBox Margin="5"
                              Text="{Binding MaximumFlow}"
                              UseFloatingWatermark="True"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
-                             extension:TextFieldAssist.Label="Максимальный расход, м3/ч"
+                             extension:TextFieldAssist.Label="Максимальный расход, м³/ч"
                              Watermark="Введите расход" />
                 </Grid>
 
@@ -126,13 +126,13 @@
                                        Text="{Binding Number, Converter={convertors:IntToStringNumberConverter}}"
                                        VerticalAlignment="Center" />
                             <TextBox Margin="5"
-                                     extension:TextFieldAssist.Label="Расход, м3/ч"
+                                     extension:TextFieldAssist.Label="Расход, м³/ч"
                                      UseFloatingWatermark="True"
                                      Watermark="Введите расход"
                                      Text="{Binding TargetFlow}" />
                             
                             <TextBox Margin="5"
-                                     extension:TextFieldAssist.Label="Необходимый объем, м3"
+                                     extension:TextFieldAssist.Label="Необходимый объем, м³"
                                      UseFloatingWatermark="True"
                                      Watermark="Введите объем"
                                      Text="{Binding TargetVolume}" />

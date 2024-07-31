@@ -268,16 +268,16 @@ public class ValidationProtocolCreator
             .UseAllAvailableWidth();
         validationResultTable
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Номер точки")).SetTextAlignment(TextAlignment.CENTER))
-            .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Расход, м3/ч")).SetTextAlignment(TextAlignment.CENTER))
+            .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Расход, м\u00b3/ч")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Кол-во воздуха по показателям, л:")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Падение давления на ГСБ, кПа")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Погрешность ГСБ, %")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Допускаемая погрешность, %")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Результат")).SetTextAlignment(TextAlignment.CENTER))
-            .AddHeaderCell(new Cell().Add(new Paragraph("СПУ-5")).SetTextAlignment(TextAlignment.CENTER))
+            .AddHeaderCell(new Cell().Add(new Paragraph("СПУ-7")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell().Add(new Paragraph("СГ")).SetTextAlignment(TextAlignment.CENTER));
         
-        
+                
         var result = true;
         
         foreach (var validationPointResult in validationOperationResult.ValidationPointResults)
@@ -637,13 +637,13 @@ public class ValidationProtocolCreator
             .UseAllAvailableWidth();
         validationResultTable
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Номер точки")).SetTextAlignment(TextAlignment.CENTER))
-            .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Расход, м3/ч")).SetTextAlignment(TextAlignment.CENTER))
+            .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Расход, м\u00b3/ч")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Кол-во воздуха по показателям, л:")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Падение давления на ГСБ, Па")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Погрешность ГСБ, %")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Допускаемая погрешность, %")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell(2, 1).Add(new Paragraph("Результат")).SetTextAlignment(TextAlignment.CENTER))
-            .AddHeaderCell(new Cell().Add(new Paragraph("СПУ-5")).SetTextAlignment(TextAlignment.CENTER))
+            .AddHeaderCell(new Cell().Add(new Paragraph("СПУ-7")).SetTextAlignment(TextAlignment.CENTER))
             .AddHeaderCell(new Cell().Add(new Paragraph("СГ")).SetTextAlignment(TextAlignment.CENTER));
         
         var result = true;

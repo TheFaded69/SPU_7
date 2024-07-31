@@ -36,6 +36,7 @@ public class ExtensionViewModel : ViewModelBase
     private UserControl _userControlWorkResult;
     private UserControl _pulseMeterExtensionUserControl;
     private UserControl _pulseCountMeterModuleExtensionUserControl;
+    private UserControl _checkTightnessExtensionUserControl;
 
 
     public UserControl UserControlWorkResult
@@ -68,6 +69,12 @@ public class ExtensionViewModel : ViewModelBase
         set => SetProperty(ref _pulseCountMeterModuleExtensionUserControl, value);
     }
     
+    public UserControl CheckTightnessExtensionUserControl
+    {
+        get => _checkTightnessExtensionUserControl;
+        set => SetProperty(ref _checkTightnessExtensionUserControl, value);
+    }
+    
     private void Init()
     {
         
@@ -90,6 +97,10 @@ public class ExtensionViewModel : ViewModelBase
         PulseCountMeterModuleExtensionUserControl = new PulseCountMeterModuleExtensionView()
         {
             DataContext = new PulseCountMeterModuleExtensionViewModel(_dialogService)
+        };
+        CheckTightnessExtensionUserControl = new CheckTightnessExtensionView()
+        {
+            DataContext = new CheckTightnessExtensionViewModel(_dialogService)
         };
     }
 }
