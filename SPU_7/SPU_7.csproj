@@ -49,6 +49,7 @@
 
 
     <ItemGroup>
+      <ProjectReference Include="..\SPU_7.CommonDevice\SPU_7.CommonDevice.csproj" />
       <ProjectReference Include="..\SPU_7.Database\SPU_7.Database.csproj" />
       <ProjectReference Include="..\SPU_7.Domain\SPU_7.Domain.csproj" />
     </ItemGroup>

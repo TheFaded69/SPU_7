@@ -139,10 +139,10 @@
                             
                             <DockPanel DockPanel.Dock="Left"
                                        VerticalAlignment="Center"
-                                       Margin="0,0,0,-360"
+                                       Margin="0,0,0,-310"
                                        IsVisible="{Binding StartCommonValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <Rectangle Fill="#00a2e8"
-                                           Height="155"
+                                           Height="130"
                                            Width="20"
                                            Margin="0, 0,0,0"
                                            StrokeThickness="0"
@@ -161,7 +161,7 @@
                                         Foreground="Black"
                                         Classes="flat" />
                                 <Rectangle Fill="#00a2e8"
-                                           Height="155"
+                                           Height="130"
                                            Width="20"
                                            Margin="0, 0,0,0"
                                            StrokeThickness="0"

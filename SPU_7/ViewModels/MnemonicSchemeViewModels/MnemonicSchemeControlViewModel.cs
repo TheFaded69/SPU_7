@@ -118,7 +118,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
         public float? Pressure
         {
             get => _pressure;
-            set => SetProperty(ref _pressure, value == null ? value : (float?)Math.Round((float)value / 1000, 3));
+            set => SetProperty(ref _pressure, value == null ? value : (float?)Math.Round((float)value, 3));
         }
 
         public float? Temperature

@@ -9,6 +9,9 @@ using SPU_7.Common.Device;
 using SPU_7.Common.Line;
 using SPU_7.Common.Modbus;
 using SPU_7.Common.Stand;
+using SPU_7.CommonDevice.Devices;
+using SPU_7.CommonDevice.Devices.ElmetroPascal;
+using SPU_7.DeviceCommunication.Communication;
 using SPU_7.Domain.Devices.Device.UniversalDevice;
 using SPU_7.Domain.Devices.StandDevices.FrequencyRegulator;
 using SPU_7.Domain.Devices.StandDevices.PressureSensor;
@@ -55,9 +58,11 @@ namespace SPU_7.Models.Stand
         private List<IFrequencyRegulatorDevice> _frequencyRegulatorDevices = [];
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
         
-        private IPressureSensor _pressureSensor;
+        //private IPressureSensor _pressureSensor;
         private ITemperatureHumiditySensor _temperatureHumiditySensor;
-
+        
+        private ElmetroDigitalDevice _elmetroDigitalDevice;
+        
         private ObservableCollection<LogMessage> _portLogMessages;
 
         private CancellationTokenSource _requestTaskCancellationTokenSource;
@@ -75,6 +80,8 @@ namespace SPU_7.Models.Stand
         {
             foreach (var portViewModel in _settingsService.StandSettingsModel.PortViewModels)
             {
+                if (portViewModel.PortName == _settingsService.StandSettingsModel.SelectedPressureSensorPortName) continue;
+                
                 var modbusProcessor = new ModbusProcessor(new RequestSerializer(), new ResponseDeserializer())
                 {
                     Communicator = new SerialCommunicator(),
@@ -99,6 +106,7 @@ namespace SPU_7.Models.Stand
                     IsPoolingNeed = false,
                     PoolingPeriod = 5000
                 };
+                
                 modbusProcessor.Start();
                 _modbusProcessors.Add(modbusProcessor);
             }
@@ -210,12 +218,12 @@ namespace SPU_7.Models.Stand
                     standDeviceRegisterMap,
                     address));
             }
+
+            _elmetroDigitalDevice = new ElmetroDigitalDevice(new SerialPortCommunication(new SerialPort()
+            {
+                PortName = _settingsService.StandSettingsModel.SelectedPressureSensorPortName
+            }));
             
-            /*_pressureResiverSensor = new PressureSensor415M(
-                _modbusProcessors.First(mb =>
-                    mb.PortName == _settingsService.StandSettingsModel.SelectedPressureResiverSensorPortName),
-                new RegisterMapEnum<PressureSensor415MRegisterMap>(),
-                _settingsService.StandSettingsModel.PressureResiverSensorAddress);*/
             _temperatureHumiditySensor = new TemperatureHumiditySensor(
                 _modbusProcessors.First(
                     mb => mb.PortName == _settingsService.StandSettingsModel.SelectedTHMeterPortName),
@@ -279,8 +287,8 @@ namespace SPU_7.Models.Stand
 
 #else
                    
-                    //if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                    //    PressureAtmosphere = _pressureSensor == null ? null : await _pressureSensor.ReadPressureAsync();
+                    if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
+                        PressureAtmosphere = await _elmetroDigitalDevice.GetPressureAsync(PressureType.AbsolutePressure);
                    
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                         Temperature = _temperatureHumiditySensor == null
@@ -1600,6 +1608,8 @@ namespace SPU_7.Models.Stand
                 var modbusProcessor = _modbusProcessors[i];
                 modbusProcessor.ShutDown();
             }
+            
+            _elmetroDigitalDevice?.CommunicationChannel?.Close();
         }
 
         public async Task<bool> ResetToZeroPressureDifferenceAsync()
