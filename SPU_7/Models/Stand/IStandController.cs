@@ -314,5 +314,6 @@ namespace SPU_7.Models.Stand
         Task<float?> ReadPulseDurationFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber);
         Task<bool> SendStartPulseCountMeterCommandAsync();
         Task<bool> SetPulseCountMeterModuleChannelSettingsAsync(int? pulseCountMeterModuleIndex, int channelNumber);
+        Task<bool> TurnOnPulseCountMeterControRegister();
     }
 }

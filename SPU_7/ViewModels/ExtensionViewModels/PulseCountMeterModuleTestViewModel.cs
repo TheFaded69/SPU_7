@@ -100,9 +100,9 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
         IsPulseCountWork = true;
         
+        await _standController.TurnOnPulseCountMeterControRegister();
         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
         await _standController.StartPulseCountModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
-        var status =  await _standController.ReadCommonCommandStatusPulseCountMeterAsync(pulseCountMeterModuleNumber - 1);
         await _standController.SendStartPulseCountMeterCommandAsync();
     }
     
@@ -118,6 +118,7 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         
         IsPulseDurationWork = true;
         
+        await _standController.TurnOnPulseCountMeterControRegister();
         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
         await _standController.StartPulseCountModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
         await _standController.SendStartPulseCountMeterCommandAsync();
@@ -135,8 +136,7 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.ChannelNumber;
         
         await _standController.SendStartPulseCountMeterCommandAsync();
-        //await _standController.StopPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
-        
+
         IsPulseCountWork = false;
         
         PulseFrequency = await _standController.ReadPulsePeriodFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
@@ -153,7 +153,6 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.ChannelNumber;
         
         await _standController.SendStartPulseCountMeterCommandAsync();
-        //await _standController.StopPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
 
         IsPulseDurationWork = false;
         
