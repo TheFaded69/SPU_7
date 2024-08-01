@@ -195,5 +195,16 @@ public enum PulseMeterCountModuleRegisterMap
         ByteOrderType.MidLittleEndian_CDAB)]
     CommonCommandRegister,
 
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x001C,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.UInt32,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    SettingsProfileRegister,
+    
     #endregion
 }

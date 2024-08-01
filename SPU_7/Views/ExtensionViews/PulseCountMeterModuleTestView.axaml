@@ -38,13 +38,29 @@
             
             <Grid ColumnDefinitions="0.5*, 0.5*"
                   RowDefinitions="Auto, *">
-                <TextBox Grid.Row="0"
-                         Grid.Column="0"
-                         Margin="5"
-                         UseFloatingWatermark="True" 
-                         Watermark="Введите номер МПКИ" 
-                         assists:TextFieldAssist.Label="Номер МПКИ"
-                         Text="{Binding PulseCountMeterModuleNumber }"/>
+                
+                <ComboBox Grid.Row="0"
+                          Grid.Column="0" 
+                          Grid.ColumnSpan="2"
+                          Margin="5"
+                          Classes="Outline"
+                          assists:ComboBoxAssist.Label="Поверяемый канал"
+                          Theme="{StaticResource MaterialOutlineComboBox}"
+                          ItemsSource="{Binding DeviceInformation}"
+                          SelectedItem="{Binding SelectedDevicePulseCountMeterModuleViewModel}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5"
+                                           Text="{Binding LineNumber, StringFormat='Линия - №{0}'}"/>
+                                <TextBlock Margin="5"
+                                           Text="{Binding DeviceNumber, StringFormat='Устройство - №{0}'}"/>
+                                <TextBlock Margin="5"
+                                           Text="{Binding ChannelNumber, StringFormat='Канал - №{0}'}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <!--TextBox Grid.Row="0"
                          Grid.Column="1"
                          Margin="5"

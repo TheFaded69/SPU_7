@@ -57,6 +57,7 @@ namespace SPU_7.Models.Stand
         private IFrequencyRegulatorDevice _frequencyRegulatorDevice;
         private List<IFrequencyRegulatorDevice> _frequencyRegulatorDevices = [];
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
+        private PulseCountMeterStarter _pulseCountMeterStarter;
         
         //private IPressureSensor _pressureSensor;
         private ITemperatureHumiditySensor _temperatureHumiditySensor;
@@ -189,6 +190,7 @@ namespace SPU_7.Models.Stand
                 }
             }
 
+            
             foreach (var pulseCountMeterModuleViewModel in _settingsService.StandSettingsModel.PulseCountMeterModuleViewModels)
             {
                 _pulseCountMeterModules.Add(new PulseCountMeterModule(_modbusProcessors.First(modbus =>
@@ -196,6 +198,11 @@ namespace SPU_7.Models.Stand
                     new RegisterMapEnum<PulseMeterCountModuleRegisterMap>(),
                     pulseCountMeterModuleViewModel.ModuleAddress));
             }
+
+            _pulseCountMeterStarter = new PulseCountMeterStarter(_modbusProcessors.First(mb => mb.PortName ==
+                    _settingsService.StandSettingsModel.PulseCountMeterModuleViewModels.First().PortName),
+                new RegisterMapEnum<PulseCountMeterStarterRegisterMap>());
+            
             
             foreach (var solenoidValveViewModel in _settingsService.StandSettingsModel.SolenoidValveViewModels)
             {
@@ -959,6 +966,13 @@ namespace SPU_7.Models.Stand
             };
 
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulseDurationAsync(channel);
+        }
+
+        public async Task<bool> SendStartPulseCountMeterCommandAsync() => await _pulseCountMeterStarter.SendStartCommand();
+        public async Task<bool> SetPulseCountMeterModuleChannelSettingsAsync(int? pulseCountMeterModuleIndex, int channelNumber)
+        {
+            return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex]
+                .SetPulseCountMeterModuleChannelSettingsAsync((ChannelNumber)channelNumber);
         }
 
         private async Task<(float?, float?)> ReadPulseCoefficientAsync(

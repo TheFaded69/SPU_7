@@ -63,4 +63,13 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
             ChannelNumber.Fourth => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.Register1),
             _ => throw new ArgumentOutOfRangeException(nameof(channelNumber), channelNumber, "Не поддерживаемый номер канала у МПКИ")
         };
+
+    public async Task<bool> SetPulseCountMeterModuleChannelSettingsAsync(ChannelNumber channelNumber) => channelNumber switch
+    {
+        ChannelNumber.First => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister, BitConverter.GetBytes((uint)1).Reverse().ToArray()),
+        ChannelNumber.Second => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister, BitConverter.GetBytes((uint)2).Reverse().ToArray()),
+        ChannelNumber.Third => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister, BitConverter.GetBytes((uint)3).Reverse().ToArray()),
+        ChannelNumber.Fourth => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister, BitConverter.GetBytes((uint)4).Reverse().ToArray()),
+        _ => throw new ArgumentOutOfRangeException(nameof(channelNumber), channelNumber, "Не поддерживаемый номер канала у МПКИ")
+    };
 }

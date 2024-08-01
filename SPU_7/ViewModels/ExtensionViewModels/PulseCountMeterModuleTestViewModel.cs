@@ -1,4 +1,6 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Models.Services.StandSetting;
@@ -34,7 +36,14 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
     private float? _pulseDuration;
     private bool _isPulseCountWork;
     private bool _isPulseDurationWork;
+    private DevicePulseCountMeterModuleViewModel _selectedDevicePulseCountMeterModuleViewModel;
 
+    public ObservableCollection<DevicePulseCountMeterModuleViewModel> DeviceInformation { get; set; } = [];
+    public DevicePulseCountMeterModuleViewModel SelectedDevicePulseCountMeterModuleViewModel
+    {
+        get => _selectedDevicePulseCountMeterModuleViewModel;
+        set => SetProperty(ref _selectedDevicePulseCountMeterModuleViewModel, value);
+    }
 
     public int? PulseCountMeterModuleNumber
     {
@@ -83,16 +92,32 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
     private async void StartPulseCountCommandHandler()
     {
-        await _standController.StartPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
+        var pulseCountMeterModuleNumber = _standSettingsService.StandSettingsModel
+            .LineViewModels[SelectedDevicePulseCountMeterModuleViewModel.LineNumber - 1]
+            .DeviceViewModels[SelectedDevicePulseCountMeterModuleViewModel.DeviceNumber - 1]
+            .PulseCountMeterModuleNumber;
+        var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.ChannelNumber;
+
+        await _standController.SetPulseCountMeterModuleChannelSettingsAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
+        await _standController.StartPulseCountModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
+        await _standController.SendStartPulseCountMeterCommandAsync();
         
-        IsPulseCountWork = true;
+        IsPulseDurationWork = true;
     }
     
     public DelegateCommand StartPulseDurationCommand { get; }
 
     private async void StartPulseDurationCommandHandler()
     {
-        await _standController.StartPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
+        var pulseCountMeterModuleNumber = _standSettingsService.StandSettingsModel
+            .LineViewModels[SelectedDevicePulseCountMeterModuleViewModel.LineNumber - 1]
+            .DeviceViewModels[SelectedDevicePulseCountMeterModuleViewModel.DeviceNumber - 1]
+            .PulseCountMeterModuleNumber;
+        var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.ChannelNumber;
+
+        await _standController.SetPulseCountMeterModuleChannelSettingsAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
+        await _standController.StartPulseCountModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
+        await _standController.SendStartPulseCountMeterCommandAsync();
         
         IsPulseDurationWork = true;
     }
@@ -101,22 +126,36 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
     private async void StopPulseCountCommandHandler()
     {
-        await _standController.StopPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
+        var pulseCountMeterModuleNumber = _standSettingsService.StandSettingsModel
+            .LineViewModels[SelectedDevicePulseCountMeterModuleViewModel.LineNumber - 1]
+            .DeviceViewModels[SelectedDevicePulseCountMeterModuleViewModel.DeviceNumber - 1]
+            .PulseCountMeterModuleNumber;
+        var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.ChannelNumber;
+        
+        await _standController.SendStartPulseCountMeterCommandAsync();
+        //await _standController.StopPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
         
         IsPulseCountWork = false;
         
-        PulseCount = (int?)await _standController.ReadPulseCountFromPulseCountMeterAsync(PulseCountMeterModuleNumber - 1, ChannelNumber);
+        PulseCount = (int?)await _standController.ReadPulseCountFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
     }
     
     public DelegateCommand StopPulseDurationCommand { get; }
 
     private async void StopPulseDurationCommandHandler()
     {
-        await _standController.StopPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
+        var pulseCountMeterModuleNumber = _standSettingsService.StandSettingsModel
+            .LineViewModels[SelectedDevicePulseCountMeterModuleViewModel.LineNumber - 1]
+            .DeviceViewModels[SelectedDevicePulseCountMeterModuleViewModel.DeviceNumber - 1]
+            .PulseCountMeterModuleNumber;
+        var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.ChannelNumber;
+        
+        await _standController.SendStartPulseCountMeterCommandAsync();
+        //await _standController.StopPulseCountModuleMeasureAsync(PulseCountMeterModuleNumber - 1);
 
         IsPulseDurationWork = false;
         
-        PulseDuration = await _standController.ReadPulseDurationFromPulseCountMeterAsync(PulseCountMeterModuleNumber - 1, ChannelNumber);
+        PulseDuration = await _standController.ReadPulseDurationFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
     }
     
     public bool CanCloseDialog() => true;
@@ -129,6 +168,19 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
     public void OnDialogOpened(IDialogParameters parameters)
     {
         //todo переделать текстбокс выбора МПКИ и канала на комбобокс исходя из настроек
+
+        foreach (var lineViewModel in _standSettingsService.StandSettingsModel.LineViewModels)
+        {
+            foreach (var deviceViewModel in lineViewModel.DeviceViewModels)
+            {
+                DeviceInformation.Add(new DevicePulseCountMeterModuleViewModel()
+                {
+                    LineNumber = lineViewModel.LineNumber,
+                    DeviceNumber = deviceViewModel.Number,
+                    ChannelNumber = (int)deviceViewModel.PulseCountMeterModuleChannelNumber
+                });
+            }
+        }
     }
 
     public event Action<IDialogResult>? RequestClose;

@@ -52,4 +52,11 @@ public interface IPulseCountMeterModule
     /// <param name="channelNumber">Номер канала</param>
     /// <returns></returns>
     Task<float?> ReadPulseDurationAsync(ChannelNumber channelNumber);
+
+    /// <summary>
+    /// Выбрать профиль настроек на нужный канал
+    /// </summary>
+    /// <param name="channelNumber"></param>
+    /// <returns></returns>
+    Task<bool> SetPulseCountMeterModuleChannelSettingsAsync(ChannelNumber channelNumber);
 }
