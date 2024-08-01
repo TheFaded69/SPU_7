@@ -53,10 +53,10 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="5"
                                            Text="{Binding LineNumber, StringFormat='Линия - №{0}'}"/>
-                                <TextBlock Margin="5"
+                                <!--TextBlock Margin="5"
                                            Text="{Binding DeviceNumber, StringFormat='Устройство - №{0}'}"/>
                                 <TextBlock Margin="5"
-                                           Text="{Binding ChannelNumber, StringFormat='Канал - №{0}'}"/>
+                                           Text="{Binding ChannelNumber, StringFormat='Канал - №{0}'}"/-->
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>

@@ -364,6 +364,13 @@
                                                     Background="Gray"
                                                     IsEnabled="{Binding IsDeviceEnable}"
                                                     CornerRadius="5">
+                                                <Button.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem>
+                                                            
+                                                        </MenuItem>
+                                                    </ContextMenu>
+                                                </Button.ContextMenu>
                                                 <DockPanel>
                                                     <TextBlock Margin="5,5,5,0"
                                                                Text="{Binding DeviceName}"

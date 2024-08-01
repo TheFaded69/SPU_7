@@ -49,10 +49,10 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
     private CancellationTokenSource _cancellationTokenSource;
 
     private int _vacuumWaitTime = 60;
-    private float _pressureDifferenceMinimum = 0.7f;
+    private float _pressureDifferenceMinimum = 2.0f;
     private float _pressureResiverMinimum = 50f;
     private float _pressureDifferenceMaximum = 0.1f;
-    private int _testTime = 300;
+    private int _testTime = 600;
     private int _stabilizationTime = 300;
     private double _selectedNozzleValue;
     private bool _needCheckLine;
@@ -280,142 +280,44 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
     {
         try
         {
-            NowActionString = $"Подготовка стенда к проверке герметичности";
-
-            _timerService.TimeSeconds = 180;
-            _timerService.OperationName = "Проверка герметичности";
-            _timerService.Message = "Подготовка стенда к работе";
-            _timerService.InfoTimerEnable();
-
-            if (!operationCancellationTokenSource.IsCancellationRequested)
+            switch (SelectedStandSettingsLineModel.SelectedLineType)
             {
-                if (!await _standController.SetStandWorkModeAsync())
+                case LineType.None:
+                    break;
+                case LineType.MasterDeviceLineType:
                 {
-                    _logger.Logging(new LogMessage("Не удалось установить рабочий режим установки", LogLevel.Error));
-                    return;
-                }
-            }
-            else
-            {
-                return;
-            }
+                    NowActionString = $"Подготовка стенда к проверке герметичности";
 
-            if (!operationCancellationTokenSource.IsCancellationRequested)
-            {
-                //Открыть S2
-                if (!await _standController.OpenSolenoidValveAsync(_standSettingsService.StandSettingsModel.SolenoidValveViewModels
-                        .FirstOrDefault(svm => svm.SolenoidValveType == SolenoidValveType.NormalOpen)))
+                    _timerService.TimeSeconds = 180;
+                    _timerService.OperationName = "Проверка герметичности";
+                    _timerService.Message = "Подготовка стенда к работе";
+                    _timerService.InfoTimerEnable();
+                    
+                    if (!operationCancellationTokenSource.IsCancellationRequested)
+                    {
+                        if (!await _standController.SetStandWorkModeAsync())
+                        {
+                            _logger.Logging(new LogMessage("Не удалось установить рабочий режим установки", LogLevel.Error));
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                    break;
+                case LineType.NozzleLineType:
                 {
-                    _logger.Logging(new LogMessage("Не удалось открыть соленоидный клапан №2", LogLevel.Error));
-                    return;
+                    
                 }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            else
-            {
-                return;
-            }
-
             
-
-            if (!operationCancellationTokenSource.IsCancellationRequested)
-            {
-                //Закрыть S1
-                if (!await _standController.CloseSolenoidValveAsync(_standSettingsService.StandSettingsModel.SolenoidValveViewModels
-                        .FirstOrDefault(svm => svm.SolenoidValveType == SolenoidValveType.NormalClose)))
-                {
-                    _logger.Logging(new LogMessage("Не удалось закрыть соленоидный клапан №1", LogLevel.Error));
-                    return;
-                }
-            }
-            else
-            {
-                return;
-            }
-
             _timerService.InfoTimerDisable();
-
-            if (!operationCancellationTokenSource.IsCancellationRequested)
-            {
-                if (!await _standController.OpenSolenoidValveAsync(_standSettingsService.StandSettingsModel
-                        .SolenoidValveViewModels
-                        .FirstOrDefault(svm => svm.SolenoidValveType == SolenoidValveType.NormalClose)))
-                {
-                    _logger.Logging(new LogMessage("Не удалось открыть соленоидный клапан №1", LogLevel.Error));
-                    return;
-                }
-            }
-            else
-            {
-                return;
-            }
-
-            //Открыть М23
             
-
-
-            //Закрыть S1
-            if (!operationCancellationTokenSource.IsCancellationRequested)
-            {
-                if (!await _standController.CloseSolenoidValveAsync(_standSettingsService.StandSettingsModel
-                        .SolenoidValveViewModels
-                        .FirstOrDefault(svm => svm.SolenoidValveType == SolenoidValveType.NormalClose)))
-                {
-                    _logger.Logging(new LogMessage("Не удалось закрыть соленоидный клапан №1", LogLevel.Error));
-                    return;
-                }
-            }
-            else
-            {
-                return;
-            }
-
-            if (NeedCheckLine)
-            {
-                _standController.SetActiveLine(SelectedLineNumber, true);
-
-                var activeLine = (int)_standController.GetActiveLine();
-
-                
-            }
-
-            
-            
-            NowActionString = $"Ожидание вакуума";
-
-            _timerService.TimeSeconds = VacuumWaitTime;
-            _timerService.OperationName = "Проверка герметичности";
-            _timerService.Message = "Ожидание вакуума";
-            _timerService.InfoTimerEnable();
-
-            while (_standController.PressureResiver < PressureResiverMinimum)
-            {
-                if (operationCancellationTokenSource.IsCancellationRequested)
-                {
-                    return;
-                }
-
-                await Task.Delay(1000);
-            }
-
-            _timerService.InfoTimerDisable();
-
-
-            //Включаем сопло
-            if (!operationCancellationTokenSource.IsCancellationRequested)
-            {
-                if (!await _standController.OpenNozzleAsync(SelectedStandSettingsNozzleModel))
-                {
-                    _logger.Logging(new LogMessage(
-                        $"Не удалось включить сопло {SelectedStandSettingsNozzleModel.NozzleValue}",
-                        LogLevel.Error));
-                    return;
-                }
-            }
-            else
-            {
-                return;
-            }
-
             _standController.SetTargetFlowValue(SelectedStandSettingsNozzleModel.NozzleFactValue);
             NowActionString = $"Ожидание перепада";
             
@@ -436,23 +338,6 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
 
             _timerService.InfoTimerDisable();
 
-            //Выключаем сопло
-            if (!operationCancellationTokenSource.IsCancellationRequested)
-            {
-                if (!await _standController.CloseNozzleAsync(SelectedStandSettingsNozzleModel))
-                {
-                    _logger.Logging(new LogMessage(
-                        $"Не удалось выключить сопло {SelectedStandSettingsNozzleModel.NozzleValue}",
-                        LogLevel.Error));
-                    return;
-                }
-            }
-            else
-            {
-                return;
-            }
-
-            _standController.SetTargetFlowValue(0);
             
 
             NowActionString = $"Стабилизация - {StabilizationTime} сек.";
@@ -474,13 +359,15 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
 
             //Фиксируем стартовое давление
             var startPressureDifference = _standController.PressureDifference;
+            //var startTemperature = _standController.GetMasterDeviceTemperature();
+            
             _logger.Logging(new LogMessage($"Начальное давление перепада - {startPressureDifference * 1000} Па",
                 LogLevel.Info));
             StartPressureDifference = startPressureDifference;
             
-            NowActionString = $"Проверка на вакуум - {TestTime} сек.";
+            NowActionString = $"Проверка на герметичность - {TestTime} сек.";
             _logger.Logging(new LogMessage(
-                $"Проверка на вакуум - {TestTime} сек.",
+                $"Проверка на герметичность - {TestTime} сек.",
                 LogLevel.Info));
             //Ожидание в тесте
 
@@ -520,39 +407,10 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
             
             NowActionString = $"Окончание проверки герметичности";
             
-            //Открыть S1
-            if (!operationCancellationTokenSource.IsCancellationRequested)
-            {
-                if (!await _standController.OpenSolenoidValveAsync(_standSettingsService.StandSettingsModel
-                        .SolenoidValveViewModels
-                        .FirstOrDefault(svm => svm.SolenoidValveType == SolenoidValveType.NormalClose)))
-                {
-                    _logger.Logging(new LogMessage("Не удалось открыть соленоидный клапан №1", LogLevel.Error));
-                    return;
-                }
-            }
-            else
-            {
-                return;
-            }
+            
 
             await Task.Delay(5000);
 
-            //Закрыть S1
-            if (!operationCancellationTokenSource.IsCancellationRequested)
-            {
-                if (!await _standController.CloseSolenoidValveAsync(_standSettingsService.StandSettingsModel
-                        .SolenoidValveViewModels
-                        .FirstOrDefault(svm => svm.Number == 1)))
-                {
-                    _logger.Logging(new LogMessage("Не удалось закрыть соленоидный клапан №1", LogLevel.Error));
-                    return;
-                }
-            }
-            else
-            {
-                return;
-            }
             
             if (Math.Abs((float)(startPressureDifference - (float)endPressureDifference)) > PressureDifferenceMaximum * 1000)
             {

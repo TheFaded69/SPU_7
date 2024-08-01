@@ -17,22 +17,18 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
     }
 
 
-    public async Task<bool> StartMeasurePulseCountAsync()
-    {
-        return await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
+    public async Task<bool> StartMeasurePulseCountAsync() =>
+        await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
             BitConverter.GetBytes((uint)1).Reverse().ToArray());
-    }
 
     public async Task<bool> StartMeasurePulseCountAsync(ChannelNumber channelNumber)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> StopMeasurePulseCountAsync()
-    {
-        return await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
+    public async Task<bool> StopMeasurePulseCountAsync() =>
+        await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
             BitConverter.GetBytes((uint)0).Reverse().ToArray());
-    }
 
     public async Task<bool> StopMeasurePulseCountAsync(ChannelNumber channelNumber)
     {
@@ -72,4 +68,6 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
         ChannelNumber.Fourth => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister, BitConverter.GetBytes((uint)4).Reverse().ToArray()),
         _ => throw new ArgumentOutOfRangeException(nameof(channelNumber), channelNumber, "Не поддерживаемый номер канала у МПКИ")
     };
+
+    public async Task<float?> ReadPulseCountAsync() => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.PulseCountRegister);
 }

@@ -19,13 +19,13 @@ public enum PulseMeterCountModuleRegisterMap
         ByteOrderType.MidLittleEndian_CDAB)]
     CommonCommandStatusRegister,
 
-    [RegisterSetup(0x0000,
+    [RegisterSetup(0x000E,
         ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register1,
+    PulseCountRegister,
 
     [RegisterSetup(0x0002,
         ModbusFunction.ReadInputRegisters,
