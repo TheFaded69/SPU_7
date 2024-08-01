@@ -1,4 +1,5 @@
 using SPU_7.Domain.Modbus;
+using SPU_7.Modbus.Extensions;
 using SPU_7.Modbus.Processor;
 
 namespace SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
@@ -19,7 +20,7 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
 
     public async Task<bool> StartMeasurePulseCountAsync() =>
         await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
-            BitConverter.GetBytes((uint)1).Reverse().ToArray());
+            BitConverter.GetBytes((uint)1).SwapBytes().ToArray());
 
     public async Task<bool> StartMeasurePulseCountAsync(ChannelNumber channelNumber)
     {
@@ -28,7 +29,7 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
 
     public async Task<bool> StopMeasurePulseCountAsync() =>
         await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
-            BitConverter.GetBytes((uint)0).Reverse().ToArray());
+            BitConverter.GetBytes((uint)0).SwapBytes().ToArray());
 
     public async Task<bool> StopMeasurePulseCountAsync(ChannelNumber channelNumber)
     {
@@ -60,14 +61,26 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
             _ => throw new ArgumentOutOfRangeException(nameof(channelNumber), channelNumber, "Не поддерживаемый номер канала у МПКИ")
         };
 
-    public async Task<bool> SetPulseCountMeterModuleChannelSettingsAsync(ChannelNumber channelNumber) => channelNumber switch
+    public async Task<bool> SetPulseCountMeterModuleChannelSettingsAsync(ChannelNumber channelNumber)
     {
-        ChannelNumber.First => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister, BitConverter.GetBytes((uint)1).Reverse().ToArray()),
-        ChannelNumber.Second => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister, BitConverter.GetBytes((uint)2).Reverse().ToArray()),
-        ChannelNumber.Third => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister, BitConverter.GetBytes((uint)3).Reverse().ToArray()),
-        ChannelNumber.Fourth => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister, BitConverter.GetBytes((uint)4).Reverse().ToArray()),
-        _ => throw new ArgumentOutOfRangeException(nameof(channelNumber), channelNumber, "Не поддерживаемый номер канала у МПКИ")
-    };
+        //Применяем настройки
+        await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
+            BitConverter.GetBytes((uint)2).SwapBytes().ToArray());
+        
+        return channelNumber switch
+        {
+            ChannelNumber.First => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister,
+                BitConverter.GetBytes((uint)1).SwapBytes().ToArray()),
+            ChannelNumber.Second => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister,
+                BitConverter.GetBytes((uint)2).SwapBytes().ToArray()),
+            ChannelNumber.Third => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister,
+                BitConverter.GetBytes((uint)3).SwapBytes().ToArray()),
+            ChannelNumber.Fourth => await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.SettingsProfileRegister,
+                BitConverter.GetBytes((uint)4).SwapBytes().ToArray()),
+            _ => throw new ArgumentOutOfRangeException(nameof(channelNumber), channelNumber,
+                "Не поддерживаемый номер канала у МПКИ")
+        };
+    }
 
     public async Task<float?> ReadPulseCountAsync() => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.PulseCountRegister);
 }

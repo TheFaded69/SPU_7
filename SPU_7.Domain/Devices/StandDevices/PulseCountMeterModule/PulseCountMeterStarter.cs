@@ -1,4 +1,5 @@
 ﻿using SPU_7.Domain.Modbus;
+using SPU_7.Modbus.Extensions;
 using SPU_7.Modbus.Processor;
 
 namespace SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
@@ -13,6 +14,6 @@ public class PulseCountMeterStarter : ModbusUnitProcessor<PulseCountMeterStarter
     public async Task<bool> SendStartCommand()
     {
         return await WriteRegisterAsync(PulseCountMeterStarterRegisterMap.CommandRegister,
-            BitConverter.GetBytes((uint)1));
+            BitConverter.GetBytes((uint)1).SwapBytes().ToArray());
     }
 }
