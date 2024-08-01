@@ -14,6 +14,6 @@ public class PulseCountMeterStarter : ModbusUnitProcessor<PulseCountMeterStarter
     public async Task<bool> SendStartCommand()
     {
         return await WriteRegisterAsync(PulseCountMeterStarterRegisterMap.CommandRegister,
-            BitConverter.GetBytes((uint)1).SwapBytes().ToArray());
+            BitConverter.GetBytes((uint)1).SwapBytes().ToArray(), 1);
     }
 }

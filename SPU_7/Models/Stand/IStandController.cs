@@ -310,7 +310,7 @@ namespace SPU_7.Models.Stand
         Task<CommonCommandStatus?> ReadCommonCommandStatusPulseCountMeterAsync(int? pulseCountMeterModuleIndex);
         Task<bool> StartPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex);
         Task<bool> StopPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex);
-        Task<uint?> ReadPulsePeriodFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber);
+        Task<float?> ReadPulsePeriodFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber);
         Task<float?> ReadPulseDurationFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber);
         Task<bool> SendStartPulseCountMeterCommandAsync();
         Task<bool> SetPulseCountMeterModuleChannelSettingsAsync(int? pulseCountMeterModuleIndex, int channelNumber);

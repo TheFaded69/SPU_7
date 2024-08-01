@@ -932,7 +932,7 @@ namespace SPU_7.Models.Stand
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].StopMeasurePulseCountAsync();
         }
 
-        public async Task<uint?> ReadPulsePeriodFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber)
+        public async Task<float?> ReadPulsePeriodFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber)
         {
             if (pulseCountMeterModuleIndex == null || channelNumber == null) return null;
 

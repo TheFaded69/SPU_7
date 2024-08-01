@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Models.Services.StandSetting;
@@ -103,6 +104,9 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         await _standController.TurnOnPulseCountMeterControRegister();
         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
         await _standController.StartPulseCountModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
+
+        await Task.Delay(2000);
+        
         await _standController.SendStartPulseCountMeterCommandAsync();
     }
     
@@ -121,6 +125,9 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         await _standController.TurnOnPulseCountMeterControRegister();
         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
         await _standController.StartPulseCountModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
+        
+        await Task.Delay(2000);
+        
         await _standController.SendStartPulseCountMeterCommandAsync();
         
     }
