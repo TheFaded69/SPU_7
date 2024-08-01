@@ -65,4 +65,16 @@ public interface IPulseCountMeterModule
     /// </summary>
     /// <returns></returns>
     Task<float?> ReadPulseCountAsync();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    Task<uint?> ReadControlRegisterAsync();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    Task<bool> TurnOnControlBitControlRegisterAsync();
 }
