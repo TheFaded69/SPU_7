@@ -98,7 +98,7 @@
                     <TextBlock DockPanel.Dock="Bottom"
                                VerticalAlignment="Center"
                                Margin="5"
-                               Text="{Binding PulseCount, StringFormat='Количество импульсов: {0}'}"/>
+                               Text="{Binding PulseFrequency, StringFormat='Частота импульсов: {0}'}"/>
                 </DockPanel>
                 
                 <DockPanel Grid.Row="1"

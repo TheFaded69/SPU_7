@@ -89,7 +89,7 @@ public enum PulseMeterCountModuleRegisterMap
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register9,
+    PulseDurationRegisterChannel1,
 
     [RegisterSetup(0x0012,
         ModbusFunction.ReadInputRegisters,
@@ -97,7 +97,7 @@ public enum PulseMeterCountModuleRegisterMap
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register10,
+    PulsePeriodRegisterChannel1,
     
     [RegisterSetup(0x0014,
         ModbusFunction.ReadInputRegisters,
@@ -105,15 +105,8 @@ public enum PulseMeterCountModuleRegisterMap
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register11,
+    StatusRegisterChannel1,
     
-    [RegisterSetup(0x0016,
-        ModbusFunction.ReadInputRegisters,
-        ModbusFunction.WriteMultipleRegisters,
-        2,
-        RegisterDataType.Float,
-        ByteOrderType.MidLittleEndian_CDAB)]
-    Register12,
     
     [RegisterSetup(0x0018,
         ModbusFunction.ReadInputRegisters,
@@ -121,7 +114,7 @@ public enum PulseMeterCountModuleRegisterMap
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register13,
+    PulseDurationRegisterChannel2,
     
     [RegisterSetup(0x001A,
         ModbusFunction.ReadInputRegisters,
@@ -129,7 +122,7 @@ public enum PulseMeterCountModuleRegisterMap
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register14,
+    PulsePeriodRegisterChannel2,
     
     [RegisterSetup(0x001C,
         ModbusFunction.ReadInputRegisters,
@@ -137,15 +130,8 @@ public enum PulseMeterCountModuleRegisterMap
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register15,
+    StatusRegisterChannel2,
     
-    [RegisterSetup(0x001E,
-        ModbusFunction.ReadInputRegisters,
-        ModbusFunction.WriteMultipleRegisters,
-        2,
-        RegisterDataType.Float,
-        ByteOrderType.MidLittleEndian_CDAB)]
-    Register16,
     
     [RegisterSetup(0x0020,
         ModbusFunction.ReadInputRegisters,
@@ -153,7 +139,7 @@ public enum PulseMeterCountModuleRegisterMap
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register17,
+    PulseDurationRegisterChannel3,
     
     [RegisterSetup(0x0022,
         ModbusFunction.ReadInputRegisters,
@@ -161,7 +147,7 @@ public enum PulseMeterCountModuleRegisterMap
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register18,
+    PulsePeriodRegisterChannel3,
     
     [RegisterSetup(0x0024,
         ModbusFunction.ReadInputRegisters,
@@ -169,15 +155,31 @@ public enum PulseMeterCountModuleRegisterMap
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register19,
+    StatusRegisterChannel3,
     
-    [RegisterSetup(0x0026,
+    [RegisterSetup(0x0028,
         ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
-    Register20,
+    PulseDurationRegisterChannel4,
+    
+    [RegisterSetup(0x002A,
+        ModbusFunction.ReadInputRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    PulsePeriodRegisterChannel4,
+    
+    [RegisterSetup(0x002C,
+        ModbusFunction.ReadInputRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    StatusRegisterChannel4,
 
     #endregion
 

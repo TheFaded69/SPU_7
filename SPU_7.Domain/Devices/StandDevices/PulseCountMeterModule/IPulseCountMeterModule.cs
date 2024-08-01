@@ -44,7 +44,7 @@ public interface IPulseCountMeterModule
     /// </summary>
     /// <param name="channelNumber">Номер канала</param>
     /// <returns></returns>
-    Task<uint?> ReadPulseCountAsync(ChannelNumber channelNumber);
+    Task<uint?> ReadPulsePeriodAsync(ChannelNumber channelNumber);
     
     /// <summary>
     /// Считать длительность импульса на канале

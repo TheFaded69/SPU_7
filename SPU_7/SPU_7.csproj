@@ -65,4 +65,11 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
+
+
+    <ItemGroup>
+      <Compile Update="Views\ExtensionViews\CheckTightnessExtensionView.axaml.cs">
+        <DependentUpon>CheckTightnessExtensionView.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>

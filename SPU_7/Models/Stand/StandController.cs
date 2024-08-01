@@ -932,7 +932,7 @@ namespace SPU_7.Models.Stand
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].StopMeasurePulseCountAsync();
         }
 
-        public async Task<uint?> ReadPulseCountFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber)
+        public async Task<uint?> ReadPulsePeriodFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber)
         {
             if (pulseCountMeterModuleIndex == null || channelNumber == null) return null;
 
@@ -942,12 +942,10 @@ namespace SPU_7.Models.Stand
                 2 => ChannelNumber.Second,
                 3 => ChannelNumber.Third,
                 4 => ChannelNumber.Fourth,
-                5 => ChannelNumber.Fifth,
-                6 => ChannelNumber.Sixth,
                 _ => ChannelNumber.None
             };
 
-            return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulseCountAsync(channel);
+            return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulsePeriodAsync(channel);
         }
 
         public async Task<float?> ReadPulseDurationFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber)
@@ -960,8 +958,6 @@ namespace SPU_7.Models.Stand
                 2 => ChannelNumber.Second,
                 3 => ChannelNumber.Third,
                 4 => ChannelNumber.Fourth,
-                5 => ChannelNumber.Fifth,
-                6 => ChannelNumber.Sixth,
                 _ => ChannelNumber.None
             };
 
