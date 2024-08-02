@@ -156,6 +156,7 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         IsPulseCountWork = false;
         
         PulseCount = await _standController.ReadPulseCountFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
+        PulsePeriod = await _standController.ReadPulsePeriodFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
     }
     
     public DelegateCommand StopPulseDurationCommand { get; }

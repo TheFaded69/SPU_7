@@ -72,6 +72,7 @@
                            Grid.Column="0"
                            LastChildFill="False">
                     <Grid DockPanel.Dock="Bottom"
+                          
                           ColumnDefinitions="0.5*, 0.5*">
                         <Button DockPanel.Dock="Bottom"
                                 Grid.Column="0"
@@ -105,7 +106,8 @@
                            Grid.Column="1"
                            LastChildFill="False">
                     <Grid DockPanel.Dock="Bottom"
-                          ColumnDefinitions="0.5*, 0.5*">
+                          ColumnDefinitions="0.5*, 0.5*"
+                          IsEnabled="False">
                         <Button DockPanel.Dock="Bottom"
                                 Grid.Column="0"
                                 Classes="flat"
