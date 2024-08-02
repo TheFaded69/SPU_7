@@ -971,13 +971,39 @@ namespace SPU_7.Models.Stand
                 .SetPulseCountMeterModuleChannelSettingsAsync((ChannelNumber)channelNumber);
         }
 
-        public async Task<bool> TurnOnPulseCountMeterControRegister()
+        public async Task<bool> TurnOnPulseCountMeterControlRegister()
         {
             foreach (var pulseCountMeterModule in _pulseCountMeterModules)
             { 
                 if (!await pulseCountMeterModule.TurnOnControlBitControlRegisterAsync()) return false;
             }
             return true;
+        }
+
+        public async Task<bool> ResetPulseCountMeterAsync()
+        {
+            foreach (var pulseCountMeterModule in _pulseCountMeterModules)
+            {
+                if (!await pulseCountMeterModule.ResetPulseCountMeterAsync()) return false;
+            }
+
+            return true;
+        }
+
+        public async Task<float?> ReadPulseCountFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int pulseCountMeterModuleChannelNumber)
+        {
+            if (pulseCountMeterModuleIndex == null) return null;
+            
+            var channel = pulseCountMeterModuleChannelNumber switch
+            {
+                1 => ChannelNumber.First,
+                2 => ChannelNumber.Second,
+                3 => ChannelNumber.Third,
+                4 => ChannelNumber.Fourth,
+                _ => ChannelNumber.None
+            };
+
+            return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulseCountAsync();
         }
 
         private async Task<(float?, float?)> ReadPulseCoefficientAsync(

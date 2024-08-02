@@ -8,6 +8,15 @@ public enum PulseMeterCountModuleRegisterMap
 {
     #region Input register
 
+    [RegisterSetup(0x0000,
+        ModbusFunction.ReadInputRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    MeasureTimeRegister,
+    
+    
     /// <summary>
     /// Регистр широковещательой команды
     /// </summary>

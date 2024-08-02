@@ -67,14 +67,26 @@ public interface IPulseCountMeterModule
     Task<float?> ReadPulseCountAsync();
 
     /// <summary>
-    /// 
+    /// Считать регистр управления
     /// </summary>
     /// <returns></returns>
     Task<uint?> ReadControlRegisterAsync();
 
     /// <summary>
-    /// 
+    /// Включить бит котроль в регистре управления 
     /// </summary>
     /// <returns></returns>
     Task<bool> TurnOnControlBitControlRegisterAsync();
+
+    /// <summary>
+    /// Сброс модуля
+    /// </summary>
+    /// <returns></returns>
+    Task<bool> ResetPulseCountMeterAsync();
+
+    /// <summary>
+    /// Считать время измерения (мс)
+    /// </summary>
+    /// <returns></returns>
+    Task<float?> ReadMeasureTimeAsync();
 }
