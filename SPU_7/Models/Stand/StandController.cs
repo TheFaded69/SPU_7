@@ -1402,41 +1402,59 @@ namespace SPU_7.Models.Stand
 
         public async Task<bool> SetStandWorkModeAsync()
         {
-            foreach (var nozzleViewModel in _settingsService.StandSettingsModel.NozzleViewModels)
-            {
-                if (!await CloseNozzleAsync(nozzleViewModel, true))
-                    return false;
-            }
-
             foreach (var lineViewModel in _settingsService.StandSettingsModel.LineViewModels)
             {
-                if (lineViewModel.IsReverseLine)
+                switch (lineViewModel.SelectedLineType)
                 {
-                    if (!await CloseReverseValveAsync(lineViewModel.DirectValveViewModel, true))
-                        return false;
-                    if (!await CloseReverseValveAsync(lineViewModel.ReverseValveViewModel, true))
-                        return false;
-                }
-
-                if (lineViewModel.SelectedDeviceLineType == DeviceLineType.JetDevice)
-                {
-                    foreach (var deviceViewModel in lineViewModel.DeviceViewModels)
+                    case LineType.None:
+                        break;
+                    case LineType.MasterDeviceLineType:
                     {
-                        if (!await CloseDeviceValveAsync(new StandSettingsValveModel
-                            {
-                                Number = 0,
-                                Address = deviceViewModel.Address,
-                                RegisterAddress = deviceViewModel.RegisterAddress,
-                                BitNumber = deviceViewModel.BitNumber,
-                                StateOnAddress = deviceViewModel.StateAddress,
-                                StateOnRegisterAddress = deviceViewModel.StateRegisterAddress,
-                                StateOnBitNumber = deviceViewModel.StateBitNumber,
-                                IsControlState = deviceViewModel.IsControlState,
-                                LineNumber = (int)_selectedLineIndex
-                            }, true))
-                            return false;
+                        if (lineViewModel.IsAfterDeviceValve)
+                            if (!await CloseValveAsync(lineViewModel.AfterDeviceValveViewModel, true))
+                                return false;
+                        
+                        if (lineViewModel.IsStartValveMasterDevice)
+                            if (!await CloseValveAsync(lineViewModel.StartValveMasterDeviceViewModel, true))
+                                return false;
+
+                        if (lineViewModel.IsEndValveMasterDevice)
+                            if (!await CloseValveAsync(lineViewModel.EndValveMasterDeviceViewModel, true))
+                                return false;
+                        
+                        if (lineViewModel.IsStartCommonValve)
+                            if (!await CloseValveAsync(lineViewModel.StartCommonValveViewModel, true))
+                                return false;
+                        
+                        if (lineViewModel.IsEndCommonValve)
+                            if (!await CloseValveAsync(lineViewModel.EndCommonValveViewModel, true))
+                                return false;
+
+                        foreach (var masterDeviceViewModel in lineViewModel.MasterDeviceViewModels)
+                        {
+                            if (!await CloseValveAsync(masterDeviceViewModel.PressureSensorValveViewModel, true))
+                                return false;
+                            
+                            if (!await CloseValveAsync(masterDeviceViewModel.MasterDeviceValveViewModel, true))
+                                return false;
+                        }
+                        
+                        foreach (var fanViewModel in lineViewModel.FanViewModels)
+                        {
+                            if (!await CloseValveAsync(fanViewModel.FanValveViewModel, true))
+                                return false;
+                        }
                     }
+                        break;
+                    case LineType.NozzleLineType:
+                    {
+                        
+                    }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
+                
             }
 
             foreach (var standDevice in _standDevices.Where(d => d.NeedUpdateState))

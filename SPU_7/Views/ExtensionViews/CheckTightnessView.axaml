@@ -153,26 +153,46 @@
                     
                     <TextBox Grid.Row="4"
                              Grid.Column="1"
-                             Text="{Binding TargetFlow}"
+                             Text="{Binding TargetFrequency}"
                              Margin="5"
                              UseFloatingWatermark="True"
                              Watermark="Введите значение"
-                             assists:TextFieldAssist.Label="Требуемый расход, м³/ч" />
+                             assists:TextFieldAssist.Label="Частота ПЧВ, гЦ" />
                     
                     <ComboBox Grid.Row="7"
                               Grid.Column="0"
-                              ItemsSource="{Binding LineNumbers}"
-                              SelectedItem="{Binding SelectedLineNumber}"
+                              ItemsSource="{Binding LineViewModels}"
+                              SelectedItem="{Binding SelectedLineViewModel}"
                               Margin="5"
-                              assists:ComboBoxAssist.Label="Номер линии"
-                              Theme="{StaticResource MaterialOutlineComboBox}" />
+                              assists:ComboBoxAssist.Label="Линия"
+                              Theme="{StaticResource MaterialOutlineComboBox}" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="5"
+                                               Text="{Binding LineName}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <ComboBox Grid.Row="7"
                               Grid.Column="1"
-                              ItemsSource="{Binding MasterDeviceNames}"
-                              SelectedItem="{Binding SelectedDeviceName}"
+                              ItemsSource="{Binding FanViewModels}"
+                              SelectedItem="{Binding SelectedFanViewModel}"
                               Margin="5"
-                              assists:ComboBoxAssist.Label="Название устройства"
-                              Theme="{StaticResource MaterialOutlineComboBox}" />
+                              assists:ComboBoxAssist.Label="Вентилятор"
+                              Theme="{StaticResource MaterialOutlineComboBox}" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="5"
+                                               Text="{Binding MinimumFlow, StringFormat='от {0} м³/ч '}"/>
+                                    <TextBlock Margin="5"
+                                               Text="{Binding MaximumFlow, StringFormat='до {0} м³/ч '}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </Grid>
             </controls:Card>
 

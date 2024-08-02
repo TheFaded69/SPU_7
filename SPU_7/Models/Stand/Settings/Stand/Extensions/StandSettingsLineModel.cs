@@ -5,6 +5,8 @@ namespace SPU_7.Models.Stand.Settings.Stand.Extensions;
 
 public class StandSettingsLineModel
 {
+    public string LineName { get; set; }
+    
     /// <summary>
     /// Настройки поверяемых устройств
     /// </summary>

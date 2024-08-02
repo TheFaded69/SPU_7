@@ -73,6 +73,13 @@ public class StandSettingsLineViewModel : ViewModelBase
     private StandSettingsValveViewModel _tightnessValveViewModel;
     private bool _isDropValveEnable;
     private StandSettingsValveViewModel _dropValveViewModel;
+    private string _lineName;
+
+    public string LineName
+    {
+        get => _lineName;
+        set => SetProperty(ref _lineName, value);
+    }
 
     public int LineNumber
     {

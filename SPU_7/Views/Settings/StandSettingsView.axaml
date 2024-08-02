@@ -1000,6 +1000,12 @@
 
                                                             <DockPanel DockPanel.Dock="Top"
                                                                        LastChildFill="False">
+                                                                <TextBox Margin="5"
+                                                                         Text="{Binding LineName}"
+                                                                         assists:TextFieldAssist.Label="Название линии"
+                                                                         UseFloatingWatermark="True"
+                                                                         MinWidth="300"
+                                                                         Watermark="Введите название"/>
                                                                 <ComboBox DockPanel.Dock="Left"
                                                                           Width="300"
                                                                           Margin="5"
