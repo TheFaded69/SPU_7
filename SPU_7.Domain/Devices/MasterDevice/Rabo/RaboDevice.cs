@@ -58,10 +58,20 @@ public class RaboDevice : IRaboDevice
     public async Task<float?> ReadTemperatureAsync()
     {
 #if DEBUGGUI
-        return Pressure = (float?)new Random().NextDouble() * 1000;
+        return Temperature = (float?)new Random().NextDouble() * 1000;
 #else
         return Temperature = await _temperatureSensor.ReadTemperatureAsync(true);
 #endif
+    }
+    
+    public float? GetPressureDifference()
+    {
+        return Pressure;
+    }
+
+    public float? GetTemperature()
+    {
+        return Temperature;
     }
     
     #region Observable

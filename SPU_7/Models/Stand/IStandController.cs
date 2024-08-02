@@ -317,5 +317,7 @@ namespace SPU_7.Models.Stand
         Task<bool> TurnOnPulseCountMeterControlRegister();
         Task<bool> ResetPulseCountMeterAsync();
         Task<float?> ReadPulseCountFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int pulseCountMeterModuleChannelNumber);
+        float? GetPressureDifference(int lineIndex);
+        float? GetTemperature(int selectedLineIndex, int indexOfMasterDevice);
     }
 }

@@ -163,6 +163,7 @@
                               Grid.Column="0"
                               ItemsSource="{Binding LineViewModels}"
                               SelectedItem="{Binding SelectedLineViewModel}"
+                              SelectedIndex="{Binding SelectedLineIndex}"
                               Margin="5"
                               assists:ComboBoxAssist.Label="Линия"
                               Theme="{StaticResource MaterialOutlineComboBox}" >
@@ -179,6 +180,7 @@
                               Grid.Column="1"
                               ItemsSource="{Binding FanViewModels}"
                               SelectedItem="{Binding SelectedFanViewModel}"
+                              SelectedIndex="{Binding SelectedFanIndex}"
                               Margin="5"
                               assists:ComboBoxAssist.Label="Вентилятор"
                               Theme="{StaticResource MaterialOutlineComboBox}" >

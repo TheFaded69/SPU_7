@@ -63,6 +63,16 @@ public class RGTDevice : IRGTDevice
 #endif
     }
     
+    public float? GetPressureDifference()
+    {
+        return Pressure;
+    }
+
+    public float? GetTemperature()
+    {
+        return Temperature;
+    }
+    
     #region Observable
     
     private List<IPressureSensorObserver> _pressureSensorObservers = [];

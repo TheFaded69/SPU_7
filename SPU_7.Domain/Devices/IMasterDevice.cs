@@ -19,4 +19,6 @@ public interface IMasterDevice : IPressureSensorObservable, ITemperatureSensorOb
     Task<float?> ReadTemperatureAsync();
 
     //Task<float?> ReadCurrentFlow();
+    float? GetPressureDifference();
+    float? GetTemperature();
 }
