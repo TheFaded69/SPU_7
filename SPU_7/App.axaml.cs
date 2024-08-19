@@ -118,7 +118,7 @@ public partial class App : PrismApplication
             containerRegistry.RegisterDialog<PicturePreviewView, PicturePreviewViewModel>();
             containerRegistry.RegisterDialog<PulseCountMeterModuleTestView, PulseCountMeterModuleTestViewModel>();
             containerRegistry.RegisterDialog<CheckTightnessView, CheckTightnessViewModel>();
-            
+            containerRegistry.RegisterDialog<CheckAverageQuadraticDifferenceView, CheckAverageQuadraticDifferenceViewModel>();
         }
 
         protected override void OnInitialized()

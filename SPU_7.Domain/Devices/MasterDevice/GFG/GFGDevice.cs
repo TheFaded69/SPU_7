@@ -79,7 +79,7 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
     public async Task<float?> ReadFlowAsync(IPulseCountMeterModule? pulseCountMeterModule,
         int? pulseCountMeterModuleChannelNumber, float pulseWeight)
     {
-        var currentFrequency = await pulseCountMeterModule.ReadCurrentFrequencyAsync((ChannelNumber)pulseCountMeterModuleChannelNumber);
+        var currentFrequency = await pulseCountMeterModule.ReadAverageFrequencyAsync((ChannelNumber)pulseCountMeterModuleChannelNumber);
         
         return Flow = currentFrequency * 3600 * pulseWeight;
     }

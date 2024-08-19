@@ -330,5 +330,6 @@ namespace SPU_7.Models.Stand
         Task<float?> ReadPulseCountFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int pulseCountMeterModuleChannelNumber);
         float? GetPressureDifference(int lineIndex);
         float? GetTemperature(int selectedLineIndex, int indexOfMasterDevice);
+        Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel, int selectedNeedleValue);
     }
 }

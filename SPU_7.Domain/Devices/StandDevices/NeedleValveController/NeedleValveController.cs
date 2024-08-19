@@ -11,6 +11,7 @@ public class NeedleValveController : ModbusUnitProcessor<NeedleValveControllerRe
         int moduleAddress) : base(modbusProcessor, registerMap)
     {
         ModuleAddress = (byte)moduleAddress;
+        ModuleAddressInt = moduleAddress;
     }
 
 
@@ -27,4 +28,7 @@ public class NeedleValveController : ModbusUnitProcessor<NeedleValveControllerRe
 
     public async Task<uint?> ReadCurrentParameterAsync() =>
         (uint?)await ReadRegisterAsync(NeedleValveControllerRegisterMap.CurrentParameterRegister);
+
+    public string PortName { get; set; }
+    public int ModuleAddressInt { get; set; }
 }

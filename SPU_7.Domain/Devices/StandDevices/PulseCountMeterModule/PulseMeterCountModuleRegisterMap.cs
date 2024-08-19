@@ -232,7 +232,7 @@ public enum PulseMeterCountModuleRegisterMap
     /// Регистр выбора профиля настроек
     /// </summary>
     [RegisterSetup(0x0056,
-        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,
@@ -243,7 +243,7 @@ public enum PulseMeterCountModuleRegisterMap
     /// Регистр выбора профиля настроек
     /// </summary>
     [RegisterSetup(0x0058,
-        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,
@@ -254,7 +254,7 @@ public enum PulseMeterCountModuleRegisterMap
     /// Регистр выбора профиля настроек
     /// </summary>
     [RegisterSetup(0x005A,
-        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,
@@ -265,7 +265,7 @@ public enum PulseMeterCountModuleRegisterMap
     /// Регистр выбора профиля настроек
     /// </summary>
     [RegisterSetup(0x005C,
-        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,
@@ -276,7 +276,7 @@ public enum PulseMeterCountModuleRegisterMap
     /// Регистр выбора профиля настроек
     /// </summary>
     [RegisterSetup(0x005E,
-        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,
@@ -287,7 +287,7 @@ public enum PulseMeterCountModuleRegisterMap
     /// Регистр выбора профиля настроек
     /// </summary>
     [RegisterSetup(0x0060,
-        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,
@@ -298,7 +298,7 @@ public enum PulseMeterCountModuleRegisterMap
     /// Регистр выбора профиля настроек
     /// </summary>
     [RegisterSetup(0x0062,
-        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,
@@ -309,7 +309,7 @@ public enum PulseMeterCountModuleRegisterMap
     /// Регистр выбора профиля настроек
     /// </summary>
     [RegisterSetup(0x0064,
-        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.Float,

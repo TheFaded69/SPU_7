@@ -61,12 +61,12 @@ namespace SPU_7.Models.Stand
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
         private List<INeedleValveController> _needleValveControllers = [];
         private PulseCountMeterStarter _pulseCountMeterStarter;
-        
+
         //private IPressureSensor _pressureSensor;
         private ITemperatureHumiditySensor _temperatureHumiditySensor;
-        
+
         private ElmetroDigitalDevice _elmetroDigitalDevice;
-        
+
         private ObservableCollection<LogMessage> _portLogMessages;
 
         private CancellationTokenSource _requestTaskCancellationTokenSource;
@@ -84,8 +84,9 @@ namespace SPU_7.Models.Stand
         {
             foreach (var portViewModel in _settingsService.StandSettingsModel.PortViewModels)
             {
-                if (portViewModel.PortName == _settingsService.StandSettingsModel.SelectedPressureSensorPortName) continue;
-                
+                if (portViewModel.PortName ==
+                    _settingsService.StandSettingsModel.SelectedPressureSensorPortName) continue;
+
                 var modbusProcessor = new ModbusProcessor(new RequestSerializer(), new ResponseDeserializer())
                 {
                     Communicator = new SerialCommunicator(),
@@ -110,7 +111,7 @@ namespace SPU_7.Models.Stand
                     IsPoolingNeed = false,
                     PoolingPeriod = 5000
                 };
-                
+
                 modbusProcessor.Start();
                 _modbusProcessors.Add(modbusProcessor);
             }
@@ -197,15 +198,19 @@ namespace SPU_7.Models.Stand
                     if (fanViewModel.NeedleValveViewModel != null)
                     {
                         _needleValveControllers.Add(new NeedleValveController(_modbusProcessors.First(modbus =>
-                            modbus.PortName == fanViewModel.NeedleValveViewModel.SelectedComPort), new RegisterMapEnum<NeedleValveControllerRegisterMap>(), 
-                            fanViewModel.NeedleValveViewModel.ModuleAddress));
+                                modbus.PortName == fanViewModel.NeedleValveViewModel.SelectedComPort),
+                            new RegisterMapEnum<NeedleValveControllerRegisterMap>(),
+                            fanViewModel.NeedleValveViewModel.ModuleAddress)
+                        {
+                            PortName = fanViewModel.NeedleValveViewModel.SelectedComPort
+                        });
                     }
                 }
             }
 
-            
-            
-            foreach (var pulseCountMeterModuleViewModel in _settingsService.StandSettingsModel.PulseCountMeterModuleViewModels)
+
+            foreach (var pulseCountMeterModuleViewModel in _settingsService.StandSettingsModel
+                         .PulseCountMeterModuleViewModels)
             {
                 _pulseCountMeterModules.Add(new PulseCountMeterModule(_modbusProcessors.First(modbus =>
                         modbus.PortName == pulseCountMeterModuleViewModel.PortName),
@@ -219,8 +224,8 @@ namespace SPU_7.Models.Stand
             _pulseCountMeterStarter = new PulseCountMeterStarter(_modbusProcessors.First(mb => mb.PortName ==
                     _settingsService.StandSettingsModel.PulseCountMeterModuleViewModels.First().PortName),
                 new RegisterMapEnum<PulseCountMeterStarterRegisterMap>());
-            
-            
+
+
             foreach (var solenoidValveViewModel in _settingsService.StandSettingsModel.SolenoidValveViewModels)
             {
                 if (solenoidValveViewModel.Address != null &&
@@ -247,7 +252,7 @@ namespace SPU_7.Models.Stand
             {
                 PortName = _settingsService.StandSettingsModel.SelectedPressureSensorPortName
             }));
-            
+
             _temperatureHumiditySensor = new TemperatureHumiditySensor(
                 _modbusProcessors.First(
                     mb => mb.PortName == _settingsService.StandSettingsModel.SelectedTHMeterPortName),
@@ -310,10 +315,11 @@ namespace SPU_7.Models.Stand
 
 
 #else
-                   
+
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        PressureAtmosphere = await _elmetroDigitalDevice.GetPressureAsync(PressureType.AbsolutePressure);
-                   
+                        PressureAtmosphere =
+                            await _elmetroDigitalDevice.GetPressureAsync(PressureType.AbsolutePressure);
+
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                         Temperature = _temperatureHumiditySensor == null
                             ? null
@@ -333,15 +339,21 @@ namespace SPU_7.Models.Stand
                             await device.ReadTemperatureAsync();
                         }
 
-                        for (var masterDeviceIndex = 0; masterDeviceIndex < standLine.MasterDevices.Count; masterDeviceIndex++)
+                        for (var masterDeviceIndex = 0;
+                             masterDeviceIndex < standLine.MasterDevices.Count;
+                             masterDeviceIndex++)
                         {
                             var masterDevice = standLine.MasterDevices[masterDeviceIndex];
                             await masterDevice.ReadTemperatureAsync();
                             await masterDevice.ReadPressureAsync();
-                            await masterDevice.ReadFlowAsync(_pulseCountMeterModules.FirstOrDefault(pcm => pcm.PulseCountMeterModuleNumber == 
-                                    _settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[masterDeviceIndex].PulseCountMeterModuleNumber),
-                                _settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[masterDeviceIndex].PulseCountMeterModuleChannelNumber,
-                                _settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[masterDeviceIndex].PulseWeight);
+                            await masterDevice.ReadFlowAsync(_pulseCountMeterModules.FirstOrDefault(pcm =>
+                                    pcm.PulseCountMeterModuleNumber ==
+                                    _settingsService.StandSettingsModel.LineViewModels[lineIndex]
+                                        .MasterDeviceViewModels[masterDeviceIndex].PulseCountMeterModuleNumber),
+                                _settingsService.StandSettingsModel.LineViewModels[lineIndex]
+                                    .MasterDeviceViewModels[masterDeviceIndex].PulseCountMeterModuleChannelNumber,
+                                _settingsService.StandSettingsModel.LineViewModels[lineIndex]
+                                    .MasterDeviceViewModels[masterDeviceIndex].PulseWeight);
                         }
                     }
 #endif
@@ -481,6 +493,8 @@ namespace SPU_7.Models.Stand
             foreach (var device in _standDevices)
             {
                 if (!await device.SetWorkRegisterAsync()) return false;
+
+                await Task.Delay(200);
             }
 
             return true;
@@ -569,7 +583,7 @@ namespace SPU_7.Models.Stand
                 return true;
             }
 
-            if (!standSettingsValveModel.IsControlState)
+            if (standSettingsValveModel.IsControlState)
             {
                 NotifyObserverByDataPair(
                     new DataPair(new StandInfoData(standSettingsValveModel.Number - 1, StateType.Open),
@@ -578,7 +592,7 @@ namespace SPU_7.Models.Stand
             }
 
             var isWork = true;
-            var count = 60;
+            var count = 3;
 
             while (isWork && count > 0)
             {
@@ -677,7 +691,7 @@ namespace SPU_7.Models.Stand
                 return true;
             }
 
-            if (!standSettingsValveModel.IsControlState)
+            if (standSettingsValveModel.IsControlState)
             {
                 NotifyObserverByDataPair(new DataPair(
                     new StandInfoData(standSettingsValveModel.Number - 1, StateType.Close),
@@ -686,7 +700,7 @@ namespace SPU_7.Models.Stand
             }
 
             var isWork = true;
-            var count = 60;
+            var count = 3;
 
             while (isWork && count > 0)
             {
@@ -935,28 +949,30 @@ namespace SPU_7.Models.Stand
             return coefficientList;
         }
 
-        public async Task<CommonCommandStatus?> ReadCommonCommandStatusPulseCountMeterAsync(int? pulseCountMeterModuleIndex)
+        public async Task<CommonCommandStatus?> ReadCommonCommandStatusPulseCountMeterAsync(
+            int? pulseCountMeterModuleIndex)
         {
             if (pulseCountMeterModuleIndex == null) return null;
-            
+
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].GetCommonCommandStatusAsync();
         }
 
         public async Task<bool> StartPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex)
         {
             if (pulseCountMeterModuleIndex == null) return false;
-            
+
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].StartMeasurePulseCountAsync();
         }
 
         public async Task<bool> StopPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex)
         {
             if (pulseCountMeterModuleIndex == null) return false;
-            
+
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].StopMeasurePulseCountAsync();
         }
 
-        public async Task<float?> ReadPulsePeriodFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber)
+        public async Task<float?> ReadPulsePeriodFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex,
+            int? channelNumber)
         {
             if (pulseCountMeterModuleIndex == null || channelNumber == null) return null;
 
@@ -972,10 +988,11 @@ namespace SPU_7.Models.Stand
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulsePeriodAsync(channel);
         }
 
-        public async Task<float?> ReadPulseDurationFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber)
+        public async Task<float?> ReadPulseDurationFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex,
+            int? channelNumber)
         {
             if (pulseCountMeterModuleIndex == null || channelNumber == null) return null;
-            
+
             var channel = channelNumber switch
             {
                 1 => ChannelNumber.First,
@@ -988,8 +1005,11 @@ namespace SPU_7.Models.Stand
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulseDurationAsync(channel);
         }
 
-        public async Task<bool> SendStartPulseCountMeterCommandAsync() => await _pulseCountMeterStarter.SendStartCommand();
-        public async Task<bool> SetPulseCountMeterModuleChannelSettingsAsync(int? pulseCountMeterModuleIndex, int channelNumber)
+        public async Task<bool> SendStartPulseCountMeterCommandAsync() =>
+            await _pulseCountMeterStarter.SendStartCommand();
+
+        public async Task<bool> SetPulseCountMeterModuleChannelSettingsAsync(int? pulseCountMeterModuleIndex,
+            int channelNumber)
         {
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex]
                 .SetPulseCountMeterModuleChannelSettingsAsync((ChannelNumber)channelNumber);
@@ -998,9 +1018,10 @@ namespace SPU_7.Models.Stand
         public async Task<bool> TurnOnPulseCountMeterControlRegister()
         {
             foreach (var pulseCountMeterModule in _pulseCountMeterModules)
-            { 
+            {
                 if (!await pulseCountMeterModule.TurnOnControlBitControlRegisterAsync()) return false;
             }
+
             return true;
         }
 
@@ -1014,10 +1035,11 @@ namespace SPU_7.Models.Stand
             return true;
         }
 
-        public async Task<float?> ReadPulseCountFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int pulseCountMeterModuleChannelNumber)
+        public async Task<float?> ReadPulseCountFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex,
+            int pulseCountMeterModuleChannelNumber)
         {
             if (pulseCountMeterModuleIndex == null) return null;
-            
+
             var channel = pulseCountMeterModuleChannelNumber switch
             {
                 1 => ChannelNumber.First,
@@ -1038,6 +1060,31 @@ namespace SPU_7.Models.Stand
         public float? GetTemperature(int selectedLineIndex, int indexOfMasterDevice)
         {
             return _lines[selectedLineIndex].MasterDevices[indexOfMasterDevice].GetTemperature();
+        }
+
+        public async Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel,
+            int selectedNeedleValue)
+        {
+            var res = await _needleValveControllers.First(ctrl => ctrl.PortName == standSettingsValveModel.SelectedComPort
+                                                               && ctrl.ModuleAddressInt ==
+                                                               (byte)standSettingsValveModel.ModuleAddress)
+                       .SetParameterAsync((uint)selectedNeedleValue)
+                   && await _needleValveControllers.First(ctrl =>
+                           ctrl.PortName == standSettingsValveModel.SelectedComPort
+                           && ctrl.ModuleAddressInt == (byte)standSettingsValveModel.ModuleAddress)
+                       .SetCommandAsync(selectedNeedleValue == 0
+                           ? NeedleValveControllerCommand.ReturnToZero
+                           : NeedleValveControllerCommand.RunToParameter);
+
+            /*while (await _needleValveControllers.First(ctrl => ctrl.PortName == standSettingsValveModel.SelectedComPort
+                                                               && ctrl.ModuleAddressInt ==
+                                                               (byte)standSettingsValveModel.ModuleAddress)
+                       .ReadStatusAsync() != NeedleValveControllerStatus.Done)
+            {
+                await Task.Delay(1000);
+            }*/
+
+            return res;
         }
 
         private async Task<(float?, float?)> ReadPulseCoefficientAsync(
@@ -1390,7 +1437,8 @@ namespace SPU_7.Models.Stand
             }
         }
 
-        public void RegisterTemperatureSensorObserver(ITemperatureSensorObserver observer, DevicePurpose devicePurpose, int deviceIndex, int lineIndex)
+        public void RegisterTemperatureSensorObserver(ITemperatureSensorObserver observer, DevicePurpose devicePurpose,
+            int deviceIndex, int lineIndex)
         {
             switch (devicePurpose)
             {
@@ -1434,7 +1482,7 @@ namespace SPU_7.Models.Stand
 
         public async Task EmergencyPowerOffAsync()
         {
-            await OpenSolenoidValveAsync(_settingsService.StandSettingsModel.SolenoidValveViewModels
+            /*await OpenSolenoidValveAsync(_settingsService.StandSettingsModel.SolenoidValveViewModels
                 .FirstOrDefault(svm => svm.SolenoidValveType == SolenoidValveType.NormalClose));
             await CloseAllNozzleAsync();
             PidDisable();
@@ -1445,7 +1493,7 @@ namespace SPU_7.Models.Stand
             await OpenSolenoidValveAsync(_settingsService.StandSettingsModel.SolenoidValveViewModels
                 .FirstOrDefault(svm => svm.SolenoidValveType == SolenoidValveType.NormalOpen));
             await CloseSolenoidValveAsync(_settingsService.StandSettingsModel.SolenoidValveViewModels
-                .FirstOrDefault(svm => svm.SolenoidValveType == SolenoidValveType.NormalClose));
+                .FirstOrDefault(svm => svm.SolenoidValveType == SolenoidValveType.NormalClose));*/
         }
 
         public async Task<bool> ResetToZeroAsync(int deviceNumber) =>
@@ -1465,7 +1513,7 @@ namespace SPU_7.Models.Stand
                         if (lineViewModel.IsAfterDeviceValve)
                             if (!await CloseValveAsync(lineViewModel.AfterDeviceValveViewModel, true))
                                 return false;
-                        
+
                         if (lineViewModel.IsStartValveMasterDevice)
                             if (!await CloseValveAsync(lineViewModel.StartValveMasterDeviceViewModel, true))
                                 return false;
@@ -1473,11 +1521,11 @@ namespace SPU_7.Models.Stand
                         if (lineViewModel.IsEndValveMasterDevice)
                             if (!await CloseValveAsync(lineViewModel.EndValveMasterDeviceViewModel, true))
                                 return false;
-                        
+
                         if (lineViewModel.IsStartCommonValve)
                             if (!await CloseValveAsync(lineViewModel.StartCommonValveViewModel, true))
                                 return false;
-                        
+
                         if (lineViewModel.IsEndCommonValve)
                             if (!await CloseValveAsync(lineViewModel.EndCommonValveViewModel, true))
                                 return false;
@@ -1486,11 +1534,11 @@ namespace SPU_7.Models.Stand
                         {
                             if (!await CloseValveAsync(masterDeviceViewModel.PressureSensorValveViewModel, true))
                                 return false;
-                            
+
                             if (!await CloseValveAsync(masterDeviceViewModel.MasterDeviceValveViewModel, true))
                                 return false;
                         }
-                        
+
                         foreach (var fanViewModel in lineViewModel.FanViewModels)
                         {
                             if (!await CloseValveAsync(fanViewModel.FanValveViewModel, true))
@@ -1500,13 +1548,11 @@ namespace SPU_7.Models.Stand
                         break;
                     case LineType.NozzleLineType:
                     {
-                        
                     }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                
             }
 
             foreach (var standDevice in _standDevices.Where(d => d.NeedUpdateState))
@@ -1526,7 +1572,6 @@ namespace SPU_7.Models.Stand
         #endregion
 
         #region Вакуумный насос
-        
 
         public async Task<bool> DisableVacuumCreator()
         {
@@ -1723,7 +1768,7 @@ namespace SPU_7.Models.Stand
                 var modbusProcessor = _modbusProcessors[i];
                 modbusProcessor.ShutDown();
             }
-            
+
             _elmetroDigitalDevice?.CommunicationChannel?.Close();
         }
 

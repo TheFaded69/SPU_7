@@ -918,7 +918,7 @@
                                                                     VerticalAlignment="Center"
                                                                     HorizontalAlignment="Center">
                                                             <TextBlock Margin="5,5,0,5"
-                                                                       Text="{Binding SelectedNeedleValue}"/>
+                                                                       Text="{Binding NeedleValveItemViewModel.SelectedNeedleValue}"/>
                                                             <TextBlock Margin="0,5,5,5"
                                                                        Text="%"/>
                                                         </StackPanel>

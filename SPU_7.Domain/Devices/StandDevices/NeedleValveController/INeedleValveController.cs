@@ -9,4 +9,7 @@ public interface INeedleValveController
     Task<bool> SetParameterAsync(uint value);
 
     Task<uint?> ReadCurrentParameterAsync();
+    string PortName { get; set; }
+    
+    int ModuleAddressInt { get; set; }
 }

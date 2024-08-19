@@ -49,7 +49,7 @@ public class NeedleValveItemViewModel : ViewModelBase
 #if DEBUGGUI
                 await Task.Delay(5000);
 #else
-                //await _standController.CloseValveAsync(StandSettingsValveModel);
+                await _standController.UseNeedleValveAsync(_standSettingsValveModel, 0);
 #endif
                 StateType = StateType.Close;
             }
@@ -60,7 +60,7 @@ public class NeedleValveItemViewModel : ViewModelBase
 #if DEBUGGUI
                 await Task.Delay(5000);
 #else
-                //await _standController.OpenValveAsync(StandSettingsValveModel);
+                await _standController.UseNeedleValveAsync(_standSettingsValveModel, SelectedNeedleValue);
 #endif
                 StateType = StateType.Open;
             }

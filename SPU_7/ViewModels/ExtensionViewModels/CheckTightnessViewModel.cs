@@ -72,12 +72,12 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
     private string _selectedDeviceName;
     private bool _isDeviceVisible;
     private bool _isChecking;
-    private double? _volumeMinimum = 0.01626;
-    private double? _insideVolumeOfStand = 0.023282745;
-    private double? _goodRange = 0.3;
+    private double? _volumeMinimum = 0.04;
+    private double? _insideVolumeOfStand = 0.00553;
+    private double? _goodRange = 0.33;
     private float? _startPressureDifference;
     private float? _endPressureDifference;
-    private float? _pressureDifference;
+    private float? _realFlowLeak;
     private string _nowActionString;
     private float? _metrologyCalculateForTightness;
     private float? _startTemperature;
@@ -184,21 +184,17 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
         set => SetProperty(ref _flowLeak, value);
     }
 
-    public float? PressureDifference
+    public float? RealFlowLeak
     {
-        get => _pressureDifference;
-        set => SetProperty(ref _pressureDifference, value);
+        get => _realFlowLeak;
+        set => SetProperty(ref _realFlowLeak, value);
     }
 
-    public float? MetrologyCalculateForTightness
-    {
-        get => _metrologyCalculateForTightness;
-        set => SetProperty(ref _metrologyCalculateForTightness, value);
-    }
+
 
     public ObservableCollection<double> NozzleValues { get; set; }
 
-    public double SelectedNozzleValue
+    /*public double SelectedNozzleValue
     {
         get => _selectedNozzleValue;
         set
@@ -208,13 +204,13 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                 _standSettingsService.StandSettingsModel.NozzleViewModels.FirstOrDefault(
                     bvm => bvm.NozzleValue == value);
         }
-    }
+    }*/
 
-    public StandSettingsLineModel SelectedStandSettingsLineModel { get; set; }
+    /*public StandSettingsLineModel SelectedStandSettingsLineModel { get; set; }
 
     public StandSettingsMasterDeviceModel SelectedStandSettingsMasterDeviceModel { get; set; }
 
-    public StandSettingsNozzleModel SelectedStandSettingsNozzleModel { get; set; }
+    public StandSettingsNozzleModel SelectedStandSettingsNozzleModel { get; set; }*/
 
     public bool NeedCheckLine
     {
@@ -299,13 +295,13 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
     {
         try
         {
-            switch (SelectedStandSettingsLineModel.SelectedLineType)
+            switch (SelectedLineViewModel.SelectedLineType)
             {
                 case LineType.None:
                     break;
                 case LineType.MasterDeviceLineType:
                 {
-                    NowActionString = $"Подготовка стенда к проверке герметичности";
+                    /*NowActionString = $"Подготовка стенда к проверке герметичности";
 
                     _timerService.TimeSeconds = 180;
                     _timerService.OperationName = "Проверка герметичности";
@@ -376,7 +372,7 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                     {
                         if (!await _standController.UpdateAllDevice())
                         {
-                            _logger.Logging(new LogMessage("Не удалось установить рабочий режим установки",
+                            _logger.Logging(new LogMessage("Не удалось открыть краны для проверки герметичности",
                                 LogLevel.Error));
                             return;
                         }
@@ -386,14 +382,28 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                         return;
                     }
 
-                    await Task.Delay(30000);
+                    await Task.Delay(30000);*/
 
                     if (!operationCancellationTokenSource.IsCancellationRequested)
                     {
                         if (!await _standController.SetRegulatorFrequencyAsync((int)SelectedFanIndex,
                                 (float)TargetFrequency))
                         {
-                            _logger.Logging(new LogMessage("Не удалось установить рабочий режим установки",
+                            _logger.Logging(new LogMessage("Не удалось установить частоту ПЧВ",
+                                LogLevel.Error));
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                    if (!operationCancellationTokenSource.IsCancellationRequested)
+                    {
+                        if (!await _standController.EnableFrequencyRegulatorAsync((int)SelectedFanIndex))
+                        {
+                            _logger.Logging(new LogMessage("Не удалось запустить ПЧВ",
                                 LogLevel.Error));
                             return;
                         }
@@ -410,7 +420,8 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                     _timerService.Message = "Ожидание перепада давления";
                     _timerService.InfoTimerEnable();
 
-                    while (_standController.GetPressureDifference((int)SelectedLineIndex) < 0.8 * PressureDifferenceMinimum)
+                    while (_standController.GetPressureDifference((int)SelectedLineIndex) <
+                           0.8 * PressureDifferenceMinimum * 1000)
                     {
                         if (operationCancellationTokenSource.IsCancellationRequested)
                         {
@@ -435,9 +446,12 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                         return;
                     }
 
+                    await Task.Delay(40000);
+
                     if (!operationCancellationTokenSource.IsCancellationRequested)
                     {
-                        if (!await _standController.SetRegulatorFrequencyAsync((int)SelectedFanIndex, 0))
+                        if (!await _standController.SetRegulatorFrequencyAsync((int)SelectedFanIndex, 0) &&
+                            !await _standController.DisableFrequencyRegulatorAsync((int)SelectedFanIndex))
                         {
                             _logger.Logging(new LogMessage("Не удалось установить рабочий режим установки",
                                 LogLevel.Error));
@@ -475,7 +489,7 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                             .MasterDeviceViewModels
                             .MinBy(md => md.MaximumFlow)));
 
-                    _logger.Logging(new LogMessage($"Начальное давление перепада - {startPressureDifference * 1000} Па",
+                    _logger.Logging(new LogMessage($"Начальное давление перепада - {startPressureDifference} Па",
                         LogLevel.Info));
 
                     StartPressureDifference = startPressureDifference;
@@ -505,26 +519,26 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                             .MasterDeviceViewModels
                             .MinBy(md => md.MaximumFlow)));
 
-                    _logger.Logging(new LogMessage($"Конечное давление перепада - {endPressureDifference * 1000} Па",
+                    _logger.Logging(new LogMessage($"Конечное давление перепада - {endPressureDifference} Па",
                         LogLevel.Info));
 
                     EndPressureDifference = endPressureDifference;
                     EndTemperature = endTemperature;
 
                     _logger.Logging(new LogMessage(
-                        $"Разница давления перепада - {(startPressureDifference - endPressureDifference) * 1000} Па",
+                        $"Разница давления перепада - {(startPressureDifference - endPressureDifference)} Па",
                         LogLevel.Info));
                     _logger.Logging(new LogMessage(
-                        $"Разница температуры - {(startTemperature - endTemperature) * 1000} Па",
+                        $"Разница температуры - {(startTemperature - endTemperature)} °С",
                         LogLevel.Info));
 
-                    var isCheckTightnessGood =
-                        InsideVolumeOfStand / TestTime * (endPressureDifference / startPressureDifference *
-                            (startTemperature + 273.15) / (endTemperature + 273.15) - 1) * 60
-                        <= VolumeMinimum * GoodRange * 0.01 * 0.125;
+                    FlowLeak = (float?)(VolumeMinimum * GoodRange * 0.01 * 0.125);
+                    RealFlowLeak = (float?)(InsideVolumeOfStand / TestTime * (endPressureDifference /
+                        startPressureDifference *
+                        (startTemperature + 273.15) / (endTemperature + 273.15) - 1) * 60);
 
-                    PressureDifference = Math.Abs((float)(StartPressureDifference - EndPressureDifference));
-
+                    var isCheckTightnessGood = RealFlowLeak <= FlowLeak;
+                    
                     NowActionString = isCheckTightnessGood ? "Установка герметична" : "Установка не герметична!!!";
                 }
                     break;

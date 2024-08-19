@@ -61,11 +61,11 @@
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
                                Margin="5"
-                               Text="{Binding StartPressureDifference, StringFormat='Начальное значение перепада - {0} кПа'}"/>
+                               Text="{Binding StartPressureDifference, StringFormat='Начальное значение перепада - {0} Па'}"/>
                     <TextBlock Grid.Row="1"
                                Grid.Column="1"
                                Margin="5"
-                               Text="{Binding EndPressureDifference, StringFormat='Конечное значение перепада - {0} кПа'}"/>
+                               Text="{Binding EndPressureDifference, StringFormat='Конечное значение перепада - {0} Па'}"/>
                     <TextBlock Grid.Row="2"
                                Grid.Column="0"
                                Margin="5"
@@ -77,17 +77,13 @@
                     <TextBlock Grid.Row="3"
                                Grid.Column="0"
                                Margin="5"
-                               Text="{Binding FlowLeak, StringFormat='Объем утечки - {0} м³/ч'}"/>
+                               Text="{Binding FlowLeak, StringFormat='Допускаемый объем утечки - {0} м³/ч'}"/>
                     <TextBlock Grid.Row="4"
                                Grid.Column="0"
                                Grid.ColumnSpan="2"
                                Margin="5"
-                               Text="{Binding PressureDifference, StringFormat='Результат проверки - {0} кПа'}"/>
-                    <TextBlock Grid.Row="5"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               Margin="5"
-                               Text="{Binding MetrologyCalculateForTightness, StringFormat='Условие герметичности - {0} кПа'}"/>
+                               Text="{Binding RealFlowLeak, StringFormat='Объем утечки - {0}  м³/ч'}"/>
+
                 </Grid>
             </controls:Card>
             <controls:Card Margin="0,5,0,5">
