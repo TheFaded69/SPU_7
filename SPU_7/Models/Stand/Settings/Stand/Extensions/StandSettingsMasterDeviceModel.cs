@@ -29,5 +29,5 @@ public class StandSettingsMasterDeviceModel
     public int? PulseCountMeterModuleChannelNumber { get; set; }
 
     public string MasterDeviceName { get; set; }
-
+    public float PulseWeight { get; set; }
 }

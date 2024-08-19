@@ -170,7 +170,7 @@ public class LineItemViewModel : ViewModelBase
     
             _standController.RegisterPressureSensorObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
             _standController.RegisterTemperatureSensorObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
-
+            _standController.RegisterFlowObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
 #endif
         }
 
@@ -193,6 +193,7 @@ public class LineItemViewModel : ViewModelBase
             FanItemViewModels.Add(new FanItemViewModel(_standController,
                 _settingsService,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].FanValveViewModel,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].NeedleValveViewModel,
                 lineIndex,
                 i)
             {

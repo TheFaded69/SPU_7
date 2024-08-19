@@ -16,12 +16,16 @@ public class ValidationPointModel
     public int MeasureCount { get; set; }
 
     public double TargetVolume { get; set; }
-    
+
     public double Inaccuracy { get; set; }
 
     public int SelectedLineNumber { get; set; }
 
     public string SelectedMasterDeviceName { get; set; }
-    
+
     public ObservableCollection<StandSettingsNozzleModel> SelectedNozzles { get; set; }
+
+    public bool IsNeedleValveUse { get; set; }
+
+    public int? NeedleValveValue { get; set; }
 }

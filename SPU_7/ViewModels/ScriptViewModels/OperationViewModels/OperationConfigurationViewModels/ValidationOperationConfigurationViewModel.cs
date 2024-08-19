@@ -42,10 +42,10 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
         
         if (configurationModel is ValidationOperationConfigurationModel validationOperationConfigurationModel)
         {
-            Points = new ObservableCollection<PointConfigurationViewModel>();
+            Points = new ObservableCollection<ValidationPointConfigurationViewModel>();
             foreach (var point in validationOperationConfigurationModel.Points)
             {
-                Points.Add(new PointConfigurationViewModel(_standController, _dialogService, _standSettingsService)
+                Points.Add(new ValidationPointConfigurationViewModel(_standController, _dialogService, _standSettingsService)
                 {
                     Delay = point.Delay,
                     Number = point.Number,
@@ -57,6 +57,8 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
                     SelectedNozzles = _mapper.Map<ObservableCollection<StandSettingsNozzleViewModel>>(point.SelectedNozzles),
                     SelectedLineNumber = point.SelectedLineNumber,
                     SelectedMasterDeviceName = point.SelectedMasterDeviceName,
+                    IsNeedleValveUse = point.IsNeedleValveUse,
+                    NeedleValveValue = point.NeedleValveValue
                 });
             }
 
@@ -76,7 +78,7 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
         }
         else
         {
-            Points = new ObservableCollection<PointConfigurationViewModel>();
+            Points = new ObservableCollection<ValidationPointConfigurationViewModel>();
             foreach (var unused in standSettingsService.StandSettingsModel.LineViewModels[lineNumber - 1].DeviceViewModels)
             {
                 PulseMeterConfigurationViewModels.Add(new ValidationPulseMeterConfigurationViewModel());
@@ -88,7 +90,7 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
     }
 
 
-    private PointConfigurationViewModel _selectedPoint;
+    private ValidationPointConfigurationViewModel _selectedValidationPoint;
     private bool _isProtocolNeed = true;
     private bool _isAutoPulseMeasure;
     private string _selectedStringValidationType;
@@ -112,11 +114,11 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
 
     public ValidationType ValidationType { get; set; }
 
-    public ObservableCollection<PointConfigurationViewModel> Points { get; set; }
-    public PointConfigurationViewModel SelectedPoint
+    public ObservableCollection<ValidationPointConfigurationViewModel> Points { get; set; }
+    public ValidationPointConfigurationViewModel SelectedValidationPoint
     {
-        get => _selectedPoint;
-        set => SetProperty(ref _selectedPoint, value);
+        get => _selectedValidationPoint;
+        set => SetProperty(ref _selectedValidationPoint, value);
     }
 
     public bool IsProtocolNeed
@@ -166,6 +168,8 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
                 SelectedNozzles = _mapper.Map<ObservableCollection<StandSettingsNozzleModel>>(point.SelectedNozzles),
                 SelectedMasterDeviceName = point.SelectedMasterDeviceName,
                 SelectedLineNumber = point.SelectedLineNumber,
+                IsNeedleValveUse = point.IsNeedleValveUse,
+                NeedleValveValue = point.NeedleValveValue
             })
             .ToList();
 
@@ -194,7 +198,7 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
     public DelegateCommand AddPointCommand { get; }
     private void AddPointCommandHandler()
     {
-        Points.Add(new PointConfigurationViewModel(_standController, _dialogService, _standSettingsService)
+        Points.Add(new ValidationPointConfigurationViewModel(_standController, _dialogService, _standSettingsService)
         {
             Number = Points.Count + 1,
         });
@@ -203,7 +207,7 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
     public DelegateCommand RemovePointCommand { get; }
     private void RemovePointCommandHandler()
     {
-        Points.Remove(SelectedPoint);
+        Points.Remove(SelectedValidationPoint);
 
         for (var i = 0; i < Points.Count; i++)
         {

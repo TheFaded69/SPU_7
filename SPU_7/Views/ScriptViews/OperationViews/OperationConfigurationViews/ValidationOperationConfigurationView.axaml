@@ -110,7 +110,7 @@
 
                 <Button Margin="5"
                         Command="{Binding RemovePointCommand}"
-                        IsEnabled="{Binding SelectedPoint, Converter={x:Static ObjectConverters.IsNotNull}}">
+                        IsEnabled="{Binding SelectedValidationPoint, Converter={x:Static ObjectConverters.IsNotNull}}">
                     <materialIcons:MaterialIcon Kind="Delete" />
                 </Button>
 
@@ -118,7 +118,7 @@
 
             <ScrollViewer>
                 <ListBox ItemsSource="{Binding Points}"
-                     SelectedItem="{Binding SelectedPoint}">
+                     SelectedItem="{Binding SelectedValidationPoint}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -158,6 +158,15 @@
                                         SelectedItem="{Binding SelectedMasterDeviceName}"
                                         Width="350"
                                         Margin="5"/>
+                            <CheckBox IsChecked="{Binding IsNeedleValveUse}"
+                                      Margin="5"
+                                      Content="Игольчатый кран"/>
+                            <TextBox Margin="5"
+                                     extension:TextFieldAssist.Label="Игольчатый кран, %"
+                                     IsVisible="{Binding IsNeedleValveUse}"
+                                     UseFloatingWatermark="True"
+                                     Watermark="Введите расход"
+                                     Text="{Binding NeedleValveValue}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

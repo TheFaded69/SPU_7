@@ -81,6 +81,9 @@ namespace SPU_7.Models.Mapper
                 .ReverseMap();
             CreateMap<StandSettingsPulseCountMeterModuleModel, StandSettingsPulseCountMeterModuleViewModel>()
                 .ReverseMap();
+            CreateMap<StandSettingsNeedleValveViewModel, StandSettingsNeedleValveModel>()
+                .ReverseMap();
+            
             #endregion
 
             CreateMap<ValidationPulseMeterConfiguration, ValidationPulseMeterConfigurationViewModel>()

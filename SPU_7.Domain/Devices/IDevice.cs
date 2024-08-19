@@ -7,7 +7,7 @@ namespace SPU_7.Domain.Devices
     /// <summary>
     /// Интерфейс устройств (общие свойства и методы для всех видов устройств)
     /// </summary>
-    public interface IDevice :  IPressureSensorObservable, ITemperatureSensorObservable
+    public interface IDevice :  IPressureSensorObservable, ITemperatureSensorObservable, IFlowObservable
     {
       
         /// <summary>

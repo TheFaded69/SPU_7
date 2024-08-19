@@ -1,4 +1,5 @@
 ﻿using SPU_7.Domain.Devices.StandDevices.PressureSensor;
+using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
 using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
 using SPU_7.Domain.Extensions;
 using SPU_7.Domain.Modbus;
@@ -44,6 +45,16 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
         }
     }
 
+    private float? Flow
+    {
+        get => _flow;
+        set
+        {
+            _flow = value;
+            NotifyFlowObservers(value);
+        }
+    }
+
     private readonly IPressureSensor _pressureSensor;
     private readonly ITemperatureSensor _temperatureSensor;
     
@@ -63,6 +74,14 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
 #else
         return Temperature = await _temperatureSensor.ReadTemperatureAsync(true);
 #endif
+    }
+
+    public async Task<float?> ReadFlowAsync(IPulseCountMeterModule? pulseCountMeterModule,
+        int? pulseCountMeterModuleChannelNumber, float pulseWeight)
+    {
+        var currentFrequency = await pulseCountMeterModule.ReadCurrentFrequencyAsync((ChannelNumber)pulseCountMeterModuleChannelNumber);
+        
+        return Flow = currentFrequency * 3600 * pulseWeight;
     }
 
     public float? GetPressureDifference()
@@ -113,6 +132,27 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
         foreach (var temperatureSensorObserver in _temperatureSensorObservers)
         {
             temperatureSensorObserver.UpdateTemperature(obj);
+        }
+    }
+    
+    private List<IFlowObserver> _flowObservers = [];
+    private float? _flow;
+
+    public void RegisterFlowObserver(IFlowObserver observer)
+    {
+        _flowObservers.Add(observer);
+    }
+
+    public void RemoveFlowObserver(IFlowObserver observer)
+    {
+        _flowObservers.Remove(observer);
+    }
+
+    public void NotifyFlowObservers(object? obj)
+    {
+        foreach (var flowObserver in _flowObservers)        
+        {
+            flowObserver.UpdateFlow(obj);
         }
     }
     

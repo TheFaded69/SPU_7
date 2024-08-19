@@ -1,4 +1,5 @@
 ﻿using SPU_7.Domain.Devices.StandDevices.PressureSensor;
+using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
 using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
 using SPU_7.Domain.Extensions;
 using SPU_7.Domain.Modbus;
@@ -21,6 +22,7 @@ public class RGTDevice : IRGTDevice
     
     private float? _pressure;
     private float? _temperature;
+    private float? _flow;
     
     public float? Pressure
     {
@@ -39,6 +41,16 @@ public class RGTDevice : IRGTDevice
         {
             _temperature = value;
             NotifyTemperatureSensorObservers(value);
+        }
+    }
+    
+    private float? Flow
+    {
+        get => _flow;
+        set
+        {
+            _flow = value;
+            NotifyFlowObservers(value);
         }
     }
 
@@ -63,6 +75,7 @@ public class RGTDevice : IRGTDevice
 #endif
     }
     
+
     public float? GetPressureDifference()
     {
         return Pressure;
@@ -71,6 +84,13 @@ public class RGTDevice : IRGTDevice
     public float? GetTemperature()
     {
         return Temperature;
+    }
+    
+    public async Task<float?> ReadFlowAsync(IPulseCountMeterModule? pulseCountMeterModule, int? pulseCountMeterModuleChannelNumber, float pulseWeight)
+    {
+        var currentFrequency = await pulseCountMeterModule.ReadCurrentFrequencyAsync((ChannelNumber)pulseCountMeterModuleChannelNumber);
+        
+        return Flow = currentFrequency * 3600 * pulseWeight;
     }
     
     #region Observable
@@ -111,6 +131,26 @@ public class RGTDevice : IRGTDevice
         foreach (var temperatureSensorObserver in _temperatureSensorObservers)
         {
             temperatureSensorObserver.UpdateTemperature(obj);
+        }
+    }
+    
+    private List<IFlowObserver> _flowObservers = [];
+    
+    public void RegisterFlowObserver(IFlowObserver observer)
+    {
+        _flowObservers.Add(observer);
+    }
+
+    public void RemoveFlowObserver(IFlowObserver observer)
+    {
+        _flowObservers.Remove(observer);
+    }
+
+    public void NotifyFlowObservers(object? obj)
+    {
+        foreach (var flowObserver in _flowObservers)        
+        {
+            flowObserver.UpdateFlow(obj);
         }
     }
     

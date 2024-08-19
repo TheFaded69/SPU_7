@@ -11,6 +11,7 @@ public class StandSettingsFanViewModel : ViewModelBase
     private StandSettingsFrequencyRegulatorViewModel _frequencyRegulatorViewModel;
     private float? _minimumFlow;
     private float? _maximumFlow;
+    private StandSettingsNeedleValveViewModel _needleValveViewModel;
 
     public int Number
     {
@@ -21,7 +22,11 @@ public class StandSettingsFanViewModel : ViewModelBase
     public bool IsNeedleValveEnable
     {
         get => _isNeedleValveEnable;
-        set => SetProperty(ref _isNeedleValveEnable, value);
+        set
+        {
+            SetProperty(ref _isNeedleValveEnable, value);
+            NeedleValveViewModel = value ? new StandSettingsNeedleValveViewModel() : null;
+        }
     }
 
     public bool IsValveEnable
@@ -40,6 +45,12 @@ public class StandSettingsFanViewModel : ViewModelBase
     {
         get => _frequencyRegulatorViewModel;
         set => SetProperty(ref _frequencyRegulatorViewModel, value);
+    }
+
+    public StandSettingsNeedleValveViewModel NeedleValveViewModel
+    {
+        get => _needleValveViewModel;
+        set => SetProperty(ref _needleValveViewModel, value);
     }
 
     public float? MinimumFlow

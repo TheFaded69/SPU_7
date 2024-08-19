@@ -228,5 +228,93 @@ public enum PulseMeterCountModuleRegisterMap
         ByteOrderType.MidLittleEndian_CDAB)]
     ControlRegister,
     
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x0056,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    CurrentFrequencyFirstRegister,
+    
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x0058,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    CurrentFrequencySecondRegister,
+    
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x005A,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    CurrentFrequencyThirdRegister,
+    
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x005C,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    CurrentFrequencyFourthRegister,
+    
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x005E,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    AverageFrequencyFirstRegister,
+    
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x0060,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    AverageFrequencySecondRegister,
+    
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x0062,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    AverageFrequencyThirdRegister,
+    
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x0064,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.Float,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    AverageFrequencyFourthRegister,
+    
     #endregion
 }

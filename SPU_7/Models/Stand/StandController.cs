@@ -14,6 +14,7 @@ using SPU_7.CommonDevice.Devices.ElmetroPascal;
 using SPU_7.DeviceCommunication.Communication;
 using SPU_7.Domain.Devices.Device.UniversalDevice;
 using SPU_7.Domain.Devices.StandDevices.FrequencyRegulator;
+using SPU_7.Domain.Devices.StandDevices.NeedleValveController;
 using SPU_7.Domain.Devices.StandDevices.PressureSensor;
 using SPU_7.Domain.Devices.StandDevices.PressureSensor415M;
 using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
@@ -33,6 +34,7 @@ using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 using SPU_7.ViewModels;
 using SPU_7.ViewModels.DeviceInformationViewModels;
+using IDevice = SPU_7.Domain.Devices.IDevice;
 
 namespace SPU_7.Models.Stand
 {
@@ -57,6 +59,7 @@ namespace SPU_7.Models.Stand
         private IFrequencyRegulatorDevice _frequencyRegulatorDevice;
         private List<IFrequencyRegulatorDevice> _frequencyRegulatorDevices = [];
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
+        private List<INeedleValveController> _needleValveControllers = [];
         private PulseCountMeterStarter _pulseCountMeterStarter;
         
         //private IPressureSensor _pressureSensor;
@@ -188,15 +191,29 @@ namespace SPU_7.Models.Stand
                         !addressList.Contains((int)masterDeviceViewModel.MasterDeviceValveViewModel.StateOffAddress))
                         addressList.Add((int)masterDeviceViewModel.MasterDeviceValveViewModel.StateOffAddress);
                 }
+
+                foreach (var fanViewModel in lineViewModel.FanViewModels)
+                {
+                    if (fanViewModel.NeedleValveViewModel != null)
+                    {
+                        _needleValveControllers.Add(new NeedleValveController(_modbusProcessors.First(modbus =>
+                            modbus.PortName == fanViewModel.NeedleValveViewModel.SelectedComPort), new RegisterMapEnum<NeedleValveControllerRegisterMap>(), 
+                            fanViewModel.NeedleValveViewModel.ModuleAddress));
+                    }
+                }
             }
 
+            
             
             foreach (var pulseCountMeterModuleViewModel in _settingsService.StandSettingsModel.PulseCountMeterModuleViewModels)
             {
                 _pulseCountMeterModules.Add(new PulseCountMeterModule(_modbusProcessors.First(modbus =>
                         modbus.PortName == pulseCountMeterModuleViewModel.PortName),
                     new RegisterMapEnum<PulseMeterCountModuleRegisterMap>(),
-                    pulseCountMeterModuleViewModel.ModuleAddress));
+                    pulseCountMeterModuleViewModel.ModuleAddress)
+                {
+                    PulseCountMeterModuleNumber = pulseCountMeterModuleViewModel.Number,
+                });
             }
 
             _pulseCountMeterStarter = new PulseCountMeterStarter(_modbusProcessors.First(mb => mb.PortName ==
@@ -306,18 +323,25 @@ namespace SPU_7.Models.Stand
                             ? null
                             : await _temperatureHumiditySensor.ReadHumidityAsync() / 100f;
 
-                    foreach (var standLine in _lines)
+                    for (var lineIndex = 0; lineIndex < _lines.Count; lineIndex++)
                     {
-                        foreach (var device in standLine.Devices)
+                        var standLine = _lines[lineIndex];
+                        for (var deviceIndex = 0; deviceIndex < standLine.Devices.Count; deviceIndex++)
                         {
+                            var device = standLine.Devices[deviceIndex];
                             //await device.ReadPressureAsync();
                             await device.ReadTemperatureAsync();
                         }
-                        
-                        foreach (var masterDevice in standLine.MasterDevices)
+
+                        for (var masterDeviceIndex = 0; masterDeviceIndex < standLine.MasterDevices.Count; masterDeviceIndex++)
                         {
+                            var masterDevice = standLine.MasterDevices[masterDeviceIndex];
                             await masterDevice.ReadTemperatureAsync();
                             await masterDevice.ReadPressureAsync();
+                            await masterDevice.ReadFlowAsync(_pulseCountMeterModules.FirstOrDefault(pcm => pcm.PulseCountMeterModuleNumber == 
+                                    _settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[masterDeviceIndex].PulseCountMeterModuleNumber),
+                                _settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[masterDeviceIndex].PulseCountMeterModuleChannelNumber,
+                                _settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[masterDeviceIndex].PulseWeight);
                         }
                     }
 #endif
@@ -1377,6 +1401,24 @@ namespace SPU_7.Models.Stand
                 case DevicePurpose.ValidationDevice:
                     ((ITemperatureSensorObservable)_lines[lineIndex].Devices[deviceIndex])
                         .RegisterTemperatureSensorObserver(observer);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(devicePurpose), devicePurpose, null);
+            }
+        }
+
+        public void RegisterFlowObserver(IFlowObserver observer, DevicePurpose devicePurpose, int deviceIndex,
+            int lineIndex)
+        {
+            switch (devicePurpose)
+            {
+                case DevicePurpose.MasterDevice:
+                    _lines[lineIndex].MasterDevices[deviceIndex]
+                        .RegisterFlowObserver(observer);
+                    break;
+                case DevicePurpose.ValidationDevice:
+                    ((IFlowObservable)_lines[lineIndex].Devices[deviceIndex])
+                        .RegisterFlowObserver(observer);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(devicePurpose), devicePurpose, null);

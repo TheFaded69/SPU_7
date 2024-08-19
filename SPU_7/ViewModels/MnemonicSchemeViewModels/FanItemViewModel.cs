@@ -13,6 +13,7 @@ public class FanItemViewModel : ViewModelBase
     public FanItemViewModel(IStandController standController,
         IStandSettingsService settingsService,
         StandSettingsValveModel standSettingsValveModel,
+        StandSettingsNeedleValveModel settingsNeedleValveModel,
         int lineIndex,
         int fanIndex)
     {
@@ -31,7 +32,8 @@ public class FanItemViewModel : ViewModelBase
         }
         
         ValveItemViewModel = new ValveItemViewModel(standSettingsValveModel, standController, StateType.Open);
-
+        NeedleValveItemViewModel = new NeedleValveItemViewModel(settingsNeedleValveModel, standController, StateType.Open);
+        
         EnableFanCommand = new DelegateCommand(EnableFanCommandHandler);
         DisableFanCommand = new DelegateCommand(DisableFanCommandHandler);
 
@@ -48,6 +50,7 @@ public class FanItemViewModel : ViewModelBase
     private int _selectedNeedleValue;
     private bool _isValveEnable;
     private float _fanFrequencyValue;
+    private NeedleValveItemViewModel _needleValveItemViewModel;
 
     public bool IsValveEnable
     {
@@ -59,6 +62,12 @@ public class FanItemViewModel : ViewModelBase
     {
         get => _valveItemViewModel;
         set => SetProperty(ref _valveItemViewModel, value);
+    }
+
+    public NeedleValveItemViewModel NeedleValveItemViewModel
+    {
+        get => _needleValveItemViewModel;
+        set => SetProperty(ref _needleValveItemViewModel, value);
     }
 
     public bool IsFanWorking

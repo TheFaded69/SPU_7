@@ -18,9 +18,11 @@ namespace SPU_7.Models.Stand;
 
 public class StandLine
 {
-    public StandLine(IStandSettingsService settingsService, List<IModbusProcessor> modbusProcessors, int i)
+    public StandLine(IStandSettingsService settingsService, List<IModbusProcessor> modbusProcessors, int lineIndex)
     {
-        foreach (var deviceViewModel in settingsService.StandSettingsModel.LineViewModels[i].DeviceViewModels)
+        LineNumber = lineIndex + 1;
+        
+        foreach (var deviceViewModel in settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels)
         {
             var pressureSensor = string.IsNullOrEmpty(deviceViewModel.SelectedPressureSensorComPort)
                 ? null
@@ -39,10 +41,10 @@ public class StandLine
                 new RegisterMapEnum<UniversalDeviceRegisterMap>(), pressureSensor, temperatureSensor));
         }
 
-        switch (settingsService.StandSettingsModel.LineViewModels[i].SelectedLineType)
+        switch (settingsService.StandSettingsModel.LineViewModels[lineIndex].SelectedLineType)
         {
             case LineType.MasterDeviceLineType:
-                foreach (var masterDeviceModel in settingsService.StandSettingsModel.LineViewModels[i].MasterDeviceViewModels)
+                foreach (var masterDeviceModel in settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels)
                 {
                     var pressureSensor = string.IsNullOrEmpty(masterDeviceModel.SelectedPressureSensorComPort)
                         ? null
@@ -77,4 +79,5 @@ public class StandLine
     public readonly List<IDevice> Devices = [];
 
     public readonly List<IMasterDevice> MasterDevices = [];
+    public int LineNumber { get; set; }
 }

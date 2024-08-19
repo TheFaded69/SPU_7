@@ -511,6 +511,10 @@
                                                                                                     assists:TextFieldAssist.Label="Канал ДТ"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Text="{Binding TemperatureChannelNumber}" />
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Вес импульса"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Text="{Binding PulseWeight}" />
                                                                                             </StackPanel>
                                                                                             <StackPanel
                                                                                                 DockPanel.Dock="Top"
@@ -877,6 +881,21 @@
                                                                                                 <CheckBox Margin="5"
                                                                                                     Content="Игольчатый клапан"
                                                                                                     IsChecked="{Binding IsNeedleValveEnable}" />
+                                                                                                
+                                                                                                <ComboBox Margin="5"
+                                                                                                    Width="300"
+                                                                                                    assists:ComboBoxAssist.Label="Порт подключения контроллера"
+                                                                                                    Theme="{StaticResource MaterialOutlineComboBox}" 
+                                                                                                    IsVisible="{Binding IsNeedleValveEnable}"
+                                                                                                    ItemsSource="{Binding NeedleValveViewModel.ComPorts}"
+                                                                                                    SelectedItem="{Binding NeedleValveViewModel.SelectedComPort}"/>
+                                                                                                
+                                                                                                <TextBox Margin="5"
+                                                                                                    assists:TextFieldAssist.Label="Адрес модуля"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите адрес"
+                                                                                                    IsVisible="{Binding IsNeedleValveEnable}"
+                                                                                                    Text="{Binding  NeedleValveViewModel.ModuleAddress}" />
 
                                                                                             </StackPanel>
                                                                                             <StackPanel Orientation="Horizontal">

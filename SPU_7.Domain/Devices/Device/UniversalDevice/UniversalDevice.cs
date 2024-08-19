@@ -170,6 +170,20 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     public void RemoveTemperatureSensorObserver(ITemperatureSensorObserver observer) => _temperatureSensorObservers.Remove(observer);
     public void NotifyTemperatureSensorObservers(object? obj) => _temperatureSensorObservers.ForEach(ob => ob.UpdateTemperature(obj));
     
+    private List<IFlowObserver> _flowObservers = [];
+    
+    public void RegisterFlowObserver(IFlowObserver observer) => _flowObservers.Add(observer);
+
+    public void RemoveFlowObserver(IFlowObserver observer) => _flowObservers.Remove(observer);
+
+    public void NotifyFlowObservers(object? obj)
+    {
+        foreach (var flowObserver in _flowObservers)        
+        {
+            flowObserver.UpdateFlow(obj);
+        }
+    }
+    
     #endregion
 
     #region DeviceObserve

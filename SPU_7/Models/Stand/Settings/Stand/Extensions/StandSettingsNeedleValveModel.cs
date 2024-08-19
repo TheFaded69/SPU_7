@@ -2,5 +2,7 @@
 
 public class StandSettingsNeedleValveModel
 {
+    public string SelectedComPort { get; set; }
     
+    public int ModuleAddress { get; set; }
 }

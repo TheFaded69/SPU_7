@@ -10,6 +10,7 @@ using SPU_7.Domain.Extensions;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 using SPU_7.ViewModels;
 using SPU_7.ViewModels.DeviceInformationViewModels;
+using SPU_7.ViewModels.MnemonicSchemeViewModels;
 
 namespace SPU_7.Models.Stand
 {
@@ -189,6 +190,16 @@ namespace SPU_7.Models.Stand
         /// <param name="lineIndex"></param>
         void RegisterTemperatureSensorObserver(ITemperatureSensorObserver observer, DevicePurpose devicePurpose, int deviceIndex, int lineIndex);
 
+        /// <summary>
+        /// Зарегистрировать наблюдателя за потокком на стенде с СГ
+        /// </summary>
+        /// <param name="observer">Наблюдатель</param>
+        /// <param name="devicePurpose"></param>
+        /// <param name="deviceIndex">Номер СГ (от 0)</param>
+        /// <param name="lineIndex"></param>
+        void RegisterFlowObserver(IFlowObserver masterDeviceItemViewModel, DevicePurpose devicePurpose, int deviceIndex, int lineIndex);
+
+        
         /// <summary>
         /// Установить рабочий режим стенда
         /// </summary>

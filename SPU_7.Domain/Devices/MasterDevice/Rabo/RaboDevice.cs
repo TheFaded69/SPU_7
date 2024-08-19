@@ -1,4 +1,5 @@
 ﻿using SPU_7.Domain.Devices.StandDevices.PressureSensor;
+using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
 using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
 using SPU_7.Domain.Extensions;
 using SPU_7.Domain.Modbus;
@@ -13,7 +14,6 @@ public class RaboDevice : IRaboDevice
         
     }
     
-    
     public RaboDevice(IPressureSensor pressureSensor, ITemperatureSensor temperatureSensor)
     {
         _pressureSensor = pressureSensor;
@@ -22,7 +22,8 @@ public class RaboDevice : IRaboDevice
     
     private float? _pressure;
     private float? _temperature;
-    
+    private float? _flow;
+
     private float? Pressure
     {
         get => _pressure;
@@ -40,6 +41,16 @@ public class RaboDevice : IRaboDevice
         {
             _temperature = value;
             NotifyTemperatureSensorObservers(value);
+        }
+    }
+    
+    private float? Flow
+    {
+        get => _flow;
+        set
+        {
+            _flow = value;
+            NotifyFlowObservers(value);
         }
     }
 
@@ -72,6 +83,14 @@ public class RaboDevice : IRaboDevice
     public float? GetTemperature()
     {
         return Temperature;
+    }
+    
+    public async Task<float?> ReadFlowAsync(IPulseCountMeterModule? pulseCountMeterModule,
+        int? pulseCountMeterModuleChannelNumber, float pulseWeight)
+    {
+        var currentFrequency = await pulseCountMeterModule.ReadCurrentFrequencyAsync((ChannelNumber)pulseCountMeterModuleChannelNumber);
+        
+        return Flow = currentFrequency * 3600 * pulseWeight;
     }
     
     #region Observable
@@ -115,6 +134,25 @@ public class RaboDevice : IRaboDevice
         }
     }
     
-    #endregion
+    private List<IFlowObserver> _flowObservers = [];
+    
+    public void RegisterFlowObserver(IFlowObserver observer)
+    {
+        _flowObservers.Add(observer);
+    }
 
+    public void RemoveFlowObserver(IFlowObserver observer)
+    {
+        _flowObservers.Remove(observer);
+    }
+
+    public void NotifyFlowObservers(object? obj)
+    {
+        foreach (var flowObserver in _flowObservers)        
+        {
+            flowObserver.UpdateFlow(obj);
+        }
+    }
+    
+    #endregion
 }

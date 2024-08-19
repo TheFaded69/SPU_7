@@ -87,8 +87,8 @@ public class MasterDeviceInfoViewModel : ViewModelBase, IDialogAware
     private readonly ObservableCollection<ObservablePoint> _values = new();
     
     public ISeries[] Series { get; set; }
-    public Axis[] ScrollableAxes { get; set; }
     public ISeries[] ScrollbarSeries { get; set; }
+    public Axis[] ScrollableAxes { get; set; }
     public Axis[] InvisibleX { get; set; }
     public Axis[] InvisibleY { get; set; }
     public RectangularSection[] Thumbs { get; set; }

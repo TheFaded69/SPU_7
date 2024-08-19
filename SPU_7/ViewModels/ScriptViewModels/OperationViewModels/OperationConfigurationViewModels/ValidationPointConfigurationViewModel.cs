@@ -7,27 +7,29 @@ using SPU_7.ViewModels.Settings;
 
 namespace SPU_7.ViewModels.ScriptViewModels.OperationViewModels.OperationConfigurationViewModels;
 
-public class PointConfigurationViewModel : ViewModelBase
+public class ValidationPointConfigurationViewModel : ViewModelBase
 {
     private readonly IStandController _standController;
     private readonly IDialogService _dialogService;
     private readonly IStandSettingsService _standSettingsService;
 
-    public PointConfigurationViewModel(IStandController standController, IDialogService dialogService, IStandSettingsService standSettingsService)
+    public ValidationPointConfigurationViewModel(IStandController standController,
+        IDialogService dialogService,
+        IStandSettingsService standSettingsService)
     {
         _standController = standController;
         _dialogService = dialogService;
-        _standSettingsService =standSettingsService;
+        _standSettingsService = standSettingsService;
 
         LineNumbers = new ObservableCollection<int>();
-        foreach(var line in _standSettingsService.StandSettingsModel.LineViewModels)
+        foreach (var line in _standSettingsService.StandSettingsModel.LineViewModels)
         {
-            LineNumbers.Add(line.LineNumber); 
+            LineNumbers.Add(line.LineNumber);
         }
 
         ShowNozzleSelectorCommand = new DelegateCommand(ShowNozzleSelectorCommandHandler);
     }
-    
+
     private int _number;
     private bool _isValveUse;
     private int? _delay;
@@ -38,6 +40,8 @@ public class PointConfigurationViewModel : ViewModelBase
     private int _selectedLineNumber;
     private string _selectedMasterDeviceName;
     private ObservableCollection<StandSettingsNozzleViewModel> _selectedNozzles;
+    private bool _isNeedleValveUse;
+    private int? _needleValveValue;
 
     public int Number
     {
@@ -60,10 +64,7 @@ public class PointConfigurationViewModel : ViewModelBase
     public double? TargetFlow
     {
         get => _targetFlow;
-        set
-        {
-            SetProperty(ref _targetFlow, value);
-        }
+        set { SetProperty(ref _targetFlow, value); }
     }
 
     public int? MeasureCount
@@ -84,26 +85,46 @@ public class PointConfigurationViewModel : ViewModelBase
         set => SetProperty(ref _inaccuracy, value);
     }
 
-    public ObservableCollection<int> LineNumbers { get;set; }
+    public ObservableCollection<int> LineNumbers { get; set; }
 
-    public int SelectedLineNumber 
-    { 
-        get => _selectedLineNumber; 
+    public int SelectedLineNumber
+    {
+        get => _selectedLineNumber;
         set
         {
             SetProperty(ref _selectedLineNumber, value);
+
+            if (value == 0) return;
+
             MasterDeviceNames.Clear();
 
-            foreach (var masterDeviceModel in _standSettingsService.StandSettingsModel.LineViewModels[value - 1].MasterDeviceViewModels)
+            foreach (var masterDeviceModel in _standSettingsService.StandSettingsModel.LineViewModels[value - 1]
+                         .MasterDeviceViewModels)
             {
                 MasterDeviceNames.Add(masterDeviceModel.MasterDeviceName);
             }
-        } 
+        }
+    }
+
+    public bool IsNeedleValveUse
+    {
+        get => _isNeedleValveUse;
+        set => SetProperty(ref _isNeedleValveUse, value);
+    }
+
+    public int? NeedleValveValue
+    {
+        get => _needleValveValue;
+        set => SetProperty(ref _needleValveValue, value);
     }
 
     public ObservableCollection<string> MasterDeviceNames { get; set; } = new();
 
-    public string SelectedMasterDeviceName { get => _selectedMasterDeviceName; set => SetProperty(ref _selectedMasterDeviceName, value); }
+    public string SelectedMasterDeviceName
+    {
+        get => _selectedMasterDeviceName;
+        set => SetProperty(ref _selectedMasterDeviceName, value);
+    }
 
     public ObservableCollection<StandSettingsNozzleViewModel> SelectedNozzles
     {

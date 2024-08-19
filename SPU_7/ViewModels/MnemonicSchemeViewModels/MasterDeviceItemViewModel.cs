@@ -8,7 +8,7 @@ using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
 namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 
-public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver, ITemperatureSensorObserver
+public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver, ITemperatureSensorObserver, IFlowObserver
 {
     public MasterDeviceItemViewModel(IDialogService dialogService, 
         IStandController standController, 
@@ -26,6 +26,8 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
         VendorNumber = "№" + masterDeviceModel.VendorNumber;
         
         OpenMasterDeviceInfoCommand = new DelegateCommand(OpenMasterDeviceInfoCommandHandler);
+        EnableFlowCommand = new DelegateCommand(EnableFlowCommandHandler);
+        DisableFlowCommand = new DelegateCommand(DisableFlowCommandHandler);
     }
 
     private readonly IDialogService _dialogService;
@@ -37,6 +39,9 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
     private float? _temperature;
     private ValveItemViewModel _valveItemViewModel;
     private ValveItemViewModel _pressureValveItemViewModel;
+    private float? _flow;
+    private float? _selectedFlow = 0;
+    private bool _isFlowWorking;
 
     public string DeviceName { get; set; }
     
@@ -64,6 +69,24 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
         set => SetProperty(ref _temperature, value == null ? value : (float?)Math.Round((float)value, 2));
     }
 
+    public float? Flow
+    {
+        get => _flow;
+        set => SetProperty(ref _flow, value == null ? value : (float?)Math.Round((float)value, 2));
+    }
+
+    public float? SelectedFlow
+    {
+        get => _selectedFlow;
+        set => SetProperty(ref _selectedFlow, value);
+    }
+
+    public bool IsFlowWorking
+    {
+        get => _isFlowWorking;
+        set => SetProperty(ref _isFlowWorking, value);
+    }
+
     public StateType StateType
     {
         get => _stateType;
@@ -77,6 +100,20 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
     private void OpenMasterDeviceInfoCommandHandler()
     {
         MasterDeviceInfoViewModel.Show(_dialogService, _masterDeviceModel, null, null);
+    }
+    
+    public DelegateCommand EnableFlowCommand { get; }
+
+    private async void EnableFlowCommandHandler()
+    {
+        
+    }
+    
+    public DelegateCommand DisableFlowCommand { get; }
+    
+    private async void DisableFlowCommandHandler()
+    {
+        
     }
 
     public void UpdatePressure(object? obj)
@@ -99,6 +136,18 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
                 return;
             case float temperature:
                 Temperature = temperature;
+                break;
+        }
+    }
+
+    public void UpdateFlow(object? flowValue)
+    {
+        switch (flowValue)
+        {
+            case null:
+                return;
+            case float temperature:
+                Flow = temperature;
                 break;
         }
     }

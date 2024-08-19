@@ -37,6 +37,7 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     private int? _pulseCountMeterModuleChannelNumber;
     private int? _temperatureChannelNumber;
     private float? _maximumFlow;
+    private float _pulseWeight;
 
     public ObservableCollection<string> MasterDeviceTypesString
     {
@@ -160,5 +161,11 @@ public class StandSettingsMasterDeviceViewModel : ViewModelBase
     {
         get => _temperatureChannelNumber;
         set => SetProperty(ref _temperatureChannelNumber, value);
+    }
+
+    public float PulseWeight
+    {
+        get => _pulseWeight;
+        set => SetProperty(ref _pulseWeight, value);
     }
 }

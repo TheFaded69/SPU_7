@@ -17,6 +17,31 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
         ModuleAddress = (byte)pulseMeterAddress;
     }
 
+    public int? PulseCountMeterModuleNumber { get; set; }
+    
+    public async Task<float?> ReadCurrentFrequencyAsync(ChannelNumber pulseCountMeterModuleChannelNumber)
+    {
+        return pulseCountMeterModuleChannelNumber switch
+        {
+            ChannelNumber.First => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.CurrentFrequencyFirstRegister),
+            ChannelNumber.Second => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.CurrentFrequencySecondRegister),
+            ChannelNumber.Third => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.CurrentFrequencyThirdRegister),
+            ChannelNumber.Fourth => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.CurrentFrequencyFourthRegister),
+            _ => throw new ArgumentOutOfRangeException(nameof(pulseCountMeterModuleChannelNumber), pulseCountMeterModuleChannelNumber, null)
+        };
+    }
+    
+    public async Task<float?> ReadAverageFrequencyAsync(ChannelNumber pulseCountMeterModuleChannelNumber)
+    {
+        return pulseCountMeterModuleChannelNumber switch
+        {
+            ChannelNumber.First => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.AverageFrequencyFirstRegister),
+            ChannelNumber.Second => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.AverageFrequencySecondRegister),
+            ChannelNumber.Third => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.AverageFrequencyThirdRegister),
+            ChannelNumber.Fourth => (float?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.AverageFrequencyFourthRegister),
+            _ => throw new ArgumentOutOfRangeException(nameof(pulseCountMeterModuleChannelNumber), pulseCountMeterModuleChannelNumber, null)
+        };
+    }
 
     public async Task<bool> StartMeasurePulseCountAsync() =>
         await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,

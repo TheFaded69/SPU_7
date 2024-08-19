@@ -89,4 +89,23 @@ public interface IPulseCountMeterModule
     /// </summary>
     /// <returns></returns>
     Task<float?> ReadMeasureTimeAsync();
+
+    /// <summary>
+    /// Номер модуля
+    /// </summary>
+    int? PulseCountMeterModuleNumber { get; set; }
+
+    /// <summary>
+    /// Считать частоту канала, измеряемую в фоне
+    /// </summary>
+    /// <param name="pulseCountMeterModuleChannelNumber"></param>
+    /// <returns></returns>
+    Task<float?> ReadCurrentFrequencyAsync(ChannelNumber pulseCountMeterModuleChannelNumber);
+
+    /// <summary>
+    /// Считать усредненную частоту канала за 10 сек, измеряемую в фоне
+    /// </summary>
+    /// <param name="pulseCountMeterModuleChannelNumber"></param>
+    /// <returns></returns>
+    Task<float?> ReadAverageFrequencyAsync(ChannelNumber pulseCountMeterModuleChannelNumber);
 }
