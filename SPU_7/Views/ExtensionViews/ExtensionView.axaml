@@ -27,6 +27,9 @@
             <ContentPresenter Width="400"
                               VerticalAlignment="Top"
                               Content="{Binding CheckTightnessExtensionUserControl}" /> 
+            <ContentPresenter Width="400"
+                              VerticalAlignment="Top"
+                              Content="{Binding CheckAverageQuadraticDifferenceUserControl}" />
         </StackPanel>
     </DockPanel>
 </UserControl>

@@ -1473,6 +1473,60 @@ namespace SPU_7.Models.Stand
             }
         }
 
+        public void UnsubscribePressureSensorObserver(IPressureSensorObserver observer, DevicePurpose devicePurpose, int deviceIndex,
+            int lineIndex)
+        {
+            switch (devicePurpose)
+            {
+                case DevicePurpose.MasterDevice:
+                    _lines[lineIndex].MasterDevices[deviceIndex]
+                        .RemovePressureSensorObserver(observer);
+                    break;
+                case DevicePurpose.ValidationDevice:
+                    ((IPressureSensorObservable)_lines[lineIndex].Devices[deviceIndex])
+                        .RemovePressureSensorObserver(observer);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(devicePurpose), devicePurpose, null);
+            }
+        }
+
+        public void UnsubscribeTemperatureSensorObserver(ITemperatureSensorObserver observer, DevicePurpose devicePurpose,
+            int deviceIndex, int lineIndex)
+        {
+            switch (devicePurpose)
+            {
+                case DevicePurpose.MasterDevice:
+                    _lines[lineIndex].MasterDevices[deviceIndex]
+                        .RemoveTemperatureSensorObserver(observer);
+                    break;
+                case DevicePurpose.ValidationDevice:
+                    ((ITemperatureSensorObservable)_lines[lineIndex].Devices[deviceIndex])
+                        .RemoveTemperatureSensorObserver(observer);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(devicePurpose), devicePurpose, null);
+            }
+        }
+
+        public void UnsubscribeFlowObserver(IFlowObserver observer, DevicePurpose devicePurpose, int deviceIndex,
+            int lineIndex)
+        {
+            switch (devicePurpose)
+            {
+                case DevicePurpose.MasterDevice:
+                    _lines[lineIndex].MasterDevices[deviceIndex]
+                        .RemoveFlowObserver(observer);
+                    break;
+                case DevicePurpose.ValidationDevice:
+                    ((IFlowObservable)_lines[lineIndex].Devices[deviceIndex])
+                        .RemoveFlowObserver(observer);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(devicePurpose), devicePurpose, null);
+            }
+        }
+
         public void RegisterDeviceObserver(IDeviceObserver observer, int deviceNumber, int lineNumber) =>
             ((IDeviceObservable)_lines[lineNumber].Devices[deviceNumber]).RegisterDeviceObserver(observer);
 

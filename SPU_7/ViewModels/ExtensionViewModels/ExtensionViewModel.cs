@@ -37,6 +37,7 @@ public class ExtensionViewModel : ViewModelBase
     private UserControl _pulseMeterExtensionUserControl;
     private UserControl _pulseCountMeterModuleExtensionUserControl;
     private UserControl _checkTightnessExtensionUserControl;
+    private UserControl _checkAverageQuadraticDifferenceUserControl;
 
 
     public UserControl UserControlWorkResult
@@ -74,7 +75,13 @@ public class ExtensionViewModel : ViewModelBase
         get => _checkTightnessExtensionUserControl;
         set => SetProperty(ref _checkTightnessExtensionUserControl, value);
     }
-    
+
+    public UserControl CheckAverageQuadraticDifferenceUserControl
+    {
+        get => _checkAverageQuadraticDifferenceUserControl;
+        set => SetProperty(ref _checkAverageQuadraticDifferenceUserControl, value);
+    }
+
     private void Init()
     {
         
@@ -101,6 +108,10 @@ public class ExtensionViewModel : ViewModelBase
         CheckTightnessExtensionUserControl = new CheckTightnessExtensionView()
         {
             DataContext = new CheckTightnessExtensionViewModel(_dialogService)
+        };
+        CheckAverageQuadraticDifferenceUserControl = new CheckAverageQuadraticDifferenceExtensionView()
+        {
+            DataContext = new CheckAverageQuadraticDifferenceExtensionViewModel(_dialogService)
         };
     }
 }

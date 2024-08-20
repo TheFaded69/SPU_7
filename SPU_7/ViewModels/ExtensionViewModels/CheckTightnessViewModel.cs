@@ -278,9 +278,10 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
 
     private async void StopCheckTightnessCommandHandler()
     {
-        _cancellationTokenSource?.Cancel();
-        await _standController.EmergencyPowerOffAsync();
+        await _cancellationTokenSource?.CancelAsync();
 
+        await _standController.DisableFrequencyRegulatorAsync((int)SelectedFanIndex);
+        
         IsChecking = false;
     }
 
@@ -559,7 +560,6 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
         finally
         {
             _timerService.InfoTimerDisable();
-            //NowActionString = $"Проверка закончена";
             IsChecking = false;
         }
     }

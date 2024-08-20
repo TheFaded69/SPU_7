@@ -2,7 +2,173 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:extensionViewModels="clr-namespace:SPU_7.ViewModels.ExtensionViewModels"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SPU_7.Views.ExtensionViews.CheckAverageQuadraticDifferenceView">
-    Welcome to Avalonia!
+             x:Class="SPU_7.Views.ExtensionViews.CheckAverageQuadraticDifferenceView"
+             x:DataType="extensionViewModels:CheckAverageQuadraticDifferenceViewModel"
+             Loaded="Control_OnLoaded"
+             Width="800"
+             Height="600">
+    <Design.DataContext>
+        <extensionViewModels:CheckAverageQuadraticDifferenceViewModel />
+    </Design.DataContext>
+
+    <controls:Card>
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Top"
+                       LastChildFill="False">
+                <Button DockPanel.Dock="Right"
+                        Width="46"
+                        Height="46"
+                        Command="{Binding CloseWindowCommand}"
+                        ToolTip.Tip="Закрыть"
+                        IsEnabled="{Binding !IsChecking}"
+                        Classes="flat">
+                    <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black" />
+                </Button>
+
+                <TextBlock Margin="5"
+                           FontSize="20"
+                           Text="{Binding Title}"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center" />
+            </DockPanel>
+
+            <DockPanel LastChildFill="False">
+                <Grid DockPanel.Dock="Top"
+                      ColumnDefinitions="0.33*, 0.33*, 0.33*"
+                      RowDefinitions="Auto, Auto">
+                    <ComboBox Grid.Column="0"
+                              Grid.Row="0"
+                              Margin="5"
+                              assists:ComboBoxAssist.Label="Линия"
+                              ItemsSource="{Binding LineViewModels}"
+                              SelectedItem="{Binding SelectedLineViewModel}"
+                              SelectedIndex="{Binding SelectedLineIndex}"
+                              Theme="{StaticResource MaterialOutlineComboBox}" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="5"
+                                               Text="{Binding LineName}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <ComboBox Grid.Column="1"
+                              Grid.Row="0"
+                              Margin="5"
+                              assists:ComboBoxAssist.Label="Эталонный СГ"
+                              ItemsSource="{Binding StandSettingsMasterDeviceModels}"
+                              SelectedItem="{Binding SelectedStandSettingsMasterDeviceModel}"
+                              SelectedIndex="{Binding SelectedMasterDeviceIndex}"
+                              Theme="{StaticResource MaterialOutlineComboBox}" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="5"
+                                               Text="{Binding MasterDeviceName}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <ComboBox Grid.Column="2"
+                              Grid.Row="0"
+                              Margin="5"
+                              ItemsSource="{Binding FanViewModels}"
+                              SelectedItem="{Binding SelectedFanViewModel}"
+                              SelectedIndex="{Binding SelectedFanIndex}"
+                              assists:ComboBoxAssist.Label="Воздуходувка"
+                              Theme="{StaticResource MaterialOutlineComboBox}" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="5"
+                                               Text="{Binding MinimumFlow, StringFormat='от {0} м³/ч '}"/>
+                                    <TextBlock Margin="5"
+                                               Text="{Binding MaximumFlow, StringFormat='до {0} м³/ч '}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock Margin="5"
+                               Grid.Row="1"
+                               Grid.Column="0" 
+                               VerticalAlignment="Center"
+                               Text="{Binding CurrentFlow, StringFormat='Текущий расход: {0}  м³/ч'}"/>
+                    <TextBox Margin="5"
+                             Grid.Row="1"
+                             Grid.Column="1"
+                             UseFloatingWatermark="True"
+                             Watermark="Введите значение"
+                             assists:TextFieldAssist.Label="Частота ПЧВ, гЦ" />
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <Button DockPanel.Dock="Bottom"
+                                Classes="flat"
+                                Width="60"
+                                Height="60"
+                                Margin="5"
+                                IsEnabled="{Binding !IsFanWorking}"
+                                Command="{Binding StartFanWorkingCommand}">
+                            <avalonia:MaterialIcon Kind="Play" Width="50" Height="50"/>
+                        </Button>
+                        <Button DockPanel.Dock="Bottom"
+                                Width="50"
+                                Height="50"
+                                Classes="flat"
+                                Margin="5"
+                                IsEnabled="{Binding IsFanWorking}"
+                                Command="{Binding StopFanWorkingCommand}">
+                            <avalonia:MaterialIcon Kind="Stop" Width="50" Height="50"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <DataGrid DockPanel.Dock="Left"
+                          Margin="5"
+                          ItemsSource="{Binding CheckAverageQuadraticDifferenceDataViewModels}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="№"
+                                            IsReadOnly="True" 
+                                            Binding="{Binding Number}"/>
+                        <DataGridTextColumn Header="Расход, м³/ч"
+                                            IsReadOnly="True" 
+                                            Binding="{Binding Flow}"/>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel DockPanel.Dock="Bottom"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Button Content="Старт"
+                            Margin="5"
+                            IsEnabled="{Binding !IsChecking}"
+                            Command="{Binding StartCheckAverageQuadraticDifferenceCommand}" />
+                    <Button Content="Стоп"
+                            Command="{Binding StopCheckAverageQuadraticDifferenceCommand}"
+                            IsEnabled="{Binding IsChecking}"
+                            Margin="5" />
+                </StackPanel>
+                
+                <TextBlock DockPanel.Dock="Top"
+                           Margin="5"
+                           HorizontalAlignment="Left"
+                           Text="{Binding  CurrentStep, StringFormat='Текущий этап проверки: {0}'}"/>
+                
+                <TextBlock DockPanel.Dock="Top"
+                           Margin="5"
+                           HorizontalAlignment="Left"
+                           Text="{Binding  CalculateAverageQuadraticDifference, StringFormat='Расчитанный СКО: {0}'}"/>
+            </DockPanel>
+
+            
+        </DockPanel>
+    </controls:Card>
 </UserControl>

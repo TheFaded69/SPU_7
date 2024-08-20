@@ -199,6 +199,33 @@ namespace SPU_7.Models.Stand
         /// <param name="lineIndex"></param>
         void RegisterFlowObserver(IFlowObserver masterDeviceItemViewModel, DevicePurpose devicePurpose, int deviceIndex, int lineIndex);
 
+        /// <summary>
+        /// Зарегистрировать наблюдателя за ДД на стенде с СГ
+        /// </summary>
+        /// <param name="observer">Наблюдатель</param>
+        /// <param name="devicePurpose"></param>
+        /// <param name="deviceIndex">Номер СГ (от 0)</param>
+        /// <param name="lineIndex"></param>
+        void UnsubscribePressureSensorObserver(IPressureSensorObserver observer, DevicePurpose devicePurpose, int deviceIndex, int lineIndex);
+
+        /// <summary>
+        /// Зарегистрировать наблюдателя за ДТ на стенде с СГ
+        /// </summary>
+        /// <param name="observer">Наблюдатель</param>
+        /// <param name="devicePurpose"></param>
+        /// <param name="deviceIndex">Номер СГ (от 0)</param>
+        /// <param name="lineIndex"></param>
+        void UnsubscribeTemperatureSensorObserver(ITemperatureSensorObserver observer, DevicePurpose devicePurpose, int deviceIndex, int lineIndex);
+
+        /// <summary>
+        /// Зарегистрировать наблюдателя за потокком на стенде с СГ
+        /// </summary>
+        /// <param name="observer">Наблюдатель</param>
+        /// <param name="devicePurpose"></param>
+        /// <param name="deviceIndex">Номер СГ (от 0)</param>
+        /// <param name="lineIndex"></param>
+        void UnsubscribeFlowObserver(IFlowObserver observer, DevicePurpose devicePurpose, int deviceIndex, int lineIndex);
+        
         
         /// <summary>
         /// Установить рабочий режим стенда

@@ -71,5 +71,8 @@
       <Compile Update="Views\ExtensionViews\CheckTightnessExtensionView.axaml.cs">
         <DependentUpon>CheckTightnessExtensionView.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Views\ExtensionViews\CheckAverageQuadraticDifferenceExtensionView.axaml.cs">
+        <DependentUpon>CheckAverageQuadraticDifferenceExtensionView.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>
