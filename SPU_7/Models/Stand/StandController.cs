@@ -1052,6 +1052,13 @@ namespace SPU_7.Models.Stand
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulseCountAsync();
         }
 
+        public async Task<float?> ReadMeasureTimeFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex)
+        {
+            if (pulseCountMeterModuleIndex == null) return null;
+            
+            return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadMeasureTimeAsync();
+        }
+
         public float? GetPressureDifference(int lineIndex)
         {
             return _lines[lineIndex].MasterDevices[0].GetPressureDifference();

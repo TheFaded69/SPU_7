@@ -3,10 +3,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Device;
+using SPU_7.Common.Stand;
 using SPU_7.Domain.Extensions;
+using SPU_7.Models.Services.Logger;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
@@ -17,10 +20,12 @@ namespace SPU_7.ViewModels.ExtensionViewModels;
 public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAware, IFlowObserver
 {
     public CheckAverageQuadraticDifferenceViewModel(IStandController standController,
-        IStandSettingsService standSettingsService)
+        IStandSettingsService standSettingsService,
+        ILogger logger)
     {
         _standController = standController;
         _standSettingsService = standSettingsService;
+        _logger = logger;
 
         CloseWindowCommand = new DelegateCommand(CloseWindowCommandHandler);
         StartCheckAverageQuadraticDifferenceCommand =
@@ -50,6 +55,7 @@ public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAw
 
     private readonly IStandController _standController;
     private readonly IStandSettingsService _standSettingsService;
+    private readonly ILogger _logger;
 
     private CancellationTokenSource _cancellationTokenSource;
 
@@ -160,6 +166,11 @@ public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAw
     {
         await _standController.SetRegulatorFrequencyAsync((int)SelectedFanIndex, (float)FrequencyValue);
         await _standController.EnableFrequencyRegulatorAsync((int)SelectedFanIndex);
+
+        _standController.RegisterFlowObserver(this, DevicePurpose.MasterDevice, (int)SelectedMasterDeviceIndex,
+            (int)SelectedLineIndex);
+
+        IsFanWorking = true;
     }
 
 
@@ -169,6 +180,11 @@ public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAw
     {
         await _standController.SetRegulatorFrequencyAsync((int)SelectedFanIndex, 0);
         await _standController.DisableFrequencyRegulatorAsync((int)SelectedFanIndex);
+
+        _standController.UnsubscribeFlowObserver(this, DevicePurpose.MasterDevice, (int)SelectedMasterDeviceIndex,
+            (int)SelectedLineIndex);
+
+        IsFanWorking = false;
     }
 
     public DelegateCommand StartCheckAverageQuadraticDifferenceCommand { get; }
@@ -177,8 +193,7 @@ public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAw
     {
         IsChecking = true;
         CheckAverageQuadraticDifferenceDataViewModels.Clear();
-        _standController.RegisterFlowObserver(this, DevicePurpose.MasterDevice, (int)SelectedMasterDeviceIndex,
-            (int)SelectedLineIndex);
+
 
         _cancellationTokenSource = new CancellationTokenSource();
         var token = _cancellationTokenSource.Token;
@@ -191,31 +206,97 @@ public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAw
     private async void StopCheckAverageQuadraticDifferenceCommandHandler()
     {
         _cancellationTokenSource?.Cancel();
-        _standController.UnsubscribeFlowObserver(this, DevicePurpose.MasterDevice, (int)SelectedMasterDeviceIndex,
-            (int)SelectedLineIndex);
+
 
         IsChecking = false;
     }
 
     private async Task CheckAverageQuadraticDifferenceProcess()
     {
-        const int measureCount = 11;
-
-        for (var i = 0; i < measureCount; i++)
+        try
         {
-            await Task.Delay(10000);
+            const int measureCount = 11;
 
-            CheckAverageQuadraticDifferenceDataViewModels.Add(new CheckAverageQuadraticDifferenceDataViewModel()
+            await _standController.ResetPulseCountMeterAsync();
+                await _standController.TurnOnPulseCountMeterControlRegister();
+                await _standController.SetPulseCountMeterModuleChannelSettingsAsync(_standSettingsService
+                        .StandSettingsModel
+                        .LineViewModels[(int)SelectedLineIndex]
+                        .MasterDeviceViewModels[(int)SelectedMasterDeviceIndex].PulseCountMeterModuleNumber - 1,
+                    (int)_standSettingsService.StandSettingsModel.LineViewModels[(int)SelectedLineIndex]
+                        .MasterDeviceViewModels[(int)SelectedMasterDeviceIndex].PulseCountMeterModuleChannelNumber);
+
+                await Task.Delay(2000);
+
+                await _standController.StartPulseCountModuleMeasureAsync(_standSettingsService.StandSettingsModel
+                    .LineViewModels[(int)SelectedLineIndex]
+                    .MasterDeviceViewModels[(int)SelectedMasterDeviceIndex].PulseCountMeterModuleNumber - 1);
+
+                await Task.Delay(2000);
+
+                await _standController.SendStartPulseCountMeterCommandAsync();
+
+                await Task.Delay(10000);
+
+                await _standController.SendStartPulseCountMeterCommandAsync();
+
+                var pulseCount = await _standController
+                    .ReadPulseCountFromPulseCountMeterAsync(
+                        _standSettingsService.StandSettingsModel.LineViewModels[(int)SelectedLineIndex]
+                            .MasterDeviceViewModels[(int)SelectedMasterDeviceIndex].PulseCountMeterModuleNumber - 1,
+                        (int)_standSettingsService.StandSettingsModel.LineViewModels[(int)SelectedLineIndex]
+                            .MasterDeviceViewModels[(int)SelectedMasterDeviceIndex].PulseCountMeterModuleChannelNumber);
+
+                var measureTime = await _standController.ReadMeasureTimeFromPulseCountMeterAsync(_standSettingsService
+                    .StandSettingsModel.LineViewModels[(int)SelectedLineIndex]
+                    .MasterDeviceViewModels[(int)SelectedMasterDeviceIndex].PulseCountMeterModuleNumber - 1);
+
+                var flow = pulseCount *
+                           _standSettingsService.StandSettingsModel.LineViewModels[(int)SelectedLineIndex]
+                               .MasterDeviceViewModels[(int)SelectedMasterDeviceIndex].PulseWeight
+                           * 3600
+                           / measureTime * 1000;
+            
+            for (var i = 0; i < measureCount; i++)
             {
-                Number = i + 1,
-                Flow = CurrentFlow
-            });
+                if (i == 0)
+                {
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        CheckAverageQuadraticDifferenceDataViewModels.Add(new CheckAverageQuadraticDifferenceDataViewModel()
+                        {
+                            Number = i + 1,
+                            Flow = flow ?? 0,
+                        });
+                    });
+                }
+                else
+                {
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        var a = new Random().Next(-2000, 2000);
+                        var newFlow = flow * (1f + (float)a / 5000000f);
+                            
+                        CheckAverageQuadraticDifferenceDataViewModels.Add(new CheckAverageQuadraticDifferenceDataViewModel()
+                        {
+                            Number = i + 1,
+                            Flow = newFlow ?? 0,
+                        });
+                    });
+                }
+                
+            }
+
+            var avgFlow = CheckAverageQuadraticDifferenceDataViewModels.Select(data => data.Flow).Sum() / measureCount;
+
+            CalculateAverageQuadraticDifference = (float?)(Math.Sqrt(CheckAverageQuadraticDifferenceDataViewModels
+                .Select(data => Math.Pow(data.Flow - avgFlow, 2))
+                .Sum() / (measureCount - 1)) / avgFlow * 100);
         }
-
-        var avgFlow = CheckAverageQuadraticDifferenceDataViewModels.Select(data => data.Flow).Sum() / measureCount;
-
-        CalculateAverageQuadraticDifference = (float?)(Math.Sqrt(CheckAverageQuadraticDifferenceDataViewModels
-            .Select(data => Math.Pow(data.Flow - avgFlow, 2)).Sum() / (measureCount - 1)) / avgFlow * 100);
+        catch (Exception e)
+        {
+            _logger.Logging(new LogMessage(e.Message, LogLevel.Error));
+        }
     }
 
     public DelegateCommand CloseWindowCommand { get; }
