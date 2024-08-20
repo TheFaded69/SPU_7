@@ -93,6 +93,8 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
     private async void StartPulseCountCommandHandler()
     {
+        
+        
         var pulseCountMeterModuleNumber = _standSettingsService.StandSettingsModel
             .LineViewModels[SelectedDevicePulseCountMeterModuleViewModel.LineNumber - 1]
             .DeviceViewModels[SelectedDevicePulseCountMeterModuleViewModel.DeviceNumber - 1]
@@ -100,7 +102,6 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.ChannelNumber;
 
         IsPulseCountWork = true;
-
 
         await _standController.ResetPulseCountMeterAsync();
         await _standController.TurnOnPulseCountMeterControlRegister();
@@ -153,10 +154,12 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         
         await _standController.SendStartPulseCountMeterCommandAsync();
 
+        await Task.Delay(2000);
+        
         IsPulseCountWork = false;
         
         PulseCount = await _standController.ReadPulseCountFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
-        PulsePeriod = await _standController.ReadPulsePeriodFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber);
+        PulsePeriod = await _standController.ReadPulsePeriodFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1, pulseCountMeterModuleChannelNumber) / 1000;
     }
     
     public DelegateCommand StopPulseDurationCommand { get; }
@@ -170,6 +173,8 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.ChannelNumber;
         
         await _standController.SendStartPulseCountMeterCommandAsync();
+        
+        await Task.Delay(2000);
 
         IsPulseDurationWork = false;
         
@@ -185,8 +190,6 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
     public void OnDialogOpened(IDialogParameters parameters)
     {
-        //todo переделать текстбокс выбора МПКИ и канала на комбобокс исходя из настроек
-
         foreach (var lineViewModel in _standSettingsService.StandSettingsModel.LineViewModels)
         {
             foreach (var deviceViewModel in lineViewModel.DeviceViewModels)

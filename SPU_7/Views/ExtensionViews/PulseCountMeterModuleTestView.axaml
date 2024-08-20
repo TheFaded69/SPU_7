@@ -52,11 +52,9 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="5"
-                                           Text="{Binding LineNumber, StringFormat='Линия - №{0}'}"/>
-                                <!--TextBlock Margin="5"
-                                           Text="{Binding DeviceNumber, StringFormat='Устройство - №{0}'}"/>
+                                           Text="{Binding LineNumber, StringFormat='МПКИ - №{0}'}"/>
                                 <TextBlock Margin="5"
-                                           Text="{Binding ChannelNumber, StringFormat='Канал - №{0}'}"/-->
+                                           Text="{Binding ChannelNumber, StringFormat='Канал - №{0}'}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
@@ -132,7 +130,7 @@
                     <TextBlock DockPanel.Dock="Bottom"
                                VerticalAlignment="Center"
                                Margin="5"
-                               Text="{Binding PulsePeriod, StringFormat='Период импульса: {0}'}"/>
+                               Text="{Binding PulsePeriod, StringFormat='Период импульса, с: {0}'}"/>
                 </DockPanel>
             </Grid>
         </DockPanel>

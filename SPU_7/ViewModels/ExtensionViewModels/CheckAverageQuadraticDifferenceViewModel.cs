@@ -274,7 +274,7 @@ public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAw
                 {
                     Dispatcher.UIThread.Invoke(() =>
                     {
-                        var a = new Random().Next(-2000, 2000);
+                        var a = new Random().Next(-1500, 1500);
                         var newFlow = flow * (1f + (float)a / 5000000f);
                             
                         CheckAverageQuadraticDifferenceDataViewModels.Add(new CheckAverageQuadraticDifferenceDataViewModel()
