@@ -17,12 +17,14 @@ public class ScriptResultsDbService : IScriptResultsDbService
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
     private readonly IRepositoryCreator<DbScriptResult, Guid> _repositoryCreator;
+    private readonly IPictureResultDbService _pictureResultDbService;
 
-    public ScriptResultsDbService(IMapper mapper, ILogger logger, IRepositoryCreator<DbScriptResult, Guid> repositoryCreator)
+    public ScriptResultsDbService(IMapper mapper, ILogger logger, IRepositoryCreator<DbScriptResult, Guid> repositoryCreator, IPictureResultDbService pictureResultDbService)
     {
         _mapper = mapper;
         _logger = logger;
         _repositoryCreator = repositoryCreator;
+        _pictureResultDbService = pictureResultDbService;
     }
 
     public void AddScriptResult(ScriptResult scriptResult)

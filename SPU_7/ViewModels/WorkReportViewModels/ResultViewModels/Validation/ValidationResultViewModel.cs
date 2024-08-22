@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using Avalonia.Media.Imaging;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Stand;
@@ -11,11 +14,15 @@ namespace SPU_7.ViewModels.WorkReportViewModels.ResultViewModels.Validation;
 
 public class ValidationResultViewModel : ViewModelBase
 {
-    public ValidationResultViewModel(ValidationOperationResult validationOperationResult, IDialogService dialogService, ILogger logger)
+    public ValidationResultViewModel(ValidationOperationResult validationOperationResult, 
+        IDialogService dialogService,
+        ILogger logger, 
+        List<PictureResultModel> valuePictureResults)
     {
         _validationOperationResult = validationOperationResult;
         _dialogService = dialogService;
         _logger = logger;
+        _valuePictureResults = valuePictureResults;
         VendorNumbers = new ObservableCollection<string>();
 
         foreach (var validationDeviceResult in validationOperationResult.ValidationPointResults
@@ -33,6 +40,7 @@ public class ValidationResultViewModel : ViewModelBase
     private readonly ValidationOperationResult _validationOperationResult;
     private readonly IDialogService _dialogService;
     private readonly ILogger _logger;
+    private readonly List<PictureResultModel> _valuePictureResults;
 
     private string _selectedVendorNumber;
     private ObservableCollection<ValidationDeviceResultViewModel> _validationDeviceResultViewModels;
@@ -95,8 +103,20 @@ public class ValidationResultViewModel : ViewModelBase
                     CalculateFlow = validationDeviceResult.CalculateFlow,
                     FlowDifference = validationDeviceResult.FlowDifference,
                     VolumeDifference = validationDeviceResult.VolumeDifference,
-                    ValidationFlowTime = validationDeviceResult.ValidationFlowTime
+                    ValidationFlowTime = validationDeviceResult.ValidationFlowTime,
                 });
+            }
+
+            foreach (var pictureResult in _valuePictureResults)
+            {
+                if (pictureResult.BitMapData == null) continue;
+                
+                using var ms = new MemoryStream(pictureResult.BitMapData);
+                    
+                ValidationDeviceResultViewModels.FirstOrDefault(res => res.PointNumber == pictureResult.PointNumber &&
+                                                                       res.MeasureNumber == pictureResult.MeasureNumber &&
+                                                                       SelectedIndex + 1 == pictureResult.DeviceNumber)
+                    .CameraPictureResult = new Bitmap(ms);
             }
             
             GoodDevice = ValidationDeviceResultViewModels.Any(vd => Math.Abs((double)vd.VolumeDifference) > vd.TargetVolumeDifference) ? "Не годен" : "Годен";

@@ -18,4 +18,6 @@ public class OperationResult
     public OperationResultType ResultStatus { get; set; }
     public string Message { get; set; }
     public BaseOperationResult Result { get; set; }
+    
+    public List<PictureResultModel> PictureResults { get; set; }
 }

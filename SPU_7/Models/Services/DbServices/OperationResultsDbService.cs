@@ -53,6 +53,7 @@ public class OperationResultsDbService : IOperationResultsDbService
                 operationReportViewModel.OperationNumber = operationResult.Result.OperationNumber;
                 operationReportViewModel.OperationType = operationResult.OperationType;
                 operationReportViewModel.BaseOperationResult = operationResult.Result;
+                operationReportViewModel.PictureResults = operationResult.PictureResults;
             }
 
             return list;

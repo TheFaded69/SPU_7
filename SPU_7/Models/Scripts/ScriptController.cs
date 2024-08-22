@@ -18,18 +18,21 @@ namespace SPU_7.Models.Scripts
         public ScriptController(ILogger logger,
             IStandController standController,
             IScriptResultsDbService scriptResultsDbService,
-            IStandSettingsService standSettingsService)
+            IStandSettingsService standSettingsService,
+            IPictureResultDbService pictureResultDbService)
         {
             _logger = logger;
             _standController = standController;
             _scriptResultsDbService = scriptResultsDbService;
             _standSettingsService = standSettingsService;
+            _pictureResultDbService = pictureResultDbService;
         }
 
         private readonly ILogger _logger;
         private readonly IStandController _standController;
         private readonly IScriptResultsDbService _scriptResultsDbService;
         private readonly IStandSettingsService _standSettingsService;
+        private readonly IPictureResultDbService _pictureResultDbService;
 
         private ScriptModel _scriptModel;
         private ScriptResult _scriptResult;
@@ -184,7 +187,6 @@ namespace SPU_7.Models.Scripts
 
         private void SaveScriptResult()
         {
-
             _scriptResultsDbService.AddScriptResult(_scriptResult);
         }
         

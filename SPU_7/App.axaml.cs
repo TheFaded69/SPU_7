@@ -87,6 +87,8 @@ public partial class App : PrismApplication
             containerRegistry.Register<IRepositoryCreator<DbOperationResult, Guid>, RepositoryCreator<DbOperationResult, Guid>>();
             containerRegistry.Register<IDeviceDbService, DeviceDbService>();
             containerRegistry.Register<IRepositoryCreator<DbDevice, Guid>, RepositoryCreator<DbDevice, Guid>>();
+            containerRegistry.Register<IPictureResultDbService, PictureResultDbService>();
+            containerRegistry.Register<IRepositoryCreator<DbPictureResult, Guid>, RepositoryCreator<DbPictureResult, Guid>>();
             
 
             //Other
@@ -110,7 +112,6 @@ public partial class App : PrismApplication
             containerRegistry.RegisterDialog<ManualValidationResultView, ManualValidationResultViewModel>();
             containerRegistry.RegisterDialog<WriteDeviceInformationView, WriteDeviceInformationViewModel>();
             containerRegistry.RegisterDialog<WorkReportView, WorkReportViewModel>();
-            containerRegistry.RegisterDialog<ResultViewerView, ResultViewerViewModel>();
             containerRegistry.RegisterDialog<NozzleSelectorView, NozzleSelectorViewModel>();
             containerRegistry.RegisterDialog<PdfViewerView, PdfViewerViewModel>();
             containerRegistry.RegisterDialog<MasterDeviceInfoView, MasterDeviceInfoViewModel>();

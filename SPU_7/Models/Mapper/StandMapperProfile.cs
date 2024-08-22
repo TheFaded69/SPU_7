@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SPU_7.Database.Models;
 using SPU_7.Models.Scripts;
 using SPU_7.Models.Scripts.Operations.Configurations.Extensions;
+using SPU_7.Models.Scripts.Operations.Results;
 using SPU_7.Models.Services.DbServices;
 using SPU_7.Models.Stand.Settings.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
@@ -49,6 +50,9 @@ namespace SPU_7.Models.Mapper
             CreateMap<DbDevice, DeviceInformation>()
                 .ReverseMap();
 
+            CreateMap<DbPictureResult, PictureResultModel>()
+                .ReverseMap();
+            
             #endregion
 
             #region Settings

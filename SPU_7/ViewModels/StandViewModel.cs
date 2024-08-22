@@ -89,6 +89,14 @@ namespace SPU_7.ViewModels
             set => SetProperty(ref _userControlExtension, value);
         }
 
+        private bool _isMnemonicSchemeControlVisible = true;
+
+        public bool IsMnemonicSchemeControlVisible
+        {
+            get => _isMnemonicSchemeControlVisible;
+            set => SetProperty(ref _isMnemonicSchemeControlVisible, value);
+        }
+
         private void CreateForm()
         {
             UserControlMnemonicSchemeControl = new MnemonicSchemeControlView

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
@@ -6,10 +7,15 @@ using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Prism.Commands;
 using Prism.Services.Dialogs;
+using SPU_7.Common.Scripts;
+using SPU_7.Common.Settings;
 using SPU_7.Common.Stand;
 using SPU_7.Models.Scripts;
+using SPU_7.Models.Scripts.Operations.Results;
+using SPU_7.Models.Scripts.Operations.Results.Extensions;
 using SPU_7.Models.Services.Autorization;
 using SPU_7.Models.Services.ContentServices;
+using SPU_7.Models.Services.DbServices;
 using SPU_7.Models.Services.Logger;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
@@ -29,7 +35,8 @@ namespace SPU_7.ViewModels
             IScriptController scriptController,
             IManualOperationService manualOperationService,
             ITimerService timerService,
-            IOperationActionService operationActionService)
+            IOperationActionService operationActionService,
+            IScriptResultsDbService scriptResultsDbService)
         {
             _dialogService = dialogService;
             _notificationService = notificationService;
@@ -41,6 +48,7 @@ namespace SPU_7.ViewModels
             _manualOperationService = manualOperationService;
             _timerService = timerService;
             _operationActionService = operationActionService;
+            _scriptResultsDbService = scriptResultsDbService;
 
             CloseWindowCommand = new DelegateCommand<Window>(CloseWindowCommandHandler);
             HideWindowCommand = new DelegateCommand<Window>(HideWindowCommandHandler);
@@ -66,6 +74,7 @@ namespace SPU_7.ViewModels
         private readonly IManualOperationService _manualOperationService;
         private readonly ITimerService _timerService;
         private readonly IOperationActionService _operationActionService;
+        private readonly IScriptResultsDbService _scriptResultsDbService;
 
         #region Боковое меню
 
@@ -101,12 +110,13 @@ namespace SPU_7.ViewModels
             StandView = new StandView
             {
                 DataContext = new StandViewModel(_dialogService, _notificationService, _logger,
-                    _standSettingsService, _standController, _scriptController, _manualOperationService, _timerService, _operationActionService)
+                    _standSettingsService, _standController, _scriptController, _manualOperationService, _timerService,
+                    _operationActionService)
             };
 
             ///костыль - ждем пока прогрузится интерфейс в другом потоке
             await Task.Delay(10000);
-            
+
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
@@ -217,7 +227,9 @@ namespace SPU_7.ViewModels
 
         private void ExitUser()
         {
-            _logger.Logging(new LogMessage($"{Employee} под псевдонимом {_authorizationService.GetUser().UserName} вышел из системы", LogLevel.Info));
+            _logger.Logging(new LogMessage(
+                $"{Employee} под псевдонимом {_authorizationService.GetUser().UserName} вышел из системы",
+                LogLevel.Info));
 
             Employee = string.Empty;
             IsAuthorize = false;
@@ -293,19 +305,196 @@ namespace SPU_7.ViewModels
             Employee = _authorizationService.GetUser().Employee;
             IsAuthorize = _authorizationService.IsAuthorize();
         }
-        
+
         public DelegateCommand<Window> CloseWindowCommand { get; }
 
         public void CloseWindowCommandHandler(Window window)
         {
-            /*var buff = System.IO.File.ReadAllBytes(@"D:\TestPicture.bmp");
+            /*var buff = System.IO.File.ReadAllBytes(@"C:\testPicture.jpeg");
             using var ms = new MemoryStream(buff);
             var bmp = new Bitmap(ms);
-            PicturePreviewViewModel.Show(_dialogService, bmp, null, null);*/
+            //PicturePreviewViewModel.Show(_dialogService, bmp, null, null);*/
+
+            /*_scriptResultsDbService.AddScriptResult(new ScriptResult()
+            {
+                Description = "Test description",
+                Name = "Test name",
+                OperationResults = new List<OperationResult>()
+                {
+                    new OperationResult(OperationResultType.Success, "Test1", new BaseOperationResult()
+                    {
+                        OperationNumber = 1,
+                    }),
+                    new OperationResult(OperationResultType.Success, "Test2", new BaseOperationResult()
+                    {
+                        OperationNumber = 2,
+                    }),
+                    new OperationResult(OperationResultType.Success, "TestValidation", new ValidationOperationResult()
+                    {
+                        OperationNumber = 3,
+                        Message = "TestTest",
+                        ValidationType = ValidationType.ValidationByVolume,
+                        MaximumFlow = 100,
+                        MinimumFlow = 0.04,
+                        NominalFlow = 10,
+                        ValidationPointResults = new List<ValidationPointResult>()
+                        {
+                            new ValidationPointResult()
+                            {
+                                ValidationMeasureResults = new List<ValidationMeasureResult>()
+                                {
+                                    new ValidationMeasureResult()
+                                    {
+                                        ValidationDeviceResults = new List<ValidationDeviceResult>()
+                                        {
+                                            new ValidationDeviceResult
+                                            {
+                                                PointNumber = 1,
+                                                MeasureNumber = 1,
+                                                ValidationVolumeTime = 0,
+                                                TargetVolume = 0,
+                                                TargetVolumeDifference = 0,
+                                                VolumeDifference = 0,
+                                                StartVolumeValue = 0,
+                                                EndVolumeValue = 57,
+                                                TargetFlow = 10,
+                                                CalculateFlow = 10,
+                                                ValidationFlowTime = 300,
+                                                FlowDifference = 1,
+                                                VendorNumber = "1234567890",
+                                                OwnerName = "David Bidenko",
+                                                DeviceInfo = "Тест СГ",
+                                                ProtocolNumber = 1,
+                                                PressureDifference = 0.31f,
+                                            },
+                                            new ValidationDeviceResult
+                                            {
+                                                PointNumber = 1,
+                                                MeasureNumber = 1,
+                                                ValidationVolumeTime = 0,
+                                                TargetVolume = 0,
+                                                TargetVolumeDifference = 0,
+                                                VolumeDifference = 0,
+                                                StartVolumeValue = 0,
+                                                EndVolumeValue = 57,
+                                                TargetFlow = 10,
+                                                CalculateFlow = 10,
+                                                ValidationFlowTime = 300,
+                                                FlowDifference = 1,
+                                                VendorNumber = "0987654321",
+                                                OwnerName = "David Bidenko",
+                                                DeviceInfo = "Тест СГ 2",
+                                                ProtocolNumber = 2,
+                                                PressureDifference = 0.31f,
+                                            },
+                                        }
+                                    },
+                                    new ValidationMeasureResult()
+                                    {
+                                        ValidationDeviceResults = new List<ValidationDeviceResult>()
+                                        {
+                                            new ValidationDeviceResult
+                                            {
+                                                PointNumber = 1,
+                                                MeasureNumber = 2,
+                                                ValidationVolumeTime = 0,
+                                                TargetVolume = 0,
+                                                TargetVolumeDifference = 0,
+                                                VolumeDifference = 0,
+                                                StartVolumeValue = 0,
+                                                EndVolumeValue = 57,
+                                                TargetFlow = 10,
+                                                CalculateFlow = 10,
+                                                ValidationFlowTime = 300,
+                                                FlowDifference = 1,
+                                                VendorNumber = "1234567890",
+                                                OwnerName = "David Bidenko",
+                                                DeviceInfo = "Тест СГ",
+                                                ProtocolNumber = 1,
+                                                PressureDifference = 0.31f,
+                                            },
+                                            new ValidationDeviceResult
+                                            {
+                                                PointNumber = 1,
+                                                MeasureNumber = 2,
+                                                ValidationVolumeTime = 0,
+                                                TargetVolume = 0,
+                                                TargetVolumeDifference = 0,
+                                                VolumeDifference = 0,
+                                                StartVolumeValue = 0,
+                                                EndVolumeValue = 57,
+                                                TargetFlow = 10,
+                                                CalculateFlow = 10,
+                                                ValidationFlowTime = 300,
+                                                FlowDifference = 1,
+                                                VendorNumber = "0987654321",
+                                                OwnerName = "David Bidenko",
+                                                DeviceInfo = "Тест СГ 2",
+                                                ProtocolNumber = 2,
+                                                PressureDifference = 0.31f,
+                                            },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        
+                    })
+                    {
+                        Device = new List<DeviceInformation>()
+                        {
+                            new DeviceInformation
+                            {
+                                VendorNumber = "123456789",
+                                DeviceName = "Test SG",
+                                VendorName = "Test vendorName",
+                                VendorAddress = "Test vendorAddress",
+                                ProtocolNumber = 1
+                            },
+                            new DeviceInformation
+                            {
+                                VendorNumber = "9876543210",
+                                DeviceName = "Test SG 2",
+                                VendorName = "Test vendorName",
+                                VendorAddress = "Test vendorAddress",
+                                ProtocolNumber = 1
+                            }
+                        },
+                        OperationType = OperationType.Validation,
+                        PictureResults = new List<PictureResultModel>()
+                        {
+                            new PictureResultModel
+                            {
+                                DeviceNumber = 1,
+                                MeasureNumber = 1,
+                                PointNumber = 1,
+                                BitMapData = null
+                            },
+                            new PictureResultModel
+                            {
+                                DeviceNumber = 1,
+                                MeasureNumber = 2,
+                                PointNumber = 1,
+                                BitMapData = null
+                            },
+                            new PictureResultModel
+                            {
+                                DeviceNumber = 2,
+                                MeasureNumber = 1,
+                                PointNumber = 1,
+                                BitMapData = buff
+                            }
+                        }
+                    },
+                },
+            });*/
+
             Dispose();
 
             window.Close();
         }
+
+        
 
         private bool _isFullScreen = true;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia.Media.Imaging;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Views;
 
@@ -10,23 +11,30 @@ public class PicturePreviewViewModel : ViewModelBase, IDialogAware
 {
     public PicturePreviewViewModel()
     {
+        Title = "Предпросмотр показаний";
         
+        CloseWindowCommand = new DelegateCommand(CloseWindowCommandHandler);
     }
 
     private Bitmap _picture;
-    
+
     public Bitmap Picture
     {
         get => _picture;
         set => SetProperty(ref _picture, value);
     }
 
-    public bool CanCloseDialog()
-        => true;
+    public DelegateCommand CloseWindowCommand { get; }
+
+    private void CloseWindowCommandHandler()
+    {
+        RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
+    }
+
+    public bool CanCloseDialog() => true;
 
     public void OnDialogClosed()
     {
-
     }
 
     public void OnDialogOpened(IDialogParameters parameters)
@@ -38,7 +46,8 @@ public class PicturePreviewViewModel : ViewModelBase, IDialogAware
 
     public static void Show(IDialogService dialogService, Bitmap picture, Action positiveAction, Action negativeAction)
     {
-        dialogService.ShowDialog(nameof(PicturePreviewView), new DialogParameters {{"Picture", picture}}, result => {
+        dialogService.ShowDialog(nameof(PicturePreviewView), new DialogParameters { { "Picture", picture } }, result =>
+        {
             switch (result.Result)
             {
                 case ButtonResult.Abort:

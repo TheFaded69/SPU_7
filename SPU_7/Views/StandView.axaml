@@ -7,7 +7,8 @@
              x:CompileBindings="False"
 
              xmlns:controls="using:Material.Styles.Controls"
-             xmlns:viewModels="clr-namespace:SPU_7.ViewModels">
+             xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
 
     <Design.DataContext>
         <viewModels:StandViewModel />
@@ -22,7 +23,10 @@
                 <ContentPresenter Content="{Binding UserControlMnemonicSchemeControl}"
                                   DockPanel.Dock="Right"
                                   Width="400"
+                                  IsVisible="{Binding IsMnemonicSchemeControlVisible}"
                                   Margin="0,0,0,0" />
+
+                
 
                 <controls:Card Margin="5,5,5,5">
 
@@ -33,6 +37,16 @@
                         <ContentPresenter Content="{Binding UserControlMnemonicScheme}" />
                     </Viewbox>
                 </controls:Card>
+                
+                <ToggleSwitch DockPanel.Dock="Right"
+                              Margin="-60,10,0,0"
+                              VerticalAlignment="Top"
+                              Width="20"
+                              Height="20"
+                              IsChecked="{Binding IsMnemonicSchemeControlVisible}"
+                              HorizontalContentAlignment="Center">
+                    
+                </ToggleSwitch>
             </DockPanel>
         </TabItem>
         <TabItem Header="Дополнительные возможности"

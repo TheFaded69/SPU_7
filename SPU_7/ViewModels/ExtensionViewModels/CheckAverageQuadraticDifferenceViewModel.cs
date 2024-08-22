@@ -197,10 +197,12 @@ public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAw
 
         _cancellationTokenSource = new CancellationTokenSource();
         var token = _cancellationTokenSource.Token;
-
         var result = Task.Run(async () => { await CheckAverageQuadraticDifferenceProcess(); }, token);
+        //var result = Task.Run(async () => { await FakeCheckAverageQuadraticDifferenceProcess(); }, token);
     }
 
+    
+    
     public DelegateCommand StopCheckAverageQuadraticDifferenceCommand { get; }
 
     private async void StopCheckAverageQuadraticDifferenceCommandHandler()
@@ -297,6 +299,50 @@ public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAw
         {
             _logger.Logging(new LogMessage(e.Message, LogLevel.Error));
         }
+    }
+
+    private async Task FakeCheckAverageQuadraticDifferenceProcess()
+    {
+        const int measureCount = 11;
+
+        CurrentFlow = 0.0041f;
+        float? flow = 0.0040500153f;
+            
+        for (var i = 0; i < measureCount; i++)
+        {
+            if (i == 0)
+            {
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    CheckAverageQuadraticDifferenceDataViewModels.Add(new CheckAverageQuadraticDifferenceDataViewModel()
+                    {
+                        Number = i + 1,
+                        Flow = flow ?? 0,
+                    });
+                });
+            }
+            else
+            {
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    var a = new Random().Next(-1500, 1500);
+                    var newFlow = flow * (1f + (float)a / 5000000f);
+                            
+                    CheckAverageQuadraticDifferenceDataViewModels.Add(new CheckAverageQuadraticDifferenceDataViewModel()
+                    {
+                        Number = i + 1,
+                        Flow = newFlow ?? 0,
+                    });
+                });
+            }
+                
+        }
+
+        var avgFlow = CheckAverageQuadraticDifferenceDataViewModels.Select(data => data.Flow).Sum() / measureCount;
+
+        CalculateAverageQuadraticDifference = (float?)(Math.Sqrt(CheckAverageQuadraticDifferenceDataViewModels
+            .Select(data => Math.Pow(data.Flow - avgFlow, 2))
+            .Sum() / (measureCount - 1)) / avgFlow * 100);
     }
 
     public DelegateCommand CloseWindowCommand { get; }

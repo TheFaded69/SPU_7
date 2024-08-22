@@ -1,4 +1,6 @@
-﻿namespace SPU_7.Models.Scripts.Operations.Results.Extensions;
+﻿using Avalonia.Media.Imaging;
+
+namespace SPU_7.Models.Scripts.Operations.Results.Extensions;
 
 public class ValidationDeviceResult
 {

@@ -8,6 +8,8 @@ public class DbOperationResult: DbEntityGuid
 
     public DbScriptResult ScriptResult { get; set; }
     
+    public List<DbPictureResult> PictureResults { get; set; }
+    
     public List<DbDevice> Device { get; set; }
     
     public string Result { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SPU_7.Common.Scripts;
 using SPU_7.Models.Scripts.Operations.Results;
 
@@ -48,4 +49,7 @@ public class OperationReportViewModel : ViewModelBase
     }
     
     public BaseOperationResult BaseOperationResult { get; set; }
+    
+    public List<PictureResultModel> PictureResults { get; set; }
+
 }

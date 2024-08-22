@@ -98,6 +98,7 @@ public sealed class DataContext : Microsoft.EntityFrameworkCore.DbContext, IData
         CreateDbCompletedScriptsModel(modelBuilder);
         CreateDbDevicesModel(modelBuilder);
         CreateDbCompletedOperationsModel(modelBuilder);
+        CreateDbPictureResultModel(modelBuilder);
     }
 
 
@@ -195,6 +196,20 @@ public sealed class DataContext : Microsoft.EntityFrameworkCore.DbContext, IData
         modelBuilder.Entity<DbDevice>()
             .HasOne(db => db.OperationResult)
             .WithMany(db => db.Device)
+            .HasForeignKey(db => db.OperationResultId);
+    }
+
+    private void CreateDbPictureResultModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<DbPictureResult>().ToTable("PictureResults");
+        CreateBaseEntity<DbPictureResult, Guid>(modelBuilder);
+        modelBuilder.Entity<DbPictureResult>().Property(db => db.DeviceNumber);
+        modelBuilder.Entity<DbPictureResult>().Property(db => db.MeasureNumber);
+        modelBuilder.Entity<DbPictureResult>().Property(db => db.PointNumber);
+
+        modelBuilder.Entity<DbPictureResult>()
+            .HasOne(db => db.OperationResult)
+            .WithMany(db => db.PictureResults)
             .HasForeignKey(db => db.OperationResultId);
     }
 }

@@ -102,9 +102,11 @@
                                         IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button IsEnabled="{Binding CameraPictureResult, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                    Command="{Binding OpenPicturePreviewCommand}">
-                                <avalonia:MaterialIcon Kind="Picture" Width="40" Height="40" Foreground="Black"/>
+                            <Button IsEnabled="{Binding CameraPictureResult, 
+                            Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Command="{Binding OpenPicturePreviewCommand}"
+                                    Classes="flat">
+                                <avalonia:MaterialIcon Kind="Camera" Width="40" Height="40" Foreground="Black"/>
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

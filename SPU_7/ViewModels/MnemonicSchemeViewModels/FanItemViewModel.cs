@@ -31,8 +31,11 @@ public class FanItemViewModel : ViewModelBase
             }
         }
         
-        ValveItemViewModel = new ValveItemViewModel(standSettingsValveModel, standController, standSettingsValveModel.IsReverseValve ? StateType.Close : StateType.Open);
-        NeedleValveItemViewModel = new NeedleValveItemViewModel(settingsNeedleValveModel, standController, StateType.Close);
+        if (standSettingsValveModel != null)
+            ValveItemViewModel = new ValveItemViewModel(standSettingsValveModel, standController, standSettingsValveModel.IsReverseValve ? StateType.Close : StateType.Open);
+        
+        if (settingsNeedleValveModel != null)
+            NeedleValveItemViewModel = new NeedleValveItemViewModel(settingsNeedleValveModel, standController, StateType.Close);
         
         EnableFanCommand = new DelegateCommand(EnableFanCommandHandler);
         DisableFanCommand = new DelegateCommand(DisableFanCommandHandler);

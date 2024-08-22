@@ -3,16 +3,48 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SPU_7.ViewModels"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:CompileBindings="False"
              x:Class="SPU_7.Views.PicturePreviewView"
              Width="800"
-             Height="600">
-    
+             Height="600"
+             Loaded="Control_OnLoaded">
+
     <Design.DataContext>
-        <viewModels:PicturePreviewViewModel />
+        <viewModels:PicturePreviewViewModel/>
     </Design.DataContext>
-    
-    <Image Source="{Binding Picture}"
-           Margin="5"/>
+
+
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Top"
+                       LastChildFill="False">
+                <Button DockPanel.Dock="Right"
+                        Width="46"
+                        Height="46"
+                        Margin="5"
+                        Command="{Binding CloseWindowCommand}"
+                        ToolTip.Tip="Закрыть"
+                        Classes="flat">
+                    <avalonia:MaterialIcon Kind="Close" Width="40" Height="40" Foreground="Black" />
+                </Button>
+
+                <TextBlock Margin="5"
+                           FontSize="20"
+                           Text="{Binding Title}"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center" />
+            </DockPanel>
+
+            <controls:Card Margin="5">
+            
+            <Image Source="{Binding Picture}"
+                   Margin="5" />
+            
+            </controls:Card>
+        </DockPanel>
+
+
+
 </UserControl>
