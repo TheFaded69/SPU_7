@@ -13,7 +13,7 @@ public class OperationResult
         Result = result;
     }
 
-    public List<DeviceInformation> Device { get; set; } = new();
+    public List<DeviceInformation> Device { get; set; } = [];
     public OperationType OperationType { get; set; }
     public OperationResultType ResultStatus { get; set; }
     public string Message { get; set; }

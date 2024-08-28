@@ -10,12 +10,26 @@ namespace SPU_7.ViewModels
     {
         public WorkResultViewModel(ILogger logger, IStandController standController, IStandSettingsService standSettingsController)
         {
-            LogsCollection = new ObservableCollection<LogViewModel>();
-            LogsCollection.Add(new LogViewModel()
+            LogsCollection =
+            [
+                new LogViewModel()
+                {
+                    LogName = "Вывод",
+                    Logs = _logMessages
+                }
+                /*LogsCollection.Add(new LogViewModel()
             {
-                LogName = "Вывод",
-                Logs = _logMessages
-            });
+                LogName = "Порт стенда",
+                Logs = _portLogMessages
+            });*/
+                /*LogsCollection.Add(new LogViewModel()
+            {
+                LogName = "Порт устройств",
+                Logs = _devicePortLogMessages
+            });*/
+
+
+            ];
             /*LogsCollection.Add(new LogViewModel()
             {
                 LogName = "Порт стенда",
@@ -32,9 +46,9 @@ namespace SPU_7.ViewModels
             //standController.AddCollectionForDevicePortLogging(_devicePortLogMessages);
         }
         
-        private ObservableCollection<LogMessage> _logMessages = new();
-        private ObservableCollection<LogMessage> _portLogMessages = new();
-        private ObservableCollection<LogMessage> _devicePortLogMessages = new();
+        private ObservableCollection<LogMessage> _logMessages = [];
+        private ObservableCollection<LogMessage> _portLogMessages = [];
+        private ObservableCollection<LogMessage> _devicePortLogMessages = [];
         
     
         public ObservableCollection<LogViewModel> LogsCollection { get; set; }

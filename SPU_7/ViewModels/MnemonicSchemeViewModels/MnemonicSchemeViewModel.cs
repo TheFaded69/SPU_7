@@ -27,7 +27,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             
             standController.RegisterObserver(this);
             
-            LineViewModels = new ObservableCollection<LineItemViewModel>();
+            LineViewModels = [];
             foreach (var lineViewModel in settingsService.StandSettingsModel.LineViewModels)
             {
                 LineViewModels.Add(new LineItemViewModel(dialogService, notificationService, settingsService, standController, LineViewModels.Count)

@@ -21,7 +21,7 @@ public class ValidationPointConfigurationViewModel : ViewModelBase
         _dialogService = dialogService;
         _standSettingsService = standSettingsService;
 
-        LineNumbers = new ObservableCollection<int>();
+        LineNumbers = [];
         foreach (var line in _standSettingsService.StandSettingsModel.LineViewModels)
         {
             LineNumbers.Add(line.LineNumber);
@@ -118,7 +118,7 @@ public class ValidationPointConfigurationViewModel : ViewModelBase
         set => SetProperty(ref _needleValveValue, value);
     }
 
-    public ObservableCollection<string> MasterDeviceNames { get; set; } = new();
+    public ObservableCollection<string> MasterDeviceNames { get; set; } = [];
 
     public string SelectedMasterDeviceName
     {

@@ -25,7 +25,7 @@ public class WriteDeviceInformationViewModel : ViewModelBase, IDialogAware
     private readonly IStandController _standController;
     private readonly IStandSettingsService _standSettingsService;
 
-    public ObservableCollection<DeviceAboutViewModel> DeviceInformationViewModels { get; set; } = new();
+    public ObservableCollection<DeviceAboutViewModel> DeviceInformationViewModels { get; set; } = [];
 
     public DelegateCommand WriteDeviceInformationCommand { get; set; }
 

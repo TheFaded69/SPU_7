@@ -54,7 +54,7 @@ public abstract class OperationModel : IObservable
     public abstract Task<OperationResult> Execute(CancellationTokenSource operationCancellationTokenSource);
     
 
-    private List<IObserver> _observers = new();
+    private List<IObserver> _observers = [];
     private OperationStatus _operationStatus;
 
     public void RegisterObserver(IObserver observer)

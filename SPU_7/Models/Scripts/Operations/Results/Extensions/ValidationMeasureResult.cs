@@ -4,5 +4,5 @@ namespace SPU_7.Models.Scripts.Operations.Results.Extensions;
 
 public class ValidationMeasureResult
 {
-    public List<ValidationDeviceResult> ValidationDeviceResults { get; set; } = new();
+    public List<ValidationDeviceResult> ValidationDeviceResults { get; set; } = [];
 }

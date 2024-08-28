@@ -9,7 +9,7 @@ public class DeviceInformationViewModel : ViewModelBase, IObserver
 {
     public DeviceInformationViewModel()
     {
-        Parameters = new ObservableCollection<DeviceInfoParameterViewModel>();
+        Parameters = [];
         //todo тестовый набор параметров для отладки GUI
         /*Parameters.Add(new DeviceInfoParameterViewModel {Name = "SPI2.4", IsVisible = true, ParameterType = DeviceInfoParameterType.DeviceType});
         Parameters.Add(new DeviceInfoParameterViewModel {Name = "P, МПа", Value = 45.56, IsVisible = true, ParameterType = DeviceInfoParameterType.Pressure});

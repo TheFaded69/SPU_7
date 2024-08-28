@@ -7,7 +7,7 @@ public class ScriptModel
 {
     public ScriptModel()
     {
-        OperationModels = new List<OperationModel>();
+        OperationModels = [];
     }
     
     public ScriptModel(List<OperationModel> operationModels, string scriptName)

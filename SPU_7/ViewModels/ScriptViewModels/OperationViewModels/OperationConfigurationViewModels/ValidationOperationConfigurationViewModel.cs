@@ -42,7 +42,7 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
         
         if (configurationModel is ValidationOperationConfigurationModel validationOperationConfigurationModel)
         {
-            Points = new ObservableCollection<ValidationPointConfigurationViewModel>();
+            Points = [];
             foreach (var point in validationOperationConfigurationModel.Points)
             {
                 Points.Add(new ValidationPointConfigurationViewModel(_standController, _dialogService, _standSettingsService)
@@ -78,7 +78,7 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
         }
         else
         {
-            Points = new ObservableCollection<ValidationPointConfigurationViewModel>();
+            Points = [];
             foreach (var unused in standSettingsService.StandSettingsModel.LineViewModels[lineNumber - 1].DeviceViewModels)
             {
                 PulseMeterConfigurationViewModels.Add(new ValidationPulseMeterConfigurationViewModel());
@@ -151,7 +151,8 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
         set => SetProperty(ref _nominalFlow, value);
     }
 
-    public ObservableCollection<ValidationPulseMeterConfigurationViewModel> PulseMeterConfigurationViewModels { get; set; } = new();
+    public ObservableCollection<ValidationPulseMeterConfigurationViewModel> PulseMeterConfigurationViewModels { get; set; } =
+        [];
 
     public BaseOperationConfigurationModel CreateConfiguration(DeviceType deviceType)
     {

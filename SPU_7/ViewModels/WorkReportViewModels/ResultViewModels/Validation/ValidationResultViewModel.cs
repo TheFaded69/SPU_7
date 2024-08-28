@@ -23,7 +23,7 @@ public class ValidationResultViewModel : ViewModelBase
         _dialogService = dialogService;
         _logger = logger;
         _valuePictureResults = valuePictureResults;
-        VendorNumbers = new ObservableCollection<string>();
+        VendorNumbers = [];
 
         foreach (var validationDeviceResult in validationOperationResult.ValidationPointResults
                      .SelectMany(validationPointResult => validationPointResult.ValidationMeasureResults,
@@ -86,7 +86,7 @@ public class ValidationResultViewModel : ViewModelBase
                 .ValidationMeasureResults.First()
                 .ValidationDeviceResults[(int)SelectedIndex].DeviceInfo;
 
-            ValidationDeviceResultViewModels = new ObservableCollection<ValidationDeviceResultViewModel>();
+            ValidationDeviceResultViewModels = [];
 
             foreach (var validationDeviceResult in _validationOperationResult.ValidationPointResults.SelectMany(validationPointResult => validationPointResult.ValidationMeasureResults.SelectMany(validationMeasureResult => validationMeasureResult.ValidationDeviceResults.Where(d => d.VendorNumber == value))))
             {

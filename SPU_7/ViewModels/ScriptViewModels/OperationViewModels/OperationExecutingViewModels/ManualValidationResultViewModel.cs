@@ -22,7 +22,7 @@ public class ManualValidationResultViewModel : ViewModelBase, IDialogAware
     private int _deviceNumber;
     private ValidationType _validationType;
 
-    public ObservableCollection<ValidationResultViewModel> ResultViewModels { get; set; } = new();
+    public ObservableCollection<ValidationResultViewModel> ResultViewModels { get; set; } = [];
 
     public int DeviceNumber
     {

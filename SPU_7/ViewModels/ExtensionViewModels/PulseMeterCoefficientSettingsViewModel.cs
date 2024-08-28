@@ -24,7 +24,7 @@ public class PulseMeterCoefficientSettingsViewModel : ViewModelBase, IDialogAwar
     private readonly IStandController _standController;
     private readonly IStandSettingsService _standSettingsService;
 
-    public ObservableCollection<PulseMeterCoefficientViewModel> PulseMeterCoefficientViewModels { get; set; } = new();
+    public ObservableCollection<PulseMeterCoefficientViewModel> PulseMeterCoefficientViewModels { get; set; } = [];
     
     
     public DelegateCommand CloseWindowCommand { get; }

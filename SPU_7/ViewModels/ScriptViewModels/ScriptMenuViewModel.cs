@@ -39,7 +39,7 @@ namespace SPU_7.ViewModels.ScriptViewModels
         private readonly IScriptDbService _scriptDbService;
         private readonly IOperationDbService _operationDbService;
 
-        public ObservableCollection<ScriptViewModel> Scripts { get; set; } = new();
+        public ObservableCollection<ScriptViewModel> Scripts { get; set; } = [];
 
         private ScriptViewModel _selectedScript;
         public ScriptViewModel SelectedScript
@@ -193,7 +193,7 @@ namespace SPU_7.ViewModels.ScriptViewModels
             }
         }
 
-        public ObservableCollection<string> StringDeviceTypes { get; set; } = new();
+        public ObservableCollection<string> StringDeviceTypes { get; set; } = [];
         private string _selectedStringDeviceType;
         public string SelectedStringDeviceType
         {

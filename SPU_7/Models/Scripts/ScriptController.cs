@@ -192,7 +192,7 @@ namespace SPU_7.Models.Scripts
         
         #endregion
 
-        private List<IObserver> _observers = new();
+        private List<IObserver> _observers = [];
 
         public void RegisterObserver(IObserver observer)
         {

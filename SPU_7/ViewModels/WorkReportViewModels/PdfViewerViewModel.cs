@@ -27,7 +27,7 @@ public class PdfViewerViewModel : ViewModelBase, IDialogAware
     }
     private string _currentAddress;
 
-    public ObservableCollection<object> PagesOfProtocol { get; set; } = new();
+    public ObservableCollection<object> PagesOfProtocol { get; set; } = [];
     public string CurrentAddress
     {
         get => _currentAddress;

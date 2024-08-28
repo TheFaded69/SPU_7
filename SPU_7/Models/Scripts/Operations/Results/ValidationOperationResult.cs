@@ -6,7 +6,7 @@ namespace SPU_7.Models.Scripts.Operations.Results;
 
 public class ValidationOperationResult : BaseOperationResult
 {
-    public List<ValidationPointResult> ValidationPointResults { get; set; } = new();
+    public List<ValidationPointResult> ValidationPointResults { get; set; } = [];
     public ValidationType ValidationType { get; set; }
     
     public double? MinimumFlow { get; set; }

@@ -16,7 +16,7 @@ namespace SPU_7.Models.Services.Logger
             var dir = Path.GetDirectoryName(path);
             if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
-            _logCollections = new List<ObservableCollection<LogMessage>>();
+            _logCollections = [];
 
             try
             {

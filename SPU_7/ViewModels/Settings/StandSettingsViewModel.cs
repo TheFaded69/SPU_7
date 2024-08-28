@@ -31,7 +31,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         _standSettingsService = standSettingsService;
         _dialogService = dialogService;
 
-        StandSettingsProfiles = new ObservableCollection<StandSettingsProfileViewModel>();
+        StandSettingsProfiles = [];
         foreach (var standSettingsProfile in _standSettingsDbService.GetSettingsProfiles())
         {
             StandSettingsProfiles.Add(new StandSettingsProfileViewModel
@@ -41,14 +41,14 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
             });
         }
 
-        NozzleViewModels = new ObservableCollection<StandSettingsNozzleViewModel>();
-        ValveViewModels = new ObservableCollection<StandSettingsValveViewModel>();
-        ComparatorSettingsViewModels = new ObservableCollection<ComparatorSettingsViewModel>();
-        DeviceViewModels = new ObservableCollection<StandSettingsDeviceViewModel>();
-        SolenoidValveViewModels = new ObservableCollection<StandSettingsSolenoidValveViewModel>();
-        LineViewModels = new ObservableCollection<StandSettingsLineViewModel>();
-        PulseMeterViewModels = new ObservableCollection<StandSettingsPulseMeterViewModel>();
-        PortViewModels = new ObservableCollection<StandSettingsPortViewModel>();
+        NozzleViewModels = [];
+        ValveViewModels = [];
+        ComparatorSettingsViewModels = [];
+        DeviceViewModels = [];
+        SolenoidValveViewModels = [];
+        LineViewModels = [];
+        PulseMeterViewModels = [];
+        PortViewModels = [];
         
         AddNozzleCommand = new DelegateCommand(AddNozzleCommandHandler);
         RemoveNozzleCommand = new DelegateCommand(RemoveNozzleCommandHandler);

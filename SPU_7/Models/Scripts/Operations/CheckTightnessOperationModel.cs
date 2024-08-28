@@ -91,7 +91,6 @@ public class CheckTightnessOperationModel : OperationModel
                 return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", result);
             }
 
-            _standController.PidEnable();
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
                 /*if (!await _standController.EnableFrequencyRegulatorAsync())
@@ -172,8 +171,7 @@ public class CheckTightnessOperationModel : OperationModel
                 return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", result);
             }
             _standController.SetTargetFlowValue(0);
-
-            _standController.PidDisable();
+            
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
                 /*if (!await _standController.DisableFrequencyRegulatorAsync())

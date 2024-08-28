@@ -290,15 +290,15 @@ public class LineItemViewModel : ViewModelBase
     public bool IsDropValveEnable { get; set; }
     public ValveItemViewModel DropValveViewModel { get; set; }
     public ValveItemViewModel StartValveViewModel { get; set; }
-    public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = new();
+    public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = [];
     public SolenoidValveItemViewModel NormalOpenSolenoidValveItemViewModel { get; set; }
     public SolenoidValveItemViewModel NormalCloseSolenoidValveItemViewModel { get; set; }
-    public ObservableCollection<NozzleItemViewModel> NozzleItemViewModels { get; set; } = new();
+    public ObservableCollection<NozzleItemViewModel> NozzleItemViewModels { get; set; } = [];
     public ValveItemViewModel EndValveViewModel { get; set; }
     
     public ValveItemViewModel EndCommonValveViewModel { get; set; }
-    public ObservableCollection<FanItemViewModel> FanItemViewModels { get; set; } = new();
-    public ObservableCollection<VacuumItemViewModel> VacuumItemViewModels { get; set; } = new();
+    public ObservableCollection<FanItemViewModel> FanItemViewModels { get; set; } = [];
+    public ObservableCollection<VacuumItemViewModel> VacuumItemViewModels { get; set; } = [];
 
     public int LineNumber
     {

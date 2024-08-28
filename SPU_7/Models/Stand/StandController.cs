@@ -49,22 +49,18 @@ namespace SPU_7.Models.Stand
         private readonly ILogger _logger;
         private readonly IStandSettingsService _settingsService;
 
-        private List<IModbusProcessor> _modbusProcessors = new();
-
-        private List<StandLine> _lines = new();
+        private List<IModbusProcessor> _modbusProcessors = [];
+        private List<StandLine> _lines = [];
         private StandLine _line => SelectedLineIndex == null ? null : _lines[(int)SelectedLineIndex];
-
-        private List<StandDevice> _standDevices = new();
+        private List<StandDevice> _standDevices = [];
 
         private IFrequencyRegulatorDevice _frequencyRegulatorDevice;
         private List<IFrequencyRegulatorDevice> _frequencyRegulatorDevices = [];
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
         private List<INeedleValveController> _needleValveControllers = [];
         private PulseCountMeterStarter _pulseCountMeterStarter;
-
-        //private IPressureSensor _pressureSensor;
+        
         private ITemperatureHumiditySensor _temperatureHumiditySensor;
-
         private ElmetroDigitalDevice _elmetroDigitalDevice;
 
         private ObservableCollection<LogMessage> _portLogMessages;
@@ -102,7 +98,7 @@ namespace SPU_7.Models.Stand
                     false);
                 modbusProcessor.ProtocolSettings = new ProtocolSettings
                 {
-                    Preamble = new byte[] { 0xFF, },
+                    Preamble = [0xFF],
                     DelayAfterPreamble = 10,
                     IsPreambleNeed = false,
                     ReadTimeout = 5000,
@@ -238,7 +234,7 @@ namespace SPU_7.Models.Stand
                 _lines.Add(new StandLine(_settingsService, _modbusProcessors, i));
             }
 
-            _standDevices = new List<StandDevice>();
+            _standDevices = [];
             foreach (var address in addressList)
             {
                 _standDevices.Add(new StandDevice(
@@ -1388,8 +1384,6 @@ namespace SPU_7.Models.Stand
 
         public async Task<bool> EndWorkAsync()
         {
-            PidDisable();
-
             if (!await OpenSolenoidValveAsync(
                     _settingsService.StandSettingsModel.SolenoidValveViewModels.FirstOrDefault(sv =>
                         sv.SolenoidValveType == SolenoidValveType.NormalClose)))
@@ -1638,17 +1632,7 @@ namespace SPU_7.Models.Stand
         {
             return await _frequencyRegulatorDevice.StopFrequencyWorkAsync();
         }
-
-        public void PidEnable()
-        {
-            _frequencyRegulatorDevice.PidEnable();
-        }
-
-        public void PidDisable()
-        {
-            _frequencyRegulatorDevice.PidDisable();
-        }
-
+        
         public async Task<bool> SetFrequencyRegulatorFrequencyAsync(double value)
         {
             return await _frequencyRegulatorDevice.SetOutputValueAsync(value);
@@ -1783,7 +1767,7 @@ namespace SPU_7.Models.Stand
 
         #region Observable base
 
-        private readonly List<IObserver> _observers = new();
+        private readonly List<IObserver> _observers = [];
         private float? _temperatureTube;
         private float? _pressureDifference;
         private float? _pressure;

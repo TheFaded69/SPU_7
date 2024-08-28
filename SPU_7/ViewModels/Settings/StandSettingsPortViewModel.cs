@@ -17,8 +17,8 @@ public class StandSettingsPortViewModel : ViewModelBase
     
     public ObservableCollection<string> PortNames { get; set; } = new(SerialPort.GetPortNames());
 
-    public ObservableCollection<int> PortBaudRates { get; set; } = new()
-    {
+    public ObservableCollection<int> PortBaudRates { get; set; } =
+    [
         300,
         600,
         1200,
@@ -32,15 +32,15 @@ public class StandSettingsPortViewModel : ViewModelBase
         230400,
         460800,
         921600
-    };
+    ];
 
-    public ObservableCollection<double> StopBits { get; set; } = new()
-    {
+    public ObservableCollection<double> StopBits { get; set; } =
+    [
         0,
         1,
         1.5,
         2
-    };
+    ];
 
     public double SelectedStopBitDouble
     {

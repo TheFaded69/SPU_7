@@ -42,7 +42,7 @@ public class WorkReportViewModel : ViewModelBase, IDialogAware
 
     #region ScriptReport
 
-    public ObservableCollection<ScriptReportViewModel> ScriptReportViewModels { get; set; } = new();
+    public ObservableCollection<ScriptReportViewModel> ScriptReportViewModels { get; set; } = [];
 
     public ScriptReportViewModel SelectedScriptViewModel
     {
@@ -62,7 +62,7 @@ public class WorkReportViewModel : ViewModelBase, IDialogAware
 
     
 
-    public ObservableCollection<OperationReportViewModel> OperationReportViewModels { get; set; } = new();
+    public ObservableCollection<OperationReportViewModel> OperationReportViewModels { get; set; } = [];
 
     public OperationReportViewModel SelectedOperationReportViewModel
     {

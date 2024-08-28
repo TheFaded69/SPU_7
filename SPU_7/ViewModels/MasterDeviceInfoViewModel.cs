@@ -30,8 +30,8 @@ public class MasterDeviceInfoViewModel : ViewModelBase, IDialogAware
         PointerDownCommand = new DelegateCommand<PointerCommandArgs>(PointerDown);
         PointerMoveCommand = new DelegateCommand<PointerCommandArgs>(PointerMove);
         
-        Series = new ISeries[]
-        {
+        Series =
+        [
             new ColumnSeries<ObservablePoint>
             {
                 Values = _values,
@@ -39,10 +39,10 @@ public class MasterDeviceInfoViewModel : ViewModelBase, IDialogAware
                 MaxBarWidth = double.PositiveInfinity,
                 DataPadding = new LvcPoint(0, 1)
             }
-        };
+        ];
 
-        ScrollbarSeries = new ISeries[]
-        {
+        ScrollbarSeries =
+        [
             new LineSeries<ObservablePoint>
             {
                 Values = _values,
@@ -50,20 +50,20 @@ public class MasterDeviceInfoViewModel : ViewModelBase, IDialogAware
                 GeometryFill = null,
                 DataPadding = new LvcPoint(0, 1)
             }
-        };
+        ];
 
-        ScrollableAxes = new[] { new Axis() };
+        ScrollableAxes = [new Axis()];
 
-        Thumbs = new[]
-        {
+        Thumbs =
+        [
             new RectangularSection
             {
                 Fill = new SolidColorPaint(new SKColor(255, 205, 210, 100))
             }
-        };
+        ];
 
-        InvisibleX = new[] { new Axis { IsVisible = false } };
-        InvisibleY = new[] { new Axis { IsVisible = false } };
+        InvisibleX = [new Axis { IsVisible = false }];
+        InvisibleY = [new Axis { IsVisible = false }];
 
         _ = AddData();
     }
@@ -84,7 +84,7 @@ public class MasterDeviceInfoViewModel : ViewModelBase, IDialogAware
     }
     
     private bool _isDown = false;
-    private readonly ObservableCollection<ObservablePoint> _values = new();
+    private readonly ObservableCollection<ObservablePoint> _values = [];
     
     public ISeries[] Series { get; set; }
     public ISeries[] ScrollbarSeries { get; set; }

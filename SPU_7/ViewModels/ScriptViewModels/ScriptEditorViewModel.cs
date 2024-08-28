@@ -23,13 +23,13 @@ namespace SPU_7.ViewModels.ScriptViewModels
 
             Title = "Редактор сценария";
 
-            LineNumbers = new ObservableCollection<int>();
+            LineNumbers = [];
             foreach (var unused in settingsService.StandSettingsModel.LineViewModels)     
             {
                 LineNumbers.Add(LineNumbers.Count + 1);
             }
             
-            StringDeviceTypes = new ObservableCollection<string>();
+            StringDeviceTypes = [];
             StringStandTypes = new ObservableCollection<string>(Enum
                 .GetValues<StandType>()
                 .Where(ot => ot != StandType.None)
@@ -133,7 +133,7 @@ namespace SPU_7.ViewModels.ScriptViewModels
             }
         }
 
-        public ObservableCollection<OperationViewModel> Operations { get; set; } = new();
+        public ObservableCollection<OperationViewModel> Operations { get; set; } = [];
 
         private OperationViewModel _selectedOperation;
         private int _height;

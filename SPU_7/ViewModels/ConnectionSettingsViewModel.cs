@@ -15,7 +15,7 @@ namespace SPU_7.ViewModels
 
 
             SerialPorts = new ObservableCollection<string>(SerialPort.GetPortNames());
-            SerialPortBaudRates = new ObservableCollection<KeyValuePair<SerialPortBaudRate, string>>();
+            SerialPortBaudRates = [];
             foreach (var baudRate in Enum.GetValues<SerialPortBaudRate>())
             {
                 SerialPortBaudRates.Add(new KeyValuePair<SerialPortBaudRate, string>(baudRate, baudRate.GetDescription()));

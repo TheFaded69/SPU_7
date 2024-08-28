@@ -11,11 +11,11 @@ public class StandSettingsLineViewModel : ViewModelBase
 {
     public StandSettingsLineViewModel()
     {
-        DeviceViewModels = new ObservableCollection<StandSettingsDeviceViewModel>();
-        MasterDeviceViewModels = new ObservableCollection<StandSettingsMasterDeviceViewModel>();
-        FanViewModels = new ObservableCollection<StandSettingsFanViewModel>();
-        VacuumValveViewModels = new ObservableCollection<StandSettingsVacuumValveViewModel>();
-        NozzleViewModels = new ObservableCollection<StandSettingsNozzleViewModel>();
+        DeviceViewModels = [];
+        MasterDeviceViewModels = [];
+        FanViewModels = [];
+        VacuumValveViewModels = [];
+        NozzleViewModels = [];
         
         StringDeviceLineTypes = new ObservableCollection<string>(Enum
             .GetValues<DeviceLineType>()

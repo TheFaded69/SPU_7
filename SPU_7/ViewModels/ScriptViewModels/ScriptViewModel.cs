@@ -8,7 +8,7 @@ namespace SPU_7.ViewModels.ScriptViewModels
 {
     public class ScriptViewModel : ViewModelBase
     {
-        public ObservableCollection<OperationViewModel> Operations { get; set; } = new();
+        public ObservableCollection<OperationViewModel> Operations { get; set; } = [];
         public Guid Id { get; set; }
     
         private StandType _targetStandType;
