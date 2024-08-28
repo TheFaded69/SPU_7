@@ -88,38 +88,47 @@ namespace SPU_7.ViewModels
 
         private async void CreateWorkSpace()
         {
-            _standController?.Dispose();
-
-            if (IsAuthorize) IsCommonUser = _authorizationService.GetUser().UserType == UserType.Common;
-
-            if (_standSettingsService.StandSettingsModel == null)
+            try
             {
-                StandView = new EmptyView
+                _standController?.Dispose();
+
+                if (IsAuthorize) IsCommonUser = _authorizationService.GetUser().UserType == UserType.Common;
+
+                if (_standSettingsService.StandSettingsModel == null)
                 {
-                    DataContext = new EmptyViewModel("Необходима настройка стенда")
-                };
-                return;
-            }
+                    StandView = new EmptyView
+                    {
+                        DataContext = new EmptyViewModel("Необходима настройка стенда")
+                    };
+                    return;
+                }
 
 #if DEBUGGUI
-            //_standController.TestInitialization();
+                //_standController.TestInitialization();
 #else
-            _standController.Initialization();
+                _standController.Initialization();
 #endif
 
-            StandView = new StandView
+                StandView = new StandView
+                {
+                    DataContext = new StandViewModel(_dialogService, _notificationService, _logger,
+                        _standSettingsService, _standController, _scriptController, _manualOperationService,
+                        _timerService,
+                        _operationActionService)
+                };
+
+                ///костыль - ждем пока прогрузится интерфейс
+                await Task.Delay(10000);
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+            }
+            catch (Exception e)
             {
-                DataContext = new StandViewModel(_dialogService, _notificationService, _logger,
-                    _standSettingsService, _standController, _scriptController, _manualOperationService, _timerService,
-                    _operationActionService)
-            };
-
-            ///костыль - ждем пока прогрузится интерфейс в другом потоке
-            await Task.Delay(10000);
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         #endregion
@@ -438,7 +447,7 @@ namespace SPU_7.ViewModels
                                 }
                             }
                         },
-                        
+
                     })
                     {
                         Device = new List<DeviceInformation>()
@@ -494,7 +503,6 @@ namespace SPU_7.ViewModels
             window.Close();
         }
 
-        
 
         private bool _isFullScreen = true;
 
