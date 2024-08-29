@@ -79,6 +79,9 @@
                     <DataGridTextColumn Binding="{Binding Name}"
                                         Header="Название"
                                         IsReadOnly="True" />
+                    <DataGridTextColumn Binding="{Binding LineNumber}"
+                                        Header="Линия"
+                                        IsReadOnly="True" />
                     <!--DataGridTextColumn Binding="{Binding TargetStandType, Converter={convertors:StandTypeToStringConverter}}"
                               Header="Тип стенда"
                               IsReadOnly="True"/>

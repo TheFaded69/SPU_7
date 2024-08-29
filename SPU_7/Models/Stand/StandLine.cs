@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
+using Avalonia.Controls;
 using SPU_7.Common.Device;
 using SPU_7.Common.Line;
+using SPU_7.CommonDevice.Devices.ElmetroPascal;
+using SPU_7.DeviceCommunication.Communication;
 using SPU_7.Domain.Devices;
 using SPU_7.Domain.Devices.Device.UniversalDevice;
 using SPU_7.Domain.Devices.MasterDevice.GFG;
 using SPU_7.Domain.Devices.MasterDevice.Rabo;
 using SPU_7.Domain.Devices.MasterDevice.RGT;
 using SPU_7.Domain.Devices.StandDevices.PressureSensor;
+using SPU_7.Domain.Devices.StandDevices.PressureSensor415M;
 using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
 using SPU_7.Domain.Modbus;
 using SPU_7.Modbus.Processor;
 using SPU_7.Models.Services.StandSetting;
+using IDevice = SPU_7.Domain.Devices.IDevice;
 
 namespace SPU_7.Models.Stand;
 
@@ -72,12 +78,69 @@ public class StandLine
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
-        
+
+        foreach (var sensorViewModel in settingsService.StandSettingsModel.LineViewModels[lineIndex].SensorViewModels)
+        {
+            switch (sensorViewModel.SensorPurpose)
+            {
+                case SensorPurpose.TemperatureSensor:
+                    TemperatureSensor = new TemperatureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                        new RegisterMapEnum<TemperatureSensorRegisterMap>(),
+                        sensorViewModel.Address, 
+                        1);
+                    break;
+                case SensorPurpose.PressureSensor:
+                    PressureSensor = sensorViewModel.SensorType switch
+                    {
+                        SensorType.TurboFlowPS => new PressureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                            new RegisterMapEnum<PressureSensorRegisterMap>(),
+                            sensorViewModel.Address),
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                    break;
+                case SensorPurpose.PressureOffsetSensor:
+                    PressureSensor = sensorViewModel.SensorType switch
+                    {
+                        SensorType.TurboFlowPS => new PressureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                            new RegisterMapEnum<PressureSensorRegisterMap>(),
+                            sensorViewModel.Address),
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                    break;
+                case SensorPurpose.PressureDifferenceSensor:
+                    PressureDifferenceSensor = sensorViewModel.SensorType switch
+                    {
+                        SensorType.TurboFlowPS => new PressureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                            new RegisterMapEnum<PressureSensorRegisterMap>(),
+                            sensorViewModel.Address),
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                    break;
+                case SensorPurpose.PressureDischargeSensor:
+                    PressureDischargeSensor = sensorViewModel.SensorType switch
+                    {
+                        SensorType.Pascal04 => new ElmetroDigitalDevice(new SerialPortCommunication(new SerialPort()
+                        {
+                            PortName = sensorViewModel.SelectedComPort
+                        })),
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                    break;
+                case SensorPurpose.HumiditySensor:
+                    break;
+                case SensorPurpose.TemperatureHumiditySensor:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
     
     public readonly List<IDevice> Devices = [];
-
     public readonly List<IMasterDevice> MasterDevices = [];
     public int LineNumber { get; set; }
+    public  ITemperatureSensor TemperatureSensor{ get; set; }
+    public IPressureSensor PressureSensor{ get; set; }
+    public IPressureSensor PressureDifferenceSensor{ get; set; }
+    public ElmetroDigitalDevice PressureDischargeSensor{ get; set; }
 }

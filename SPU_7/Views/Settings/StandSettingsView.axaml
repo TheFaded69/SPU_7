@@ -1014,6 +1014,69 @@
                                                                         </DockPanel>
                                                                     </TabItem>
 
+                                                                    <TabItem Header="Датчики линии">
+                                                                        <DockPanel DockPanel.Dock="Right">
+
+                                                                            <StackPanel Orientation="Horizontal"
+                                                                                HorizontalAlignment="Center"
+                                                                                DockPanel.Dock="Bottom">
+                                                                                <Button Margin="5"
+                                                                                    Command="{Binding AddSensorCommand}">
+                                                                                    <materialIcons:MaterialIcon
+                                                                                        Kind="Add" />
+                                                                                </Button>
+                                                                                <Button Margin="5"
+                                                                                    Command="{Binding RemoveSensorCommand}">
+                                                                                    <materialIcons:MaterialIcon
+                                                                                        Kind="Delete" />
+                                                                                </Button>
+                                                                            </StackPanel>
+
+                                                                            <ListBox
+                                                                                ItemsSource="{Binding SensorViewModels}"
+                                                                                SelectedItem="{Binding SelectedSensorViewModel}">
+                                                                                <ListBox.ItemTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <StackPanel
+                                                                                            Orientation="Horizontal">
+                                                                                            <ComboBox
+                                                                                                DockPanel.Dock="Left"
+                                                                                                Width="300"
+                                                                                                Margin="5"
+                                                                                                assists:ComboBoxAssist.Label="Назначение датчика"
+                                                                                                ItemsSource="{Binding SensorPurposes}"
+                                                                                                SelectedItem="{Binding SelectedSensorPurposes}"
+                                                                                                Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                            <ComboBox
+                                                                                                DockPanel.Dock="Left"
+                                                                                                Width="300"
+                                                                                                Margin="5"
+                                                                                                assists:ComboBoxAssist.Label="Тип датчика"
+                                                                                                ItemsSource="{Binding SensorTypes}"
+                                                                                                SelectedItem="{Binding SelectedSensorType}"
+                                                                                                Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                            <ComboBox
+                                                                                                DockPanel.Dock="Left"
+                                                                                                Width="300"
+                                                                                                Margin="5"
+                                                                                                assists:ComboBoxAssist.Label="Порт подключения"
+                                                                                                ItemsSource="{Binding ComPorts}"
+                                                                                                SelectedItem="{Binding SelectedComPort}"
+                                                                                                Theme="{StaticResource MaterialOutlineComboBox}" />
+                                                                                            <TextBox Margin="5"
+                                                                                                assists:TextFieldAssist.Label="Адрес"
+                                                                                                UseFloatingWatermark="True"
+                                                                                                Watermark="Введите адрес"
+                                                                                                Width="300"
+                                                                                                Text="{Binding  Address}" />
+
+                                                                                        </StackPanel>
+                                                                                    </DataTemplate>
+                                                                                </ListBox.ItemTemplate>
+                                                                            </ListBox>
+                                                                        </DockPanel>
+                                                                    </TabItem>
+                                                                    
                                                                 </TabControl>
                                                             </controls:Card>
 

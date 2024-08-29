@@ -31,6 +31,11 @@ public class StandSettingsLineModel
     /// Настройки вакуумных насосов (обычно один, но мало ли)
     /// </summary>
     public ObservableCollection<StandSettingsVacuumValveModel> VacuumValveViewModels { get; set; }
+    
+    /// <summary>
+    /// Настройки вакуумных насосов (обычно один, но мало ли)
+    /// </summary>
+    public ObservableCollection<StandSettingsSensorModel> SensorViewModels { get; set; }
 
     /// <summary>
     /// Есть ли общий клапан до поверочного блока со следующей линией

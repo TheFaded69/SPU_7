@@ -15,9 +15,9 @@
         <mnemonicSchemeViewModels:MnemonicSchemeControlViewModel />
     </Design.DataContext>
 
-    <DockPanel LastChildFill="False">
-        <DockPanel DockPanel.Dock="Top"
-                   Margin="5,5,5,0">
+    <ScrollViewer>
+        <DockPanel LastChildFill="False">
+        <DockPanel DockPanel.Dock="Top">
             <TextBlock Text="ПАРАМЕТРЫ СРЕДЫ"
 
                        Margin="5, 5, 5, 5"
@@ -29,7 +29,7 @@
                        Fill="#2196f3" />
         </DockPanel>
         <controls:Card DockPanel.Dock="Top"
-                       Margin="5,5,5,0">
+                       Margin="5,0,5,5">
             <Grid ColumnDefinitions="0.75*, 0.25*"
                   RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto">
                 
@@ -65,7 +65,7 @@
                            FontSize="18"
                            Text="{Binding Humidity}" />
                 
-                <TextBlock Grid.Row="6"
+                <!--TextBlock Grid.Row="6"
                            Margin="5"
                            Grid.Column="0"
                            FontSize="18"
@@ -74,11 +74,105 @@
                            Margin="5"
                            Grid.Column="1"
                            FontSize="18"
-                           Text="{Binding TargetFlow}" />
+                           Text="{Binding TargetFlow}" /-->
             </Grid>
         </controls:Card>
-        <DockPanel DockPanel.Dock="Top"
-                   Margin="5,5,5,0">
+        
+        <ItemsControl ItemsSource="{Binding LineInformationItemViewModels}"
+                      DockPanel.Dock="Top">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel IsVisible="{Binding LineVisible}"
+                               Margin="0,5,0,5">
+                        <DockPanel DockPanel.Dock="Top">
+                            <TextBlock Text="{Binding LineName}"
+
+                                       Margin="5, 0, 5, 5"
+                                       DockPanel.Dock="Left"
+                                       FontSize="18" />
+                            <Rectangle Margin="5, 0, 5, 5"
+                                       VerticalAlignment="Center"
+                                       Height="2"
+                                       Fill="#2196f3" />
+                        </DockPanel>
+                        <controls:Card DockPanel.Dock="Top"
+                                       Margin="5,0,5,0">
+                            <Grid ColumnDefinitions="0.75*, 0.25*"
+                                  RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+                
+                                <TextBlock Grid.Row="0"
+                                           Margin="5"
+                                           Grid.Column="0"
+                                           FontSize="18"
+                                           IsVisible="{Binding Temperature, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="Температура среды, °C" />
+                                <TextBlock Grid.Row="0"
+                                           Margin="5"
+                                           Grid.Column="1"
+                                           FontSize="18"
+                                           IsVisible="{Binding Temperature, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="{Binding Temperature}" />
+                                
+                                <TextBlock Grid.Row="1"
+                                           Margin="5"
+                                           Grid.Column="0"
+                                           FontSize="18"
+                                           IsVisible="{Binding Pressure, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="Давление абсолютное, кПа" />
+                                <TextBlock Grid.Row="1"
+                                           Margin="5"
+                                           Grid.Column="1"
+                                           FontSize="18"
+                                           IsVisible="{Binding Pressure, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="{Binding Pressure}" />
+
+                                
+                                <TextBlock Grid.Row="2"
+                                           Margin="5"
+                                           Grid.Column="0"
+                                           FontSize="18"
+                                           IsVisible="{Binding PressureDifference, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="Перепад давления, кПа" />
+                                <TextBlock Grid.Row="2"
+                                           Margin="5"
+                                           Grid.Column="1"
+                                           FontSize="18"
+                                           IsVisible="{Binding PressureDifference, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="{Binding PressureDifference}" />
+                
+                                <TextBlock Grid.Row="3"
+                                           Margin="5"
+                                           Grid.Column="0"
+                                           FontSize="18"
+                                           IsVisible="{Binding PressureDischarged, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="Давление разряжения, кПа" />
+                                <TextBlock Grid.Row="3"
+                                           Margin="5"
+                                           Grid.Column="1"
+                                           FontSize="18"
+                                           IsVisible="{Binding PressureDischarged, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="{Binding PressureDischarged}" />
+                                
+                                <TextBlock Grid.Row="4"
+                                           Margin="5"
+                                           Grid.Column="0"
+                                           FontSize="18"
+                                           IsVisible="{Binding CurrentFlow, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="Текущий расход, м³/ч" />
+                                <TextBlock Grid.Row="4"
+                                           Margin="5"
+                                           Grid.Column="1"
+                                           FontSize="18"
+                                           IsVisible="{Binding CurrentFlow, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="{Binding CurrentFlow}" />
+                            </Grid>
+                        </controls:Card>
+                    </DockPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <DockPanel DockPanel.Dock="Top">
             <TextBlock Text="СТЕНД"
                        Margin="5, 5, 5, 5"
                        DockPanel.Dock="Left"
@@ -89,7 +183,7 @@
                        Fill="#2196f3" />
         </DockPanel>
         <controls:Card DockPanel.Dock="Top"
-                       Margin="5,5,5,0">
+                       Margin="5,0,5,0">
             <Grid ColumnDefinitions="0.5*, 0.5*"
                   RowDefinitions="Auto">
                 <Button Grid.Column="0"
@@ -101,8 +195,7 @@
                         Command="{Binding WriteDeviceInformationCommand}"/>
             </Grid>
         </controls:Card>
-        <DockPanel DockPanel.Dock="Top"
-                   Margin="5,5,5,0">
+        <DockPanel DockPanel.Dock="Top">
             <TextBlock Text="СЦЕНАРИЙ"
                        Margin="5, 5, 5, 5"
                        DockPanel.Dock="Left"
@@ -113,7 +206,7 @@
                        Fill="#2196f3" />
         </DockPanel>
         <controls:Card DockPanel.Dock="Top"
-                       Margin="5,5,5,0">
+                       Margin="5,0,5,0">
             <DockPanel>
                 <Grid DockPanel.Dock="Top"
                       ColumnDefinitions="0.5*, 0.5*">
@@ -130,10 +223,11 @@
                             ToolTip.Tip="Выбрать сценарий"
                             Command="{Binding ChooseScriptCommand}" />
                 </Grid>
-                <ScrollViewer MaxHeight="250">
+                <ScrollViewer MaxHeight="250"
+                              IsVisible="{Binding Operations, Converter={x:Static ObjectConverters.IsNotNull}}">
                     <ItemsControl ItemsSource="{Binding Operations}"
                                   Margin="5"
-                                  IsVisible="{Binding Operations, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                  >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel>
@@ -182,8 +276,7 @@
             </DockPanel>
         </controls:Card>
         <controls:Card DockPanel.Dock="Top"
-                       IsVisible="{Binding IsTimerVisible}"
-                       Margin="5,5,5,0">
+                       IsVisible="{Binding IsTimerVisible}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Операция:"
@@ -212,8 +305,7 @@
             </StackPanel>
         </controls:Card>
         
-        <DockPanel DockPanel.Dock="Top"
-                   Margin="5,5,5,0">
+        <DockPanel DockPanel.Dock="Top">
             <TextBlock Text="УПРАВЛЕНИЕ СЦЕНАРИЕМ"
                        Margin="5, 5, 5, 5"
                        DockPanel.Dock="Left"
@@ -224,7 +316,7 @@
                        Fill="#2196f3" />
         </DockPanel>
         <controls:Card DockPanel.Dock="Top"
-                       Margin="5,5,5,0">
+                       Margin="5,0,5,0">
             <StackPanel>
                 <Grid ColumnDefinitions="0.5*, 0.5*"
                       RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
@@ -244,8 +336,7 @@
             </StackPanel>
         </controls:Card>
        
-        <DockPanel DockPanel.Dock="Top"
-                   Margin="5,5,5,0">
+        <DockPanel DockPanel.Dock="Top">
             <TextBlock Text="ОТЧЕТ"
                        Margin="5, 5, 5, 5"
                        DockPanel.Dock="Left"
@@ -256,7 +347,7 @@
                        Fill="#2196f3" />
         </DockPanel>
         <controls:Card DockPanel.Dock="Top"
-                       Margin="5,5,5,0">
+                       Margin="5,0,5,0">
             <Grid ColumnDefinitions="0.5*, 0.5*"
                   RowDefinitions="Auto">
                 <Button Grid.Column="1"
@@ -268,4 +359,5 @@
         </controls:Card>
        
     </DockPanel>
+    </ScrollViewer>
 </UserControl>

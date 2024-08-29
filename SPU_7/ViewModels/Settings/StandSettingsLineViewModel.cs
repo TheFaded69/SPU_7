@@ -16,6 +16,7 @@ public class StandSettingsLineViewModel : ViewModelBase
         FanViewModels = [];
         VacuumValveViewModels = [];
         NozzleViewModels = [];
+        SensorViewModels = [];
         
         StringDeviceLineTypes = new ObservableCollection<string>(Enum
             .GetValues<DeviceLineType>()
@@ -35,6 +36,8 @@ public class StandSettingsLineViewModel : ViewModelBase
         RemoveFanCommand = new DelegateCommand(RemoveFanCommandHandler);
         AddVacuumValveCommand = new DelegateCommand(AddVacuumValveCommandHandler);
         RemoveVacuumValveCommand = new DelegateCommand(RemoveVacuumValveCommandHandler);
+        AddSensorCommand = new DelegateCommand(AddSensorCommandHandler);
+        RemoveSensorCommand = new DelegateCommand(RemoveSensorCommandHandler);
     }
 
     private int _lineNumber;
@@ -51,6 +54,8 @@ public class StandSettingsLineViewModel : ViewModelBase
     private StandSettingsFanViewModel _selectedFanViewModel;
     private ObservableCollection<StandSettingsVacuumValveViewModel> _vacuumValveViewModels;
     private StandSettingsVacuumValveViewModel _selectedVacuumValveViewModel;
+    private ObservableCollection<StandSettingsSensorViewModel> _sensorViewModels;
+    private StandSettingsSensorViewModel _selectedSensorViewModel;
     private ObservableCollection<string> _stringLineTypes;
     private string _selectedStringLineType;
     private bool _isStartValveMasterDevice;
@@ -302,6 +307,18 @@ public class StandSettingsLineViewModel : ViewModelBase
         get => _selectedVacuumValveViewModel;
         set => SetProperty(ref _selectedVacuumValveViewModel, value);
     }
+    
+    public ObservableCollection<StandSettingsSensorViewModel> SensorViewModels
+    {
+        get => _sensorViewModels;
+        set => SetProperty(ref _sensorViewModels, value);
+    }
+
+    public StandSettingsSensorViewModel SelectedSensorViewModel
+    {
+        get => _selectedSensorViewModel;
+        set => SetProperty(ref _selectedSensorViewModel, value);
+    }
 
     /// <summary>
     /// Есть ли линия проверки герметичности
@@ -451,5 +468,20 @@ public class StandSettingsLineViewModel : ViewModelBase
     private void RemoveVacuumValveCommandHandler()
     {
         VacuumValveViewModels.Remove(SelectedVacuumValveViewModel);
+    }
+    
+    public DelegateCommand AddSensorCommand { get; set; }
+    private void AddSensorCommandHandler()
+    {
+        SensorViewModels.Add(new StandSettingsSensorViewModel()
+        {
+            Number = SensorViewModels.Count + 1, 
+        });
+    }
+
+    public DelegateCommand RemoveSensorCommand { get; }
+    private void RemoveSensorCommandHandler()
+    {
+        SensorViewModels.Remove(SelectedSensorViewModel);
     }
 }

@@ -66,7 +66,7 @@ public partial class App : PrismApplication
             containerRegistry.RegisterSingleton<IManualOperationService, ManualOperationService>();
             containerRegistry.RegisterSingleton<ITimerService, TimerService>();
             containerRegistry.RegisterSingleton<IOperationActionService, OperationActionService>();
-            //containerRegistry.RegisterInstance(typeof(ITimerService), new TimerService());
+            containerRegistry.RegisterInstance(typeof(ITimerService), new TimerService());
 
 
             //Db

@@ -48,6 +48,14 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             WriteDeviceInformationCommand = new DelegateCommand(WriteDeviceInformationCommandHandler);
             OpenWorkReportCommand = new DelegateCommand(OpenWorkReportCommandHandler);
 
+            foreach (var lineViewModel in _settingsService.StandSettingsModel.LineViewModels)
+            {
+                LineInformationItemViewModels.Add(new LineInformationItemViewModel()
+                {
+                    LineName = lineViewModel.LineName.ToUpper(),
+                });
+            }
+            
             standController.RegisterObserver(this);
             timerService.SetInfoTimerEnableAction(TimerEnable);
             timerService.SetInfoTimerDisableAction(TimerDisable);
@@ -81,8 +89,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
         private bool _isStartEnable;
         private bool _isWriteDeviceInformationEnabled;
         private int? _lineIndex;
-
-
+        
         #region Сценарий
 
         public bool IsChooseScriptEnable
@@ -143,6 +150,8 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
 
         #endregion
 
+        public ObservableCollection<LineInformationItemViewModel> LineInformationItemViewModels { get; set; } = [];
+        
         #region Управление стендом
 
         public bool IsStartEnable
@@ -365,6 +374,34 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
         {
             if (dataPair.Data == null) return;
 
+            if (dataPair.Data is LineData lineData)
+            {
+                switch (dataPair.DataType)
+                {
+                    case DeviceInfoParameterType.TemperatureTube:
+                        LineInformationItemViewModels[lineData.LineIndex].Temperature = (float)dataPair.Data;
+                        break;
+                    case DeviceInfoParameterType.Pressure:
+                        LineInformationItemViewModels[lineData.LineIndex].Pressure = (float)dataPair.Data;
+                        break;
+                    case DeviceInfoParameterType.PressureResiver:
+                        LineInformationItemViewModels[lineData.LineIndex].PressureDischarged = (float)dataPair.Data;
+                        break;
+                    case DeviceInfoParameterType.PressureDifference:
+                        LineInformationItemViewModels[lineData.LineIndex].PressureDifference = (float)dataPair.Data;
+                        break;
+                }
+
+                LineInformationItemViewModels[lineData.LineIndex].LineVisible =
+                    LineInformationItemViewModels[lineData.LineIndex].Temperature != null ||
+                    LineInformationItemViewModels[lineData.LineIndex].Pressure != null ||
+                    LineInformationItemViewModels[lineData.LineIndex].PressureDifference != null ||
+                    LineInformationItemViewModels[lineData.LineIndex].PressureDischarged != null ||
+                    LineInformationItemViewModels[lineData.LineIndex].CurrentFlow != null;
+                
+                return;
+            }
+            
             switch (dataPair.DataType)
             {
                 case DeviceInfoParameterType.TemperatureTube:

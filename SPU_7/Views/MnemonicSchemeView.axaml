@@ -706,6 +706,21 @@
                                                                    Margin="5" />
                                                     </Grid>
                                                 </ToolTip.Tip>
+                                                
+                                                <Button.ContextMenu>
+                                                <ContextMenu>
+                                                        
+                                                    <DockPanel LastChildFill="True">
+                                                        <TextBox Text="м³/ч"
+                                                                 Margin="5"
+                                                                 HorizontalAlignment="Stretch"
+                                                                 DockPanel.Dock="Right"/>
+                                                        <TextBox Text="{Binding SelectedFlow}"
+                                                                 Margin="5"
+                                                                 HorizontalAlignment="Stretch"/>
+                                                    </DockPanel>
+                                                </ContextMenu>
+                                                </Button.ContextMenu>
                                             </Button>
                                         </DockPanel>
                                     </DataTemplate>

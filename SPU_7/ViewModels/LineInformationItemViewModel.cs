@@ -1,8 +1,8 @@
 ﻿namespace SPU_7.ViewModels;
 
-public class LineInformationViewModel : ViewModelBase
+public class LineInformationItemViewModel : ViewModelBase
 {
-    public LineInformationViewModel()
+    public LineInformationItemViewModel()
     {
         
     }
@@ -10,14 +10,28 @@ public class LineInformationViewModel : ViewModelBase
     private float? _pressure;
     private float? _pressureDischarged;
     private float? _currentFlow;
+    private float? _temperature;
+    private string _lineName;
+    private bool _lineVisible = true;
 
+    public string LineName
+    {
+        get => _lineName;
+        set => SetProperty(ref _lineName, value);
+    }
+
+    public bool LineVisible
+    {
+        get => _lineVisible;
+        set => SetProperty(ref _lineVisible, value);
+    }
 
     public float? PressureDifference
     {
         get => _pressureDifference;
         set => SetProperty(ref _pressureDifference, value);
     }
-
+    
     public float? Pressure
     {
         get => _pressure;
@@ -34,5 +48,11 @@ public class LineInformationViewModel : ViewModelBase
     {
         get => _currentFlow;
         set => SetProperty(ref _currentFlow, value);
+    }
+
+    public float? Temperature
+    {
+        get => _temperature;
+        set => SetProperty(ref _temperature, value);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using SPU_7.Common.Attributes;
 using SPU_7.Common.Device;
+using SPU_7.Common.Line;
 using SPU_7.Common.Stand;
 
 namespace SPU_7.Common.Extensions
@@ -29,6 +30,15 @@ namespace SPU_7.Common.Extensions
             if (memInfo.Length <= 0) return StandType.None;
             var attrs = memInfo[0].GetCustomAttributes(typeof(StandTypeAttribute), false);
             return attrs.Length > 0 ? ((StandTypeAttribute)attrs[0]).StandType : StandType.None;
+        }
+        
+        public static SensorType[] GetSensorTypes(this Enum enumElement)
+        {
+            var type = enumElement.GetType();
+            var memInfo = type.GetMember(enumElement.ToString());
+            if (memInfo.Length <= 0) return [];
+            var attrs = memInfo[0].GetCustomAttributes(typeof(SensorAttribute), false);
+            return attrs.Length > 0 ? ((SensorAttribute)attrs[0]).SensorTypes : [];
         }
 
         public static DeviceGroupType GetDeviceGroupType(this Enum enumElement)

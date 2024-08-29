@@ -87,6 +87,8 @@ namespace SPU_7.Models.Mapper
                 .ReverseMap();
             CreateMap<StandSettingsNeedleValveViewModel, StandSettingsNeedleValveModel>()
                 .ReverseMap();
+            CreateMap<StandSettingsSensorViewModel, StandSettingsSensorModel>()
+                .ReverseMap();
             
             #endregion
 
