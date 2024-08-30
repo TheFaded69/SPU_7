@@ -79,7 +79,7 @@
                     </Path>
                     <ContentPresenter x:Name="PART_ContentPresenter"
                                       Content="{TemplateBinding Content}"
-                                      Margin="-45,0,0,0"
+                                      Margin="-75,0,0,0"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"/>
                 </Panel>

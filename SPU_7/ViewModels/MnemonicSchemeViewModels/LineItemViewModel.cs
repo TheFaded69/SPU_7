@@ -33,7 +33,7 @@ public class LineItemViewModel : ViewModelBase
 
         IsDeviceOnLine = settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels.Count != 0;
         AfterDeviceWidthValue = 40 + 160 * (deviceMaxCount - deviceCount);
-        
+
         switch (settingsService.StandSettingsModel.LineViewModels[lineIndex].SelectedLineType)
         {
             case LineType.None:
@@ -42,9 +42,11 @@ public class LineItemViewModel : ViewModelBase
             {
                 IsMasterDeviceVisible = true;
                 IsFanVisible = true;
-                MasterDeviceHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count - 1) * 110;
+                MasterDeviceHeightValue =
+                    20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count -
+                          1) * 110;
 
-            
+
                 double firstHeight = 0;
                 double secondHeight = 0;
                 double totalHeight = 0;
@@ -55,21 +57,45 @@ public class LineItemViewModel : ViewModelBase
 
                 if (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count != 1)
                 {
-                    for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count; i++)
+                    for (var i = 0;
+                         i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count;
+                         i++)
                     {
-                        if (i == 0 || i == settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count - 1)
+                        if (i == 0 || i == settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels
+                                .Count - 1)
                         {
                             if (i == 0)
                             {
-                                firstHeight = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
+                                firstHeight =
+                                    settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                        .IsNeedleValveEnable
+                                        ? heightWithNeedle
+                                        : heightWithoutNeedle;
                             }
-                            totalHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
-                            fanHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle / 2 : heightWithoutNeedle / 2;
+
+                            totalHeight +=
+                                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                    .IsNeedleValveEnable
+                                    ? heightWithNeedle
+                                    : heightWithoutNeedle;
+                            fanHeight +=
+                                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                    .IsNeedleValveEnable
+                                    ? heightWithNeedle / 2
+                                    : heightWithoutNeedle / 2;
                         }
                         else
                         {
-                            totalHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
-                            fanHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
+                            totalHeight +=
+                                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                    .IsNeedleValveEnable
+                                    ? heightWithNeedle
+                                    : heightWithoutNeedle;
+                            fanHeight +=
+                                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                    .IsNeedleValveEnable
+                                    ? heightWithNeedle
+                                    : heightWithoutNeedle;
                         }
                     }
 
@@ -84,11 +110,14 @@ public class LineItemViewModel : ViewModelBase
                 break;
             case LineType.NozzleLineType:
             {
-                IsNozzleVisible = !settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Any(noz => noz.IsReplaceNozzle);
-                IsReplaceNozzleVisible = settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Any(noz => noz.IsReplaceNozzle);
+                IsNozzleVisible = !settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels
+                    .Any(noz => noz.IsReplaceNozzle);
+                IsReplaceNozzleVisible = settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels
+                    .Any(noz => noz.IsReplaceNozzle);
                 IsFanVisible = true;
-                MasterDeviceHeightValue = 20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count - 1) * 80;
-                
+                MasterDeviceHeightValue =
+                    20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count - 1) * 80;
+
                 double firstHeight = 0;
                 double secondHeight = 0;
                 double totalHeight = 0;
@@ -99,21 +128,45 @@ public class LineItemViewModel : ViewModelBase
 
                 if (settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count != 1)
                 {
-                    for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count; i++)
+                    for (var i = 0;
+                         i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count;
+                         i++)
                     {
-                        if (i == 0 || i == settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count - 1)
+                        if (i == 0 || i == settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels
+                                .Count - 1)
                         {
                             if (i == 0)
                             {
-                                firstHeight = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
+                                firstHeight =
+                                    settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                        .IsNeedleValveEnable
+                                        ? heightWithNeedle
+                                        : heightWithoutNeedle;
                             }
-                            totalHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
-                            fanHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle / 2 : heightWithoutNeedle / 2;
+
+                            totalHeight +=
+                                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                    .IsNeedleValveEnable
+                                    ? heightWithNeedle
+                                    : heightWithoutNeedle;
+                            fanHeight +=
+                                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                    .IsNeedleValveEnable
+                                    ? heightWithNeedle / 2
+                                    : heightWithoutNeedle / 2;
                         }
                         else
                         {
-                            totalHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
-                            fanHeight += settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable ? heightWithNeedle : heightWithoutNeedle;
+                            totalHeight +=
+                                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                    .IsNeedleValveEnable
+                                    ? heightWithNeedle
+                                    : heightWithoutNeedle;
+                            fanHeight +=
+                                settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                                    .IsNeedleValveEnable
+                                    ? heightWithNeedle
+                                    : heightWithoutNeedle;
                         }
                     }
 
@@ -131,43 +184,73 @@ public class LineItemViewModel : ViewModelBase
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels.Count; i++)
         {
             DeviceItemViewModels.Add(new DeviceItemViewModel(standController, settingsService, i, lineIndex));
-            
+
 #if !DEBUGGUI
-            
             _standController.RegisterPressureSensorObserver(DeviceItemViewModels[i], DevicePurpose.ValidationDevice, i, lineIndex);
             _standController.RegisterTemperatureSensorObserver(DeviceItemViewModels[i], DevicePurpose.ValidationDevice, i, lineIndex);
 #endif
         }
 
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsAfterDeviceValve)
-            AfterDeviceValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].AfterDeviceValveViewModel,
+            AfterDeviceValveViewModel = new ValveItemViewModel(
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].AfterDeviceValveViewModel,
                 _standController, StateType.Open);
-        
+
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsStartCommonValve)
-            StartCommonValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StartCommonValveViewModel,
+            StartCommonValveViewModel = new ValveItemViewModel(
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].StartCommonValveViewModel,
                 _standController, StateType.Open);
-        
+
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsStartValveMasterDevice)
-            StartValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].StartValveMasterDeviceViewModel,
+            StartValveItemViewModel = new ValveItemViewModel(
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].StartValveMasterDeviceViewModel,
                 _standController, StateType.Open);
-        
+
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsOpenNormalSolenoidValve)
             NormalOpenSolenoidValveItemViewModel = new SolenoidValveItemViewModel(_standController,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].OpenNormalSolenoidValveViewModel);
-        
+
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsCloseNormalSolenoidValve)
             NormalCloseSolenoidValveItemViewModel = new SolenoidValveItemViewModel(_standController,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].CloseNormalSolenoidValveViewModel);
-        
-        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count; i++)
+
+        if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsCheckTightnessLine)
+        {
+            FirstTightnessValveItemViewModel = new ValveItemViewModel(
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].FirstTightnessValveViewModel,
+                _standController,
+                StateType.Open);
+            SecondTightnessValveItemViewModel = new ValveItemViewModel(
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].SecondTightnessValveViewModel,
+                _standController,
+                StateType.Open);
+            
+        }
+
+        if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsDropValveEnable)
+        {
+            DropValveItemViewModel = new ValveItemViewModel(
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].DropValveViewModel,
+                _standController,
+                StateType.Open);
+            TightnessValveItemViewModel = new ValveItemViewModel(
+                settingsService.StandSettingsModel.LineViewModels[lineIndex - 1].TightnessValveViewModel,
+                _standController,
+                StateType.Open);
+        }
+
+        for (var i = 0;
+             i < settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count;
+             i++)
         {
             MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_dialogService,
                 _standController,
-                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].MasterDeviceValveViewModel,
-                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i].PressureSensorValveViewModel,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i]
+                    .MasterDeviceValveViewModel,
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i]
+                    .PressureSensorValveViewModel,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i]));
 #if !DEBUGGUI
-    
             _standController.RegisterPressureSensorObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
             _standController.RegisterTemperatureSensorObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
             _standController.RegisterFlowObserver(MasterDeviceItemViewModels[i], DevicePurpose.MasterDevice, i, lineIndex);
@@ -176,16 +259,30 @@ public class LineItemViewModel : ViewModelBase
 
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels.Count; i++)
         {
-            NozzleItemViewModels.Add(
-                new NozzleItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels[i], _standController));
+            if (IsReplaceNozzleVisible)
+            {
+                ManualNozzleItemViewModels.Add(
+                    new ManualNozzleItemViewModel(
+                        settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels[i],
+                        _standController));
+            }
+            else
+            {
+                NozzleItemViewModels.Add(
+                    new NozzleItemViewModel(
+                        settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels[i],
+                        _standController));
+            }
         }
-        
+
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsEndValveMasterDevice)
-            EndValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].EndValveMasterDeviceViewModel,
+            EndValveItemViewModel = new ValveItemViewModel(
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].EndValveMasterDeviceViewModel,
                 _standController, StateType.Open);
-        
+
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsEndCommonValve)
-            EndCommonValveViewModel = new ValveItemViewModel(settingsService.StandSettingsModel.LineViewModels[lineIndex].EndCommonValveViewModel,
+            EndCommonValveItemViewModel = new ValveItemViewModel(
+                settingsService.StandSettingsModel.LineViewModels[lineIndex].EndCommonValveViewModel,
                 _standController, StateType.Open);
 
         for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels.Count; i++)
@@ -197,18 +294,21 @@ public class LineItemViewModel : ViewModelBase
                 lineIndex,
                 i)
             {
-                IsNeedleValveEnable = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i].IsNeedleValveEnable
+                IsNeedleValveEnable = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[i]
+                    .IsNeedleValveEnable
             });
         }
 
-        for (var i = 0; i < settingsService.StandSettingsModel.LineViewModels[lineIndex].VacuumValveViewModels.Count; i++)
+        for (var i = 0;
+             i < settingsService.StandSettingsModel.LineViewModels[lineIndex].VacuumValveViewModels.Count;
+             i++)
         {
             VacuumItemViewModels.Add(new VacuumItemViewModel());
         }
 
         IsCheckTightnessLine = _settingsService.StandSettingsModel.LineViewModels[lineIndex].IsCheckTightnessLine;
         IsDropValveEnable = _settingsService.StandSettingsModel.LineViewModels[lineIndex].IsDropValveEnable;
-        
+
         LineNumber = lineIndex + 1;
 
         ReverseFlowCommand = new DelegateCommand(ReverseFlowCommandHandler);
@@ -266,37 +366,31 @@ public class LineItemViewModel : ViewModelBase
     }
 
     public int AfterDeviceWidthValue { get; set; }
-    
+
     public bool IsDeviceOnLine { get; set; }
     public int MasterDeviceHeightValue { get; set; }
-    
+
     public int NozzleWidthValue { get; set; }
-    
+
     public double FanHeightValue { get; set; }
     public Thickness FanHeightMargin { get; set; }
     public ObservableCollection<DeviceItemViewModel> DeviceItemViewModels { get; set; } = [];
-    
     public ValveItemViewModel AfterDeviceValveViewModel { get; set; }
     public ValveItemViewModel StartCommonValveViewModel { get; set; }
-    
     public bool IsCheckTightnessLine { get; set; }
-    
-    public ValveItemViewModel FirstTightnessValveViewModel { get; set; }
-    
-    public ValveItemViewModel SecondTightnessValveViewModel { get; set; }
-    
-    public ValveItemViewModel TightnessValveViewModel { get; set; }
-    
+    public ValveItemViewModel FirstTightnessValveItemViewModel { get; set; }
+    public ValveItemViewModel SecondTightnessValveItemViewModel { get; set; }
+    public ValveItemViewModel TightnessValveItemViewModel { get; set; }
     public bool IsDropValveEnable { get; set; }
-    public ValveItemViewModel DropValveViewModel { get; set; }
-    public ValveItemViewModel StartValveViewModel { get; set; }
+    public ValveItemViewModel DropValveItemViewModel { get; set; }
+    public ValveItemViewModel StartValveItemViewModel { get; set; }
     public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = [];
     public SolenoidValveItemViewModel NormalOpenSolenoidValveItemViewModel { get; set; }
     public SolenoidValveItemViewModel NormalCloseSolenoidValveItemViewModel { get; set; }
     public ObservableCollection<NozzleItemViewModel> NozzleItemViewModels { get; set; } = [];
-    public ValveItemViewModel EndValveViewModel { get; set; }
-    
-    public ValveItemViewModel EndCommonValveViewModel { get; set; }
+    public ObservableCollection<ManualNozzleItemViewModel> ManualNozzleItemViewModels { get; set; } = [];
+    public ValveItemViewModel EndValveItemViewModel { get; set; }
+    public ValveItemViewModel EndCommonValveItemViewModel { get; set; }
     public ObservableCollection<FanItemViewModel> FanItemViewModels { get; set; } = [];
     public ObservableCollection<VacuumItemViewModel> VacuumItemViewModels { get; set; } = [];
 

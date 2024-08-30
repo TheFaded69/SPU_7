@@ -116,7 +116,7 @@ public class StandSettingsLineModel
     /// Клапан обратной подачи воздуха (из СПУ-5)
     /// </summary>
     public StandSettingsValveModel ReverseValveViewModel { get; set; }
-
+    
     /// <summary>
     /// Номер линии
     /// </summary>

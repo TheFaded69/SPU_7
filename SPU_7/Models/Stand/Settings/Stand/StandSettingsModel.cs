@@ -48,4 +48,5 @@ public class StandSettingsModel
     public string OutsideCheckInfo { get; set; }
     public string DeviceTestInfo { get; set; }
     public string PostInfo { get; set; }
+    
 }

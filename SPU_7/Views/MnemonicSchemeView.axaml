@@ -197,7 +197,7 @@
                                         Padding="-3"
                                         Margin="-25, 0,-25,0"
                                         DockPanel.Dock="Top"
-                                        Command="{Binding StartCommonValveViewModel.UseValveCommand}"
+                                        Command="{Binding FirstTightnessValveItemViewModel.UseValveCommand}"
                                         HorizontalAlignment="Center"
                                         Background="{Binding StartCommonValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                         Foreground="Black"
@@ -216,7 +216,7 @@
                                         Padding="-3"
                                         Margin="-25, 0,-25,0"
                                         DockPanel.Dock="Top"
-                                        Command="{Binding StartCommonValveViewModel.UseValveCommand}"
+                                        Command="{Binding SecondTightnessValveItemViewModel.UseValveCommand}"
                                         HorizontalAlignment="Center"
                                         Background="{Binding StartCommonValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                         Foreground="Black"
@@ -236,11 +236,11 @@
                                     Content="КШ"
                                     Padding="-3"
                                     Margin="0, 0,0,0"
-                                    IsVisible="{Binding StartValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    IsVisible="{Binding StartValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
                                     DockPanel.Dock="Left"
-                                    Command="{Binding StartValveViewModel.UseValveCommand}"
+                                    Command="{Binding StartValveItemViewModel.UseValveCommand}"
                                     HorizontalAlignment="Center"
-                                    Background="{Binding StartValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                    Background="{Binding StartValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                     Foreground="Black"
                                     Classes="flat" />
                             
@@ -253,15 +253,7 @@
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
                             
-                            <Rectangle Fill="#00a2e8"
-                                       Height="145"
-                                       Width="20"
-                                       Margin="0, 0,0,125"
-                                       StrokeThickness="0"
-                                       ClipToBounds="True"
-                                       IsVisible="{Binding NormalCloseSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                       VerticalAlignment="Center"
-                                       DockPanel.Dock="Left" />
+                            
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="120"
@@ -276,10 +268,10 @@
                                     Classes="flat"
                                     Foreground="Black"
                                     Content="НЗК"
-                                    IsVisible="{Binding NormalCloseSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                    Command="{Binding NormalCloseSolenoidValveItemViewModel.UseSolenoidCommand}"
-                                    Background="{Binding  NormalCloseSolenoidValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
-                                    Margin="-130, 0,0,250"/>
+                                    IsVisible="{Binding NormalOpenSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Command="{Binding NormalOpenSolenoidValveItemViewModel.UseSolenoidCommand}"
+                                    Background="{Binding  NormalOpenSolenoidValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                    Margin="-120, 0,0,250"/>
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="120"
@@ -289,15 +281,24 @@
                                        IsVisible="{Binding NormalOpenSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
+                            <Rectangle Fill="#00a2e8"
+                                       Height="145"
+                                       Width="20"
+                                       Margin="0, 0,0,125"
+                                       StrokeThickness="0"
+                                       ClipToBounds="True"
+                                       IsVisible="{Binding NormalCloseSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left" />
                             <Button Width="30"
                                     Height="70"
                                     Classes="flat"
                                     Foreground="Black"
                                     Content="НЗК"
-                                    IsVisible="{Binding NormalOpenSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                    Command="{Binding NormalOpenSolenoidValveItemViewModel.UseSolenoidCommand}"
-                                    Background="{Binding  NormalOpenSolenoidValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
-                                    Margin="-130, 0,0,0"/>
+                                    IsVisible="{Binding NormalCloseSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Command="{Binding NormalCloseSolenoidValveItemViewModel.UseSolenoidCommand}"
+                                    Background="{Binding  NormalCloseSolenoidValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                    Margin="-160, 0,0,0"/>
                             
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
@@ -660,7 +661,7 @@
                             <!-- Ручное заменяемое сопло IsReplaceNozzleVisible todo -->
                             <ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsReplaceNozzleVisible}"
-                                          ItemsSource="{Binding NozzleItemViewModels}"
+                                          ItemsSource="{Binding ManualNozzleItemViewModels}"
                                           VerticalAlignment="Center">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -740,11 +741,11 @@
                                     Content="КШ"
                                     Padding="-3"
                                     Margin="0, 0,0,0"
-                                    IsVisible="{Binding EndValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    IsVisible="{Binding EndValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
                                     DockPanel.Dock="Left"
-                                    Command="{Binding EndValveViewModel.UseValveCommand}"
+                                    Command="{Binding EndValveItemViewModel.UseValveCommand}"
                                     HorizontalAlignment="Center"
-                                    Background="{Binding EndValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                    Background="{Binding EndValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                     Foreground="Black"
                                     Classes="flat" />
                             <Rectangle Fill="#00a2e8"
@@ -761,7 +762,7 @@
                                        Margin="0, 0,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
-                                       IsVisible="{Binding EndCommonValveViewModel, Converter={x:Static ObjectConverters.IsNull}}"
+                                       IsVisible="{Binding EndCommonValveItemViewModel, Converter={x:Static ObjectConverters.IsNull}}"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
                             
@@ -769,7 +770,7 @@
                             <DockPanel DockPanel.Dock="Left"
                                        VerticalAlignment="Center"
                                        Margin="0,0,0,-310"
-                                       IsVisible="{Binding EndCommonValveViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                       IsVisible="{Binding EndCommonValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <Rectangle Fill="#00a2e8"
                                            Height="130"
                                            Width="20"
@@ -784,9 +785,9 @@
                                         Padding="-3"
                                         Margin="-25, 0,-25,0"
                                         DockPanel.Dock="Top"
-                                        Command="{Binding EndCommonValveViewModel.UseValveCommand}"
+                                        Command="{Binding EndCommonValveItemViewModel.UseValveCommand}"
                                         HorizontalAlignment="Center"
-                                        Background="{Binding EndCommonValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+                                        Background="{Binding EndCommonValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                         Foreground="Black"
                                         Classes="flat" />
                                 <Rectangle Fill="#00a2e8"
@@ -821,8 +822,9 @@
                                         Padding="-3"
                                         Margin="-650, -400,0,0"
                                         DockPanel.Dock="Left"
+                                        Command="{Binding TightnessValveItemViewModel.UseValveCommand}"
+                                        Background="{Binding  TightnessValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                         HorizontalAlignment="Center"
-                                        Background="LightGreen"
                                         Foreground="Black"
                                         Classes="flat" />
                                 <Rectangle Fill="#00a2e8"
@@ -840,7 +842,9 @@
                                         Margin="-55, 0,-35,-200"
                                         DockPanel.Dock="Left"
                                         HorizontalAlignment="Center"
-                                        Background="LightGreen"
+                                        Command="{Binding DropValveItemViewModel.UseValveCommand}"
+                                        Background="{Binding  DropValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
+
                                         Foreground="Black"
                                         Classes="flat" />
                             </DockPanel>
