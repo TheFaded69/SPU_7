@@ -10,10 +10,10 @@ public enum SensorPurpose
     TemperatureSensor = 1,
 
     [Description("Датчик абсолютного давления")]
-    [Sensor(SensorType.TurboFlowPS, SensorType.Metran)]
+    [Sensor(SensorType.TurboFlowPS, SensorType.Pascal04)]
     PressureSensor = 2,
     
-    [Description("Датчик относительного давления")]
+    [Description("Датчик избыточного давления")]
     [Sensor(SensorType.TurboFlowPS)]
     PressureOffsetSensor = 3,
     
@@ -22,7 +22,7 @@ public enum SensorPurpose
     PressureDifferenceSensor = 4,
     
     [Description("Датчик разряжения давления")]
-    [Sensor(SensorType.Pascal04)]
+    [Sensor(SensorType.Metran)]
     PressureDischargeSensor = 5,
     
     [Description("Датчик влажности")]

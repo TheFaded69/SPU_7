@@ -13,7 +13,6 @@ using SPU_7.Domain.Devices.MasterDevice.GFG;
 using SPU_7.Domain.Devices.MasterDevice.Rabo;
 using SPU_7.Domain.Devices.MasterDevice.RGT;
 using SPU_7.Domain.Devices.StandDevices.PressureSensor;
-using SPU_7.Domain.Devices.StandDevices.PressureSensor415M;
 using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
 using SPU_7.Domain.Modbus;
 using SPU_7.Modbus.Processor;
@@ -32,13 +31,15 @@ public class StandLine
         {
             var pressureSensor = string.IsNullOrEmpty(deviceViewModel.SelectedPressureSensorComPort)
                 ? null
-                : new PressureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedPressureSensorComPort), 
+                : new PressureSensor(modbusProcessors
+                        .FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedPressureSensorComPort), 
                     new RegisterMapEnum<PressureSensorRegisterMap>(),
                     deviceViewModel.PressureSensorAddress);
                     
             var temperatureSensor = string.IsNullOrEmpty(deviceViewModel.SelectedTemperatureSensorComPort)
                 ? null
-                : new TemperatureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedTemperatureSensorComPort), 
+                : new TemperatureSensor(modbusProcessors
+                        .FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedTemperatureSensorComPort), 
                     new RegisterMapEnum<TemperatureSensorRegisterMap>(),
                     deviceViewModel.TemperatureSensorAddress,
                     (int)deviceViewModel.TemperatureChannelNumber);
@@ -54,22 +55,27 @@ public class StandLine
                 {
                     var pressureSensor = string.IsNullOrEmpty(masterDeviceModel.SelectedPressureSensorComPort)
                         ? null
-                        : new PressureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == masterDeviceModel.SelectedPressureSensorComPort), 
+                        : new PressureSensor(modbusProcessors
+                                .FirstOrDefault(mb => mb.PortName == masterDeviceModel.SelectedPressureSensorComPort), 
                             new RegisterMapEnum<PressureSensorRegisterMap>(),
                             masterDeviceModel.PressureSensorAddress);
                     
                     var temperatureSensor = string.IsNullOrEmpty(masterDeviceModel.SelectedTemperatureSensorComPort)
                         ? null
-                        : new TemperatureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == masterDeviceModel.SelectedTemperatureSensorComPort), 
+                        : new TemperatureSensor(modbusProcessors
+                                .FirstOrDefault(mb => mb.PortName == masterDeviceModel.SelectedTemperatureSensorComPort), 
                             new RegisterMapEnum<TemperatureSensorRegisterMap>(),
                             masterDeviceModel.TemperatureSensorAddress,
                             (int)masterDeviceModel.TemperatureChannelNumber);
                     
                     MasterDevices.Add(masterDeviceModel.SelectedMasterDeviceType switch
                     {
-                        MasterDeviceType.GFG => new GfgDevice(null, new RegisterMapEnum<GFGRegisterMap>(), pressureSensor, temperatureSensor),
-                        MasterDeviceType.Rabo => new RaboDevice( pressureSensor, temperatureSensor),
-                        MasterDeviceType.RGT => new RGTDevice( pressureSensor, temperatureSensor),
+                        MasterDeviceType.GFG => new GfgDevice(null, 
+                            new RegisterMapEnum<GFGRegisterMap>(), 
+                            pressureSensor, 
+                            temperatureSensor),
+                        MasterDeviceType.Rabo => new RaboDevice(pressureSensor, temperatureSensor),
+                        MasterDeviceType.RGT => new RGTDevice(pressureSensor, temperatureSensor),
                     });
                 }
                 break;
@@ -84,15 +90,17 @@ public class StandLine
             switch (sensorViewModel.SensorPurpose)
             {
                 case SensorPurpose.TemperatureSensor:
-                    TemperatureSensor = new TemperatureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                    TemperatureSensor = new TemperatureSensor(modbusProcessors
+                            .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
                         new RegisterMapEnum<TemperatureSensorRegisterMap>(),
                         sensorViewModel.Address, 
-                        1);
+                        sensorViewModel.ChannelNumber);
                     break;
                 case SensorPurpose.PressureSensor:
                     PressureSensor = sensorViewModel.SensorType switch
                     {
-                        SensorType.TurboFlowPS => new PressureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                        SensorType.TurboFlowPS => new PressureSensor(modbusProcessors
+                                .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
                             new RegisterMapEnum<PressureSensorRegisterMap>(),
                             sensorViewModel.Address),
                         _ => throw new ArgumentOutOfRangeException()
@@ -101,7 +109,8 @@ public class StandLine
                 case SensorPurpose.PressureOffsetSensor:
                     PressureSensor = sensorViewModel.SensorType switch
                     {
-                        SensorType.TurboFlowPS => new PressureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                        SensorType.TurboFlowPS => new PressureSensor(modbusProcessors
+                                .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
                             new RegisterMapEnum<PressureSensorRegisterMap>(),
                             sensorViewModel.Address),
                         _ => throw new ArgumentOutOfRangeException()
@@ -110,7 +119,8 @@ public class StandLine
                 case SensorPurpose.PressureDifferenceSensor:
                     PressureDifferenceSensor = sensorViewModel.SensorType switch
                     {
-                        SensorType.TurboFlowPS => new PressureSensor(modbusProcessors.FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                        SensorType.TurboFlowPS => new PressureSensor(modbusProcessors
+                                .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
                             new RegisterMapEnum<PressureSensorRegisterMap>(),
                             sensorViewModel.Address),
                         _ => throw new ArgumentOutOfRangeException()
@@ -119,10 +129,10 @@ public class StandLine
                 case SensorPurpose.PressureDischargeSensor:
                     PressureDischargeSensor = sensorViewModel.SensorType switch
                     {
-                        SensorType.Pascal04 => new ElmetroDigitalDevice(new SerialPortCommunication(new SerialPort()
-                        {
-                            PortName = sensorViewModel.SelectedComPort
-                        })),
+                        SensorType.Metran => new PressureSensor415M(modbusProcessors
+                                .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                            new RegisterMapEnum<PressureSensor415MRegisterMap>(),
+                            sensorViewModel.Address),
                         _ => throw new ArgumentOutOfRangeException()
                     };
                     break;
@@ -138,9 +148,12 @@ public class StandLine
     
     public readonly List<IDevice> Devices = [];
     public readonly List<IMasterDevice> MasterDevices = [];
+    public  ITemperatureSensor? TemperatureSensor{ get; set; }
+    public IPressureSensor? PressureSensor{ get; set; }
+    public IPressureSensor? PressureDifferenceSensor{ get; set; }
+    public IPressureSensor? PressureDischargeSensor{ get; set; }
+    
     public int LineNumber { get; set; }
-    public  ITemperatureSensor TemperatureSensor{ get; set; }
-    public IPressureSensor PressureSensor{ get; set; }
-    public IPressureSensor PressureDifferenceSensor{ get; set; }
-    public ElmetroDigitalDevice PressureDischargeSensor{ get; set; }
+    public float CurrentFlow { get; set; }
+    public float? CurrentCalculateFlow { get; set; }
 }

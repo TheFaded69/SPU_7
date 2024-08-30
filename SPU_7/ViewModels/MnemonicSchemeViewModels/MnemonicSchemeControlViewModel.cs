@@ -379,16 +379,16 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                 switch (dataPair.DataType)
                 {
                     case DeviceInfoParameterType.TemperatureTube:
-                        LineInformationItemViewModels[lineData.LineIndex].Temperature = (float)dataPair.Data;
+                        LineInformationItemViewModels[lineData.LineIndex].Temperature = (float?)lineData.Data;
                         break;
                     case DeviceInfoParameterType.Pressure:
-                        LineInformationItemViewModels[lineData.LineIndex].Pressure = (float)dataPair.Data;
+                        LineInformationItemViewModels[lineData.LineIndex].Pressure = (float?)lineData.Data;
                         break;
                     case DeviceInfoParameterType.PressureResiver:
-                        LineInformationItemViewModels[lineData.LineIndex].PressureDischarged = (float)dataPair.Data;
+                        LineInformationItemViewModels[lineData.LineIndex].PressureDischarged = (float?)lineData.Data;
                         break;
                     case DeviceInfoParameterType.PressureDifference:
-                        LineInformationItemViewModels[lineData.LineIndex].PressureDifference = (float)dataPair.Data;
+                        LineInformationItemViewModels[lineData.LineIndex].PressureDifference = (float?)lineData.Data;
                         break;
                 }
 

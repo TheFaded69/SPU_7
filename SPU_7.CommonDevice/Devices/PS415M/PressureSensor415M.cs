@@ -29,7 +29,7 @@ public class PressureSensor415M : ModbusDevice, IModbusDevice, IPressureSensor
     /// <summary>
     /// Получить текущее давление в Па асинхронно
     /// </summary>
-    public async Task<float?> GetPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default) =>
+    public async Task<float?> ReadPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default) =>
         await GetParameterValueAsync<float?>(pressureType switch
     {
         PressureType.DefaultPressure => PS415M_RegisterMap.CurrentPressure,

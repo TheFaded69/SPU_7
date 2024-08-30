@@ -131,7 +131,7 @@ public class UFG : ModbusDevice, IModbusDevice, IPressureSensor, ITemperatureSen
         _ => throw new IndexOutOfRangeException()
     });
 
-    public Task<float?> GetPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default) =>
+    public Task<float?> ReadPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default) =>
         GetParameterValueAsync<float?>(pressureType switch
         {
             PressureType.DefaultPressure => UFG_RegisterMap.AbsolutePressure,

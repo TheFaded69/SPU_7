@@ -4,11 +4,12 @@ using SPU_7.Modbus.Processor;
 namespace SPU_7.Domain.Devices.StandDevices.THMeter
 {
     /// <summary>
-    /// 
+    /// ИВА
     /// </summary>
-    public class TemperatureHumiditySensor : ModbusUnitProcessor<TemperatureHumiditySensorRegisterMap>, ITemperatureHumiditySensor
+    public class TemperatureHumiditySensor : ModbusUnitProcessor<TemperatureHumiditySensorRegisterMap>,
+        ITemperatureHumiditySensor
     {
-        public TemperatureHumiditySensor(IModbusProcessor modbusProcessor, 
+        public TemperatureHumiditySensor(IModbusProcessor modbusProcessor,
             IRegisterMapEnum<TemperatureHumiditySensorRegisterMap> registerMap,
             int moduleAddress) :
             base(modbusProcessor, registerMap)
@@ -16,8 +17,10 @@ namespace SPU_7.Domain.Devices.StandDevices.THMeter
             ModuleAddress = (byte)moduleAddress;
         }
 
-        public async Task<ushort?> ReadHumidityAsync() => (ushort?)await ReadRegisterAsync(TemperatureHumiditySensorRegisterMap.HumidityRegister);
+        public async Task<float?> ReadHumidityAsync() =>
+            (ushort?)await ReadRegisterAsync(TemperatureHumiditySensorRegisterMap.HumidityRegister);
 
-        public async Task<short?> ReadTemperatureAsync() => (short?)await ReadRegisterAsync(TemperatureHumiditySensorRegisterMap.TemperatureRegister);
+        public async Task<float?> ReadTemperatureAsync() =>
+            (short?)await ReadRegisterAsync(TemperatureHumiditySensorRegisterMap.TemperatureRegister);
     }
 }

@@ -18,6 +18,7 @@ public class StandSettingsSensorViewModel : ViewModelBase
     private int _address;
     private string _selectedSensorPurposes;
     private string _selectedSensorType;
+    private int _channelNumber;
 
     public int Number
     {
@@ -70,4 +71,10 @@ public class StandSettingsSensorViewModel : ViewModelBase
     }
 
     public SensorType SensorType { get; set; }
+
+    public int ChannelNumber
+    {
+        get => _channelNumber;
+        set => SetProperty(ref _channelNumber, value);
+    }
 }

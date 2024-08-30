@@ -17,5 +17,5 @@ public interface IPressureSensor : IDevice
     /// <param name="pressureType">Тип давления</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<float?> GetPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default);
+    public Task<float?> ReadPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default);
 }

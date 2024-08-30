@@ -1,4 +1,6 @@
-﻿namespace SPU_7.ViewModels;
+﻿using System;
+
+namespace SPU_7.ViewModels;
 
 public class LineInformationItemViewModel : ViewModelBase
 {
@@ -29,19 +31,19 @@ public class LineInformationItemViewModel : ViewModelBase
     public float? PressureDifference
     {
         get => _pressureDifference;
-        set => SetProperty(ref _pressureDifference, value);
+        set => SetProperty(ref _pressureDifference, value == null ? value : (float?)Math.Round((float)value / 1000, 3));
     }
     
     public float? Pressure
     {
         get => _pressure;
-        set => SetProperty(ref _pressure, value);
+        set => SetProperty(ref _pressure, value == null ? value : (float?)Math.Round((float)value / 1000, 3));
     }
 
     public float? PressureDischarged
     {
         get => _pressureDischarged;
-        set => SetProperty(ref _pressureDischarged, value);
+        set => SetProperty(ref _pressureDischarged, value == null ? value : (float?)Math.Round((float)value / 1000, 3));
     }
 
     public float? CurrentFlow

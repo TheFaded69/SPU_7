@@ -6,6 +6,7 @@ using AutoMapper;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Extensions;
+using SPU_7.Common.Line;
 using SPU_7.Common.Settings;
 using SPU_7.Common.Stand;
 using SPU_7.Models.Services.Autorization;
@@ -18,14 +19,14 @@ namespace SPU_7.ViewModels.Settings;
 
 public class StandSettingsViewModel : ViewModelBase, IDialogAware
 {
-    public StandSettingsViewModel(IMapper mapper, 
-        IStandSettingsDbService standSettingsDbService, 
+    public StandSettingsViewModel(IMapper mapper,
+        IStandSettingsDbService standSettingsDbService,
         IStandSettingsService standSettingsService,
         IDialogService dialogService,
         IAuthorizationService authorizationService)
     {
         Title = "Настройки стенда";
-        
+
         _mapper = mapper;
         _standSettingsDbService = standSettingsDbService;
         _standSettingsService = standSettingsService;
@@ -49,7 +50,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         LineViewModels = [];
         PulseMeterViewModels = [];
         PortViewModels = [];
-        
+
         AddNozzleCommand = new DelegateCommand(AddNozzleCommandHandler);
         RemoveNozzleCommand = new DelegateCommand(RemoveNozzleCommandHandler);
         AddValveCommand = new DelegateCommand(AddValveCommandHandler);
@@ -72,8 +73,8 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         CreateNewSettingsProfileFromOtherCommand = new DelegateCommand(CreateNewSettingsProfileFromOtherCommandHandler);
         DeleteSettingsProfileCommand = new DelegateCommand(DeleteSettingsProfileCommandHandler);
         CloseWindowCommand = new DelegateCommand(CloseWindowCommandHandler);
-        
-        
+
+
         StringStandTypes = new ObservableCollection<string>(Enum
             .GetValues<StandType>()
             .Where(st => st != StandType.None)
@@ -93,12 +94,18 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         if (_standSettingsService.StandSettingsModel != null)
         {
             _mapper.Map(_standSettingsService.StandSettingsModel, this);
-            
+
             var selectedProfile = StandSettingsProfiles.FirstOrDefault(sp => sp.Name == ProfileName);
 
             if (selectedProfile != null)
                 SelectedSettingsProfile = selectedProfile;
         }
+
+        THSensorTypes = new ObservableCollection<string>(Enum
+            .GetValues<SensorPurpose>()
+            .FirstOrDefault(sp => sp == SensorPurpose.TemperatureHumiditySensor)
+            .GetSensorTypes()
+            .Select(st => st.GetDescription()));
     }
 
     private readonly IMapper _mapper;
@@ -189,12 +196,14 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     private string _selectedPressureResiverSensorPortName;
     private ObservableCollection<StandSettingsPulseCountMeterModuleViewModel> _pulseCountMeterModuleViewModels;
     private StandSettingsPulseCountMeterModuleViewModel _selectedPulseCountMeterModuleViewModel;
+    private string _selectedThSensorTypeString;
 
     #region Profiles
 
     public Guid Id { get; set; }
-    
+
     public ObservableCollection<StandSettingsProfileViewModel> StandSettingsProfiles { get; set; }
+
     public StandSettingsProfileViewModel SelectedSettingsProfile
     {
         get => _selectedSettingsProfile;
@@ -220,12 +229,12 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
 
     #region TabVisible
 
-    public bool IsProtocolVisible { get;set; }
+    public bool IsProtocolVisible { get; set; }
     public bool IsMnemonicSchemeVisible { get; set; }
     public bool IsDeviceVisible { get; set; }
 
     #endregion
-    
+
     #region Stand
 
     public string StandNumber
@@ -293,7 +302,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         get => _fortyPeriod;
         set => SetProperty(ref _fortyPeriod, value);
     }
-    
+
     public ObservableCollection<string> StringStandTypes { get; }
 
     public string SelectedStringStandType
@@ -310,7 +319,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
 
     public StandType StandType { get; set; }
 
-    
+
     public ObservableCollection<string> StringNozzleManualTypes { get; }
 
     public string SelectedStringNozzleManualType
@@ -324,10 +333,11 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
                 .FirstOrDefault(nt => nt.GetDescription() == value);
         }
     }
+
     public NozzleManualType NozzleManualType { get; set; }
-    
+
     #endregion
-    
+
     #region Protocols
 
     public string ValidationVendorType
@@ -433,7 +443,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     }
 
     #endregion
-    
+
     #region Mnemoscheme
 
     public ObservableCollection<StandSettingsNozzleViewModel> NozzleViewModels
@@ -509,6 +519,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     }
 
     public DelegateCommand AddNozzleCommand { get; set; }
+
     private void AddNozzleCommandHandler()
     {
         NozzleViewModels.Add(new StandSettingsNozzleViewModel
@@ -516,14 +527,16 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
             Number = NozzleViewModels.Count + 1
         });
     }
-    
+
     public DelegateCommand RemoveNozzleCommand { get; set; }
+
     private void RemoveNozzleCommandHandler()
     {
         NozzleViewModels.Remove(SelectedNozzleViewModels);
     }
-    
+
     public DelegateCommand AddValveCommand { get; set; }
+
     private void AddValveCommandHandler()
     {
         ValveViewModels.Add(new StandSettingsValveViewModel
@@ -531,14 +544,16 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
             Number = ValveViewModels.Count + 1
         });
     }
-    
+
     public DelegateCommand RemoveValveCommand { get; set; }
+
     private void RemoveValveCommandHandler()
     {
         ValveViewModels.Remove(SelectedValveViewModel);
     }
-    
+
     public DelegateCommand AddSolenoidValveCommand { get; set; }
+
     private void AddSolenoidValveCommandHandler()
     {
         SolenoidValveViewModels.Add(new StandSettingsSolenoidValveViewModel
@@ -546,13 +561,14 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
             Number = SolenoidValveViewModels.Count + 1
         });
     }
-    
+
     public DelegateCommand RemoveSolenoidValveCommand { get; set; }
+
     private void RemoveSolenoidValveCommandHandler()
     {
         SolenoidValveViewModels.Remove(SelectedSolenoidValveViewModel);
     }
-    
+
     public DelegateCommand AddLineCommand { get; }
 
     private void AddLineCommandHandler()
@@ -562,14 +578,14 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
             LineNumber = LineViewModels.Count + 1
         });
     }
-    
+
     public DelegateCommand RemoveLineCommand { get; }
 
     private void RemoveLineCommandHandler()
     {
         LineViewModels.Remove(LineViewModels.Last());
     }
-    
+
     public DelegateCommand AddPulseMeterCommand { get; }
 
     private void AddPulseMeterCommandHandler()
@@ -579,14 +595,14 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
             Number = PulseMeterViewModels.Count + 1,
         });
     }
-    
+
     public DelegateCommand RemovePulseMeterCommand { get; }
 
     private void RemovePulseMeterCommandHandler()
     {
         PulseMeterViewModels.Remove(SelectedPulseMeterViewModel);
     }
-    
+
     public DelegateCommand AddPulseCountMeterModuleCommand { get; }
 
     private void AddPulseCountMeterModuleCommandHandler()
@@ -596,19 +612,34 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
             Number = PulseCountMeterModuleViewModels.Count + 1,
         });
     }
-    
+
     public DelegateCommand RemovePulseCountMeterModuleCommand { get; }
 
     private void RemovePulseCountMeterModuleCommandHandler()
     {
         PulseCountMeterModuleViewModels.Remove(SelectedPulseCountMeterModuleViewModel);
     }
-    
+
     #endregion
 
     #region Equipment
-    public ObservableCollection<string> PortNames { get; set; }  = new(SerialPort.GetPortNames());
-    
+
+    public ObservableCollection<string> PortNames { get; set; } = new(SerialPort.GetPortNames());
+
+    public ObservableCollection<string> THSensorTypes { get; set; }
+
+    public string SelectedTHSensorTypeString
+    {
+        get => _selectedThSensorTypeString;
+        set
+        {
+            SetProperty(ref _selectedThSensorTypeString, value);
+            SelectedTHSensorType = Enum.GetValues<SensorType>().FirstOrDefault(st => st.GetDescription() == value);
+        }
+    }
+
+    public SensorType SelectedTHSensorType { get; set; }
+
     public DelegateCommand AddPortCommand { get; }
 
     private void AddPortCommandHandler()
@@ -631,18 +662,19 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         get => _selectedPortViewModel;
         set => SetProperty(ref _selectedPortViewModel, value);
     }
+
     public string SelectedEquipmentPortName
     {
         get => _selectedEquipmentPort;
         set => SetProperty(ref _selectedEquipmentPort, value);
     }
-    
+
     public int SelectedEquipmentPortBaudRate
     {
         get => _selectedEquipmentBaudRate;
         set => SetProperty(ref _selectedEquipmentBaudRate, value);
     }
-    
+
     public int TemperatureSensorAddress
     {
         get => _temperatureSensorAddress;
@@ -730,7 +762,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     }
 
     #endregion
-    
+
     #region SPI settings
 
     public double? ContractualTemperature
@@ -844,7 +876,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         get => _selectedComparatorSettingsViewModel;
         set => SetProperty(ref _selectedComparatorSettingsViewModel, value);
     }
-    
+
     public ObservableCollection<string> CheckConnectionWithPlatform { get; set; }
 
     public string SelectedCheckConnectionWithPlatform
@@ -896,96 +928,90 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         get => _pauseForCheckingOutsideValve;
         set => SetProperty(ref _pauseForCheckingOutsideValve, value);
     }
-    
+
     #endregion
 
     #region Grand
-
-    
 
     #endregion
 
     #region Printer
 
-    
-
     #endregion
 
     #region Dialog
 
-    
     public DelegateCommand SaveSettingsCommand { get; }
+
     private void SaveSettingsCommandHandler()
     {
         var isNewGuid = false;
-        
+
         if (Id == Guid.Empty)
         {
             Id = Guid.NewGuid();
-            
+
             isNewGuid = true;
-        } 
-        
+        }
+
         var settingsModel = _mapper.Map<StandSettingsModel>(this);
-        
+
         _standSettingsService.SaveSettings(settingsModel);
         _standSettingsService.StandSettingsModel = settingsModel;
-        
+
         if (isNewGuid) _standSettingsDbService.AddStandSettings(settingsModel);
         else _standSettingsDbService.EditStandSettings(settingsModel);
-        
+
         RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
     }
-    
+
     public DelegateCommand CancelCommand { get; }
+
     private void CancelCommandHandler()
     {
         RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
     }
-    
+
     public DelegateCommand CreateNewSettingsProfile { get; }
 
     private void CreateNewSettingsProfileHandler()
     {
         _mapper.Map(new StandSettingsModel(), this);
     }
-    
+
     public DelegateCommand CreateNewSettingsProfileFromOtherCommand { get; }
-    
+
     private void CreateNewSettingsProfileFromOtherCommandHandler()
     {
         var settingsModel = _mapper.Map<StandSettingsModel>(this);
         settingsModel.ProfileName = string.Empty;
         settingsModel.Id = Guid.Empty;
         _mapper.Map(settingsModel, this);
-        
+
         MessageViewModel.Show(_dialogService, "Новый профиль скопирован из выбранного", null, null);
     }
-    
+
     public DelegateCommand DeleteSettingsProfileCommand { get; }
 
     private void DeleteSettingsProfileCommandHandler()
     {
-        
     }
-    
+
     public DelegateCommand CloseWindowCommand { get; }
 
     private void CloseWindowCommandHandler()
     {
         RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
     }
-    
+
     public bool CanCloseDialog() => true;
 
     public void OnDialogClosed()
     {
-        
     }
 
     public void OnDialogOpened(IDialogParameters parameters)
     {
-        
     }
 
     public static void Show(IDialogService dialogService, Action positiveAction, Action negativeAction)
@@ -1018,9 +1044,8 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
                 }
             });
     }
-    
-    public event Action<IDialogResult> RequestClose;
-    
-    #endregion
 
+    public event Action<IDialogResult> RequestClose;
+
+    #endregion
 }

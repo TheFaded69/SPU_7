@@ -2,13 +2,13 @@
 
 public class LineData
 {
-    public LineData(int lineIndex, object data)
+    public LineData(int lineIndex, object? data)
     {
         LineIndex = lineIndex;
         Data = data;
     }
     
-    public object Data { get; set; }
+    public object? Data { get; set; }
     
     public int LineIndex { get; set; }
 }

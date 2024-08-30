@@ -17,4 +17,6 @@ public class StandSettingsSensorModel
     public string SelectedSensorType { get; set; }
     
     public SensorType SensorType { get; set; }
+    
+    public int ChannelNumber { get; set; }
 }

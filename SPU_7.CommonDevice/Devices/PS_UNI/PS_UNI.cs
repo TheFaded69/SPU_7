@@ -33,7 +33,7 @@ public class PS_UNI : ModbusDevice, IModbusDevice, IPressureSensor
     /// <summary>
     /// Измеренное давление в Па асинхронно
     /// </summary>
-    public Task<float?> GetPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default) =>
+    public Task<float?> ReadPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default) =>
         GetParameterValueAsync<float?>(pressureType switch
         {
             PressureType.DefaultPressure => PS_UNI_RegisterMap.OutputPressure,

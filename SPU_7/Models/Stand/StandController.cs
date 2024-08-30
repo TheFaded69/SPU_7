@@ -16,7 +16,6 @@ using SPU_7.Domain.Devices.Device.UniversalDevice;
 using SPU_7.Domain.Devices.StandDevices.FrequencyRegulator;
 using SPU_7.Domain.Devices.StandDevices.NeedleValveController;
 using SPU_7.Domain.Devices.StandDevices.PressureSensor;
-using SPU_7.Domain.Devices.StandDevices.PressureSensor415M;
 using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
 using SPU_7.Domain.Devices.StandDevices.PulseMeter;
 using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
@@ -59,7 +58,7 @@ namespace SPU_7.Models.Stand
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
         private List<INeedleValveController> _needleValveControllers = [];
         private PulseCountMeterStarter _pulseCountMeterStarter;
-        
+
         private ITemperatureHumiditySensor _temperatureHumiditySensor;
         private ElmetroDigitalDevice _elmetroDigitalDevice;
 
@@ -137,6 +136,7 @@ namespace SPU_7.Models.Stand
 
             foreach (var lineViewModel in _settingsService.StandSettingsModel.LineViewModels)
             {
+                if (lineViewModel.DeviceViewModels != null)
                 foreach (var deviceViewModel in lineViewModel.DeviceViewModels)
                 {
                     if (deviceViewModel.Address != null && !addressList.Contains((int)deviceViewModel.Address))
@@ -146,62 +146,78 @@ namespace SPU_7.Models.Stand
                         !addressList.Contains((int)deviceViewModel.StateAddress))
                         addressList.Add((int)deviceViewModel.StateAddress);
                 }
-
-                foreach (var fanViewModel in lineViewModel.FanViewModels)
-                {
-                    if (fanViewModel.FanValveViewModel.Address != null &&
-                        !addressList.Contains((int)fanViewModel.FanValveViewModel.Address))
-                        addressList.Add((int)fanViewModel.FanValveViewModel.Address);
-                    if (fanViewModel.FanValveViewModel.StateOnAddress != null &&
-                        !addressList.Contains((int)fanViewModel.FanValveViewModel.StateOnAddress))
-                        addressList.Add((int)fanViewModel.FanValveViewModel.StateOnAddress);
-                    if (fanViewModel.FanValveViewModel.StateOffAddress != null &&
-                        !addressList.Contains((int)fanViewModel.FanValveViewModel.StateOffAddress))
-                        addressList.Add((int)fanViewModel.FanValveViewModel.StateOffAddress);
-
-                    _frequencyRegulatorDevices.Add(new FrequencyRegulatorDevice(
-                        _modbusProcessors.FirstOrDefault(mb =>
-                            mb.PortName == fanViewModel.FrequencyRegulatorViewModel.PortName),
-                        new RegisterMapEnum<FrequencyRegulatorRegisterMap>(),
-                        fanViewModel.FrequencyRegulatorViewModel.ModuleAddress));
-                }
-
-                foreach (var masterDeviceViewModel in lineViewModel.MasterDeviceViewModels)
-                {
-                    if (masterDeviceViewModel.PressureSensorValveViewModel.Address != null &&
-                        !addressList.Contains((int)masterDeviceViewModel.PressureSensorValveViewModel.Address))
-                        addressList.Add((int)masterDeviceViewModel.PressureSensorValveViewModel.Address);
-                    if (masterDeviceViewModel.PressureSensorValveViewModel.StateOnAddress != null &&
-                        !addressList.Contains((int)masterDeviceViewModel.PressureSensorValveViewModel.StateOnAddress))
-                        addressList.Add((int)masterDeviceViewModel.PressureSensorValveViewModel.StateOnAddress);
-                    if (masterDeviceViewModel.PressureSensorValveViewModel.StateOffAddress != null &&
-                        !addressList.Contains((int)masterDeviceViewModel.PressureSensorValveViewModel.StateOffAddress))
-                        addressList.Add((int)masterDeviceViewModel.PressureSensorValveViewModel.StateOffAddress);
-
-                    if (masterDeviceViewModel.MasterDeviceValveViewModel.Address != null &&
-                        !addressList.Contains((int)masterDeviceViewModel.MasterDeviceValveViewModel.Address))
-                        addressList.Add((int)masterDeviceViewModel.MasterDeviceValveViewModel.Address);
-                    if (masterDeviceViewModel.MasterDeviceValveViewModel.StateOnAddress != null &&
-                        !addressList.Contains((int)masterDeviceViewModel.MasterDeviceValveViewModel.StateOnAddress))
-                        addressList.Add((int)masterDeviceViewModel.MasterDeviceValveViewModel.StateOnAddress);
-                    if (masterDeviceViewModel.MasterDeviceValveViewModel.StateOffAddress != null &&
-                        !addressList.Contains((int)masterDeviceViewModel.MasterDeviceValveViewModel.StateOffAddress))
-                        addressList.Add((int)masterDeviceViewModel.MasterDeviceValveViewModel.StateOffAddress);
-                }
-
-                foreach (var fanViewModel in lineViewModel.FanViewModels)
-                {
-                    if (fanViewModel.NeedleValveViewModel != null)
+                
+                if (lineViewModel.NozzleViewModels != null)
+                    foreach (var nozzleViewModel in lineViewModel.NozzleViewModels)
                     {
-                        _needleValveControllers.Add(new NeedleValveController(_modbusProcessors.First(modbus =>
-                                modbus.PortName == fanViewModel.NeedleValveViewModel.SelectedComPort),
-                            new RegisterMapEnum<NeedleValveControllerRegisterMap>(),
-                            fanViewModel.NeedleValveViewModel.ModuleAddress)
-                        {
-                            PortName = fanViewModel.NeedleValveViewModel.SelectedComPort
-                        });
+                        if (nozzleViewModel.Address != null && !addressList.Contains((int)nozzleViewModel.Address))
+                            addressList.Add((int)nozzleViewModel.Address);
+
+                        if (nozzleViewModel.StateAddress != null && !addressList.Contains((int)nozzleViewModel.StateAddress))
+                            addressList.Add((int)nozzleViewModel.StateAddress);
                     }
-                }
+
+                /*if (lineViewModel.FanViewModels != null)
+                    foreach (var fanViewModel in lineViewModel.FanViewModels)
+                    {
+                        if (fanViewModel.FanValveViewModel.Address != null &&
+                            !addressList.Contains((int)fanViewModel.FanValveViewModel.Address))
+                            addressList.Add((int)fanViewModel.FanValveViewModel.Address);
+                        if (fanViewModel.FanValveViewModel.StateOnAddress != null &&
+                            !addressList.Contains((int)fanViewModel.FanValveViewModel.StateOnAddress))
+                            addressList.Add((int)fanViewModel.FanValveViewModel.StateOnAddress);
+                        if (fanViewModel.FanValveViewModel.StateOffAddress != null &&
+                            !addressList.Contains((int)fanViewModel.FanValveViewModel.StateOffAddress))
+                            addressList.Add((int)fanViewModel.FanValveViewModel.StateOffAddress);
+
+                        _frequencyRegulatorDevices.Add(new FrequencyRegulatorDevice(
+                            _modbusProcessors.FirstOrDefault(mb =>
+                                mb.PortName == fanViewModel.FrequencyRegulatorViewModel.PortName),
+                            new RegisterMapEnum<FrequencyRegulatorRegisterMap>(),
+                            fanViewModel.FrequencyRegulatorViewModel.ModuleAddress));
+                    }*/
+
+                if (lineViewModel.MasterDeviceViewModels != null)
+                    foreach (var masterDeviceViewModel in lineViewModel.MasterDeviceViewModels)
+                    {
+                        if (masterDeviceViewModel.PressureSensorValveViewModel.Address != null &&
+                            !addressList.Contains((int)masterDeviceViewModel.PressureSensorValveViewModel.Address))
+                            addressList.Add((int)masterDeviceViewModel.PressureSensorValveViewModel.Address);
+                        if (masterDeviceViewModel.PressureSensorValveViewModel.StateOnAddress != null &&
+                            !addressList.Contains(
+                                (int)masterDeviceViewModel.PressureSensorValveViewModel.StateOnAddress))
+                            addressList.Add((int)masterDeviceViewModel.PressureSensorValveViewModel.StateOnAddress);
+                        if (masterDeviceViewModel.PressureSensorValveViewModel.StateOffAddress != null &&
+                            !addressList.Contains((int)masterDeviceViewModel.PressureSensorValveViewModel
+                                .StateOffAddress))
+                            addressList.Add((int)masterDeviceViewModel.PressureSensorValveViewModel.StateOffAddress);
+
+                        if (masterDeviceViewModel.MasterDeviceValveViewModel.Address != null &&
+                            !addressList.Contains((int)masterDeviceViewModel.MasterDeviceValveViewModel.Address))
+                            addressList.Add((int)masterDeviceViewModel.MasterDeviceValveViewModel.Address);
+                        if (masterDeviceViewModel.MasterDeviceValveViewModel.StateOnAddress != null &&
+                            !addressList.Contains((int)masterDeviceViewModel.MasterDeviceValveViewModel.StateOnAddress))
+                            addressList.Add((int)masterDeviceViewModel.MasterDeviceValveViewModel.StateOnAddress);
+                        if (masterDeviceViewModel.MasterDeviceValveViewModel.StateOffAddress != null &&
+                            !addressList.Contains((int)masterDeviceViewModel.MasterDeviceValveViewModel
+                                .StateOffAddress))
+                            addressList.Add((int)masterDeviceViewModel.MasterDeviceValveViewModel.StateOffAddress);
+                    }
+
+                /*if (lineViewModel.FanViewModels != null)
+                    foreach (var fanViewModel in lineViewModel.FanViewModels)
+                    {
+                        if (fanViewModel.NeedleValveViewModel != null)
+                        {
+                            _needleValveControllers.Add(new NeedleValveController(_modbusProcessors.First(modbus =>
+                                    modbus.PortName == fanViewModel.NeedleValveViewModel.SelectedComPort),
+                                new RegisterMapEnum<NeedleValveControllerRegisterMap>(),
+                                fanViewModel.NeedleValveViewModel.ModuleAddress)
+                            {
+                                PortName = fanViewModel.NeedleValveViewModel.SelectedComPort
+                            });
+                        }
+                    }*/
             }
 
 
@@ -217,9 +233,10 @@ namespace SPU_7.Models.Stand
                 });
             }
 
-            _pulseCountMeterStarter = new PulseCountMeterStarter(_modbusProcessors.First(mb => mb.PortName ==
-                    _settingsService.StandSettingsModel.PulseCountMeterModuleViewModels.First().PortName),
-                new RegisterMapEnum<PulseCountMeterStarterRegisterMap>());
+            if (_settingsService.StandSettingsModel.PulseCountMeterModuleViewModels.Count > 0)
+                _pulseCountMeterStarter = new PulseCountMeterStarter(_modbusProcessors.First(mb => mb.PortName ==
+                        _settingsService.StandSettingsModel.PulseCountMeterModuleViewModels.First().PortName),
+                    new RegisterMapEnum<PulseCountMeterStarterRegisterMap>());
 
 
             foreach (var solenoidValveViewModel in _settingsService.StandSettingsModel.SolenoidValveViewModels)
@@ -249,11 +266,20 @@ namespace SPU_7.Models.Stand
                 PortName = _settingsService.StandSettingsModel.SelectedPressureSensorPortName
             }));
 
-            _temperatureHumiditySensor = new TemperatureHumiditySensor(
-                _modbusProcessors.First(
-                    mb => mb.PortName == _settingsService.StandSettingsModel.SelectedTHMeterPortName),
-                new RegisterMapEnum<TemperatureHumiditySensorRegisterMap>(),
-                _settingsService.StandSettingsModel.THMeterAddress);
+            _temperatureHumiditySensor = _settingsService.StandSettingsModel.SelectedTHSensorType switch
+            {
+                SensorType.IVTM7 => new IVTMSensor(
+                    _modbusProcessors.First(
+                        mb => mb.PortName == _settingsService.StandSettingsModel.SelectedTHMeterPortName),
+                    new RegisterMapEnum<IVTMSensorRegisterMap>(),
+                    _settingsService.StandSettingsModel.THMeterAddress),
+                SensorType.IVA => new TemperatureHumiditySensor(
+                    _modbusProcessors.First(
+                        mb => mb.PortName == _settingsService.StandSettingsModel.SelectedTHMeterPortName),
+                    new RegisterMapEnum<TemperatureHumiditySensorRegisterMap>(),
+                    _settingsService.StandSettingsModel.THMeterAddress),
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
             _requestTaskCancellationTokenSource = new CancellationTokenSource();
             _requestTask = new Task(RequestTaskHandler, _requestTaskCancellationTokenSource.Token);
@@ -302,7 +328,7 @@ namespace SPU_7.Models.Stand
                     Humidity = new Random().Next(30, 90);
                     TemperatureTube = new Random().Next(15, 25);
 
-                    
+
                     if (_line != null)
                         foreach (var device in _line.Devices)
                         {
@@ -311,19 +337,34 @@ namespace SPU_7.Models.Stand
 
 
 #else
-
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                         PressureAtmosphere =
-                            await _elmetroDigitalDevice.GetPressureAsync(PressureType.AbsolutePressure);
+                            await _elmetroDigitalDevice.ReadPressureAsync(PressureType.AbsolutePressure);
 
-                    if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        Temperature = _temperatureHumiditySensor == null
-                            ? null
-                            : await _temperatureHumiditySensor.ReadTemperatureAsync() / 100f;
-                    if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
-                        Humidity = _temperatureHumiditySensor == null
-                            ? null
-                            : await _temperatureHumiditySensor.ReadHumidityAsync() / 100f;
+                    switch (_settingsService.StandSettingsModel.SelectedTHSensorType)
+                    {
+                        case SensorType.IVTM7:
+                            if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
+                                Temperature = _temperatureHumiditySensor == null
+                                    ? null
+                                    : await _temperatureHumiditySensor.ReadTemperatureAsync();
+                            if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
+                                Humidity = _temperatureHumiditySensor == null
+                                    ? null
+                                    : await _temperatureHumiditySensor.ReadHumidityAsync();
+                            break;
+                        case SensorType.IVA:
+                            if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
+                                Temperature = _temperatureHumiditySensor == null
+                                    ? null
+                                    : await _temperatureHumiditySensor.ReadTemperatureAsync() / 100f;
+                            if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
+                                Humidity = _temperatureHumiditySensor == null
+                                    ? null
+                                    : await _temperatureHumiditySensor.ReadHumidityAsync() / 100f;
+                            break;
+                    }
+
 
                     for (var lineIndex = 0; lineIndex < _lines.Count; lineIndex++)
                     {
@@ -331,7 +372,7 @@ namespace SPU_7.Models.Stand
                         for (var deviceIndex = 0; deviceIndex < standLine.Devices.Count; deviceIndex++)
                         {
                             var device = standLine.Devices[deviceIndex];
-                            //await device.ReadPressureAsync();
+                            await device.ReadPressureAsync();
                             await device.ReadTemperatureAsync();
                         }
 
@@ -351,6 +392,38 @@ namespace SPU_7.Models.Stand
                                 _settingsService.StandSettingsModel.LineViewModels[lineIndex]
                                     .MasterDeviceViewModels[masterDeviceIndex].PulseWeight);
                         }
+
+                        if (standLine.TemperatureSensor != null)
+                        {
+                            var temperature = await standLine.TemperatureSensor.ReadTemperatureAsync();
+                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, temperature),
+                                DeviceInfoParameterType.TemperatureTube));
+                        }
+
+                        if (standLine.PressureSensor != null)
+                        {
+                            var pressure = await standLine.PressureSensor.ReadPressureAsync();
+                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, pressure),
+                                DeviceInfoParameterType.Pressure));
+                        }
+
+                        if (standLine.PressureDifferenceSensor != null)
+                        {
+                            var pressureDifference = await standLine.PressureDifferenceSensor.ReadPressureAsync();
+                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, pressureDifference),
+                                DeviceInfoParameterType.PressureDifference));
+                        }
+
+                        if (standLine.PressureDischargeSensor != null)
+                        {
+                            var pressureResiver = await standLine.PressureDischargeSensor.ReadPressureAsync();
+                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, pressureResiver),
+                                DeviceInfoParameterType.PressureResiver));
+                        }
+
+                        var flow = standLine.CurrentFlow;
+                        NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
+                            DeviceInfoParameterType.TargetFlow));
                     }
 #endif
 
@@ -579,7 +652,7 @@ namespace SPU_7.Models.Stand
                 return true;
             }
 
-            if (standSettingsValveModel.IsControlState)
+            if (!standSettingsValveModel.IsControlState)
             {
                 NotifyObserverByDataPair(
                     new DataPair(new StandInfoData(standSettingsValveModel.Number - 1, StateType.Open),
@@ -588,19 +661,34 @@ namespace SPU_7.Models.Stand
             }
 
             var isWork = true;
-            var count = 3;
+            var count = 60;
 
-            while (isWork && count > 0)
+            if (standSettingsValveModel.StateOffAddress == standSettingsValveModel.StateOnAddress)
             {
-                await Task.Delay(1000);
+                while (isWork && count > 0)
+                {
+                    await Task.Delay(1000);
 
-                var moduleState = await _standDevices
-                    .FirstOrDefault(sd => sd.ModuleAddressInt == standSettingsValveModel.StateOnAddress)
-                    .GetInfoRegisterBitAsync((int)standSettingsValveModel.StateOnBitNumber);
+                    var moduleState = await _standDevices
+                        .FirstOrDefault(sd => sd.ModuleAddressInt == standSettingsValveModel.StateOnAddress)
+                        .GetInfoRegisterBitAsync((int)standSettingsValveModel.StateOnBitNumber);
 
-                isWork = !moduleState;
-                count--;
+                    isWork = moduleState;
+                    count--;
+                }
             }
+            else
+                while (isWork && count > 0)
+                {
+                    await Task.Delay(1000);
+
+                    var moduleState = await _standDevices
+                        .FirstOrDefault(sd => sd.ModuleAddressInt == standSettingsValveModel.StateOnAddress)
+                        .GetInfoRegisterBitAsync((int)standSettingsValveModel.StateOnBitNumber);
+
+                    isWork = !moduleState;
+                    count--;
+                }
 
             NotifyObserverByDataPair(new DataPair(new StandInfoData(standSettingsValveModel.Number - 1, StateType.Open),
                 DeviceInfoParameterType.ValveState));
@@ -687,7 +775,7 @@ namespace SPU_7.Models.Stand
                 return true;
             }
 
-            if (standSettingsValveModel.IsControlState)
+            if (!standSettingsValveModel.IsControlState)
             {
                 NotifyObserverByDataPair(new DataPair(
                     new StandInfoData(standSettingsValveModel.Number - 1, StateType.Close),
@@ -696,19 +784,35 @@ namespace SPU_7.Models.Stand
             }
 
             var isWork = true;
-            var count = 3;
+            var count = 60;
 
-            while (isWork && count > 0)
+
+            if (standSettingsValveModel.StateOffAddress == standSettingsValveModel.StateOnAddress)
             {
-                await Task.Delay(1000);
+                while (isWork && count > 0)
+                {
+                    await Task.Delay(1000);
 
-                var moduleState = await _standDevices
-                    .FirstOrDefault(sd => sd.ModuleAddressInt == standSettingsValveModel.StateOffAddress)
-                    .GetInfoRegisterBitAsync((int)standSettingsValveModel.StateOffBitNumber);
+                    var moduleState = await _standDevices
+                        .FirstOrDefault(sd => sd.ModuleAddressInt == standSettingsValveModel.StateOnAddress)
+                        .GetInfoRegisterBitAsync((int)standSettingsValveModel.StateOnBitNumber);
 
-                isWork = !moduleState;
-                count--;
+                    isWork = moduleState;
+                    count--;
+                }
             }
+            else
+                while (isWork && count > 0)
+                {
+                    await Task.Delay(1000);
+
+                    var moduleState = await _standDevices
+                        .FirstOrDefault(sd => sd.ModuleAddressInt == standSettingsValveModel.StateOffAddress)
+                        .GetInfoRegisterBitAsync((int)standSettingsValveModel.StateOffBitNumber);
+
+                    isWork = !moduleState;
+                    count--;
+                }
 
             NotifyObserverByDataPair(new DataPair(
                 new StandInfoData(standSettingsValveModel.Number - 1, StateType.Close),
@@ -1051,7 +1155,7 @@ namespace SPU_7.Models.Stand
         public async Task<float?> ReadMeasureTimeFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex)
         {
             if (pulseCountMeterModuleIndex == null) return null;
-            
+
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadMeasureTimeAsync();
         }
 
@@ -1068,16 +1172,17 @@ namespace SPU_7.Models.Stand
         public async Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel,
             int selectedNeedleValue)
         {
-            var res = await _needleValveControllers.First(ctrl => ctrl.PortName == standSettingsValveModel.SelectedComPort
-                                                               && ctrl.ModuleAddressInt ==
-                                                               (byte)standSettingsValveModel.ModuleAddress)
-                       .SetParameterAsync((uint)selectedNeedleValue)
-                   && await _needleValveControllers.First(ctrl =>
-                           ctrl.PortName == standSettingsValveModel.SelectedComPort
-                           && ctrl.ModuleAddressInt == (byte)standSettingsValveModel.ModuleAddress)
-                       .SetCommandAsync(selectedNeedleValue == 0
-                           ? NeedleValveControllerCommand.ReturnToZero
-                           : NeedleValveControllerCommand.RunToParameter);
+            var res = await _needleValveControllers.First(ctrl =>
+                              ctrl.PortName == standSettingsValveModel.SelectedComPort
+                              && ctrl.ModuleAddressInt ==
+                              (byte)standSettingsValveModel.ModuleAddress)
+                          .SetParameterAsync((uint)selectedNeedleValue)
+                      && await _needleValveControllers.First(ctrl =>
+                              ctrl.PortName == standSettingsValveModel.SelectedComPort
+                              && ctrl.ModuleAddressInt == (byte)standSettingsValveModel.ModuleAddress)
+                          .SetCommandAsync(selectedNeedleValue == 0
+                              ? NeedleValveControllerCommand.ReturnToZero
+                              : NeedleValveControllerCommand.RunToParameter);
 
             /*while (await _needleValveControllers.First(ctrl => ctrl.PortName == standSettingsValveModel.SelectedComPort
                                                                && ctrl.ModuleAddressInt ==
@@ -1122,11 +1227,14 @@ namespace SPU_7.Models.Stand
             {
                 case LineDirectionFlowState.AllOpen:
 #if DEBUGGUI
-                    NotifyObserverByDataPair(new DataPair (new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber), DeviceInfoParameterType.ReverseValveState));
+                    NotifyObserverByDataPair(new DataPair(
+                        new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber),
+                        DeviceInfoParameterType.ReverseValveState));
                     await Task.Delay(5000);
-                    NotifyObserverByDataPair(new DataPair (new DirectFlowInfoData(LineDirectionFlowState.AllOpen, lineNumber), DeviceInfoParameterType.ReverseValveState));
+                    NotifyObserverByDataPair(new DataPair(
+                        new DirectFlowInfoData(LineDirectionFlowState.AllOpen, lineNumber),
+                        DeviceInfoParameterType.ReverseValveState));
 #else
-
                     NotifyObserverByDataPair(new DataPair(
                         new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber),
                         DeviceInfoParameterType.ReverseValveState));
@@ -1141,11 +1249,14 @@ namespace SPU_7.Models.Stand
                     break;
                 case LineDirectionFlowState.AllClose:
 #if DEBUGGUI
-                    NotifyObserverByDataPair(new DataPair (new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber), DeviceInfoParameterType.ReverseValveState));
+                    NotifyObserverByDataPair(new DataPair(
+                        new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber),
+                        DeviceInfoParameterType.ReverseValveState));
                     await Task.Delay(5000);
-                    NotifyObserverByDataPair(new DataPair (new DirectFlowInfoData(LineDirectionFlowState.AllClose, lineNumber), DeviceInfoParameterType.ReverseValveState));
+                    NotifyObserverByDataPair(new DataPair(
+                        new DirectFlowInfoData(LineDirectionFlowState.AllClose, lineNumber),
+                        DeviceInfoParameterType.ReverseValveState));
 #else
-
                     NotifyObserverByDataPair(new DataPair(
                         new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber),
                         DeviceInfoParameterType.ReverseValveState));
@@ -1160,11 +1271,14 @@ namespace SPU_7.Models.Stand
                     break;
                 case LineDirectionFlowState.DirectDirection:
 #if DEBUGGUI
-                    NotifyObserverByDataPair(new DataPair (new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber), DeviceInfoParameterType.ReverseValveState));
+                    NotifyObserverByDataPair(new DataPair(
+                        new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber),
+                        DeviceInfoParameterType.ReverseValveState));
                     await Task.Delay(5000);
-                    NotifyObserverByDataPair(new DataPair (new DirectFlowInfoData(LineDirectionFlowState.DirectDirection, lineNumber), DeviceInfoParameterType.ReverseValveState));
+                    NotifyObserverByDataPair(new DataPair(
+                        new DirectFlowInfoData(LineDirectionFlowState.DirectDirection, lineNumber),
+                        DeviceInfoParameterType.ReverseValveState));
 #else
-
                     NotifyObserverByDataPair(new DataPair(
                         new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber),
                         DeviceInfoParameterType.ReverseValveState));
@@ -1179,11 +1293,14 @@ namespace SPU_7.Models.Stand
                     break;
                 case LineDirectionFlowState.ReverseDirection:
 #if DEBUGGUI
-                    NotifyObserverByDataPair(new DataPair (new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber), DeviceInfoParameterType.ReverseValveState));
+                    NotifyObserverByDataPair(new DataPair(
+                        new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber),
+                        DeviceInfoParameterType.ReverseValveState));
                     await Task.Delay(5000);
-                    NotifyObserverByDataPair(new DataPair (new DirectFlowInfoData(LineDirectionFlowState.ReverseDirection, lineNumber), DeviceInfoParameterType.ReverseValveState));
+                    NotifyObserverByDataPair(new DataPair(
+                        new DirectFlowInfoData(LineDirectionFlowState.ReverseDirection, lineNumber),
+                        DeviceInfoParameterType.ReverseValveState));
 #else
-
                     NotifyObserverByDataPair(new DataPair(
                         new DirectFlowInfoData(LineDirectionFlowState.Working, lineNumber),
                         DeviceInfoParameterType.ReverseValveState));
@@ -1474,7 +1591,8 @@ namespace SPU_7.Models.Stand
             }
         }
 
-        public void UnsubscribePressureSensorObserver(IPressureSensorObserver observer, DevicePurpose devicePurpose, int deviceIndex,
+        public void UnsubscribePressureSensorObserver(IPressureSensorObserver observer, DevicePurpose devicePurpose,
+            int deviceIndex,
             int lineIndex)
         {
             switch (devicePurpose)
@@ -1492,7 +1610,8 @@ namespace SPU_7.Models.Stand
             }
         }
 
-        public void UnsubscribeTemperatureSensorObserver(ITemperatureSensorObserver observer, DevicePurpose devicePurpose,
+        public void UnsubscribeTemperatureSensorObserver(ITemperatureSensorObserver observer,
+            DevicePurpose devicePurpose,
             int deviceIndex, int lineIndex)
         {
             switch (devicePurpose)
@@ -1632,7 +1751,7 @@ namespace SPU_7.Models.Stand
         {
             return await _frequencyRegulatorDevice.StopFrequencyWorkAsync();
         }
-        
+
         public async Task<bool> SetFrequencyRegulatorFrequencyAsync(double value)
         {
             return await _frequencyRegulatorDevice.SetOutputValueAsync(value);

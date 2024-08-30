@@ -120,8 +120,6 @@ public class ValidationOperationModel : OperationModel
                 return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", _validationOperationResult);
             }
 
-            _standController.PidEnable();
-
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
                 /*if (!await _standController.EnableFrequencyRegulatorAsync())
@@ -690,7 +688,7 @@ public class ValidationOperationModel : OperationModel
             }
 
 #if !DEBUGGUI
-            _standController.PidDisable();
+            
             if (!operationCancellationTokenSource.IsCancellationRequested)
             {
                 /*if (!await _standController.DisableFrequencyRegulatorAsync())

@@ -2,9 +2,9 @@
 {
     public interface ITemperatureHumiditySensor
     {
-        Task<short?> ReadTemperatureAsync();
+        Task<float?> ReadTemperatureAsync();
 
-        Task<ushort?> ReadHumidityAsync();
+        Task<float?> ReadHumidityAsync();
 
     }
 }

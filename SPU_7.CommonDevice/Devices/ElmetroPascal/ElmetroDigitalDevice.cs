@@ -143,7 +143,7 @@ public class ElmetroDigitalDevice : IDevice, IPressureSensor
         _ => throw new IndexOutOfRangeException()
     };
 
-    public Task<float?> GetPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default) =>
+    public Task<float?> ReadPressureAsync(PressureType pressureType = PressureType.DefaultPressure, CancellationToken cancellationToken = default) =>
         pressureType switch
         {
             PressureType.DefaultPressure => GetCurrentPressureAsync(cancellationToken),

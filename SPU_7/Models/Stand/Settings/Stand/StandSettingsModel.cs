@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using SPU_7.Common.Line;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
 namespace SPU_7.Models.Stand.Settings.Stand;
@@ -19,6 +20,11 @@ public class StandSettingsModel
     public int TemperatureSensorAddress { get; set; }
     public int PressureSensorAddress { get; set; }
     public int THMeterAddress { get; set; }
+    
+    public string SelectedTHSensorTypeString{ get; set; }
+
+    public SensorType SelectedTHSensorType { get; set; }
+    
     public int PressureResiverSensorAddress { get; set; }
     public int PressureDifferenceSensorAddress { get; set; }
     public string SelectedTemperatureSensorPortName { get; set; }
@@ -48,5 +54,7 @@ public class StandSettingsModel
     public string OutsideCheckInfo { get; set; }
     public string DeviceTestInfo { get; set; }
     public string PostInfo { get; set; }
+    
+    
     
 }
