@@ -12,6 +12,8 @@ public class PressureSensor415M : ModbusUnitProcessor<PressureSensor415MRegister
         ModuleAddress = (byte)pressureSensorAddress;
     }
 
+    public float? Pressure { get; set; }
+
     /// <summary>
     /// Считать давление в мм рт ст
     /// </summary>
@@ -22,7 +24,7 @@ public class PressureSensor415M : ModbusUnitProcessor<PressureSensor415MRegister
 
         if (currentPressure == null) return null;
 
-        return currentPressure * 9.80638f;
+        return Pressure = currentPressure * 9.80638f;
     }
 
     public async Task<bool> ResetToZeroAsync() => true;

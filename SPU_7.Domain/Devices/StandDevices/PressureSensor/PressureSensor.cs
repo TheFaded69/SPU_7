@@ -11,14 +11,14 @@ public class PressureSensor : ModbusUnitProcessor<PressureSensorRegisterMap>, IP
     {
         ModuleAddress = (byte)moduleAddress;
     }
-
+    public float? Pressure { get; set; }
     /// <summary>
     /// Считать давление с ДД
     /// </summary>
     /// <returns>Давление</returns>
     public async Task<float?> ReadPressureAsync() =>
-        (float?)await ReadRegisterAsync(PressureSensorRegisterMap.PressureRegister);
-
+        Pressure = (float?)await ReadRegisterAsync(PressureSensorRegisterMap.PressureRegister);
+    
     /// <summary>
     /// Сброс ДД на ноль
     /// </summary>

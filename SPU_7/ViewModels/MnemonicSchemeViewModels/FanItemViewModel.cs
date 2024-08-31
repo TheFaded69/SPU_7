@@ -1,4 +1,5 @@
 ﻿using Prism.Commands;
+using SPU_7.Common.Line;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
@@ -43,6 +44,7 @@ public class FanItemViewModel : ViewModelBase
         FanHeightValue = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].IsNeedleValveEnable ? 100 : 20;
         
         _isValveEnable = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].IsValveEnable;
+        _isFrequencyEnable = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].SelectedFanType == FanType.FrequencyControlFan;
     }
 
     public int FanHeightValue { get; set; }
@@ -54,6 +56,7 @@ public class FanItemViewModel : ViewModelBase
     private bool _isValveEnable;
     private float _fanFrequencyValue;
     private NeedleValveItemViewModel _needleValveItemViewModel;
+    private bool _isFrequencyEnable;
 
     public bool IsValveEnable
     {
@@ -112,5 +115,11 @@ public class FanItemViewModel : ViewModelBase
     {
         await _standController.DisableFrequencyRegulatorAsync(_fanIndex);
         IsFanWorking = false;
+    }
+
+    public bool IsFrequencyEnable
+    {
+        get => _isFrequencyEnable;
+        set => SetProperty(ref _isFrequencyEnable, value);
     }
 }

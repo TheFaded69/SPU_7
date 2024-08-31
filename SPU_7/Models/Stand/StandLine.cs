@@ -17,6 +17,7 @@ using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
 using SPU_7.Domain.Modbus;
 using SPU_7.Modbus.Processor;
 using SPU_7.Models.Services.StandSetting;
+using SPU_7.Domain.Devices;
 using IDevice = SPU_7.Domain.Devices.IDevice;
 
 namespace SPU_7.Models.Stand;
@@ -103,7 +104,10 @@ public class StandLine
                                 .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
                             new RegisterMapEnum<PressureSensorRegisterMap>(),
                             sensorViewModel.Address),
-                        _ => throw new ArgumentOutOfRangeException()
+                        _ => new  PressureSensor(modbusProcessors
+                            .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                        new RegisterMapEnum<PressureSensorRegisterMap>(),
+                        sensorViewModel.Address)
                     };
                     break;
                 case SensorPurpose.PressureOffsetSensor:

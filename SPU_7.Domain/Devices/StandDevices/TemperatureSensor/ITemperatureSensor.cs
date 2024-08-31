@@ -2,6 +2,7 @@
 
 public interface ITemperatureSensor
 {
+    float? Temperature { get; set; }
     Task<float?> ReadTemperatureAsync();
     
     Task<float?> ReadTemperatureAsync(bool useChannel);

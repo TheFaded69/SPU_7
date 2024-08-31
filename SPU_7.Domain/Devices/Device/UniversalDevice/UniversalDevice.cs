@@ -51,7 +51,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     private readonly IPulseMeter2Channel? _pulseMeter2Channel;
     private readonly PulseMeterChannel _pulseMeterChannelType;
 
-    private float? Pressure
+    public float? Pressure
     {
         get => _pressure;
         set
@@ -61,7 +61,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
         }
     }
 
-    private float? Temperature
+    public float? Temperature
     {
         get => _temperature;
         set

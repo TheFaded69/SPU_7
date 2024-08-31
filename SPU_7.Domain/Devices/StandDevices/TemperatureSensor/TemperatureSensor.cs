@@ -16,10 +16,11 @@ public class TemperatureSensor : ModbusUnitProcessor<TemperatureSensorRegisterMa
 
     private readonly int _channelNumber;
 
+    public float? Temperature { get; set; }
     public async Task<float?> ReadTemperatureAsync() => (float?)await ReadRegisterAsync(TemperatureSensorRegisterMap.TemperatureRegister);
 
     public async Task<float?> ReadTemperatureAsync(bool useChannel) =>
-        _channelNumber switch
+        Temperature = _channelNumber switch
         {
             1 => (float?)await ReadRegisterAsync(TemperatureSensorRegisterMap.Channel1Register),
             2 => (float?)await ReadRegisterAsync(TemperatureSensorRegisterMap.Channel2Register),

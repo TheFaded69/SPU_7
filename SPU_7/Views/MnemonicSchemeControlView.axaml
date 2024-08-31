@@ -37,7 +37,7 @@
                            Margin="5"
                            Grid.Column="0"
                            FontSize="18"
-                           Text="Давление атмосферное, кПа" />
+                           Text="Давление абсолютное, кПа" />
                 <TextBlock Grid.Row="1"
                            Margin="5"
                            Grid.Column="1"
@@ -105,13 +105,13 @@
                                            Grid.Column="0"
                                            FontSize="18"
                                            IsVisible="{Binding Temperature, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           Text="Температура среды, °C" />
+                                           Text="Температура сопел, °C" />
                                 <TextBlock Grid.Row="0"
                                            Margin="5"
                                            Grid.Column="1"
                                            FontSize="18"
                                            IsVisible="{Binding Temperature, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           Text="{Binding Temperature}" />
+                                           Text="{Binding Temperature, StringFormat='{}{0:0.00}'}" />
                                 
                                 <TextBlock Grid.Row="1"
                                            Margin="5"

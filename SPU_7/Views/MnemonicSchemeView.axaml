@@ -1037,15 +1037,24 @@
                                                     Margin="-6,-6,0,0" />
                                                 <Border.ContextMenu>
                                                     <ContextMenu>
-                                                         <DockPanel LastChildFill="True">
-                                                             <TextBox Text="Гц"
-                                                                      Margin="5"
-                                                                      HorizontalAlignment="Stretch"
-                                                                      DockPanel.Dock="Right"/>
-                                                             <TextBox Text="{Binding FanFrequencyValue}"
-                                                                      Margin="5"
-                                                                      HorizontalAlignment="Stretch"/>
-                                                         </DockPanel>
+                                                        
+                                                        
+                                                        
+                                                        <MenuItem IsVisible="{Binding IsFrequencyEnable}">
+                                                            <MenuItem.Header>
+                                                                <DockPanel LastChildFill="True">
+                                                                    <TextBox Text="Гц"
+                                                                             Margin="5"
+                                                                             IsVisible="{Binding IsFrequencyEnable}"
+                                                                             HorizontalAlignment="Stretch"
+                                                                             DockPanel.Dock="Right"/>
+                                                                    <TextBox Text="{Binding FanFrequencyValue}"
+                                                                             Margin="5"
+                                                                             IsVisible="{Binding IsFrequencyEnable}"
+                                                                             HorizontalAlignment="Stretch"/>
+                                                                </DockPanel>
+                                                            </MenuItem.Header>
+                                                        </MenuItem>
                                                         
                                                         <MenuItem Header="Включить"
                                                                   Command="{Binding EnableFanCommand}"

@@ -355,8 +355,12 @@ namespace SPU_7.Models.Stand
         Task<float?> ReadPulseCountFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int pulseCountMeterModuleChannelNumber);
         Task<float?> ReadMeasureTimeFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex);
 
-        float? GetPressureDifference(int lineIndex);
-        float? GetTemperature(int selectedLineIndex, int indexOfMasterDevice);
+        float? GetPressureDifferenceFromMasterDevice(int lineIndex);
+        float? GetTemperatureFromMasterDevice(int selectedLineIndex, int indexOfMasterDevice);
         Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel, int selectedNeedleValue);
+        float? GetTemperatureFromLine(int lineIndex);
+        float? GetPressureDifferenceFromLine(int lineIndex);
+        Task<bool> EnableLineFanAsync(int selectedLineIndex, int selectedFanIndex);
+        Task<bool> DisableLineFanAsync(int selectedLineIndex, int selectedFanIndex);
     }
 }

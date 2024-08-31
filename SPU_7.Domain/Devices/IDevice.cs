@@ -11,6 +11,16 @@ namespace SPU_7.Domain.Devices
     {
       
         /// <summary>
+        /// Температура
+        /// </summary>
+        float? Temperature { get; set; }
+        
+        /// <summary>
+        /// Давление
+        /// </summary>
+        float? Pressure { get; set; }
+        
+        /// <summary>
         /// Доступно ли усройство для использования
         /// </summary>
         bool IsManualEnabled { get; set; }

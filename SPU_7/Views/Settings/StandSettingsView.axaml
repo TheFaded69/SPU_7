@@ -906,56 +906,95 @@
                                                                                             </StackPanel>
                                                                                             <StackPanel
                                                                                                 Orientation="Horizontal">
+                                                                                                
                                                                                                 <ComboBox Margin="5"
                                                                                                     Width="300"
+                                                                                                    assists:ComboBoxAssist.Label="Тип вентелятора"
+                                                                                                    Theme="{StaticResource MaterialOutlineComboBox}"
+                                                                                                    ItemsSource="{Binding FanTypesString}"
+                                                                                                    SelectedItem="{Binding SelectedFanTypeString}" />
+                                                                                                
+                                                                                                <ComboBox Margin="5"
+                                                                                                    Width="300"
+                                                                                                    IsVisible="{Binding IsControlModuleSettingsEnable}"
+                                                                                                    assists:ComboBoxAssist.Label="Порт подключения КПК"
+                                                                                                    Theme="{StaticResource MaterialOutlineComboBox}"
+                                                                                                    ItemsSource="{Binding ComPorts}"
+                                                                                                    SelectedItem="{Binding SelectedComPort}" />
+                                                                                                
+                                                                                                <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsControlModuleSettingsEnable}"
+                                                                                                    assists:TextFieldAssist.Label="Адрес модуля"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите адрес"
+                                                                                                    Text="{Binding  Address}" />
+                                                                                                
+                                                                                                <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsControlModuleSettingsEnable}"
+                                                                                                    assists:TextFieldAssist.Label="Бит управления"
+                                                                                                    UseFloatingWatermark="True"
+                                                                                                    Watermark="Введите бит"
+                                                                                                    Text="{Binding  BitIndex}" />
+                                                                                                
+                                                                                                <ComboBox Margin="5"
+                                                                                                    Width="300"
+                                                                                                    IsVisible="{Binding IsFrequencyRegulatorSettingsEnable}"
                                                                                                     assists:ComboBoxAssist.Label="Порт подключения ПЧВ"
                                                                                                     Theme="{StaticResource MaterialOutlineComboBox}"
                                                                                                     ItemsSource="{Binding FrequencyRegulatorViewModel.PortNames}"
                                                                                                     SelectedItem="{Binding FrequencyRegulatorViewModel.PortName}" />
 
                                                                                                 <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsFrequencyRegulatorSettingsEnable}"
                                                                                                     assists:TextFieldAssist.Label="Адрес модуля"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Watermark="Введите адрес"
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.ModuleAddress}" />
 
                                                                                                 <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsFrequencyRegulatorSettingsEnable}"
                                                                                                     assists:TextFieldAssist.Label="kP"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Watermark="Введите коэффициент"
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.kP}" />
 
                                                                                                 <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsFrequencyRegulatorSettingsEnable}"
                                                                                                     assists:TextFieldAssist.Label="kI"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Watermark="Введите коэффициент"
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.kI}" />
 
                                                                                                 <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsFrequencyRegulatorSettingsEnable}"
                                                                                                     assists:TextFieldAssist.Label="kD"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Watermark="Введите коэффициент"
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.kD}" />
 
                                                                                                 <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsFrequencyRegulatorSettingsEnable}"
                                                                                                     assists:TextFieldAssist.Label="Мин. входное значение"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Watermark=""
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.pvMin}" />
 
                                                                                                 <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsFrequencyRegulatorSettingsEnable}"
                                                                                                     assists:TextFieldAssist.Label="Макс. входное значение"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Watermark=""
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.pvMax}" />
 
                                                                                                 <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsFrequencyRegulatorSettingsEnable}"
                                                                                                     assists:TextFieldAssist.Label="Мин. выходное значение"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Watermark=""
                                                                                                     Text="{Binding  FrequencyRegulatorViewModel.outMin}" />
 
                                                                                                 <TextBox Margin="5"
+                                                                                                    IsVisible="{Binding IsFrequencyRegulatorSettingsEnable}"
                                                                                                     assists:TextFieldAssist.Label="Макс. выходное значение"
                                                                                                     UseFloatingWatermark="True"
                                                                                                     Watermark=""
@@ -2009,6 +2048,11 @@
                     </TabItem>
 
                 </TabControl>
+            </TabItem>
+            
+            <TabItem Header="Проверка герметичности">
+                
+                
             </TabItem>
 
             <TabItem Header="Оборудование"

@@ -2,6 +2,8 @@
 
 public interface IPressureSensor
 {
+    float? Pressure { get; set; }
+
     /// <summary>
     /// Считать давление с ДД
     /// </summary>

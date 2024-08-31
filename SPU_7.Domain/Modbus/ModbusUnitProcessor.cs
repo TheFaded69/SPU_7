@@ -27,6 +27,7 @@ public abstract class ModbusUnitProcessor<TRegisterMapEnum> where TRegisterMapEn
     public byte ModuleAddress { get; set; }
 
     protected IModbusProcessor ModbusProcessor { get; }
+    
     private readonly IRegisterMapEnum<TRegisterMapEnum> _registerMap;
 
     protected RegisterConfiguration GetRegisterConfiguration(TRegisterMapEnum register) => _registerMap.Map[register];

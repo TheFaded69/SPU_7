@@ -1,4 +1,10 @@
-﻿using SPU_7.Models.Stand.Settings.Stand.Extensions;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.IO.Ports;
+using System.Linq;
+using SPU_7.Common.Extensions;
+using SPU_7.Common.Line;
+using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
 namespace SPU_7.ViewModels.Settings;
 
@@ -12,6 +18,13 @@ public class StandSettingsFanViewModel : ViewModelBase
     private float? _minimumFlow;
     private float? _maximumFlow;
     private StandSettingsNeedleValveViewModel _needleValveViewModel;
+    private string _selectedFanTypeString;
+    private FanType _selectedFanType;
+    private int _address;
+    private int _bitIndex;
+    private string _selectedComPort;
+    private bool _isFrequencyRegulatorSettingsEnable;
+    private bool _isControlModuleSettingsEnable;
 
     public int Number
     {
@@ -63,5 +76,72 @@ public class StandSettingsFanViewModel : ViewModelBase
     {
         get => _maximumFlow;
         set => SetProperty(ref _maximumFlow, value);
+    }
+
+    public ObservableCollection<string> FanTypesString { get; set; } = new(Enum
+        .GetValues<FanType>()
+        .Select(ft => ft.GetDescription()));
+
+    public ObservableCollection<string> ComPorts { get; set; }= new(SerialPort.GetPortNames());
+
+    public string SelectedFanTypeString
+    {
+        get => _selectedFanTypeString;
+        set
+        {
+            SetProperty(ref _selectedFanTypeString, value);
+
+            SelectedFanType = Enum
+                .GetValues<FanType>()
+                .FirstOrDefault(ft => ft.GetDescription() == value);
+
+            switch (SelectedFanType)
+            {
+                case FanType.FrequencyControlFan:
+                    IsFrequencyRegulatorSettingsEnable = true;
+                    IsControlModuleSettingsEnable = false;
+                    break;
+                case FanType.ControlModuleControlFan:
+                    IsFrequencyRegulatorSettingsEnable = false;
+                    IsControlModuleSettingsEnable = true;
+                    break;
+            }
+        }
+    }
+
+    public FanType SelectedFanType
+    {
+        get => _selectedFanType;
+        set => SetProperty(ref _selectedFanType, value);
+    }
+
+    public int Address
+    {
+        get => _address;
+        set => SetProperty(ref _address, value);
+    }
+
+    public int BitIndex
+    {
+        get => _bitIndex;
+        set => SetProperty(ref _bitIndex, value);
+    }
+
+    public string SelectedComPort
+    {
+        get => _selectedComPort;
+        set => SetProperty(ref _selectedComPort, value);
+    }
+
+    public bool IsFrequencyRegulatorSettingsEnable
+    {
+        get => _isFrequencyRegulatorSettingsEnable;
+        set => SetProperty(ref _isFrequencyRegulatorSettingsEnable, value);
+    }
+
+    public bool IsControlModuleSettingsEnable
+    {
+        get => _isControlModuleSettingsEnable;
+        set => SetProperty(ref _isControlModuleSettingsEnable, value);
     }
 }
