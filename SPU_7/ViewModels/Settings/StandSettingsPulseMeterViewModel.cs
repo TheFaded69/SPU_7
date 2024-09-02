@@ -1,4 +1,9 @@
-﻿namespace SPU_7.ViewModels.Settings;
+﻿using System.Collections.ObjectModel;
+using System.IdentityModel.Tokens.Jwt;
+using System.IO.Ports;
+using System.Reactive.Linq;
+
+namespace SPU_7.ViewModels.Settings;
 
 public class StandSettingsPulseMeterViewModel : ViewModelBase
 {
@@ -6,6 +11,7 @@ public class StandSettingsPulseMeterViewModel : ViewModelBase
     private int? _address;
     private double? _firstCalibrateCoefficient;
     private double? _secondCalibrateCoefficient;
+    private string _selectedComPort;
 
     public int Number
     {
@@ -29,5 +35,13 @@ public class StandSettingsPulseMeterViewModel : ViewModelBase
     {
         get => _secondCalibrateCoefficient;
         set => SetProperty(ref _secondCalibrateCoefficient, value);
+    }
+
+    public ObservableCollection<string> ComPorts { get; set; } = new(SerialPort.GetPortNames());
+
+    public string SelectedComPort
+    {
+        get => _selectedComPort;
+        set => SetProperty(ref _selectedComPort, value);
     }
 }

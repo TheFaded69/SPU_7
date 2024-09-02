@@ -126,8 +126,7 @@ namespace SPU_7.ViewModels
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                _logger.Logging(new LogMessage(e.Message, LogLevel.Fatal));
             }
         }
 

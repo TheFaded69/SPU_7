@@ -9,5 +9,7 @@ public class StandSettingsPulseMeterModel
     public double? FirstCalibrateCoefficient { get; set; }
     
     public double? SecondCalibrateCoefficient { get; set; }
+    
+    public string SelectedComPort { get; set; }
 
 }

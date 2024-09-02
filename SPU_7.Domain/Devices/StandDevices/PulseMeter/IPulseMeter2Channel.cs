@@ -177,5 +177,6 @@ public interface IPulseMeter2Channel
     Task<float?> GetMeasureCounterTimeAsync();
 
     byte ModuleAddress { get; set; }
+    int PulseMeterModuleNumber { get; set; }
     Task<bool> SetTimeOutValueAsync(int i);
 }

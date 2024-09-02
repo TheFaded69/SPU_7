@@ -89,6 +89,8 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         {
             IsMnemonicSchemeVisible = true;
             IsDeviceVisible = true;
+            IsExtensionVisible = true;
+            IsCheckTightnessVisible = true;
         }
 
         if (_standSettingsService.StandSettingsModel != null)
@@ -197,6 +199,8 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     private ObservableCollection<StandSettingsPulseCountMeterModuleViewModel> _pulseCountMeterModuleViewModels;
     private StandSettingsPulseCountMeterModuleViewModel _selectedPulseCountMeterModuleViewModel;
     private string _selectedThSensorTypeString;
+    private StandSettingsExtensionViewModel _standSettingsExtensionViewModel;
+    private bool _isExtensionSettingsEnable;
 
     #region Profiles
 
@@ -231,6 +235,8 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
 
     public bool IsProtocolVisible { get; set; }
     public bool IsMnemonicSchemeVisible { get; set; }
+    public bool IsCheckTightnessVisible { get; set; }
+    public bool IsExtensionVisible { get; set; }
     public bool IsDeviceVisible { get; set; }
 
     #endregion
@@ -622,6 +628,26 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
 
     #endregion
 
+    #region Extension
+
+    public bool IsExtensionSettingsEnable
+    {
+        get => _isExtensionSettingsEnable;
+        set
+        {
+            SetProperty(ref _isExtensionSettingsEnable, value);
+            StandSettingsExtensionViewModel = value ? new() : null;
+        }
+    }
+
+    public StandSettingsExtensionViewModel StandSettingsExtensionViewModel
+    {
+        get => _standSettingsExtensionViewModel;
+        set => SetProperty(ref _standSettingsExtensionViewModel, value);
+    }
+
+    #endregion
+    
     #region Equipment
 
     public ObservableCollection<string> PortNames { get; set; } = new(SerialPort.GetPortNames());

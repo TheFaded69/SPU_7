@@ -1989,6 +1989,13 @@
                                                          UseFloatingWatermark="True"
                                                          Watermark="Введите значение"
                                                          Text="{Binding SecondCalibrateCoefficient}" />
+                                                
+                                                <ComboBox Margin="5"
+                                                          Width="300"
+                                                          ItemsSource="{Binding ComPorts}"
+                                                          SelectedItem="{Binding SelectedComPort}"
+                                                          assists:ComboBoxAssist.Label="Порт подключения БИПЧ"
+                                                          Theme="{StaticResource MaterialOutlineComboBox}" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -2050,8 +2057,40 @@
                 </TabControl>
             </TabItem>
             
-            <TabItem Header="Проверка герметичности">
+            <TabItem Header="Проверка герметичности"
+                     IsVisible="{Binding IsCheckTightnessVisible}">
                 
+                
+            </TabItem>
+            
+            <TabItem Header="Дополнительные возможности"
+                     IsVisible="{Binding IsExtensionVisible}">
+                <controls:Card Margin="5">
+                    <DockPanel LastChildFill="False">
+                        <StackPanel Orientation="Vertical"
+                                    DockPanel.Dock="Left"
+                                    VerticalAlignment="Top">
+                            <CheckBox Content="Проверка герметичности"
+                                      Margin="5"
+                                      IsChecked="{Binding StandSettingsExtensionViewModel.IsCheckTightnessEnable}"/>
+                            <CheckBox Content="Управление вакуумным насосом"
+                                      Margin="5"
+                                      IsChecked="{Binding StandSettingsExtensionViewModel.IsVacuumCreatorEnable}"/>
+                            <CheckBox Content="Проверка СКО"
+                                      Margin="5"
+                                      IsChecked="{Binding StandSettingsExtensionViewModel.IsCheckAverageQuadraticDifferenceEnable}"/>
+                            <CheckBox Content="Проверка МПКИ"
+                                      Margin="5"
+                                      IsChecked="{Binding StandSettingsExtensionViewModel.IsPulseCountMeterModuleEnable}"/>
+                            <CheckBox Content="Настройка БИПЧ"
+                                      Margin="5"
+                                      IsChecked="{Binding StandSettingsExtensionViewModel.IsPulseMeterCoefficientSettingsEnable}"/>
+                            <CheckBox Content="Настройка БИПЧ"
+                                      Margin="5"
+                                      IsChecked="{Binding StandSettingsExtensionViewModel.IsCheckPulseCountMeterModuleEnable}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </controls:Card>
                 
             </TabItem>
 

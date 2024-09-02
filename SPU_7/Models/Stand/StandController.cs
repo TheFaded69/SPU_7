@@ -12,9 +12,11 @@ using SPU_7.Common.Stand;
 using SPU_7.CommonDevice.Devices;
 using SPU_7.CommonDevice.Devices.ElmetroPascal;
 using SPU_7.DeviceCommunication.Communication;
+using SPU_7.Domain.Devices.Device.UniversalDevice;
 using SPU_7.Domain.Devices.StandDevices.FrequencyRegulator;
 using SPU_7.Domain.Devices.StandDevices.NeedleValveController;
 using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
+using SPU_7.Domain.Devices.StandDevices.PulseMeter;
 using SPU_7.Domain.Devices.StandDevices.THMeter;
 using SPU_7.Domain.Extensions;
 using SPU_7.Domain.Modbus;
@@ -51,6 +53,7 @@ namespace SPU_7.Models.Stand
         private IFrequencyRegulatorDevice _frequencyRegulatorDevice;
         private List<IFrequencyRegulatorDevice> _frequencyRegulatorDevices = [];
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
+        private List<IPulseMeter2Channel> _pulseMeter2Channels = [];
         private List<INeedleValveController> _needleValveControllers = [];
         private PulseCountMeterStarter _pulseCountMeterStarter;
 
@@ -235,8 +238,7 @@ namespace SPU_7.Models.Stand
                         }
                     }
             }
-
-
+            
             foreach (var pulseCountMeterModuleViewModel in _settingsService.StandSettingsModel
                          .PulseCountMeterModuleViewModels)
             {
@@ -246,6 +248,18 @@ namespace SPU_7.Models.Stand
                     pulseCountMeterModuleViewModel.ModuleAddress)
                 {
                     PulseCountMeterModuleNumber = pulseCountMeterModuleViewModel.Number,
+                });
+            }
+            
+            foreach (var pulseMeterModel in _settingsService.StandSettingsModel
+                         .PulseMeterViewModels)
+            {
+                _pulseMeter2Channels.Add(new PulseMeter2Channel(_modbusProcessors.First(modbus =>
+                        modbus.PortName == pulseMeterModel.SelectedComPort),
+                    new RegisterMapEnum<PulseMeter2ChannelRegisterMap>(),
+                    (int)pulseMeterModel.Address)
+                {
+                    PulseMeterModuleNumber = pulseMeterModel.Number,
                 });
             }
 
@@ -338,20 +352,7 @@ namespace SPU_7.Models.Stand
                 while (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                 {
 #if DEBUGGUI
-                    Temperature = new Random().Next(15, 25);
-                    PressureAtmosphere = 101325f;
-                    PressureResiver = 4f;
-                    PressureDifference = 2000f;
-                    Humidity = new Random().Next(30, 90);
-                    TemperatureTube = new Random().Next(15, 25);
-
-
-                    if (_line != null)
-                        foreach (var device in _line.Devices)
-                        {
-                            await ((IUniversalDevice)device).ReadPressureAsync();
-                        }
-
+                    
 
 #else
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)

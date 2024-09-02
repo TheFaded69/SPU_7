@@ -55,6 +55,5 @@ public class StandSettingsModel
     public string DeviceTestInfo { get; set; }
     public string PostInfo { get; set; }
     
-    
-    
+    public  StandSettingsExtensionModel  StandSettingsExtensionViewModel { get; set; }
 }

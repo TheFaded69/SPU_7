@@ -16,6 +16,8 @@ public class PulseMeter2Channel : ModbusUnitProcessor<PulseMeter2ChannelRegister
         ModuleAddress = (byte)pulseMeterAddress;
     }
 
+    public int PulseMeterModuleNumber { get; set; }
+
     /// <summary>
     /// Прочитать сетевой адрес модуля. Необходимое условие - модуль должен быть
     /// один на шине Modbus, т.к. запрос делается на широковещательный адрес 0!!!

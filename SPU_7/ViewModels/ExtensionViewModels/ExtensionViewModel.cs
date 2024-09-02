@@ -1,5 +1,7 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Prism.Services.Dialogs;
+using SPU_7.Common.Stand;
 using SPU_7.Models.Services.ContentServices;
 using SPU_7.Models.Services.Logger;
 using SPU_7.Models.Services.StandSetting;
@@ -11,9 +13,9 @@ namespace SPU_7.ViewModels.ExtensionViewModels;
 
 public class ExtensionViewModel : ViewModelBase
 {
-    public ExtensionViewModel(IStandController standController, 
-        IStandSettingsService settingsService, 
-        ILogger logger, 
+    public ExtensionViewModel(IStandController standController,
+        IStandSettingsService settingsService,
+        ILogger logger,
         INotificationService notificationService,
         IDialogService dialogService)
     {
@@ -25,6 +27,7 @@ public class ExtensionViewModel : ViewModelBase
 
         Init();
     }
+
     private readonly IStandController _standController;
     private readonly IStandSettingsService _settingsService;
     private readonly ILogger _logger;
@@ -45,7 +48,7 @@ public class ExtensionViewModel : ViewModelBase
         get => _userControlWorkResult;
         set => SetProperty(ref _userControlWorkResult, value);
     }
-    
+
     public UserControl StandExtensionUserControl
     {
         get => _standExtensionUserControl;
@@ -63,13 +66,13 @@ public class ExtensionViewModel : ViewModelBase
         get => _pulseMeterExtensionUserControl;
         set => SetProperty(ref _pulseMeterExtensionUserControl, value);
     }
-    
+
     public UserControl PulseCountMeterModuleExtensionUserControl
     {
         get => _pulseCountMeterModuleExtensionUserControl;
         set => SetProperty(ref _pulseCountMeterModuleExtensionUserControl, value);
     }
-    
+
     public UserControl CheckTightnessExtensionUserControl
     {
         get => _checkTightnessExtensionUserControl;
@@ -84,34 +87,68 @@ public class ExtensionViewModel : ViewModelBase
 
     private void Init()
     {
-        
-        StandExtensionUserControl = new StandExtensionView()
+        try
         {
-            DataContext = new StandExtensionViewModel(_standController, _notificationService, _settingsService, _logger)
-        };
-        /*VacuumCreatorExtensionUserControl = new VacuumCreatorExtensionView()
+            StandExtensionUserControl = new StandExtensionView()
+            {
+                DataContext =
+                    new StandExtensionViewModel(_standController, _notificationService, _settingsService, _logger)
+            };
+
+            UserControlWorkResult = new WorkResultView
+            {
+                DataContext = new WorkResultViewModel(_logger, _standController, _settingsService)
+            };
+
+            if (_settingsService.StandSettingsModel.StandSettingsExtensionViewModel.IsCheckTightnessEnable)
+            {
+                CheckTightnessExtensionUserControl = new CheckTightnessExtensionView()
+                {
+                    DataContext = new CheckTightnessExtensionViewModel(_dialogService)
+                };
+            }
+
+            if (_settingsService.StandSettingsModel.StandSettingsExtensionViewModel.IsVacuumCreatorEnable)
+            {
+                VacuumCreatorExtensionUserControl = new VacuumCreatorExtensionView()
+                {
+                    DataContext = new VacuumCreatorExtensionViewModel(_standController)
+                };
+            }
+
+            if (_settingsService.StandSettingsModel.StandSettingsExtensionViewModel
+                .IsCheckAverageQuadraticDifferenceEnable)
+            {
+                CheckAverageQuadraticDifferenceUserControl = new CheckAverageQuadraticDifferenceExtensionView()
+                {
+                    DataContext = new CheckAverageQuadraticDifferenceExtensionViewModel(_dialogService)
+                };
+            }
+
+            if (_settingsService.StandSettingsModel.StandSettingsExtensionViewModel.IsPulseCountMeterModuleEnable)
+            {
+                PulseCountMeterModuleExtensionUserControl = new PulseCountMeterModuleExtensionView()
+                {
+                    DataContext = new PulseCountMeterModuleExtensionViewModel(_dialogService)
+                };
+            }
+
+            if (_settingsService.StandSettingsModel.StandSettingsExtensionViewModel
+                .IsPulseMeterCoefficientSettingsEnable)
+            {
+                PulseMeterExtensionUserControl = new PulseMeterExtensionView()
+                {
+                    DataContext = new PulseMeterExtensionViewModel(_dialogService)
+                };
+            }
+
+            if (_settingsService.StandSettingsModel.StandSettingsExtensionViewModel.IsCheckPulseCountMeterModuleEnable)
+            {
+            }
+        }
+        catch (Exception e)
         {
-            DataContext = new VacuumCreatorExtensionViewModel(_standController)
-        };*/
-        UserControlWorkResult = new WorkResultView
-        {
-            DataContext = new WorkResultViewModel(_logger, _standController, _settingsService)
-        };
-        /*PulseMeterExtensionUserControl = new PulseMeterExtensionView()
-        {
-            DataContext = new PulseMeterExtensionViewModel(_dialogService)
-        };*/
-        PulseCountMeterModuleExtensionUserControl = new PulseCountMeterModuleExtensionView()
-        {
-            DataContext = new PulseCountMeterModuleExtensionViewModel(_dialogService)
-        };
-        CheckTightnessExtensionUserControl = new CheckTightnessExtensionView()
-        {
-            DataContext = new CheckTightnessExtensionViewModel(_dialogService)
-        };
-        CheckAverageQuadraticDifferenceUserControl = new CheckAverageQuadraticDifferenceExtensionView()
-        {
-            DataContext = new CheckAverageQuadraticDifferenceExtensionViewModel(_dialogService)
-        };
+            _logger.Logging(new LogMessage(e.Message, LogLevel.Fatal));
+        }
     }
 }
