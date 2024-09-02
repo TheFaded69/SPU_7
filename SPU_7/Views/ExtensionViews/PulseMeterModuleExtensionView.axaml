@@ -5,12 +5,12 @@
              xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:extensionViewModels="clr-namespace:SPU_7.ViewModels.ExtensionViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="extensionViewModels:PulseMeterExtensionViewModel"
-             x:Class="SPU_7.Views.ExtensionViews.PulseMeterExtensionView">
-      <DockPanel>
+             x:DataType="extensionViewModels:PulseMeterModuleExtensionViewModel"
+             x:Class="SPU_7.Views.ExtensionViews.PulseMeterModuleExtensionView">
+    <DockPanel>
         <DockPanel DockPanel.Dock="Top"
                    Margin="5,5,5,0">
-            <TextBlock Text="БИПЧ"
+            <TextBlock Text="ПОВЕРКА ИМПУЛЬСНОГО КАНАЛА"
                        Margin="5, 5, 5, 5"
                        DockPanel.Dock="Left"
                        FontSize="18" />
@@ -28,12 +28,12 @@
                     <Button Grid.Row="0"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
-                            Content="Настройка БИПЧ"
+                            Content="Поверка"
                             DockPanel.Dock="Right"
                             Margin="5"
-                            Command="{Binding OpenPulseMeterEditorCommand}" />
+                            Command="{Binding OpenPulseCountMeterModuleExtensionCommand}" />
 
-                    </Grid>
+                </Grid>
             </DockPanel>
         </controls:Card>
     </DockPanel>

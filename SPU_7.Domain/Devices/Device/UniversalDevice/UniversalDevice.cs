@@ -18,10 +18,26 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     public UniversalDevice(IModbusProcessor modbusProcessor, 
         IRegisterMapEnum<UniversalDeviceRegisterMap> registerMap,
         IPressureSensor pressureSensor, 
-        ITemperatureSensor temperatureSensor) : base(modbusProcessor, registerMap)
+        ITemperatureSensor temperatureSensor,
+        IModbusProcessor? pulseMeterModbusProcessor,
+        int pulseMeterAddress,
+        int pulseMeterChannel) : base(modbusProcessor, registerMap)
     {
         _pressureSensor = pressureSensor;
         _temperatureSensor = temperatureSensor;
+        
+        _pulseMeter2Channel = pulseMeterModbusProcessor == null
+            ? null
+            : new PulseMeter2Channel(pulseMeterModbusProcessor, new RegisterMapEnum<PulseMeter2ChannelRegisterMap>(),
+                pulseMeterAddress);
+        PulseMeterAddress = pulseMeterAddress;
+        
+        _pulseMeterChannelType = pulseMeterChannel switch
+        {
+            1 => PulseMeterChannel.Channel1,
+            2 => PulseMeterChannel.Channel2,
+            _ => throw new ArgumentOutOfRangeException(),
+        };
     }
     public UniversalDevice(IModbusProcessor modbusProcessor,
         IRegisterMapEnum<UniversalDeviceRegisterMap> registerMap,
@@ -95,7 +111,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
 
     public string VendorName { get; set; }
     public string DeviceTypeInfo { get; set; }
-    public int PulseMeterNumber { get; set; }
+    public int PulseMeterAddress { get; set; }
 
     public async Task<bool> ResetToZeroAsync() => await _pressureSensor.ResetToZeroAsync();
 
@@ -155,6 +171,16 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
 #else
         return Temperature = await _temperatureSensor.ReadTemperatureAsync(true);
 #endif
+    }
+
+    public async Task<uint?> ReadFreeRunningCounterAsync(int pulseMeterChannelNumber)
+    {
+        return await _pulseMeter2Channel.ReadFreeRunningCounterAsync(pulseMeterChannelNumber);
+    }
+
+    public async Task<float?> ReadPulseMeterPeriodAsync(int pulseMeterChannelNumber)
+    {
+        return await _pulseMeter2Channel.GetCurrentPeriodAsync((PulseMeterChannel)pulseMeterChannelNumber);
     }
 
     #region PresureSensorObserve

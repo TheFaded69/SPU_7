@@ -7,9 +7,7 @@
              x:Class="SPU_7.Views.ExtensionViews.ExtensionView"
              x:DataType="extensionViewModels:ExtensionViewModel">
     <DockPanel LastChildFill="False">
-        <ContentPresenter Content="{Binding UserControlWorkResult}"
-                          DockPanel.Dock="Bottom"
-                          Height="300" />
+        
         <StackPanel Orientation="Vertical"
                     DockPanel.Dock="Right">
             <ContentPresenter Width="400"
@@ -26,10 +24,17 @@
                               Content="{Binding PulseCountMeterModuleExtensionUserControl}" /> 
             <ContentPresenter Width="400"
                               VerticalAlignment="Top"
+                              Content="{Binding PulseMeterModuleExtensionUserControl}" /> 
+            <ContentPresenter Width="400"
+                              VerticalAlignment="Top"
                               Content="{Binding CheckTightnessExtensionUserControl}" /> 
             <ContentPresenter Width="400"
                               VerticalAlignment="Top"
                               Content="{Binding CheckAverageQuadraticDifferenceUserControl}" />
         </StackPanel>
+        
+        <ContentPresenter Content="{Binding UserControlWorkResult}"
+                          DockPanel.Dock="Bottom"
+                          Height="300" />
     </DockPanel>
 </UserControl>

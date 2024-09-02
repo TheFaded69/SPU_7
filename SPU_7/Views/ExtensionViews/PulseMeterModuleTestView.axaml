@@ -1,19 +1,16 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:extensionViewModels="clr-namespace:SPU_7.ViewModels.ExtensionViewModels"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
-             x:DataType="extensionViewModels:PulseCountMeterModuleTestViewModel"
-             x:Class="SPU_7.Views.ExtensionViews.PulseCountMeterModuleTestView"
-             Loaded="Control_OnLoaded">
-    <Design.DataContext>
-        <extensionViewModels:PulseCountMeterModuleTestViewModel/>
-    </Design.DataContext>
-    
+
+             x:DataType="extensionViewModels:PulseMeterModuleTestViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Loaded="Control_OnLoaded"
+             x:Class="SPU_7.Views.ExtensionViews.PulseMeterModuleTestView">
     <controls:Card MinWidth="500"
                    MinHeight="300">
         
@@ -54,9 +51,9 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="5"
-                                           Text="{Binding LineNumber, StringFormat='МПКИ - №{0}'}"/>
-                                <!--TextBlock Margin="5"
-                                           Text="{Binding ChannelNumber, StringFormat='Канал - №{0}'}"/-->
+                                           Text="{Binding PulseMeterNumber, StringFormat='Адрес БИПЧ - №{0}'}"/>
+                                <TextBlock Margin="5"
+                                           Text="{Binding PulseMeterChannelNumber, StringFormat='Канал - №{0}'}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
@@ -72,7 +69,6 @@
                            Grid.Column="0"
                            LastChildFill="False">
                     <Grid DockPanel.Dock="Bottom"
-                          
                           ColumnDefinitions="0.5*, 0.5*">
                         <Button DockPanel.Dock="Bottom"
                                 Grid.Column="0"
@@ -106,8 +102,7 @@
                            Grid.Column="1"
                            LastChildFill="False">
                     <Grid DockPanel.Dock="Bottom"
-                          ColumnDefinitions="0.5*, 0.5*"
-                          IsEnabled="False">
+                          ColumnDefinitions="0.5*, 0.5*">
                         <Button DockPanel.Dock="Bottom"
                                 Grid.Column="0"
                                 Classes="flat"

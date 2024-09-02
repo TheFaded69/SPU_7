@@ -6,6 +6,7 @@ using SPU_7.Common.Device;
 using SPU_7.Common.Line;
 using SPU_7.Common.Stand;
 using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
+using SPU_7.Domain.Devices.StandDevices.PulseMeter;
 using SPU_7.Domain.Extensions;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 using SPU_7.ViewModels;
@@ -311,7 +312,9 @@ namespace SPU_7.Models.Stand
         /// <param name="pulseCount">Количество импульсов</param>
         /// <param name="deviceIndex">Индекс устройства (каждому устройству привязан свой БИПЧ)</param>
         /// <returns>Получилось ли отправить запрос</returns>
-        Task<bool> SetPulseCountAsync(int pulseCount, int deviceIndex);
+        Task<bool> SetPulseCountForPulseMeterAsync(int pulseCount, int deviceIndex);
+        Task<bool> SetPulseCountForPulseMeterAsync(int pulseCount, int pulseMeterAddress, int pulseMeterChannelNumber);
+
 
         /// <summary>
         /// Считать время начала измерения импульсов
@@ -344,7 +347,7 @@ namespace SPU_7.Models.Stand
         Task<List<(float?, float?)>> ReadPulseCoefficientsAsync();
 
         Task<CommonCommandStatus?> ReadCommonCommandStatusPulseCountMeterAsync(int? pulseCountMeterModuleIndex);
-        Task<bool> StartPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex);
+        Task<bool> StartPulseCountMeterModuleMeasureAsync(int? pulseCountMeterModuleIndex);
         Task<bool> StopPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex);
         Task<float?> ReadPulsePeriodFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber);
         Task<float?> ReadPulseDurationFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex, int? channelNumber);
@@ -362,5 +365,32 @@ namespace SPU_7.Models.Stand
         float? GetPressureDifferenceFromLine(int lineIndex);
         Task<bool> EnableLineFanAsync(int selectedLineIndex, int selectedFanIndex);
         Task<bool> DisableLineFanAsync(int selectedLineIndex, int selectedFanIndex);
+        Task<uint?> ReadFreeRunPulseCount(int pulseMeterAddress, int pulseMeterChannelNumber);
+        
+        
+        /// <summary>
+        /// Запуск измерения импульсов на БИПЧе
+        /// </summary>
+        /// <param name="pulseCount">Импульсы</param>
+        /// <param name="pulseMeterAddress">Адрес БИПЧ</param>
+        /// <param name="pulseMeterChannelNumber">Канал БИПЧ</param>
+        /// <returns></returns>
+        Task<bool> StartPulseMeterPeriodMeasureAsync(int pulseCount, int pulseMeterAddress, int pulseMeterChannelNumber);
+
+        /// <summary>
+        /// Считать период измерения с БИПЧа
+        /// </summary>
+        /// <param name="pulseMeterAddress">Адрес БИПЧ</param>
+        /// <param name="pulseMeterChannelNumber">Канал БИПЧ</param>
+        /// <returns></returns>
+        Task<float?> ReadPeriodFromPulseMeterAsync(int pulseMeterAddress, int pulseMeterChannelNumber);
+
+        /// <summary>
+        /// Считать текущий статус с БИПЧа
+        /// </summary>
+        /// <param name="pulseMeterAddress"></param>
+        /// <param name="pulseMeterChannelNumber"></param>
+        /// <returns></returns>
+        Task<PulseMeter2ChannelState> GetPulseMeterStatusAsync(int pulseMeterAddress, int pulseMeterChannelNumber);
     }
 }

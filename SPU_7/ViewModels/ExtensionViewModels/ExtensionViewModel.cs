@@ -39,6 +39,7 @@ public class ExtensionViewModel : ViewModelBase
     private UserControl _userControlWorkResult;
     private UserControl _pulseMeterExtensionUserControl;
     private UserControl _pulseCountMeterModuleExtensionUserControl;
+    private UserControl _pulseMeterModuleExtensionUserControl;
     private UserControl _checkTightnessExtensionUserControl;
     private UserControl _checkAverageQuadraticDifferenceUserControl;
 
@@ -71,6 +72,12 @@ public class ExtensionViewModel : ViewModelBase
     {
         get => _pulseCountMeterModuleExtensionUserControl;
         set => SetProperty(ref _pulseCountMeterModuleExtensionUserControl, value);
+    }
+    
+    public UserControl PulseMeterModuleExtensionUserControl
+    {
+        get => _pulseMeterModuleExtensionUserControl;
+        set => SetProperty(ref _pulseMeterModuleExtensionUserControl, value);
     }
 
     public UserControl CheckTightnessExtensionUserControl
@@ -124,7 +131,13 @@ public class ExtensionViewModel : ViewModelBase
                     DataContext = new CheckAverageQuadraticDifferenceExtensionViewModel(_dialogService)
                 };
             }
-
+            if (_settingsService.StandSettingsModel.StandSettingsExtensionViewModel.IsCheckPulseCountMeterModuleEnable)
+            {
+                PulseMeterModuleExtensionUserControl = new PulseMeterModuleExtensionView()
+                {
+                    DataContext = new PulseMeterModuleExtensionViewModel(_dialogService)
+                };
+            }
             if (_settingsService.StandSettingsModel.StandSettingsExtensionViewModel.IsPulseCountMeterModuleEnable)
             {
                 PulseCountMeterModuleExtensionUserControl = new PulseCountMeterModuleExtensionView()
@@ -142,9 +155,7 @@ public class ExtensionViewModel : ViewModelBase
                 };
             }
 
-            if (_settingsService.StandSettingsModel.StandSettingsExtensionViewModel.IsCheckPulseCountMeterModuleEnable)
-            {
-            }
+            
         }
         catch (Exception e)
         {

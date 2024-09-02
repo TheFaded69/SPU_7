@@ -230,7 +230,7 @@ public class CheckAverageQuadraticDifferenceViewModel : ViewModelBase, IDialogAw
 
                 await Task.Delay(2000);
 
-                await _standController.StartPulseCountModuleMeasureAsync(_standSettingsService.StandSettingsModel
+                await _standController.StartPulseCountMeterModuleMeasureAsync(_standSettingsService.StandSettingsModel
                     .LineViewModels[(int)SelectedLineIndex]
                     .MasterDeviceViewModels[(int)SelectedMasterDeviceIndex].PulseCountMeterModuleNumber - 1);
 

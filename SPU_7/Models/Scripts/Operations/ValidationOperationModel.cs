@@ -553,7 +553,7 @@ public class ValidationOperationModel : OperationModel
                                 var pulseCount = (int)Math.Ceiling(point.TargetVolume / ((ValidationOperationConfigurationModel)_configuration) .PulseMeterConfigurations[deviceIndex].PulseWeight);
                                 pulseCountList.Add(pulseCount);
 
-                                if (!await _standController.SetPulseCountAsync(pulseCount, deviceIndex))
+                                if (!await _standController.SetPulseCountForPulseMeterAsync(pulseCount, deviceIndex))
                                 {
                                     _logger.Logging(new LogMessage($"Не удалось установить количество импульсов в точке {point.Number}", LogLevel.Error));
                                     return new OperationResult(OperationResultType.Error, $"Не удалось установить количество импульсов в точке {point.Number}",

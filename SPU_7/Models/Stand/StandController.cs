@@ -238,7 +238,7 @@ namespace SPU_7.Models.Stand
                         }
                     }
             }
-            
+
             foreach (var pulseCountMeterModuleViewModel in _settingsService.StandSettingsModel
                          .PulseCountMeterModuleViewModels)
             {
@@ -250,7 +250,7 @@ namespace SPU_7.Models.Stand
                     PulseCountMeterModuleNumber = pulseCountMeterModuleViewModel.Number,
                 });
             }
-            
+
             foreach (var pulseMeterModel in _settingsService.StandSettingsModel
                          .PulseMeterViewModels)
             {
@@ -352,8 +352,6 @@ namespace SPU_7.Models.Stand
                 while (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                 {
 #if DEBUGGUI
-                    
-
 #else
                     if (!_requestTaskCancellationTokenSource.Token.IsCancellationRequested)
                         PressureAtmosphere =
@@ -451,11 +449,14 @@ namespace SPU_7.Models.Stand
                         if (standLine.PressureSensor != null)
                         {
                             switch (_settingsService.StandSettingsModel.LineViewModels[lineIndex].SensorViewModels
-                                        .FirstOrDefault(s => s.SensorPurpose == SensorPurpose.PressureSensor).SensorType)
+                                        .FirstOrDefault(s => s.SensorPurpose == SensorPurpose.PressureSensor)
+                                        .SensorType)
                             {
                                 case SensorType.TurboFlowPS:
                                 {
-                                    var pressure = await ((SPU_7.Domain.Devices.StandDevices.PressureSensor.IPressureSensor)standLine.PressureSensor).ReadPressureAsync();
+                                    var pressure =
+                                        await ((SPU_7.Domain.Devices.StandDevices.PressureSensor.IPressureSensor)
+                                            standLine.PressureSensor).ReadPressureAsync();
                                     NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, pressure),
                                         DeviceInfoParameterType.Pressure));
                                 }
@@ -470,7 +471,6 @@ namespace SPU_7.Models.Stand
                                 default:
                                     throw new ArgumentOutOfRangeException();
                             }
-                            
                         }
 
                         if (standLine.PressureDifferenceSensor != null)
@@ -1072,9 +1072,16 @@ namespace SPU_7.Models.Stand
             return !isWork;
         }
 
-        public async Task<bool> SetPulseCountAsync(int pulseCount, int deviceIndex)
+        public async Task<bool> SetPulseCountForPulseMeterAsync(int pulseCount, int deviceIndex)
         {
             return await _line.Devices[deviceIndex].SetPulseCountAsync(pulseCount);
+        }
+
+        public async Task<bool> SetPulseCountForPulseMeterAsync(int pulseCount, int pulseMeterAddress, int pulseMeterChannelNumber)
+        {
+            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+                .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
+                .SetPulseCountAsync(pulseCount);
         }
 
         public async Task<float?> ReadStartPulseMeasureTimeAsync(int deviceIndex)
@@ -1123,7 +1130,7 @@ namespace SPU_7.Models.Stand
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].GetCommonCommandStatusAsync();
         }
 
-        public async Task<bool> StartPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex)
+        public async Task<bool> StartPulseCountMeterModuleMeasureAsync(int? pulseCountMeterModuleIndex)
         {
             if (pulseCountMeterModuleIndex == null) return false;
 
@@ -1281,12 +1288,41 @@ namespace SPU_7.Models.Stand
             throw new NotImplementedException();
         }
 
+        public async Task<uint?> ReadFreeRunPulseCount(int pulseMeterAddress, int pulseMeterChannelNumber)
+        {
+            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+                            .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
+                                .ReadFreeRunningCounterAsync(pulseMeterChannelNumber);
+        }
+
+        public async Task<bool> StartPulseMeterPeriodMeasureAsync(int pulseCount, int pulseMeterAddress, int pulseMeterChannelNumber)
+        {
+            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+                .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
+                .StartPeriodMeasureAsync(pulseCount);
+        }
+
+        public async Task<float?> ReadPeriodFromPulseMeterAsync(int pulseMeterAddress, int pulseMeterChannelNumber)
+        {
+            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+                .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
+                .ReadPulseMeterPeriodAsync(pulseMeterChannelNumber);
+
+        }
+
+        public async Task<PulseMeter2ChannelState> GetPulseMeterStatusAsync(int pulseMeterAddress, int pulseMeterChannelNumber)
+        {
+            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+                .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
+                .ReadChannelStatusAsync();
+        }
+
         private async Task<(float?, float?)> ReadPulseCoefficientAsync(
             StandSettingsPulseMeterModel settingsPulseMeterModel)
         {
             return await _lines.First(l =>
-                    l.Devices.Any(device => device.PulseMeterNumber == settingsPulseMeterModel.Number))
-                .Devices.First(device => device.PulseMeterNumber == settingsPulseMeterModel.Number)
+                    l.Devices.Any(device => device.PulseMeterAddress == settingsPulseMeterModel.Number))
+                .Devices.First(device => device.PulseMeterAddress == settingsPulseMeterModel.Number)
                 .ReadPulseCoefficientsAsync();
         }
 

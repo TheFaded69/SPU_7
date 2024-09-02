@@ -45,7 +45,7 @@ namespace SPU_7.Domain.Devices
         /// </summary>
         public string DeviceTypeInfo { get; set; }
 
-        public int PulseMeterNumber { get; set; }
+        public int PulseMeterAddress { get; set; }
 
 
         /// <summary>
@@ -108,5 +108,19 @@ namespace SPU_7.Domain.Devices
         /// </summary>
         /// <returns></returns>
         Task<float?> ReadTemperatureAsync();
+
+        /// <summary>
+        /// Считать свободно бегущий счетчик с БИПЧа
+        /// </summary>
+        /// <param name="pulseMeterChannelNumber"></param>
+        /// <returns></returns>
+        Task<uint?> ReadFreeRunningCounterAsync(int pulseMeterChannelNumber);
+        
+        /// <summary>
+        /// Считать период измеренных импульсов с БИПЧа
+        /// </summary>
+        /// <param name="pulseMeterChannelNumber"></param>
+        /// <returns></returns>
+        Task<float?> ReadPulseMeterPeriodAsync(int pulseMeterChannelNumber);
     }
 }

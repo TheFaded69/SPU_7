@@ -3,8 +3,10 @@
 public class DevicePulseCountMeterModuleViewModel : ViewModelBase
 {
     public int LineNumber { get; set; }
-    
     public int DeviceNumber { get; set; }
+    public int  PulseCountMeterChannelNumber { get; set; }
     
-    public int  ChannelNumber { get; set; }
+    public int  PulseMeterChannelNumber { get; set; }
+    
+    public int PulseMeterNumber { get; set; }
 }

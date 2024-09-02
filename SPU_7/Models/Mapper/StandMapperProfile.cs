@@ -91,6 +91,8 @@ namespace SPU_7.Models.Mapper
                 .ReverseMap();
             CreateMap<StandSettingsCheckTightnessModel, StandSettingsCheckTightnessViewModel>()
                 .ReverseMap();
+            CreateMap<StandSettingsExtensionModel, StandSettingsExtensionViewModel>()
+                .ReverseMap();
             
             #endregion
 

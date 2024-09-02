@@ -2070,6 +2070,10 @@
                         <StackPanel Orientation="Vertical"
                                     DockPanel.Dock="Left"
                                     VerticalAlignment="Top">
+                            
+                            <CheckBox Content="Настройка доплнительных возможностей"
+                                      Margin="5"
+                                      IsChecked="{Binding IsExtensionSettingsEnable}"/>
                             <CheckBox Content="Проверка герметичности"
                                       Margin="5"
                                       IsChecked="{Binding StandSettingsExtensionViewModel.IsCheckTightnessEnable}"/>
@@ -2085,7 +2089,7 @@
                             <CheckBox Content="Настройка БИПЧ"
                                       Margin="5"
                                       IsChecked="{Binding StandSettingsExtensionViewModel.IsPulseMeterCoefficientSettingsEnable}"/>
-                            <CheckBox Content="Настройка БИПЧ"
+                            <CheckBox Content="Проверка БИПЧ"
                                       Margin="5"
                                       IsChecked="{Binding StandSettingsExtensionViewModel.IsCheckPulseCountMeterModuleEnable}"/>
                         </StackPanel>

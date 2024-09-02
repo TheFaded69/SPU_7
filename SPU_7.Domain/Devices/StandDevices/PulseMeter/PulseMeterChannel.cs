@@ -1,6 +1,6 @@
 ﻿namespace SPU_7.Domain.Devices.StandDevices.PulseMeter;
 
-public enum PulseMeterChannel
+public enum PulseMeterChannel : int
 {
     None = 0,
     Channel1 = 1,

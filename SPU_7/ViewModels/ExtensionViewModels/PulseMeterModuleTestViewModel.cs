@@ -4,21 +4,22 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Prism.Commands;
 using Prism.Services.Dialogs;
+using SPU_7.Domain.Devices.StandDevices.PulseMeter;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
 using SPU_7.Views.ExtensionViews;
 
 namespace SPU_7.ViewModels.ExtensionViewModels;
 
-public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
+public class PulseMeterModuleTestViewModel : ViewModelBase, IDialogAware
 {
     private readonly IStandController _standController;
     private readonly IStandSettingsService _standSettingsService;
 
-    public PulseCountMeterModuleTestViewModel(IStandController standController,
+    public PulseMeterModuleTestViewModel(IStandController standController,
         IStandSettingsService standSettingsService)
     {
-        Title = "Поверка импульсного канала";
+        Title = "Поверка импульсного канала БИПЧ";
 
         _standController = standController;
         _standSettingsService = standSettingsService;
@@ -92,97 +93,55 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
     }
 
     public DelegateCommand StartPulseCountCommand { get; }
-
+    
     private async void StartPulseCountCommandHandler()
     {
-        var pulseCountMeterModuleNumber = _standSettingsService.StandSettingsModel
-            .LineViewModels[SelectedDevicePulseCountMeterModuleViewModel.LineNumber - 1]
-            .DeviceViewModels[SelectedDevicePulseCountMeterModuleViewModel.DeviceNumber - 1]
-            .PulseCountMeterModuleNumber;
-        var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.PulseCountMeterChannelNumber;
-
         IsPulseCountWork = true;
-
-        await _standController.ResetPulseCountMeterAsync();
-        await _standController.TurnOnPulseCountMeterControlRegister();
-        await _standController.SetPulseCountMeterModuleChannelSettingsAsync(pulseCountMeterModuleNumber - 1,
-            pulseCountMeterModuleChannelNumber);
-
-        await Task.Delay(2000);
-
-        await _standController.StartPulseCountMeterModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
-
-        await Task.Delay(2000);
-
-        await _standController.SendStartPulseCountMeterCommandAsync();
+        
+        var pulseCount = await _standController.ReadFreeRunPulseCount(SelectedDevicePulseCountMeterModuleViewModel.PulseMeterNumber, SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber);
+        PulseCount = pulseCount;
     }
 
     public DelegateCommand StartPulseDurationCommand { get; }
 
     private async void StartPulseDurationCommandHandler()
     {
-        var pulseCountMeterModuleNumber = _standSettingsService.StandSettingsModel
-            .LineViewModels[SelectedDevicePulseCountMeterModuleViewModel.LineNumber - 1]
-            .DeviceViewModels[SelectedDevicePulseCountMeterModuleViewModel.DeviceNumber - 1]
-            .PulseCountMeterModuleNumber;
-        var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.PulseCountMeterChannelNumber;
-
         IsPulseDurationWork = true;
+        
+        await _standController.StartPulseMeterPeriodMeasureAsync(2, 
+            SelectedDevicePulseCountMeterModuleViewModel.PulseMeterNumber,
+            SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber);
 
-        await _standController.ResetPulseCountMeterAsync();
-        await _standController.TurnOnPulseCountMeterControlRegister();
-        await _standController.SetPulseCountMeterModuleChannelSettingsAsync(pulseCountMeterModuleNumber - 1,
-            pulseCountMeterModuleChannelNumber);
+        while (await _standController.GetPulseMeterStatusAsync(
+                   SelectedDevicePulseCountMeterModuleViewModel.PulseMeterNumber,
+                   SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber) != PulseMeter2ChannelState.Ok)
+        {
+            await Task.Delay(1000);
+        }
 
-        await Task.Delay(2000);
+        var period = await _standController.ReadPeriodFromPulseMeterAsync(
+            SelectedDevicePulseCountMeterModuleViewModel.PulseMeterNumber,
+            SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber);
 
-        await _standController.StartPulseCountMeterModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
-
-        await Task.Delay(2000);
-
-        await _standController.SendStartPulseCountMeterCommandAsync();
+        PulsePeriod = period;
+        IsPulseCountWork = false;
     }
 
     public DelegateCommand StopPulseCountCommand { get; }
 
     private async void StopPulseCountCommandHandler()
     {
-        var pulseCountMeterModuleNumber = _standSettingsService.StandSettingsModel
-            .LineViewModels[SelectedDevicePulseCountMeterModuleViewModel.LineNumber - 1]
-            .DeviceViewModels[SelectedDevicePulseCountMeterModuleViewModel.DeviceNumber - 1]
-            .PulseCountMeterModuleNumber;
-        var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.PulseCountMeterChannelNumber;
-
-        await _standController.SendStartPulseCountMeterCommandAsync();
-
-        await Task.Delay(2000);
-
         IsPulseCountWork = false;
-
-        PulseCount = await _standController.ReadPulseCountFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1,
-            pulseCountMeterModuleChannelNumber);
-        PulsePeriod = await _standController.ReadPulsePeriodFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1,
-            pulseCountMeterModuleChannelNumber) / 1000;
+        
+        var pulseCount = await _standController.ReadFreeRunPulseCount(SelectedDevicePulseCountMeterModuleViewModel.PulseMeterNumber, SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber);
+        PulseCount = pulseCount - PulseCount;
     }
 
     public DelegateCommand StopPulseDurationCommand { get; }
 
     private async void StopPulseDurationCommandHandler()
     {
-        var pulseCountMeterModuleNumber = _standSettingsService.StandSettingsModel
-            .LineViewModels[SelectedDevicePulseCountMeterModuleViewModel.LineNumber - 1]
-            .DeviceViewModels[SelectedDevicePulseCountMeterModuleViewModel.DeviceNumber - 1]
-            .PulseCountMeterModuleNumber;
-        var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.PulseCountMeterChannelNumber;
-
-        await _standController.SendStartPulseCountMeterCommandAsync();
-
-        await Task.Delay(2000);
-
-        IsPulseDurationWork = false;
-
-        PulsePeriod = await _standController.ReadPulsePeriodFromPulseCountMeterAsync(pulseCountMeterModuleNumber - 1,
-            pulseCountMeterModuleChannelNumber);
+        
     }
 
     public bool CanCloseDialog() => true;
@@ -197,20 +156,14 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
         {
             foreach (var deviceViewModel in lineViewModel.DeviceViewModels)
             {
-                if (deviceViewModel.PulseCountMeterModuleChannelNumber != null)
-                    DeviceInformation.Add(new DevicePulseCountMeterModuleViewModel()
-                    {
-                        LineNumber = lineViewModel.LineNumber,
-                        DeviceNumber = deviceViewModel.Number,
-                        PulseCountMeterChannelNumber = (int)deviceViewModel.PulseCountMeterModuleChannelNumber
-                    });
-                
+               
                 if (deviceViewModel.PulseMeterChannelNumber != null)
                     DeviceInformation.Add(new DevicePulseCountMeterModuleViewModel()
                     {
                         LineNumber = lineViewModel.LineNumber,
                         DeviceNumber = deviceViewModel.Number,
-                        PulseCountMeterChannelNumber = deviceViewModel.PulseMeterChannelNumber
+                        PulseMeterChannelNumber = deviceViewModel.PulseMeterChannelNumber,
+                        PulseMeterNumber = deviceViewModel.PulseMeterNumber
                     });
                     
             }
@@ -221,7 +174,7 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
     public static void Show(IDialogService dialogService, Action positive, Action negative)
     {
-        dialogService.ShowDialog(nameof(PulseCountMeterModuleTestView), null, result =>
+        dialogService.ShowDialog(nameof(PulseMeterModuleTestView), null, result =>
         {
             switch (result.Result)
             {

@@ -27,58 +27,65 @@ public class StandLine
     public StandLine(IStandSettingsService settingsService, List<IModbusProcessor> modbusProcessors, int lineIndex)
     {
         LineNumber = lineIndex + 1;
-        
+
         foreach (var deviceViewModel in settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels)
         {
             var pressureSensor = string.IsNullOrEmpty(deviceViewModel.SelectedPressureSensorComPort)
                 ? null
                 : new PressureSensor(modbusProcessors
-                        .FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedPressureSensorComPort), 
+                        .FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedPressureSensorComPort),
                     new RegisterMapEnum<PressureSensorRegisterMap>(),
                     deviceViewModel.PressureSensorAddress);
-                    
+
             var temperatureSensor = string.IsNullOrEmpty(deviceViewModel.SelectedTemperatureSensorComPort)
                 ? null
                 : new TemperatureSensor(modbusProcessors
-                        .FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedTemperatureSensorComPort), 
+                        .FirstOrDefault(mb => mb.PortName == deviceViewModel.SelectedTemperatureSensorComPort),
                     new RegisterMapEnum<TemperatureSensorRegisterMap>(),
                     deviceViewModel.TemperatureSensorAddress,
                     (int)deviceViewModel.TemperatureChannelNumber);
-            
+
             Devices.Add(new UniversalDevice(null,
-                new RegisterMapEnum<UniversalDeviceRegisterMap>(), pressureSensor, temperatureSensor));
+                new RegisterMapEnum<UniversalDeviceRegisterMap>(), pressureSensor, temperatureSensor,
+                modbusProcessors.FirstOrDefault(mb => mb.PortName == settingsService.StandSettingsModel
+                    .PulseMeterViewModels
+                    .FirstOrDefault(p => p.Address == deviceViewModel.PulseMeterNumber).SelectedComPort),
+                deviceViewModel.PulseMeterNumber, deviceViewModel.PulseMeterChannelNumber));
         }
 
         switch (settingsService.StandSettingsModel.LineViewModels[lineIndex].SelectedLineType)
         {
             case LineType.MasterDeviceLineType:
-                foreach (var masterDeviceModel in settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels)
+                foreach (var masterDeviceModel in settingsService.StandSettingsModel.LineViewModels[lineIndex]
+                             .MasterDeviceViewModels)
                 {
                     var pressureSensor = string.IsNullOrEmpty(masterDeviceModel.SelectedPressureSensorComPort)
                         ? null
                         : new PressureSensor(modbusProcessors
-                                .FirstOrDefault(mb => mb.PortName == masterDeviceModel.SelectedPressureSensorComPort), 
+                                .FirstOrDefault(mb => mb.PortName == masterDeviceModel.SelectedPressureSensorComPort),
                             new RegisterMapEnum<PressureSensorRegisterMap>(),
                             masterDeviceModel.PressureSensorAddress);
-                    
+
                     var temperatureSensor = string.IsNullOrEmpty(masterDeviceModel.SelectedTemperatureSensorComPort)
                         ? null
                         : new TemperatureSensor(modbusProcessors
-                                .FirstOrDefault(mb => mb.PortName == masterDeviceModel.SelectedTemperatureSensorComPort), 
+                                .FirstOrDefault(mb =>
+                                    mb.PortName == masterDeviceModel.SelectedTemperatureSensorComPort),
                             new RegisterMapEnum<TemperatureSensorRegisterMap>(),
                             masterDeviceModel.TemperatureSensorAddress,
                             (int)masterDeviceModel.TemperatureChannelNumber);
-                    
+
                     MasterDevices.Add(masterDeviceModel.SelectedMasterDeviceType switch
                     {
-                        MasterDeviceType.GFG => new GfgDevice(null, 
-                            new RegisterMapEnum<GFGRegisterMap>(), 
-                            pressureSensor, 
+                        MasterDeviceType.GFG => new GfgDevice(null,
+                            new RegisterMapEnum<GFGRegisterMap>(),
+                            pressureSensor,
                             temperatureSensor),
                         MasterDeviceType.Rabo => new RaboDevice(pressureSensor, temperatureSensor),
                         MasterDeviceType.RGT => new RGTDevice(pressureSensor, temperatureSensor),
                     });
                 }
+
                 break;
             case LineType.NozzleLineType:
                 break;
@@ -94,7 +101,7 @@ public class StandLine
                     TemperatureSensor = new TemperatureSensor(modbusProcessors
                             .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
                         new RegisterMapEnum<TemperatureSensorRegisterMap>(),
-                        sensorViewModel.Address, 
+                        sensorViewModel.Address,
                         sensorViewModel.ChannelNumber);
                     break;
                 case SensorPurpose.PressureSensor:
@@ -104,10 +111,10 @@ public class StandLine
                                 .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
                             new RegisterMapEnum<PressureSensorRegisterMap>(),
                             sensorViewModel.Address),
-                        _ => new  PressureSensor(modbusProcessors
-                            .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
-                        new RegisterMapEnum<PressureSensorRegisterMap>(),
-                        sensorViewModel.Address)
+                        _ => new PressureSensor(modbusProcessors
+                                .FirstOrDefault(mb => mb.PortName == sensorViewModel.SelectedComPort),
+                            new RegisterMapEnum<PressureSensorRegisterMap>(),
+                            sensorViewModel.Address)
                     };
                     break;
                 case SensorPurpose.PressureOffsetSensor:
@@ -149,14 +156,14 @@ public class StandLine
             }
         }
     }
-    
+
     public readonly List<IDevice> Devices = [];
     public readonly List<IMasterDevice> MasterDevices = [];
-    public  ITemperatureSensor? TemperatureSensor{ get; set; }
-    public IPressureSensor? PressureSensor{ get; set; }
-    public IPressureSensor? PressureDifferenceSensor{ get; set; }
-    public IPressureSensor? PressureDischargeSensor{ get; set; }
-    
+    public ITemperatureSensor? TemperatureSensor { get; set; }
+    public IPressureSensor? PressureSensor { get; set; }
+    public IPressureSensor? PressureDifferenceSensor { get; set; }
+    public IPressureSensor? PressureDischargeSensor { get; set; }
+
     public int LineNumber { get; set; }
     public float CurrentFlow { get; set; }
     public float? CurrentCalculateFlow { get; set; }
