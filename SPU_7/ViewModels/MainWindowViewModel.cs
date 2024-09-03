@@ -127,6 +127,10 @@ namespace SPU_7.ViewModels
             catch (Exception e)
             {
                 _logger.Logging(new LogMessage(e.Message, LogLevel.Fatal));
+                StandView = new EmptyView
+                {
+                    DataContext = new EmptyViewModel($"Необходима настройка стенда, ошибка - {e.Message}")
+                };
             }
         }
 
