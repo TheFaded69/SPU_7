@@ -13,6 +13,8 @@ public class FanItemViewModel : ViewModelBase
     private readonly IStandSettingsService _settingsService;
     private readonly int _lineIndex;
     private readonly int _fanIndex;
+    private readonly int _regulatorIndex;
+    private readonly int _bitIndex;
 
     public FanItemViewModel(IStandController standController,
         IStandSettingsService settingsService,
@@ -24,6 +26,8 @@ public class FanItemViewModel : ViewModelBase
         _standController = standController;
         _settingsService = settingsService;
         _lineIndex = lineIndex;
+        _regulatorIndex = fanIndex;
+        _bitIndex = fanIndex;
         _fanIndex = fanIndex;
 
         if (lineIndex > 0)
@@ -32,28 +36,37 @@ public class FanItemViewModel : ViewModelBase
             {
                 foreach (var fanViewModel in settingsService.StandSettingsModel.LineViewModels[i].FanViewModels)
                 {
-                    _fanIndex++;
+                    if (fanViewModel.SelectedFanType == FanType.FrequencyControlFan)
+                        _regulatorIndex++;
                 }
             }
         }
-        
+
         if (standSettingsValveModel != null)
-            ValveItemViewModel = new ValveItemViewModel(standSettingsValveModel, standController, standSettingsValveModel.IsReverseValve ? StateType.Close : StateType.Open);
-        
+            ValveItemViewModel = new ValveItemViewModel(standSettingsValveModel, standController,
+                standSettingsValveModel.IsReverseValve ? StateType.Close : StateType.Open);
+
         if (settingsNeedleValveModel != null)
-            NeedleValveItemViewModel = new NeedleValveItemViewModel(settingsNeedleValveModel, standController, StateType.Close);
-        
+            NeedleValveItemViewModel =
+                new NeedleValveItemViewModel(settingsNeedleValveModel, standController, StateType.Close);
+
         EnableFanCommand = new DelegateCommand(EnableFanCommandHandler);
         DisableFanCommand = new DelegateCommand(DisableFanCommandHandler);
 
-        FanHeightValue = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].IsNeedleValveEnable ? 100 : 20;
-        
-        _isValveEnable = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].IsValveEnable;
-        _isFrequencyEnable = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex].SelectedFanType == FanType.FrequencyControlFan;
+        FanHeightValue = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex]
+            .IsNeedleValveEnable
+            ? 100
+            : 20;
+
+        _isValveEnable = settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex]
+            .IsValveEnable;
+        _isFrequencyEnable =
+            settingsService.StandSettingsModel.LineViewModels[lineIndex].FanViewModels[fanIndex]
+                .SelectedFanType == FanType.FrequencyControlFan;
     }
 
     public int FanHeightValue { get; set; }
-    
+
     private ValveItemViewModel _valveItemViewModel;
     private bool _isFanWorking;
     private bool _isNeedleValveEnable;
@@ -103,24 +116,24 @@ public class FanItemViewModel : ViewModelBase
 
     private async void EnableFanCommandHandler()
     {
-        switch (_settingsService.StandSettingsModel.LineViewModels[_lineIndex].FanViewModels[_fanIndex].SelectedFanType)
+        switch (_settingsService.StandSettingsModel.LineViewModels[_lineIndex]
+                    .FanViewModels[_fanIndex]
+                    .SelectedFanType)
         {
             case FanType.FrequencyControlFan:
-                await _standController.SetRegulatorFrequencyAsync(_fanIndex, FanFrequencyValue);
-                await _standController.EnableFrequencyRegulatorAsync(_fanIndex);
+                await _standController.SetRegulatorFrequencyAsync(_regulatorIndex, FanFrequencyValue);
+                await _standController.EnableFrequencyRegulatorAsync(_regulatorIndex);
                 IsFanWorking = true;
                 break;
             case FanType.ControlModuleControlFan:
-                await _standController.EnableLineFanWorkAsync(_lineIndex, _fanIndex);
+                await _standController.EnableLineFanWorkAsync(_lineIndex, _bitIndex);
                 IsFanWorking = true;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
-
     }
-    
+
     public DelegateCommand DisableFanCommand { get; set; }
 
     public int SelectedNeedleValue
@@ -136,18 +149,16 @@ public class FanItemViewModel : ViewModelBase
                     .SelectedFanType)
         {
             case FanType.FrequencyControlFan:
-                await _standController.DisableFrequencyRegulatorAsync(_fanIndex);
+                await _standController.DisableFrequencyRegulatorAsync(_regulatorIndex);
                 IsFanWorking = false;
                 break;
             case FanType.ControlModuleControlFan:
-                await _standController.DisableLineFanAsync(_lineIndex, _fanIndex);
+                await _standController.DisableLineFanWorkAsync(_lineIndex, _bitIndex);
                 IsFanWorking = false;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-
-
     }
 
     public bool IsFrequencyEnable

@@ -15,10 +15,13 @@
         <extensionViewModels1:CheckTightnessViewModel />
     </Design.DataContext>
 
-    <controls:Card>
+    <controls:Card >
         <DockPanel>
             <DockPanel DockPanel.Dock="Top"
-                       LastChildFill="False">
+                       LastChildFill="False"
+                       PointerPressed="InputElement_OnPointerPressed"
+                       PointerMoved="InputElement_OnPointerMoved"
+                       PointerReleased="InputElement_OnPointerReleased">
                 <Button DockPanel.Dock="Right"
                         Width="46"
                         Height="46"

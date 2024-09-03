@@ -351,6 +351,7 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
     {
         try
         {
+            
             switch (SelectedLineViewModel.SelectedLineType)
             {
                 case LineType.None:
@@ -654,20 +655,7 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                     {
                         return;
                     }
-
-                    if (!operationCancellationTokenSource.IsCancellationRequested)
-                    {
-                        if (!await _standController.SetStandWorkModeAsync())
-                        {
-                            _logger.Logging(new LogMessage("Не удалось установить рабочий режим установки",
-                                LogLevel.Error));
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
+                    
 
                     if (_standSettingsService.StandSettingsModel.LineViewModels[(int)SelectedLineIndex]
                         .NozzleViewModels.Any(noz => noz.IsReplaceNozzle))
@@ -704,7 +692,7 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                         
                         if (!operationCancellationTokenSource.IsCancellationRequested)
                         {
-                            if (!await _standController.EnableLineFanAsync((int)SelectedLineIndex, (int)SelectedFanIndex))
+                            if (!await _standController.EnableLineFanWorkAsync((int)SelectedLineIndex, (int)SelectedFanIndex))
                             {
                                 _logger.Logging(new LogMessage("Не удалось запустить компрессор на линии",
                                     LogLevel.Error));
@@ -808,7 +796,10 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                     _timerService.Message = "Ожидание перепада давления";
                     _timerService.InfoTimerEnable();
 
-                    while (_standController.GetPressureDifferenceFromLine((int)SelectedLineIndex) <
+                    var deviceIndex = _standSettingsService.StandSettingsModel.LineViewModels[(int)SelectedLineIndex]
+                        .DeviceViewModels.IndexOf(_standSettingsService.StandSettingsModel
+                            .LineViewModels[(int)SelectedLineIndex].DeviceViewModels.Last());
+                    while (_standController.GetPressureDifferenceFromDevice((int)SelectedLineIndex, deviceIndex) <
                            0.8 * PressureDifferenceMinimum * 1000)
                     {
                         if (operationCancellationTokenSource.IsCancellationRequested)
@@ -839,7 +830,7 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                         
                         if (!operationCancellationTokenSource.IsCancellationRequested)
                         {
-                            if (!await _standController.DisableLineFanAsync((int)SelectedLineIndex, (int)SelectedFanIndex))
+                            if (!await _standController.DisableLineFanWorkAsync((int)SelectedLineIndex, (int)SelectedFanIndex))
                             {
                                 _logger.Logging(new LogMessage("Не удалось выключить компрессор на линии",
                                     LogLevel.Error));
@@ -1006,7 +997,7 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
 
     public static void Show(IDialogService dialogService)
     {
-        dialogService.ShowDialog(nameof(CheckTightnessView), null, result =>
+        dialogService.Show(nameof(CheckTightnessView), null, result =>
         {
             switch (result.Result)
             {

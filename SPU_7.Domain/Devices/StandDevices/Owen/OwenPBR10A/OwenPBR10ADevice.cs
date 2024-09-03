@@ -19,34 +19,34 @@ public class OwenPBR10ADevice : ModbusUnitProcessor<OwenPBR10ARegisterMap>, IOwe
     public async Task<bool> StopMovingAsync()
     {
         return await WriteRegisterAsync(OwenPBR10ARegisterMap.ValveControl,
-            BitConverter.GetBytes((uint)IOwenPBR10AMoveType.Stop));
+            BitConverter.GetBytes((ushort)IOwenPBR10AMoveType.Stop));
     }
 
     public async Task<bool> MovingDownAsync()
     {
         return await WriteRegisterAsync(OwenPBR10ARegisterMap.ValveControl,
-            BitConverter.GetBytes((uint)IOwenPBR10AMoveType.Down));
+            BitConverter.GetBytes((ushort)IOwenPBR10AMoveType.Down));
     }
 
     public async Task<bool> MovingUpAsync()
     {
         return await WriteRegisterAsync(OwenPBR10ARegisterMap.ValveControl,
-            BitConverter.GetBytes((uint)IOwenPBR10AMoveType.Up));
+            BitConverter.GetBytes((ushort)IOwenPBR10AMoveType.Up));
     }
 
-    public async Task<float?> GetPositionAsync()
+    public async Task<ushort?> GetPositionAsync()
     {
-        return (float?)await ReadRegisterAsync(OwenPBR10ARegisterMap.PositionPercent);
+        return (ushort?)await ReadRegisterAsync(OwenPBR10ARegisterMap.PositionPercent);
     }
 
-    public async Task<bool> SetPosition(float position)
+    public async Task<bool> SetPosition(int position)
     {
         var result = true;
         var currentPosition = await GetPositionAsync();
 
         if (currentPosition < position)
         {
-            result = await MovingUpAsync();
+            result = await MovingDownAsync();
             
             while (await GetPositionAsync() < position)
             {
@@ -57,7 +57,7 @@ public class OwenPBR10ADevice : ModbusUnitProcessor<OwenPBR10ARegisterMap>, IOwe
         }
         else if (currentPosition > position)
         {
-            result = await MovingDownAsync();
+            result = await MovingUpAsync();
 
             while (await GetPositionAsync() > position)
             {

@@ -5,8 +5,6 @@ using System.Linq;
 using Avalonia.Controls;
 using SPU_7.Common.Device;
 using SPU_7.Common.Line;
-using SPU_7.CommonDevice.Devices.ElmetroPascal;
-using SPU_7.DeviceCommunication.Communication;
 using SPU_7.Domain.Devices;
 using SPU_7.Domain.Devices.Device.UniversalDevice;
 using SPU_7.Domain.Devices.MasterDevice.GFG;
@@ -17,7 +15,6 @@ using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
 using SPU_7.Domain.Modbus;
 using SPU_7.Modbus.Processor;
 using SPU_7.Models.Services.StandSetting;
-using SPU_7.Domain.Devices;
 using IDevice = SPU_7.Domain.Devices.IDevice;
 
 namespace SPU_7.Models.Stand;
@@ -27,6 +24,8 @@ public class StandLine
     public StandLine(IStandSettingsService settingsService, List<IModbusProcessor> modbusProcessors, int lineIndex)
     {
         LineNumber = lineIndex + 1;
+        CurrentFlow = settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels
+            .Sum(noz => noz.NozzleFactValue);
 
         foreach (var deviceViewModel in settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels)
         {
@@ -159,12 +158,19 @@ public class StandLine
 
     public readonly List<IDevice> Devices = [];
     public readonly List<IMasterDevice> MasterDevices = [];
+    private double? _currentFlow;
     public ITemperatureSensor? TemperatureSensor { get; set; }
     public IPressureSensor? PressureSensor { get; set; }
     public IPressureSensor? PressureDifferenceSensor { get; set; }
     public IPressureSensor? PressureDischargeSensor { get; set; }
 
     public int LineNumber { get; set; }
-    public float CurrentFlow { get; set; }
+
+    public double? CurrentFlow
+    {
+        get => _currentFlow;
+        set => _currentFlow = value;
+    }
+
     public float? CurrentCalculateFlow { get; set; }
 }

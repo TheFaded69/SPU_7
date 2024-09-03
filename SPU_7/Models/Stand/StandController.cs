@@ -31,6 +31,7 @@ using SPU_7.Modbus.Responses;
 using SPU_7.Models.Services.Logger;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
+using SPU_7.Models.Stand.StaticData;
 using SPU_7.ViewModels;
 using SPU_7.ViewModels.DeviceInformationViewModels;
 
@@ -51,6 +52,7 @@ namespace SPU_7.Models.Stand
         private List<StandLine> _lines = [];
         private StandLine _line => SelectedLineIndex == null ? null : _lines[(int)SelectedLineIndex];
         private List<StandDevice> _standDevices = [];
+        private List<StandDevice> _standDevicesForFan = [];
 
         private IFrequencyRegulatorDevice _frequencyRegulatorDevice;
         private List<IFrequencyRegulatorDevice> _frequencyRegulatorDevices = [];
@@ -116,6 +118,7 @@ namespace SPU_7.Models.Stand
                 new RegisterMapEnum<StandDeviceRegisterMap>();
 
             var addressList = new List<int>();
+            var addressFanList = new List<int>();
 
             foreach (var nozzleViewModel in _settingsService.StandSettingsModel.NozzleViewModels)
             {
@@ -182,17 +185,8 @@ namespace SPU_7.Models.Stand
                                     fanViewModel.FrequencyRegulatorViewModel.ModuleAddress));
                                 break;
                             case FanType.ControlModuleControlFan:
-                                if (fanViewModel.FanValveViewModel.Address != null &&
-                                    !addressList.Contains((int)fanViewModel.FanValveViewModel.Address))
-                                    addressList.Add((int)fanViewModel.FanValveViewModel.Address);
-                                if (fanViewModel.FanValveViewModel.StateOnAddress != null &&
-                                    !addressList.Contains((int)fanViewModel.FanValveViewModel.StateOnAddress))
-                                    addressList.Add((int)fanViewModel.FanValveViewModel.StateOnAddress);
-                                if (fanViewModel.FanValveViewModel.StateOffAddress != null &&
-                                    !addressList.Contains((int)fanViewModel.FanValveViewModel.StateOffAddress))
-                                    addressList.Add((int)fanViewModel.FanValveViewModel.StateOffAddress);
-                                if (fanViewModel.Address != null && !addressList.Contains((int)fanViewModel.Address))
-                                    addressList.Add((int)fanViewModel.Address);
+                                if (fanViewModel.Address != null && !addressFanList.Contains((int)fanViewModel.Address))
+                                    addressFanList.Add((int)fanViewModel.Address);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -305,12 +299,22 @@ namespace SPU_7.Models.Stand
                 _lines.Add(new StandLine(_settingsService, _modbusProcessors, i));
             }
 
-            _standDevices = [];
             foreach (var address in addressList)
             {
                 _standDevices.Add(new StandDevice(
                     _modbusProcessors.First(modbus =>
                         modbus.PortName == _settingsService.StandSettingsModel.SelectedEquipmentPortName),
+                    standDeviceRegisterMap,
+                    address));
+            }
+
+            foreach (var address in addressFanList)
+            {
+                _standDevicesForFan.Add(new StandDevice(
+                    _modbusProcessors.First(mb => mb.PortName == _settingsService.StandSettingsModel.LineViewModels
+                        .Where(line => line.DropValveViewModel != null)
+                        .Select(line => line.DropValveViewModel.SelectedPort)
+                        .FirstOrDefault(port => port == mb.PortName)),
                     standDeviceRegisterMap,
                     address));
             }
@@ -511,9 +515,43 @@ namespace SPU_7.Models.Stand
                                 DeviceInfoParameterType.PressureResiver));
                         }
 
-                        var flow = standLine.CurrentFlow;
-                        NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
-                            DeviceInfoParameterType.TargetFlow));
+                        if (standLine.CurrentFlow < _settingsService.StandSettingsModel.LineViewModels[lineIndex]
+                                .NozzleViewModels.Min(noz => noz.NozzleFactValue * 0.1))
+                            standLine.CurrentFlow = 0;
+                        var k = SelectMetrologyCoefficient(Temperature, Humidity);
+                        
+                        var flowK = PressureAtmosphere / (PressureAtmosphere - standLine.Devices.Last().Pressure / 1000);
+                        NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flowK),
+                            DeviceInfoParameterType.CoefficientOfCriticalMode));
+                        
+                        var isNeedFlow = standLine.CurrentFlow switch
+                        {
+                            < 1 => flowK >= 2.5,
+                            >= 1 => flowK >= 1.25,
+                            _ => false
+                        };
+                        NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, isNeedFlow),
+                            DeviceInfoParameterType.IsCoefficientOfCriticalModeGood));
+                        
+                        if (isNeedFlow)
+                        {
+                            var flow = k == null
+                                ? null
+                                : standLine.CurrentFlow
+                                * Math.Sqrt((double)((273.15 + standLine.TemperatureSensor.Temperature) / 293.15))
+                                * (PressureAtmosphere / (PressureAtmosphere + standLine.Devices.Last().Pressure / 1000))
+                                * ((standLine.Devices.First().Temperature + 273.15) / (standLine.TemperatureSensor.Temperature + 273.15))
+                                * 1 / k;
+                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
+                                DeviceInfoParameterType.TargetFlow));
+                        }
+                        else
+                        {
+                            double? flow = null;
+                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
+                                DeviceInfoParameterType.TargetFlow));
+                        }
+                        
                     }
 #endif
 
@@ -524,8 +562,43 @@ namespace SPU_7.Models.Stand
             }
             catch (Exception e)
             {
-                //ignore
+                _logger.Logging(new LogMessage(e.Message, LogLevel.Fatal));
             }
+        }
+
+        private double? SelectMetrologyCoefficient(float? temperature, float? humidity)
+        {
+            var i = temperature switch
+            {
+                < 11 and > 5 => 0,
+                >= 11 and < 13 => 1,
+                >= 13 and < 15 => 2,
+                >= 15 and < 17 => 3,
+                >= 17 and < 19 => 4,
+                >= 19 and < 21 => 5,
+                >= 21 and < 23 => 6,
+                >= 23 and < 25 => 7,
+                >= 25 and < 27 => 8,
+                >= 27 and < 29 => 9,
+                >= 29 and <= 35 => 10,
+                _ => -1,
+            };
+
+            var j = humidity switch
+            {
+                < 35 and >= 10 => 0,
+                >= 35 and < 45 => 1,
+                >= 45 and < 55 => 2,
+                >= 55 and < 65 => 3,
+                >= 65 and < 75 => 4,
+                >= 75 and < 85 => 5,
+                >= 85 and <= 95 => 6,
+                _ => -1
+            };
+
+            if (i == -1 || j == -1) return null;
+
+            return MetrologyData.CoefficientCorrectHumidity[i, j];
         }
 
         #endregion
@@ -1312,14 +1385,9 @@ namespace SPU_7.Models.Stand
             return _lines[lineIndex].PressureDifferenceSensor.Pressure;
         }
 
-        public async Task<bool> EnableLineFanAsync(int selectedLineIndex, int selectedFanIndex)
+        public float? GetPressureDifferenceFromDevice(int selectedLineIndex, int deviceIndex)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> DisableLineFanAsync(int selectedLineIndex, int selectedFanIndex)
-        {
-            throw new NotImplementedException();
+            return _lines[selectedLineIndex].Devices[deviceIndex].Pressure;
         }
 
         public async Task<uint?> ReadFreeRunPulseCount(int pulseMeterAddress, int pulseMeterChannelNumber)
@@ -1381,6 +1449,16 @@ namespace SPU_7.Models.Stand
 
         public void AddTargetFlowValue(double? value)
             => TargetFlow += value;
+
+        public void SetLineTargetFlowValue(double? value, int lineIndex)
+        {
+            _lines[lineIndex].CurrentFlow = value;
+        }
+
+        public void AddLineTargetFlowValue(double? value, int lineIndex)
+        {
+            _lines[lineIndex].CurrentFlow += value ?? 0;
+        }
 
         public async Task SetFlowDirectionAsync(LineDirectionFlowState reverseDirection, int lineNumber)
         {
@@ -1652,7 +1730,7 @@ namespace SPU_7.Models.Stand
 
         public async Task<bool> EnableLineFanWorkAsync(int lineIndex, int fanIndex)
         {
-            return await _standDevices.FirstOrDefault(sd =>
+            return await _standDevicesForFan.FirstOrDefault(sd =>
                     sd.ModuleAddressInt == _settingsService.StandSettingsModel.LineViewModels[lineIndex]
                         .FanViewModels[fanIndex].Address)
                 .SetBitState(fanIndex, true);
@@ -1660,7 +1738,7 @@ namespace SPU_7.Models.Stand
 
         public async Task<bool> DisableLineFanWorkAsync(int lineIndex, int fanIndex)
         {
-            return await _standDevices.FirstOrDefault(sd =>
+            return await _standDevicesForFan.FirstOrDefault(sd =>
                     sd.ModuleAddressInt == _settingsService.StandSettingsModel.LineViewModels[lineIndex]
                         .FanViewModels[fanIndex].Address)
                 .SetBitState(fanIndex, false);
@@ -1931,7 +2009,8 @@ namespace SPU_7.Models.Stand
                                 return false;
                         }
 
-                        foreach (var nozzleViewModel in lineViewModel.NozzleViewModels)
+                        foreach (var nozzleViewModel in lineViewModel.NozzleViewModels.Where(
+                                     noz => !noz.IsReplaceNozzle))
                         {
                             if (!await CloseNozzleAsync(nozzleViewModel, true))
                                 return false;
@@ -1949,7 +2028,7 @@ namespace SPU_7.Models.Stand
                     return false;
             }
 
-            await Task.Delay(30000);
+            await Task.Delay(40000);
 
             return true;
         }

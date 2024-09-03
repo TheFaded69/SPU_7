@@ -390,6 +390,15 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                     case DeviceInfoParameterType.PressureDifference:
                         LineInformationItemViewModels[lineData.LineIndex].PressureDifference = (float?)lineData.Data;
                         break;
+                    case DeviceInfoParameterType.TargetFlow:
+                        LineInformationItemViewModels[lineData.LineIndex].CurrentFlow = (double?)lineData.Data;
+                        break;
+                    case DeviceInfoParameterType.CoefficientOfCriticalMode:
+                        LineInformationItemViewModels[lineData.LineIndex].CoefficientOfCriticalMode = (float?)lineData.Data;
+                        break;
+                    case DeviceInfoParameterType.IsCoefficientOfCriticalModeGood:
+                        LineInformationItemViewModels[lineData.LineIndex].IsCoefficientOfCriticalModeGood = (bool)lineData.Data;
+                        break;
                 }
 
                 LineInformationItemViewModels[lineData.LineIndex].LineVisible =
