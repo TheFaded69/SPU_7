@@ -84,6 +84,16 @@ namespace SPU_7.Models.Stand
         Task<bool> CloseValveAsync(StandSettingsValveModel standSettingsValveModel, bool withoutWrite = false);
 
         /// <summary>
+        /// Использовать клапан подключенный к ОВЕН 10ПРА
+        /// </summary>
+        /// <param name="standSettingsValveModel"></param>
+        /// <param name="lineIndex"></param>
+        /// <param name="owenValue"></param>
+        /// <returns></returns>
+        Task<bool> UseOwenValveAsync(StandSettingsOwenValveModel standSettingsValveModel, int lineIndex, int owenValue);
+
+        
+        /// <summary>
         /// Запустить открытие задвижки
         /// </summary>
         /// <param name="numberGate">номер задвижки (1 - 1-5 устройства, 2 - 6-10 устройства)</param>
@@ -238,6 +248,8 @@ namespace SPU_7.Models.Stand
         Task<bool> OpenSolenoidValveAsync(StandSettingsSolenoidValveModel solenoidValveModel);
         Task<bool> CloseSolenoidValveAsync(StandSettingsSolenoidValveModel solenoidValveModel);
         Task<bool> EnableFrequencyRegulatorAsync(int regulatorIndex);
+        Task<bool> EnableLineFanWorkAsync(int lineIndex, int fanIndex);
+        Task<bool> DisableLineFanWorkAsync(int lineIndex, int fanIndex);
         Task<bool> SetRegulatorFrequencyAsync(int regulatorIndex ,float frequency);
         Task<bool> DisableFrequencyRegulatorAsync(int regulatorIndex);
         Task<bool> EndWorkAsync();
@@ -392,5 +404,6 @@ namespace SPU_7.Models.Stand
         /// <param name="pulseMeterChannelNumber"></param>
         /// <returns></returns>
         Task<PulseMeter2ChannelState> GetPulseMeterStatusAsync(int pulseMeterAddress, int pulseMeterChannelNumber);
+
     }
 }

@@ -83,7 +83,7 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
+
                             <Rectangle Fill="#fefefe"
                                        IsVisible="{Binding !IsDeviceOnLine}"
                                        Height="20"
@@ -93,7 +93,7 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
+
                             <Button Width="70"
                                     Height="70"
                                     Content="КШ"
@@ -106,7 +106,7 @@
                                     Background="{Binding AfterDeviceValveViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                     Foreground="Black"
                                     Classes="flat" />
-                            
+
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="20"
@@ -116,7 +116,7 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
+
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="90"
@@ -126,7 +126,7 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
+
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="20"
@@ -136,7 +136,7 @@
                                        IsVisible="{Binding StartCommonValveViewModel, Converter={x:Static ObjectConverters.IsNull}}"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
+
                             <DockPanel DockPanel.Dock="Left"
                                        VerticalAlignment="Center"
                                        Margin="0,0,0,-360"
@@ -169,7 +169,7 @@
                                            VerticalAlignment="Center"
                                            DockPanel.Dock="Top" />
                             </DockPanel>
-                            
+
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="60"
@@ -178,7 +178,7 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
+
                             <DockPanel DockPanel.Dock="Left"
                                        VerticalAlignment="Center"
                                        Margin="0,0,0,-360"
@@ -230,7 +230,7 @@
                                            VerticalAlignment="Center"
                                            DockPanel.Dock="Top" />
                             </DockPanel>
-                            
+
                             <Button Width="70"
                                     Height="70"
                                     Content="КШ"
@@ -243,7 +243,7 @@
                                     Background="{Binding StartValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                     Foreground="Black"
                                     Classes="flat" />
-                            
+
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="40"
@@ -252,8 +252,8 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
-                            
+
+
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="120"
@@ -271,7 +271,7 @@
                                     IsVisible="{Binding NormalCloseSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
                                     Command="{Binding NormalCloseSolenoidValveItemViewModel.UseSolenoidCommand}"
                                     Background="{Binding  NormalCloseSolenoidValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
-                                    Margin="-120, 0,0,250"/>
+                                    Margin="-120, 0,0,250" />
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="120"
@@ -298,8 +298,8 @@
                                     IsVisible="{Binding NormalOpenSolenoidValveItemViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
                                     Command="{Binding NormalOpenSolenoidValveItemViewModel.UseSolenoidCommand}"
                                     Background="{Binding  NormalOpenSolenoidValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
-                                    Margin="-160, 0,0,0"/>
-                            
+                                    Margin="-160, 0,0,0" />
+
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="40"
@@ -308,7 +308,7 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
+
 
                             <!-- Мастер устройства -->
                             <Rectangle Fill="#00a2e8"
@@ -367,24 +367,24 @@
                                                     CornerRadius="5">
                                                 <Button.ContextMenu>
                                                     <ContextMenu>
-                                                        
-                                                            <DockPanel LastChildFill="True">
-                                                                <TextBox Text="м³/ч"
-                                                                         Margin="5"
-                                                                         HorizontalAlignment="Stretch"
-                                                                         DockPanel.Dock="Right"/>
-                                                                <TextBox Text="{Binding SelectedFlow}"
-                                                                         Margin="5"
-                                                                         HorizontalAlignment="Stretch"/>
-                                                            </DockPanel>
-                                                        
-                                                            <MenuItem Header="Включить"
-                                                                      Command="{Binding EnableFlowCommand}"
-                                                                      IsEnabled="{Binding !IsFlowWorking}" />
-                                                            <MenuItem Header="Выключить"
-                                                                      Command="{Binding DisableFlowCommand}"
-                                                                      IsEnabled="{Binding IsFlowWorking}" />
-                                                        
+
+                                                        <DockPanel LastChildFill="True">
+                                                            <TextBox Text="м³/ч"
+                                                                     Margin="5"
+                                                                     HorizontalAlignment="Stretch"
+                                                                     DockPanel.Dock="Right" />
+                                                            <TextBox Text="{Binding SelectedFlow}"
+                                                                     Margin="5"
+                                                                     HorizontalAlignment="Stretch" />
+                                                        </DockPanel>
+
+                                                        <MenuItem Header="Включить"
+                                                                  Command="{Binding EnableFlowCommand}"
+                                                                  IsEnabled="{Binding !IsFlowWorking}" />
+                                                        <MenuItem Header="Выключить"
+                                                                  Command="{Binding DisableFlowCommand}"
+                                                                  IsEnabled="{Binding IsFlowWorking}" />
+
                                                     </ContextMenu>
                                                 </Button.ContextMenu>
                                                 <DockPanel>
@@ -450,7 +450,7 @@
                                        ClipToBounds="True"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
+
                             <!-- Сопла вертикально расположенные -->
                             <!--ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsNozzleVisible}"
@@ -531,7 +531,7 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl-->
-                            
+
                             <!-- Сопла горизонтально расположенные -->
                             <Rectangle DockPanel.Dock="Left"
                                        IsVisible="{Binding IsNozzleVisible}"
@@ -541,7 +541,7 @@
                                        Margin="0, 0,0,125"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
                             <Rectangle DockPanel.Dock="Left"
                                        IsVisible="{Binding IsNozzleVisible}"
                                        Width="1010"
@@ -550,14 +550,14 @@
                                        Margin="0, 0,-1010,250"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
                             <ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsNozzleVisible}"
                                           ItemsSource="{Binding NozzleItemViewModels}"
                                           VerticalAlignment="Center">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"/>
+                                        <StackPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
@@ -647,7 +647,7 @@
                                        Margin="-1010, 250,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
-                                       VerticalAlignment="Center"/>
+                                       VerticalAlignment="Center" />
                             <Rectangle DockPanel.Dock="Left"
                                        IsVisible="{Binding IsNozzleVisible}"
                                        Width="20"
@@ -656,8 +656,8 @@
                                        Margin="0, 125,0,0"
                                        StrokeThickness="0"
                                        ClipToBounds="True"
-                                       VerticalAlignment="Center"/>
-                            
+                                       VerticalAlignment="Center" />
+
                             <!-- Ручное заменяемое сопло IsReplaceNozzleVisible todo -->
                             <ItemsControl DockPanel.Dock="Left"
                                           IsVisible="{Binding IsReplaceNozzleVisible}"
@@ -707,27 +707,27 @@
                                                                    Margin="5" />
                                                     </Grid>
                                                 </ToolTip.Tip>
-                                                
+
                                                 <Button.ContextMenu>
-                                                <ContextMenu>
-                                                        
-                                                    <DockPanel LastChildFill="True">
-                                                        <TextBox Text="м³/ч"
-                                                                 Margin="5"
-                                                                 HorizontalAlignment="Stretch"
-                                                                 DockPanel.Dock="Right"/>
-                                                        <TextBox Text="{Binding SelectedFlow}"
-                                                                 Margin="5"
-                                                                 HorizontalAlignment="Stretch"/>
-                                                    </DockPanel>
-                                                </ContextMenu>
+                                                    <ContextMenu>
+
+                                                        <DockPanel LastChildFill="True">
+                                                            <TextBox Text="м³/ч"
+                                                                     Margin="5"
+                                                                     HorizontalAlignment="Stretch"
+                                                                     DockPanel.Dock="Right" />
+                                                            <TextBox Text="{Binding SelectedFlow}"
+                                                                     Margin="5"
+                                                                     HorizontalAlignment="Stretch" />
+                                                        </DockPanel>
+                                                    </ContextMenu>
                                                 </Button.ContextMenu>
                                             </Button>
                                         </DockPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            
+
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
                                        Width="20"
@@ -765,8 +765,8 @@
                                        IsVisible="{Binding EndCommonValveItemViewModel, Converter={x:Static ObjectConverters.IsNull}}"
                                        VerticalAlignment="Center"
                                        DockPanel.Dock="Left" />
-                            
-                            
+
+
                             <DockPanel DockPanel.Dock="Left"
                                        VerticalAlignment="Center"
                                        Margin="0,0,0,-310"
@@ -837,16 +837,40 @@
                                            DockPanel.Dock="Left" />
                                 <Button Width="70"
                                         Height="70"
-                                        Content="КШ"
                                         Padding="-3"
                                         Margin="-55, 0,-35,-200"
                                         DockPanel.Dock="Left"
-                                        HorizontalAlignment="Center"
                                         Command="{Binding DropValveItemViewModel.UseValveCommand}"
-                                        Background="{Binding  DropValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
-
+                                        HorizontalAlignment="Center"
+                                        Background="{Binding DropValveItemViewModel.StateType, Converter={convertors:StateTypeToColorConverter}}"
                                         Foreground="Black"
-                                        Classes="flat" />
+                                        Classes="flat"
+                                        VerticalAlignment="Center">
+                                    <Button.ContextMenu>
+                                        <ContextMenu>
+                                            <DockPanel>
+                                                <Slider TickFrequency="1"
+                                                        IsSnapToTickEnabled="True"
+                                                        Width="200"
+                                                        DockPanel.Dock="Left"
+                                                        Value="{Binding DropValveItemViewModel.SelectedOwenValue}" />
+                                                <TextBlock Margin="5,5,0,5"
+                                                           Text="{Binding DropValveItemViewModel.SelectedOwenValue}" />
+                                                <TextBlock Margin="0,5,0,5"
+                                                           Text="%" />
+                                            </DockPanel>
+
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
+                                    <StackPanel Orientation="Horizontal"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
+                                        <TextBlock Margin="5,5,0,5"
+                                                   Text="{Binding DropValveItemViewModel.SelectedOwenValue}" />
+                                        <TextBlock Margin="0,5,5,5"
+                                                   Text="%" />
+                                    </StackPanel>
+                                </Button>
                             </DockPanel>
                             <Rectangle Fill="#00a2e8"
                                        Height="20"
@@ -937,9 +961,9 @@
                                                                     VerticalAlignment="Center"
                                                                     HorizontalAlignment="Center">
                                                             <TextBlock Margin="5,5,0,5"
-                                                                       Text="{Binding NeedleValveItemViewModel.SelectedNeedleValue}"/>
+                                                                       Text="{Binding NeedleValveItemViewModel.SelectedNeedleValue}" />
                                                             <TextBlock Margin="0,5,5,5"
-                                                                       Text="%"/>
+                                                                       Text="%" />
                                                         </StackPanel>
                                                     </Button>
                                                     <Rectangle Fill="#00a2e8"
@@ -1019,10 +1043,11 @@
                                                                        IterationCount="INFINITE"
                                                                        FillMode="None">
                                                                 <KeyFrame Cue="0%">
-                                                                    <Setter Property="RotateTransform.Angle" Value="0"/>
+                                                                    <Setter Property="RotateTransform.Angle" Value="0" />
                                                                 </KeyFrame>
                                                                 <KeyFrame Cue="100%">
-                                                                    <Setter Property="RotateTransform.Angle" Value="360"/>
+                                                                    <Setter Property="RotateTransform.Angle"
+                                                                            Value="360" />
                                                                 </KeyFrame>
                                                             </Animation>
                                                         </Style.Animations>
@@ -1037,9 +1062,8 @@
                                                     Margin="-6,-6,0,0" />
                                                 <Border.ContextMenu>
                                                     <ContextMenu>
-                                                        
-                                                        
-                                                        
+
+
                                                         <MenuItem IsVisible="{Binding IsFrequencyEnable}">
                                                             <MenuItem.Header>
                                                                 <DockPanel LastChildFill="True">
@@ -1047,15 +1071,15 @@
                                                                              Margin="5"
                                                                              IsVisible="{Binding IsFrequencyEnable}"
                                                                              HorizontalAlignment="Stretch"
-                                                                             DockPanel.Dock="Right"/>
+                                                                             DockPanel.Dock="Right" />
                                                                     <TextBox Text="{Binding FanFrequencyValue}"
                                                                              Margin="5"
                                                                              IsVisible="{Binding IsFrequencyEnable}"
-                                                                             HorizontalAlignment="Stretch"/>
+                                                                             HorizontalAlignment="Stretch" />
                                                                 </DockPanel>
                                                             </MenuItem.Header>
                                                         </MenuItem>
-                                                        
+
                                                         <MenuItem Header="Включить"
                                                                   Command="{Binding EnableFanCommand}"
                                                                   IsEnabled="{Binding !IsFanWorking}" />

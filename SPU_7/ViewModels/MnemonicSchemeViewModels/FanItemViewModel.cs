@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using System;
+using Prism.Commands;
 using SPU_7.Common.Line;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
@@ -9,6 +10,8 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 public class FanItemViewModel : ViewModelBase
 {
     private readonly IStandController _standController;
+    private readonly IStandSettingsService _settingsService;
+    private readonly int _lineIndex;
     private readonly int _fanIndex;
 
     public FanItemViewModel(IStandController standController,
@@ -19,6 +22,8 @@ public class FanItemViewModel : ViewModelBase
         int fanIndex)
     {
         _standController = standController;
+        _settingsService = settingsService;
+        _lineIndex = lineIndex;
         _fanIndex = fanIndex;
 
         if (lineIndex > 0)
@@ -98,9 +103,22 @@ public class FanItemViewModel : ViewModelBase
 
     private async void EnableFanCommandHandler()
     {
-        await _standController.SetRegulatorFrequencyAsync(_fanIndex, FanFrequencyValue);
-        await _standController.EnableFrequencyRegulatorAsync(_fanIndex);
-        IsFanWorking = true;
+        switch (_settingsService.StandSettingsModel.LineViewModels[_lineIndex].FanViewModels[_fanIndex].SelectedFanType)
+        {
+            case FanType.FrequencyControlFan:
+                await _standController.SetRegulatorFrequencyAsync(_fanIndex, FanFrequencyValue);
+                await _standController.EnableFrequencyRegulatorAsync(_fanIndex);
+                IsFanWorking = true;
+                break;
+            case FanType.ControlModuleControlFan:
+                await _standController.EnableLineFanWorkAsync(_lineIndex, _fanIndex);
+                IsFanWorking = true;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        
+
     }
     
     public DelegateCommand DisableFanCommand { get; set; }
@@ -113,8 +131,23 @@ public class FanItemViewModel : ViewModelBase
 
     private async void DisableFanCommandHandler()
     {
-        await _standController.DisableFrequencyRegulatorAsync(_fanIndex);
-        IsFanWorking = false;
+        switch (_settingsService.StandSettingsModel.LineViewModels[_lineIndex]
+                    .FanViewModels[_fanIndex]
+                    .SelectedFanType)
+        {
+            case FanType.FrequencyControlFan:
+                await _standController.DisableFrequencyRegulatorAsync(_fanIndex);
+                IsFanWorking = false;
+                break;
+            case FanType.ControlModuleControlFan:
+                await _standController.DisableLineFanAsync(_lineIndex, _fanIndex);
+                IsFanWorking = false;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+
     }
 
     public bool IsFrequencyEnable

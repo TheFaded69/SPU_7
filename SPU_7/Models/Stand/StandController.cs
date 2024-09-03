@@ -15,6 +15,8 @@ using SPU_7.DeviceCommunication.Communication;
 using SPU_7.Domain.Devices.Device.UniversalDevice;
 using SPU_7.Domain.Devices.StandDevices.FrequencyRegulator;
 using SPU_7.Domain.Devices.StandDevices.NeedleValveController;
+using SPU_7.Domain.Devices.StandDevices.Owen;
+using SPU_7.Domain.Devices.StandDevices.Owen.OwenPBR10A;
 using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
 using SPU_7.Domain.Devices.StandDevices.PulseMeter;
 using SPU_7.Domain.Devices.StandDevices.THMeter;
@@ -55,6 +57,7 @@ namespace SPU_7.Models.Stand
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
         private List<IPulseMeter2Channel> _pulseMeter2Channels = [];
         private List<INeedleValveController> _needleValveControllers = [];
+        private List<IOwen> _owens = [];
         private PulseCountMeterStarter _pulseCountMeterStarter;
 
         private ITemperatureHumiditySensor _temperatureHumiditySensor;
@@ -179,6 +182,17 @@ namespace SPU_7.Models.Stand
                                     fanViewModel.FrequencyRegulatorViewModel.ModuleAddress));
                                 break;
                             case FanType.ControlModuleControlFan:
+                                if (fanViewModel.FanValveViewModel.Address != null &&
+                                    !addressList.Contains((int)fanViewModel.FanValveViewModel.Address))
+                                    addressList.Add((int)fanViewModel.FanValveViewModel.Address);
+                                if (fanViewModel.FanValveViewModel.StateOnAddress != null &&
+                                    !addressList.Contains((int)fanViewModel.FanValveViewModel.StateOnAddress))
+                                    addressList.Add((int)fanViewModel.FanValveViewModel.StateOnAddress);
+                                if (fanViewModel.FanValveViewModel.StateOffAddress != null &&
+                                    !addressList.Contains((int)fanViewModel.FanValveViewModel.StateOffAddress))
+                                    addressList.Add((int)fanViewModel.FanValveViewModel.StateOffAddress);
+                                if (fanViewModel.Address != null && !addressList.Contains((int)fanViewModel.Address))
+                                    addressList.Add((int)fanViewModel.Address);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -237,6 +251,16 @@ namespace SPU_7.Models.Stand
                                 throw new ArgumentOutOfRangeException();
                         }
                     }
+
+                if (lineViewModel.IsDropValveEnable)
+                {
+                    _owens.Add(new OwenPBR10ADevice(
+                        _modbusProcessors.FirstOrDefault(mp =>
+                            mp.PortName == lineViewModel.DropValveViewModel.SelectedPort),
+                        new RegisterMapEnum<OwenPBR10ARegisterMap>(),
+                        (int)lineViewModel.DropValveViewModel.Address,
+                        _owens.Count + 1));
+                }
             }
 
             foreach (var pulseCountMeterModuleViewModel in _settingsService.StandSettingsModel
@@ -886,6 +910,14 @@ namespace SPU_7.Models.Stand
             return !isWork;
         }
 
+        public async Task<bool> UseOwenValveAsync(StandSettingsOwenValveModel standSettingsValveModel, int lineIndex,
+            int owenValue)
+        {
+            return await ((IOwenPBR10ADevice)_owens.FirstOrDefault(owen =>
+                    ((owen is IOwenPBR10ADevice) && owen.ModuleAddressInt == standSettingsValveModel.Address)))
+                .SetPosition(owenValue);
+        }
+
         public async Task<bool> CloseDeviceValveAsync(StandSettingsValveModel standSettingsValveModel,
             bool withoutWrite = false)
         {
@@ -1077,9 +1109,11 @@ namespace SPU_7.Models.Stand
             return await _line.Devices[deviceIndex].SetPulseCountAsync(pulseCount);
         }
 
-        public async Task<bool> SetPulseCountForPulseMeterAsync(int pulseCount, int pulseMeterAddress, int pulseMeterChannelNumber)
+        public async Task<bool> SetPulseCountForPulseMeterAsync(int pulseCount, int pulseMeterAddress,
+            int pulseMeterChannelNumber)
         {
-            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+            return await _lines
+                .FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
                 .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
                 .SetPulseCountAsync(pulseCount);
         }
@@ -1290,29 +1324,34 @@ namespace SPU_7.Models.Stand
 
         public async Task<uint?> ReadFreeRunPulseCount(int pulseMeterAddress, int pulseMeterChannelNumber)
         {
-            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
-                            .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
-                                .ReadFreeRunningCounterAsync(pulseMeterChannelNumber);
+            return await _lines
+                .FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+                .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
+                .ReadFreeRunningCounterAsync(pulseMeterChannelNumber);
         }
 
-        public async Task<bool> StartPulseMeterPeriodMeasureAsync(int pulseCount, int pulseMeterAddress, int pulseMeterChannelNumber)
+        public async Task<bool> StartPulseMeterPeriodMeasureAsync(int pulseCount, int pulseMeterAddress,
+            int pulseMeterChannelNumber)
         {
-            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+            return await _lines
+                .FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
                 .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
                 .StartPeriodMeasureAsync(pulseCount);
         }
 
         public async Task<float?> ReadPeriodFromPulseMeterAsync(int pulseMeterAddress, int pulseMeterChannelNumber)
         {
-            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+            return await _lines
+                .FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
                 .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
                 .ReadPulseMeterPeriodAsync(pulseMeterChannelNumber);
-
         }
 
-        public async Task<PulseMeter2ChannelState> GetPulseMeterStatusAsync(int pulseMeterAddress, int pulseMeterChannelNumber)
+        public async Task<PulseMeter2ChannelState> GetPulseMeterStatusAsync(int pulseMeterAddress,
+            int pulseMeterChannelNumber)
         {
-            return await _lines.FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
+            return await _lines
+                .FirstOrDefault(line => line.Devices.Any(dev => dev.PulseMeterAddress == pulseMeterAddress))
                 .Devices.FirstOrDefault(dev => dev.PulseMeterAddress == pulseMeterAddress)
                 .ReadChannelStatusAsync();
         }
@@ -1609,6 +1648,22 @@ namespace SPU_7.Models.Stand
         public async Task<bool> EnableFrequencyRegulatorAsync(int regulatorIndex)
         {
             return await _frequencyRegulatorDevices[regulatorIndex].StartFrequencyWorkAsync();
+        }
+
+        public async Task<bool> EnableLineFanWorkAsync(int lineIndex, int fanIndex)
+        {
+            return await _standDevices.FirstOrDefault(sd =>
+                    sd.ModuleAddressInt == _settingsService.StandSettingsModel.LineViewModels[lineIndex]
+                        .FanViewModels[fanIndex].Address)
+                .SetBitState(fanIndex, true);
+        }
+
+        public async Task<bool> DisableLineFanWorkAsync(int lineIndex, int fanIndex)
+        {
+            return await _standDevices.FirstOrDefault(sd =>
+                    sd.ModuleAddressInt == _settingsService.StandSettingsModel.LineViewModels[lineIndex]
+                        .FanViewModels[fanIndex].Address)
+                .SetBitState(fanIndex, false);
         }
 
         public async Task<bool> SetRegulatorFrequencyAsync(int regulatorIndex, float frequency)

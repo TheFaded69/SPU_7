@@ -1864,74 +1864,12 @@
                                                                          Watermark="Введите адрес"
                                                                          Text="{Binding  DropValveViewModel.Address}" />
 
-                                                                <TextBox Margin="5"
-                                                                         IsVisible="{Binding IsDropValveEnable}"
-                                                                         assists:TextFieldAssist.Label="Регистр в модуле"
-                                                                         UseFloatingWatermark="True"
-                                                                         Watermark="Введите hex"
-                                                                         Text="{Binding DropValveViewModel.RegisterAddress}" />
-
-                                                                <TextBox Margin="5"
-                                                                         IsVisible="{Binding IsDropValveEnable}"
-                                                                         assists:TextFieldAssist.Label="Номер бита"
-                                                                         UseFloatingWatermark="True"
-                                                                         Watermark=""
-                                                                         Text="{Binding DropValveViewModel.BitNumber}" />
-
-
-                                                                <TextBox Margin="5"
-                                                                         IsVisible="{Binding IsDropValveEnable}"
-                                                                         assists:TextFieldAssist.Label="Адрес ON"
-                                                                         UseFloatingWatermark="True"
-                                                                         Watermark="Введите адрес"
-                                                                         Text="{Binding DropValveViewModel.StateOnAddress}" />
-
-                                                                <TextBox Margin="5"
-                                                                         IsVisible="{Binding IsDropValveEnable}"
-                                                                         assists:TextFieldAssist.Label="Регистр ON"
-                                                                         UseFloatingWatermark="True"
-                                                                         Watermark="Введите hex"
-                                                                         Text="{Binding DropValveViewModel.StateOnRegisterAddress}" />
-
-                                                                <TextBox Margin="5"
-                                                                         IsVisible="{Binding IsDropValveEnable}"
-                                                                         assists:TextFieldAssist.Label="Бит ON"
-                                                                         UseFloatingWatermark="True"
-                                                                         Watermark=""
-                                                                         Text="{Binding DropValveViewModel.StateOnBitNumber}" />
-
-                                                                <TextBox Margin="5"
-                                                                         IsVisible="{Binding IsDropValveEnable}"
-                                                                         assists:TextFieldAssist.Label="Адрес OFF"
-                                                                         UseFloatingWatermark="True"
-                                                                         Watermark="Введите адрес"
-                                                                         Text="{Binding DropValveViewModel.StateOffAddress}" />
-
-                                                                <TextBox Margin="5"
-                                                                         IsVisible="{Binding IsDropValveEnable}"
-                                                                         assists:TextFieldAssist.Label="Регистр OFF"
-                                                                         UseFloatingWatermark="True"
-                                                                         Watermark="Введите hex"
-                                                                         Text="{Binding DropValveViewModel.StateOffRegisterAddress}" />
-
-                                                                <TextBox Margin="5"
-                                                                         IsVisible="{Binding IsDropValveEnable}"
-                                                                         assists:TextFieldAssist.Label="Бит OFF"
-                                                                         UseFloatingWatermark="True"
-                                                                         Watermark=""
-                                                                         Text="{Binding DropValveViewModel.StateOffBitNumber}" />
-
-                                                                <CheckBox Margin="5"
-                                                                          IsVisible="{Binding IsDropValveEnable}"
-                                                                          IsChecked="{Binding DropValveViewModel.IsControlState}"
-                                                                          Content="Контроль состояния"
-                                                                          VerticalAlignment="Center" />
-
-                                                                <CheckBox Margin="5"
-                                                                          IsVisible="{Binding IsDropValveEnable}"
-                                                                          IsChecked="{Binding DropValveViewModel.IsReverseValve}"
-                                                                          Content="Обратное управление"
-                                                                          VerticalAlignment="Center" />
+                                                                <ComboBox Margin="5"
+                                                                          assists:ComboBoxAssist.Label="Порт подключения ОВЕН"
+                                                                          Width="300"
+                                                                          Theme="{StaticResource MaterialOutlineComboBox}"
+                                                                          ItemsSource="{Binding DropValveViewModel.ComPorts}"
+                                                                          SelectedItem="{Binding DropValveViewModel.SelectedPort}"/>
                                                             </StackPanel>
                                                         </DockPanel>
                                                     </Expander>

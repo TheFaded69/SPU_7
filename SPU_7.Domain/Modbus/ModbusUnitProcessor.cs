@@ -119,6 +119,9 @@ public abstract class ModbusUnitProcessor<TRegisterMapEnum> where TRegisterMapEn
             case RegisterDataType.UInt64:
                 response = BitConverter.ToUInt64(data);
                 break;
+            case RegisterDataType.Int32:
+                response = BitConverter.ToInt32(data);
+                break;
             case RegisterDataType.Float:
                 response = BitConverter.ToSingle(data);
                 break;

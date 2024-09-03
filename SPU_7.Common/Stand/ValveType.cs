@@ -9,5 +9,7 @@
         LineValve = 2,
         
         ReverseValve = 3,
+        
+        ValveControlByOwen = 4,
     }
 }

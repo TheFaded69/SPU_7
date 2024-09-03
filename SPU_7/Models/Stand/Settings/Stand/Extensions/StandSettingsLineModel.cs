@@ -70,7 +70,7 @@ public class StandSettingsLineModel
     /// <summary>
     /// Настройки клапана для проверки герметичности
     /// </summary>
-    public StandSettingsValveModel DropValveViewModel { get; set; }
+    public StandSettingsOwenValveModel DropValveViewModel { get; set; }
     
     /// <summary>
     /// Есть ли общий клапан после поверочного блока со следующей линией

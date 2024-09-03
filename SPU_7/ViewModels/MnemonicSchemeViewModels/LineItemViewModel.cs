@@ -229,10 +229,11 @@ public class LineItemViewModel : ViewModelBase
 
         if (settingsService.StandSettingsModel.LineViewModels[lineIndex].IsDropValveEnable)
         {
-            DropValveItemViewModel = new ValveItemViewModel(
+            DropValveItemViewModel = new OwenValveItemViewModel(
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].DropValveViewModel,
                 _standController,
-                StateType.Open);
+                StateType.Open,
+                lineIndex);
             TightnessValveItemViewModel = new ValveItemViewModel(
                 settingsService.StandSettingsModel.LineViewModels[lineIndex - 1].TightnessValveViewModel,
                 _standController,
@@ -382,7 +383,7 @@ public class LineItemViewModel : ViewModelBase
     public ValveItemViewModel SecondTightnessValveItemViewModel { get; set; }
     public ValveItemViewModel TightnessValveItemViewModel { get; set; }
     public bool IsDropValveEnable { get; set; }
-    public ValveItemViewModel DropValveItemViewModel { get; set; }
+    public OwenValveItemViewModel DropValveItemViewModel { get; set; }
     public ValveItemViewModel StartValveItemViewModel { get; set; }
     public ObservableCollection<MasterDeviceItemViewModel> MasterDeviceItemViewModels { get; set; } = [];
     public SolenoidValveItemViewModel NormalOpenSolenoidValveItemViewModel { get; set; }

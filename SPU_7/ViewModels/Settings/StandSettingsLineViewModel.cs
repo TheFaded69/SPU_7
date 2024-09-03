@@ -77,7 +77,7 @@ public class StandSettingsLineViewModel : ViewModelBase
     private StandSettingsValveViewModel _secondTightnessValveViewModel;
     private StandSettingsValveViewModel _tightnessValveViewModel;
     private bool _isDropValveEnable;
-    private StandSettingsValveViewModel _dropValveViewModel;
+    private StandSettingsOwenValveViewModel _dropValveViewModel;
     private string _lineName;
 
     public string LineName
@@ -371,14 +371,14 @@ public class StandSettingsLineViewModel : ViewModelBase
         set
         {
             SetProperty(ref _isDropValveEnable, value);
-            DropValveViewModel = new StandSettingsValveViewModel();
+            DropValveViewModel = new StandSettingsOwenValveViewModel();
         }
     }
 
     /// <summary>
     /// Настройки клапана для проверки герметичности
     /// </summary>
-    public StandSettingsValveViewModel DropValveViewModel
+    public StandSettingsOwenValveViewModel DropValveViewModel
     {
         get => _dropValveViewModel;
         set => SetProperty(ref _dropValveViewModel, value);

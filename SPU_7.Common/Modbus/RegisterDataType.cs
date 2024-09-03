@@ -102,4 +102,11 @@ public enum RegisterDataType
     /// 16 битное знаковое целое
     /// </summary>
     Int16 = 18,
+    
+    /// <summary>
+    /// 32 битное знаковое целое
+    /// </summary>
+    Int32 = 19,
+    
+    
 }
