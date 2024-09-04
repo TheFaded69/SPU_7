@@ -180,4 +180,10 @@ public interface IPulseMeter2Channel
     int PulseMeterModuleNumber { get; set; }
     Task<bool> SetTimeOutValueAsync(int i);
     Task<uint?> ReadFreeRunningCounterAsync(int pulseMeterChannelNumber);
+    Task<float?> ReadCoefficientPeriodCorrectionAsync();
+    Task<float?> ReadCoefficientTimeIntervalCorrectionAsync();
+    Task<float?> ReadCoefficientFrequencyCorrectionAsync();
+    Task<bool> WriteCoefficientPeriodCorrectionAsync(float firstCoefficient);
+    Task<bool> WriteCoefficientTimeIntervalCorrectionAsync(float secondCoefficient);
+    Task<bool> WriteCoefficientFrequencyCorrectionAsync(float thirdCoefficient);
 }

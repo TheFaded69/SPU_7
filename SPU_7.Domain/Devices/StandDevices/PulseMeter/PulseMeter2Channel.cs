@@ -407,4 +407,37 @@ public class PulseMeter2Channel : ModbusUnitProcessor<PulseMeter2ChannelRegister
                 .FreeRunningCounterChannel2),
             _ => throw new ArgumentOutOfRangeException(nameof(pulseMeterChannelNumber), pulseMeterChannelNumber, null)
         };
+
+    public async Task<float?> ReadCoefficientPeriodCorrectionAsync()
+    {
+        return (float?)await ReadRegisterAsync(PulseMeter2ChannelRegisterMap.PulseDurationCorrectionMultiplier);
+    }
+
+    public async Task<float?> ReadCoefficientTimeIntervalCorrectionAsync()
+    {
+        return (float?)await ReadRegisterAsync(PulseMeter2ChannelRegisterMap.PulseCountingIntervalCorrectionMultiplier);
+    }
+
+    public async Task<float?> ReadCoefficientFrequencyCorrectionAsync()
+    {
+        return (float?)await ReadRegisterAsync(PulseMeter2ChannelRegisterMap.PulseFrequencyCorrectionMultiplier);
+    }
+
+    public  async Task<bool> WriteCoefficientPeriodCorrectionAsync(float firstCoefficient)
+    {
+        return await WriteRegisterAsync(PulseMeter2ChannelRegisterMap.PulseDurationCorrectionMultiplier,
+            BitConverter.GetBytes(firstCoefficient).SwapBytes());
+    }
+
+    public async Task<bool> WriteCoefficientTimeIntervalCorrectionAsync(float secondCoefficient)
+    {
+        return await WriteRegisterAsync(PulseMeter2ChannelRegisterMap.PulseCountingIntervalCorrectionMultiplier,
+            BitConverter.GetBytes(secondCoefficient).SwapBytes());
+    }
+
+    public async Task<bool> WriteCoefficientFrequencyCorrectionAsync(float thirdCoefficient)
+    {
+        return await WriteRegisterAsync(PulseMeter2ChannelRegisterMap.PulseFrequencyCorrectionMultiplier,
+            BitConverter.GetBytes(thirdCoefficient).SwapBytes());
+    }
 }

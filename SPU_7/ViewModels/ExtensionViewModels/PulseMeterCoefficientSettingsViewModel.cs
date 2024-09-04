@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Prism.Commands;
 using Prism.Services.Dialogs;
+using SPU_7.Common.Stand;
+using SPU_7.Models.Services.Logger;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
 using SPU_7.Views.ExtensionViews;
@@ -10,10 +14,13 @@ namespace SPU_7.ViewModels.ExtensionViewModels;
 
 public class PulseMeterCoefficientSettingsViewModel : ViewModelBase, IDialogAware
 {
-    public PulseMeterCoefficientSettingsViewModel(IStandController standController, IStandSettingsService standSettingsService)
+    public PulseMeterCoefficientSettingsViewModel(IStandController standController,
+        IStandSettingsService standSettingsService,
+        ILogger logger)
     {
         _standController = standController;
         _standSettingsService = standSettingsService;
+        _logger = logger;
 
         CloseWindowCommand = new DelegateCommand(CloseWindowCommandHandler);
         ReadCoefficientCommand = new DelegateCommand(ReadCoefficientCommandHandler);
@@ -21,57 +28,88 @@ public class PulseMeterCoefficientSettingsViewModel : ViewModelBase, IDialogAwar
 
         Title = "Коэффициенты БИПЧей";
     }
+
     private readonly IStandController _standController;
     private readonly IStandSettingsService _standSettingsService;
+    private readonly ILogger _logger;
 
     public ObservableCollection<PulseMeterCoefficientViewModel> PulseMeterCoefficientViewModels { get; set; } = [];
-    
-    
+
+
     public DelegateCommand CloseWindowCommand { get; }
 
     private void CloseWindowCommandHandler()
     {
         RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
     }
-    
+
     public DelegateCommand ReadCoefficientCommand { get; }
 
-    public async void ReadCoefficientCommandHandler()
+    private async void ReadCoefficientCommandHandler()
     {
-        var coefficientList = await _standController.ReadPulseCoefficientsAsync();
-
-        for (var i = 0; i < coefficientList.Count; i++)
+        try
         {
-            var coefficientTuple = coefficientList[i];
+            var coefficientList = await _standController.ReadPulseCoefficientsAsync();
 
-            PulseMeterCoefficientViewModels[i].FirstCoefficientRead = coefficientTuple.Item1;
-            PulseMeterCoefficientViewModels[i].SecondCoefficientRead = coefficientTuple.Item2;
+            for (var i = 0; i < coefficientList.Count; i++)
+            {
+                var coefficientTuple = coefficientList[i];
+
+                PulseMeterCoefficientViewModels[i].FirstCoefficientRead = coefficientTuple.Item1;
+                PulseMeterCoefficientViewModels[i].SecondCoefficientRead = coefficientTuple.Item2;
+                PulseMeterCoefficientViewModels[i].ThirdCoefficientRead = coefficientTuple.Item3;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.Logging(new LogMessage(e.Message, LogLevel.Error));
         }
     }
-    
+
     public DelegateCommand WriteCoefficientCommand { get; }
-    
-    public async void WriteCoefficientCommandHandler()
+
+    private async void WriteCoefficientCommandHandler()
     {
-        
+        try
+        {
+            var coefficientList = PulseMeterCoefficientViewModels
+                .Select(pulseMeterCoefficientViewModel => new ValueTuple<float, float, float>(
+                    (float)pulseMeterCoefficientViewModel.FirstCoefficientWrite,
+                    (float)pulseMeterCoefficientViewModel.SecondCoefficientWrite,
+                    (float)pulseMeterCoefficientViewModel.ThirdCoefficientWrite))
+                .ToList();
+
+            await _standController.WritePulseCoefficientsAsync(coefficientList);
+        }
+        catch (Exception e)
+        {
+            _logger.Logging(new LogMessage(e.Message, LogLevel.Error));
+        }
     }
-    
+
     public bool CanCloseDialog() => true;
 
     public void OnDialogClosed()
     {
-        
     }
 
     public void OnDialogOpened(IDialogParameters parameters)
     {
         foreach (var pulseMeterViewModel in _standSettingsService.StandSettingsModel.PulseMeterViewModels)
         {
-            PulseMeterCoefficientViewModels.Add(new PulseMeterCoefficientViewModel()
+            /*PulseMeterCoefficientViewModels.Add(new PulseMeterCoefficientViewModel()
             {
                 Number = PulseMeterCoefficientViewModels.Count + 1,
                 FirstCoefficientWrite = (float?)pulseMeterViewModel.FirstCalibrateCoefficient,
                 SecondCoefficientWrite = (float?)pulseMeterViewModel.SecondCalibrateCoefficient,
+            });*/
+
+            PulseMeterCoefficientViewModels.Add(new PulseMeterCoefficientViewModel()
+            {
+                Number = PulseMeterCoefficientViewModels.Count + 1,
+                FirstCoefficientWrite = 1,
+                SecondCoefficientWrite = 1,
+                ThirdCoefficientWrite = 1,
             });
         }
     }

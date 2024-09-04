@@ -89,13 +89,13 @@ namespace SPU_7.Domain.Devices
         /// Считать коэффициенты калибровки БИПЧ
         /// </summary>
         /// <returns>1 и 2 коэффициенты</returns>
-        Task<(float?, float?)> ReadPulseCoefficientsAsync();
+        Task<(float?, float?, float?)> ReadPulseCoefficientsAsync();
         
         /// <summary>
         /// Записать 1 и 2 коэффициенты
         /// </summary>
         /// <returns>Получилось ли отправить запросы</returns>
-        Task<bool> WritePulseCoefficientsAsync(float firstCoefficient, float secondCoefficient);
+        Task<bool> WritePulseCoefficientsAsync(float firstCoefficient, float secondCoefficient, float thirdCoefficient);
         
         /// <summary>
         /// Считать давление с ДД привязанного к позиции СГ

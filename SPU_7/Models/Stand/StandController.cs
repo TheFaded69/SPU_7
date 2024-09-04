@@ -1144,9 +1144,9 @@ namespace SPU_7.Models.Stand
                 { DeviceTypeInfo = _lines[activeLine].Devices[deviceIndex].DeviceTypeInfo };
         }
 
-        public async Task<List<(float?, float?)>> ReadPulseCoefficientsAsync()
+        public async Task<List<(float?, float?, float?)>> ReadPulseCoefficientsAsync()
         {
-            var coefficientList = new List<(float?, float?)>();
+            var coefficientList = new List<(float?, float?, float?)>();
 
             foreach (var pulseMeterViewModel in _settingsService.StandSettingsModel.PulseMeterViewModels)
             {
@@ -1155,6 +1155,25 @@ namespace SPU_7.Models.Stand
 
             return coefficientList;
         }
+
+        public async Task<bool> WritePulseCoefficientsAsync(List<(float, float, float)> coefficientTuples)
+        {
+            var result = true;
+
+            for (var i = 0; i < _settingsService.StandSettingsModel.PulseMeterViewModels.Count; i++)
+            {
+                var pulseMeterViewModel = _settingsService.StandSettingsModel.PulseMeterViewModels[i];
+                var coefficientTuple = coefficientTuples[i];
+
+                if (!result) return result;
+
+                result = await WritePulseCoefficientAsync(coefficientTuple, pulseMeterViewModel);
+            }
+
+            return result;
+        }
+
+        
 
         public async Task<CommonCommandStatus?> ReadCommonCommandStatusPulseCountMeterAsync(
             int? pulseCountMeterModuleIndex)
@@ -1356,13 +1375,21 @@ namespace SPU_7.Models.Stand
                 .ReadChannelStatusAsync();
         }
 
-        private async Task<(float?, float?)> ReadPulseCoefficientAsync(
+        private async Task<(float?, float?, float?)> ReadPulseCoefficientAsync(
             StandSettingsPulseMeterModel settingsPulseMeterModel)
         {
             return await _lines.First(l =>
                     l.Devices.Any(device => device.PulseMeterAddress == settingsPulseMeterModel.Number))
                 .Devices.First(device => device.PulseMeterAddress == settingsPulseMeterModel.Number)
                 .ReadPulseCoefficientsAsync();
+        }
+        
+        private async Task<bool> WritePulseCoefficientAsync((float, float, float) coefficientTuple, StandSettingsPulseMeterModel pulseMeterViewModel)
+        {
+            return await _lines.First(l =>
+                    l.Devices.Any(device => device.PulseMeterAddress == pulseMeterViewModel.Number))
+                .Devices.First(device => device.PulseMeterAddress == pulseMeterViewModel.Number)
+                .WritePulseCoefficientsAsync(coefficientTuple.Item1, coefficientTuple.Item2, coefficientTuple.Item3);
         }
 
         public async Task<bool> SetConsumptionWithoutSelectionAsync(

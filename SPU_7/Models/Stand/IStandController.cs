@@ -356,8 +356,15 @@ namespace SPU_7.Models.Stand
         /// Считать коэффициенты калибровки БИПЧ
         /// </summary>
         /// <returns></returns>
-        Task<List<(float?, float?)>> ReadPulseCoefficientsAsync();
+        Task<List<(float?, float?, float?)>> ReadPulseCoefficientsAsync();
 
+        /// <summary>
+        /// Записать коэффициенты калибровка в БИПЧи
+        /// </summary>
+        /// <param name="coefficientTuples">Кортеж из 3х коэффициентов</param>
+        /// <returns></returns>
+        Task<bool> WritePulseCoefficientsAsync(List<(float, float, float)> coefficientTuples);
+        
         Task<CommonCommandStatus?> ReadCommonCommandStatusPulseCountMeterAsync(int? pulseCountMeterModuleIndex);
         Task<bool> StartPulseCountMeterModuleMeasureAsync(int? pulseCountMeterModuleIndex);
         Task<bool> StopPulseCountModuleMeasureAsync(int? pulseCountMeterModuleIndex);

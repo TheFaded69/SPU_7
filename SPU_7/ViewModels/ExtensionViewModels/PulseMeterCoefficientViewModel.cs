@@ -7,6 +7,8 @@ public class PulseMeterCoefficientViewModel : ViewModelBase
     private float? _secondCoefficientRead;
     private float? _firstCoefficientWrite;
     private float? _secondCoefficientWrite;
+    private float? _thirdCoefficientRead;
+    private float? _thirdCoefficientWrite;
 
     public int Number
     {
@@ -25,6 +27,19 @@ public class PulseMeterCoefficientViewModel : ViewModelBase
         get => _secondCoefficientRead;
         set => SetProperty(ref _secondCoefficientRead, value);
     }
+
+    public float? ThirdCoefficientRead
+    {
+        get => _thirdCoefficientRead;
+        set => SetProperty(ref _thirdCoefficientRead, value);
+    }
+
+    public float? ThirdCoefficientWrite
+    {
+        get => _thirdCoefficientWrite;
+        set => SetProperty(ref _thirdCoefficientWrite, value);
+    }
+
 
     public float? FirstCoefficientWrite
     {

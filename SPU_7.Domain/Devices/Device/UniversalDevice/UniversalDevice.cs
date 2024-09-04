@@ -137,17 +137,20 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     public async Task<uint?> GetEndMeasureTimeAsync()
         => await _pulseMeter2Channel.GetEndMeasureTimeAsync(_pulseMeterChannelType);
 
-    public async Task<(float?, float?)> ReadPulseCoefficientsAsync()
+    public async Task<(float?, float?, float?)> ReadPulseCoefficientsAsync()
     {
-        var firstCoefficient = await _pulseMeter2Channel.GetCorrectedAveargePeriodAsync(PulseMeterChannel.Channel1);
-        var secondCoefficient = await _pulseMeter2Channel.GetCorrectedAveargePeriodAsync(PulseMeterChannel.Channel2);
+        var firstCoefficient = await _pulseMeter2Channel.ReadCoefficientPeriodCorrectionAsync();
+        var secondCoefficient = await _pulseMeter2Channel.ReadCoefficientTimeIntervalCorrectionAsync();
+        var thirdCoefficient = await _pulseMeter2Channel.ReadCoefficientFrequencyCorrectionAsync();
 
-        return (firstCoefficient, secondCoefficient);
+        return (firstCoefficient, secondCoefficient, thirdCoefficient);
     }
 
-    public Task<bool> WritePulseCoefficientsAsync(float firstCoefficient, float secondCoefficient)
+    public async Task<bool> WritePulseCoefficientsAsync(float firstCoefficient, float secondCoefficient, float thirdCoefficient)
     {
-        throw new NotImplementedException();
+        return await _pulseMeter2Channel.WriteCoefficientPeriodCorrectionAsync(firstCoefficient)
+               && await _pulseMeter2Channel.WriteCoefficientTimeIntervalCorrectionAsync(secondCoefficient)
+               && await _pulseMeter2Channel.WriteCoefficientFrequencyCorrectionAsync(thirdCoefficient);
     }
 
     public async Task<bool> SetPulseTimeOutAsync(int i)

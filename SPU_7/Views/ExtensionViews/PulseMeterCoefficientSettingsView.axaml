@@ -41,7 +41,8 @@
                         Margin="5"
                         Command="{Binding ReadCoefficientCommand}"/>
                 <Button Content="Записать"
-                        Margin="5"/>
+                        Margin="5"
+                        Command="{Binding WriteCoefficientCommand}"/>
             </StackPanel>
             
             <DataGrid ItemsSource="{Binding PulseMeterCoefficientViewModels}"
@@ -49,14 +50,18 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№"
                                         Binding="{Binding Number}"/>
-                    <DataGridTextColumn Header="K1 считанный"
+                    <DataGridTextColumn Header="К1 поправка по периоду"
                                         Binding="{Binding FirstCoefficientRead}"/>
-                    <DataGridTextColumn Header="K2 считанный"
+                    <DataGridTextColumn Header="К2 поправка по интервалу"
                                         Binding="{Binding SecondCoefficientRead}"/>
+                    <DataGridTextColumn Header="К3 поправка по частоте"
+                                        Binding="{Binding ThirdCoefficientRead}"/>
                     <DataGridTextColumn Header="K1 запись"
                                         Binding="{Binding FirstCoefficientWrite}"/>
                     <DataGridTextColumn Header="K2 запись"
                                         Binding="{Binding SecondCoefficientWrite}"/>
+                    <DataGridTextColumn Header="K2 запись"
+                                        Binding="{Binding ThirdCoefficientWrite}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
