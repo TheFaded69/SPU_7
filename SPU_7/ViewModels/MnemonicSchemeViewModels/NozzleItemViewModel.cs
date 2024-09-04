@@ -9,10 +9,11 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
     public class NozzleItemViewModel : ViewModelBase
     {
         public NozzleItemViewModel(StandSettingsNozzleModel standSettingsNozzleModel,
-            IStandController standController)
+            IStandController standController, int lineIndex)
         {
             _standSettingsNozzleModel = standSettingsNozzleModel;
             _standController = standController;
+            _lineIndex = lineIndex;
 
             _nozzleValue = standSettingsNozzleModel.NozzleValue;
             _nozzleFactValue = standSettingsNozzleModel.NozzleFactValue;
@@ -24,6 +25,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
 
         private readonly StandSettingsNozzleModel _standSettingsNozzleModel;
         private readonly IStandController _standController;
+        private readonly int _lineIndex;
 
         private int _nozzleNumber;
         private double? _nozzleValue;
@@ -65,7 +67,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
 
         private void SetNozzleValueCommandHandler()
         {
-            
+            _standController.SetLineTargetFlowValue(NozzleValue, _lineIndex);
         }
 
         private void SetNozzleValue(double? value)
@@ -87,6 +89,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                     await Task.Delay(5000);
 #else
                     await _standController.CloseNozzleAsync(_standSettingsNozzleModel);
+                    _standController.AddLineTargetFlowValue(-_standSettingsNozzleModel.NozzleFactValue, _lineIndex);
 #endif
                     StateType = StateType.Close;
                     break;
@@ -96,6 +99,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                     await Task.Delay(5000);
 #else
                     await _standController.OpenNozzleAsync(_standSettingsNozzleModel);
+                    _standController.AddLineTargetFlowValue(_standSettingsNozzleModel.NozzleFactValue, _lineIndex);
 #endif
                     StateType = StateType.Open;
                     break;

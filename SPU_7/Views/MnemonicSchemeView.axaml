@@ -710,16 +710,21 @@
 
                                                 <Button.ContextMenu>
                                                     <ContextMenu>
-
-                                                        <DockPanel LastChildFill="True">
-                                                            <TextBox Text="м³/ч"
-                                                                     Margin="5"
-                                                                     HorizontalAlignment="Stretch"
-                                                                     DockPanel.Dock="Right" />
-                                                            <TextBox Text="{Binding SelectedFlow}"
-                                                                     Margin="5"
-                                                                     HorizontalAlignment="Stretch" />
-                                                        </DockPanel>
+                                                        <MenuItem StaysOpenOnClick="True">
+                                                            <MenuItem.Header>
+                                                                <DockPanel LastChildFill="True">
+                                                                    <TextBox Text="м³/ч"
+                                                                             Margin="5"
+                                                                             HorizontalAlignment="Stretch"
+                                                                             DockPanel.Dock="Right" />
+                                                                    <TextBox Text="{Binding SelectedFlow}"
+                                                                             Margin="5"
+                                                                             HorizontalAlignment="Stretch" />
+                                                                </DockPanel>
+                                                            </MenuItem.Header>
+                                                        </MenuItem>
+                                                        <MenuItem Header="Применить"
+                                                                  Command="{Binding SetNozzleValueCommand}"/>
                                                     </ContextMenu>
                                                 </Button.ContextMenu>
                                             </Button>
@@ -1064,7 +1069,8 @@
                                                     <ContextMenu>
 
 
-                                                        <MenuItem IsVisible="{Binding IsFrequencyEnable}">
+                                                        <MenuItem IsVisible="{Binding IsFrequencyEnable}"
+                                                                  StaysOpenOnClick="True">
                                                             <MenuItem.Header>
                                                                 <DockPanel LastChildFill="True">
                                                                     <TextBox Text="Гц"

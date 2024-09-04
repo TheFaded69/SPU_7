@@ -232,7 +232,7 @@ public class LineItemViewModel : ViewModelBase
             DropValveItemViewModel = new OwenValveItemViewModel(
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].DropValveViewModel,
                 _standController,
-                StateType.Open,
+                StateType.Close,
                 lineIndex);
             TightnessValveItemViewModel = new ValveItemViewModel(
                 settingsService.StandSettingsModel.LineViewModels[lineIndex - 1].TightnessValveViewModel,
@@ -265,14 +265,14 @@ public class LineItemViewModel : ViewModelBase
                 ManualNozzleItemViewModels.Add(
                     new ManualNozzleItemViewModel(
                         settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels[i],
-                        _standController));
+                        _standController, lineIndex));
             }
             else
             {
                 NozzleItemViewModels.Add(
                     new NozzleItemViewModel(
                         settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels[i],
-                        _standController));
+                        _standController, lineIndex));
             }
         }
 

@@ -157,14 +157,32 @@
                                            Margin="5"
                                            Grid.Column="0"
                                            FontSize="18"
-                                           IsVisible="{Binding CurrentFlow, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           Text="Текущий расход, м³/ч" />
+                                           IsVisible="{Binding CoefficientOfCriticalMode, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="Коэффициент расхода" />
+
                                 <TextBlock Grid.Row="4"
                                            Margin="5"
                                            Grid.Column="1"
                                            FontSize="18"
+                                           Foreground="{Binding IsCoefficientOfCriticalModeGood, Converter={convertors:CoefficientOfCriticalModeBoolToForegroundConverter}}"
+                                           IsVisible="{Binding CoefficientOfCriticalMode, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="{Binding CoefficientOfCriticalMode, StringFormat='{}{0:0.00}'}" />
+                                
+                                <TextBlock Grid.Row="5"
+                                           Margin="5"
+                                           Grid.Column="0"
+                                           FontSize="18"
+                                           IsVisible="{Binding CurrentFlow, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Text="Текущий расход, м³/ч" />
+                                <TextBlock Grid.Row="5"
+                                           Margin="5"
+                                           Grid.Column="1"
+                                           FontSize="18"
+                                           
                                            IsVisible="{Binding CurrentFlow, Converter={x:Static ObjectConverters.IsNotNull}}"
                                            Text="{Binding CurrentFlow}" />
+                                
+                                
                             </Grid>
                         </controls:Card>
                     </DockPanel>
@@ -276,6 +294,7 @@
             </DockPanel>
         </controls:Card>
         <controls:Card DockPanel.Dock="Top"
+                       Margin="5"
                        IsVisible="{Binding IsTimerVisible}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">

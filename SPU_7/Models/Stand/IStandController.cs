@@ -291,6 +291,9 @@ namespace SPU_7.Models.Stand
         void SetTargetFlowValue(double? value);
         void AddTargetFlowValue(double? value);
         
+        void SetLineTargetFlowValue(double? value, int lineIndex);
+        void AddLineTargetFlowValue(double? value, int lineIndex);
+        
         /// <summary>
         /// Установить направление потока клапанами в линии (если линия позволяет)
         /// </summary>
@@ -382,8 +385,7 @@ namespace SPU_7.Models.Stand
         Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel, int selectedNeedleValue);
         float? GetTemperatureFromLine(int lineIndex);
         float? GetPressureDifferenceFromLine(int lineIndex);
-        Task<bool> EnableLineFanAsync(int selectedLineIndex, int selectedFanIndex);
-        Task<bool> DisableLineFanAsync(int selectedLineIndex, int selectedFanIndex);
+        float? GetPressureDifferenceFromDevice(int selectedLineIndex, int deviceIndex);
         Task<uint?> ReadFreeRunPulseCount(int pulseMeterAddress, int pulseMeterChannelNumber);
         
         

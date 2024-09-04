@@ -39,4 +39,8 @@ public enum DeviceInfoParameterType
     
     LineValveState = 17,
     
+    CoefficientOfCriticalMode = 18,
+    
+    IsCoefficientOfCriticalModeGood = 19, 
+    
 }

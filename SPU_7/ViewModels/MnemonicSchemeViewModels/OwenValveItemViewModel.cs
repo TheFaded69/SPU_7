@@ -26,7 +26,7 @@ public class OwenValveItemViewModel : ViewModelBase
     }
 
     private StateType _stateType;
-    private int _selectedOwenValue;
+    private int _selectedOwenValue = 0;
 
     public StateType StateType
     {

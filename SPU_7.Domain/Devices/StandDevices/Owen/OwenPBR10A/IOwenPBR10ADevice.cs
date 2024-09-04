@@ -10,7 +10,7 @@ public interface IOwenPBR10ADevice : IOwen
     
     Task<bool> MovingUpAsync();
     
-    Task<float?> GetPositionAsync();
+    Task<ushort?> GetPositionAsync();
 
-    Task<bool> SetPosition(float position);
+    Task<bool> SetPosition(int position);
 }

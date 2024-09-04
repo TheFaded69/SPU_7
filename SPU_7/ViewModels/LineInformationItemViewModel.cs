@@ -11,10 +11,12 @@ public class LineInformationItemViewModel : ViewModelBase
     private float? _pressureDifference;
     private float? _pressure;
     private float? _pressureDischarged;
-    private float? _currentFlow;
+    private double? _currentFlow;
     private float? _temperature;
     private string _lineName;
     private bool _lineVisible = true;
+    private float? _coefficientOfCriticalMode;
+    private bool _isCoefficientOfCriticalModeGood;
 
     public string LineName
     {
@@ -43,18 +45,30 @@ public class LineInformationItemViewModel : ViewModelBase
     public float? PressureDischarged
     {
         get => _pressureDischarged;
-        set => SetProperty(ref _pressureDischarged, value == null ? value : (float?)Math.Round((float)value / 1000, 3));
+        set => SetProperty(ref _pressureDischarged, value == null ? value : (float?)Math.Round((float)value, 3));
     }
 
-    public float? CurrentFlow
+    public double? CurrentFlow
     {
         get => _currentFlow;
-        set => SetProperty(ref _currentFlow, value);
+        set => SetProperty(ref _currentFlow, value == null ? value : (double?)Math.Round((double)value, 3));
     }
 
     public float? Temperature
     {
         get => _temperature;
         set => SetProperty(ref _temperature, value);
+    }
+
+    public float? CoefficientOfCriticalMode
+    {
+        get => _coefficientOfCriticalMode;
+        set => SetProperty(ref _coefficientOfCriticalMode, value == null ? value : (float?)Math.Round((float)value, 2));
+    }
+
+    public bool IsCoefficientOfCriticalModeGood
+    {
+        get => _isCoefficientOfCriticalModeGood;
+        set => SetProperty(ref _isCoefficientOfCriticalModeGood, value);
     }
 }

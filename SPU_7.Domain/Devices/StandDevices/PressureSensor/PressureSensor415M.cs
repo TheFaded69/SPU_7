@@ -24,7 +24,7 @@ public class PressureSensor415M : ModbusUnitProcessor<PressureSensor415MRegister
 
         if (currentPressure == null) return null;
 
-        return Pressure = currentPressure * 9.80638f;
+        return Pressure = currentPressure;
     }
 
     public async Task<bool> ResetToZeroAsync() => true;
