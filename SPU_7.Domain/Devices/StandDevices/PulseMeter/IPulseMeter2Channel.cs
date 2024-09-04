@@ -157,7 +157,7 @@ public interface IPulseMeter2Channel
     /// Получить среднее значение периода (разрешение 4 us), ms
     /// </summary>
     /// <param name="channel">канал</param>
-    Task<uint?> GetAveargePeriodAsync(PulseMeterChannel channel);
+    Task<uint?> GetAveragePeriodAsync(PulseMeterChannel channel);
 
     /// <summary>
     /// Получить корректированное среднее значение периода, ms

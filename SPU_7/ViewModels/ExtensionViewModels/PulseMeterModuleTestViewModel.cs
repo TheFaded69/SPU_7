@@ -121,10 +121,10 @@ public class PulseMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
         var period = await _standController.ReadPeriodFromPulseMeterAsync(
             SelectedDevicePulseCountMeterModuleViewModel.PulseMeterNumber,
-            SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber);
+            SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber) / 1000;
 
         PulsePeriod = period;
-        IsPulseCountWork = false;
+        IsPulseDurationWork = false;
     }
 
     public DelegateCommand StopPulseCountCommand { get; }

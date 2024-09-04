@@ -49,12 +49,16 @@
                       Margin="5">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№"
-                                        Binding="{Binding Number}"/>
+                                        Binding="{Binding Number}"
+                                        IsReadOnly="True"/>
                     <DataGridTextColumn Header="К1 поправка по периоду"
+                                        IsReadOnly="True"
                                         Binding="{Binding FirstCoefficientRead}"/>
                     <DataGridTextColumn Header="К2 поправка по интервалу"
+                                        IsReadOnly="True"
                                         Binding="{Binding SecondCoefficientRead}"/>
                     <DataGridTextColumn Header="К3 поправка по частоте"
+                                        IsReadOnly="True"
                                         Binding="{Binding ThirdCoefficientRead}"/>
                     <DataGridTextColumn Header="K1 запись"
                                         Binding="{Binding FirstCoefficientWrite}"/>

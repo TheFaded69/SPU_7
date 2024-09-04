@@ -350,7 +350,7 @@ public class PulseMeter2Channel : ModbusUnitProcessor<PulseMeter2ChannelRegister
     /// Получить среднее значение периода (разрешение 4 us), ms
     /// </summary>
     /// <param name="channel">канал</param>
-    public async Task<uint?> GetAveargePeriodAsync(PulseMeterChannel channel) =>
+    public async Task<uint?> GetAveragePeriodAsync(PulseMeterChannel channel) =>
         channel switch
         {
             PulseMeterChannel.Channel1 => (uint?)await ReadRegisterAsync(PulseMeter2ChannelRegisterMap

@@ -183,7 +183,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
 
     public async Task<float?> ReadPulseMeterPeriodAsync(int pulseMeterChannelNumber)
     {
-        return await _pulseMeter2Channel.GetCurrentPeriodAsync((PulseMeterChannel)pulseMeterChannelNumber);
+        return await _pulseMeter2Channel.GetAveragePeriodAsync((PulseMeterChannel)pulseMeterChannelNumber);
     }
 
     #region PresureSensorObserve

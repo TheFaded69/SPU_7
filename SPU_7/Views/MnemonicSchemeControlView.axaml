@@ -105,7 +105,7 @@
                                            Grid.Column="0"
                                            FontSize="18"
                                            IsVisible="{Binding Temperature, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           Text="Температура сопел, °C" />
+                                           Text="Температура перед соплами, °C" />
                                 <TextBlock Grid.Row="0"
                                            Margin="5"
                                            Grid.Column="1"
@@ -145,7 +145,7 @@
                                            Grid.Column="0"
                                            FontSize="18"
                                            IsVisible="{Binding PressureDischarged, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           Text="Давление разряжения, кПа" />
+                                           Text="Давление разрежения, кПа" />
                                 <TextBlock Grid.Row="3"
                                            Margin="5"
                                            Grid.Column="1"

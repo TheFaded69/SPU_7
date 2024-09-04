@@ -520,7 +520,7 @@ namespace SPU_7.Models.Stand
                             standLine.CurrentFlow = 0;
                         var k = SelectMetrologyCoefficient(Temperature, Humidity);
                         
-                        var flowK = PressureAtmosphere / (PressureAtmosphere - standLine.Devices.Last().Pressure / 1000);
+                        var flowK = PressureAtmosphere / (PressureAtmosphere + standLine.PressureDischargeSensor.Pressure);
                         NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flowK),
                             DeviceInfoParameterType.CoefficientOfCriticalMode));
                         
@@ -1447,16 +1447,16 @@ namespace SPU_7.Models.Stand
             StandSettingsPulseMeterModel settingsPulseMeterModel)
         {
             return await _lines.First(l =>
-                    l.Devices.Any(device => device.PulseMeterAddress == settingsPulseMeterModel.Number))
-                .Devices.First(device => device.PulseMeterAddress == settingsPulseMeterModel.Number)
+                    l.Devices.Any(device => device.PulseMeterAddress == settingsPulseMeterModel.Address))
+                .Devices.First(device => device.PulseMeterAddress == settingsPulseMeterModel.Address)
                 .ReadPulseCoefficientsAsync();
         }
         
         private async Task<bool> WritePulseCoefficientAsync((float, float, float) coefficientTuple, StandSettingsPulseMeterModel pulseMeterViewModel)
         {
             return await _lines.First(l =>
-                    l.Devices.Any(device => device.PulseMeterAddress == pulseMeterViewModel.Number))
-                .Devices.First(device => device.PulseMeterAddress == pulseMeterViewModel.Number)
+                    l.Devices.Any(device => device.PulseMeterAddress == pulseMeterViewModel.Address))
+                .Devices.First(device => device.PulseMeterAddress == pulseMeterViewModel.Address)
                 .WritePulseCoefficientsAsync(coefficientTuple.Item1, coefficientTuple.Item2, coefficientTuple.Item3);
         }
 
