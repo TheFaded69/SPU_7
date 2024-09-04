@@ -106,9 +106,12 @@ public class PulseMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
     private async void StartPulseDurationCommandHandler()
     {
+        try
+        {
+
         IsPulseDurationWork = true;
         
-        await _standController.StartPulseMeterPeriodMeasureAsync(2, 
+        await _standController.StartPulseMeterPeriodMeasureAsync(1, 
             SelectedDevicePulseCountMeterModuleViewModel.PulseMeterNumber,
             SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber);
 
@@ -125,6 +128,12 @@ public class PulseMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
         PulsePeriod = period;
         IsPulseDurationWork = false;
+        
+        }
+        catch (Exception e)
+        {
+            
+        }
     }
 
     public DelegateCommand StopPulseCountCommand { get; }

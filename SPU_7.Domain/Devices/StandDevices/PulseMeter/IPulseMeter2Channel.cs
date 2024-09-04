@@ -163,7 +163,7 @@ public interface IPulseMeter2Channel
     /// Получить корректированное среднее значение периода, ms
     /// </summary>
     /// <param name="channel">канал</param>
-    Task<float?> GetCorrectedAveargePeriodAsync(PulseMeterChannel channel);
+    Task<float?> GetCorrectedAveragePeriodAsync(PulseMeterChannel channel);
 
     /// <summary>
     /// Получить запускаемый счётчик импульсов
