@@ -159,10 +159,12 @@
                                            FontSize="18"
                                            IsVisible="{Binding CoefficientOfCriticalMode, Converter={x:Static ObjectConverters.IsNotNull}}"
                                            Text="Коэффициент расхода" />
+
                                 <TextBlock Grid.Row="4"
                                            Margin="5"
                                            Grid.Column="1"
                                            FontSize="18"
+                                           Foreground="{Binding IsCoefficientOfCriticalModeGood, Converter={convertors:CoefficientOfCriticalModeBoolToForegroundConverter}}"
                                            IsVisible="{Binding CoefficientOfCriticalMode, Converter={x:Static ObjectConverters.IsNotNull}}"
                                            Text="{Binding CoefficientOfCriticalMode, StringFormat='{}{0:0.00}'}" />
                                 
@@ -176,7 +178,7 @@
                                            Margin="5"
                                            Grid.Column="1"
                                            FontSize="18"
-                                           Foreground="{Binding IsCoefficientOfCriticalModeGood, Converter={convertors:CoefficientOfCriticalModeBoolToForegroundConverter}}"
+                                           
                                            IsVisible="{Binding CurrentFlow, Converter={x:Static ObjectConverters.IsNotNull}}"
                                            Text="{Binding CurrentFlow}" />
                                 

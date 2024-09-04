@@ -1,4 +1,5 @@
 ﻿using SPU_7.Domain.Modbus;
+using SPU_7.Modbus.Extensions;
 using SPU_7.Modbus.Processor;
 
 namespace SPU_7.Domain.Devices.StandDevices.Owen.OwenPBR10A;
@@ -19,19 +20,19 @@ public class OwenPBR10ADevice : ModbusUnitProcessor<OwenPBR10ARegisterMap>, IOwe
     public async Task<bool> StopMovingAsync()
     {
         return await WriteRegisterAsync(OwenPBR10ARegisterMap.ValveControl,
-            BitConverter.GetBytes((ushort)IOwenPBR10AMoveType.Stop));
+            BitConverter.GetBytes((ushort)IOwenPBR10AMoveType.Stop).SwapBytes());
     }
 
     public async Task<bool> MovingDownAsync()
     {
         return await WriteRegisterAsync(OwenPBR10ARegisterMap.ValveControl,
-            BitConverter.GetBytes((ushort)IOwenPBR10AMoveType.Down));
+            BitConverter.GetBytes((ushort)IOwenPBR10AMoveType.Down).SwapBytes());
     }
 
     public async Task<bool> MovingUpAsync()
     {
         return await WriteRegisterAsync(OwenPBR10ARegisterMap.ValveControl,
-            BitConverter.GetBytes((ushort)IOwenPBR10AMoveType.Up));
+            BitConverter.GetBytes((ushort)IOwenPBR10AMoveType.Up).SwapBytes());
     }
 
     public async Task<ushort?> GetPositionAsync()
