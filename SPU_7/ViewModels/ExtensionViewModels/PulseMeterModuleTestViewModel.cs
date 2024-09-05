@@ -66,6 +66,8 @@ public class PulseMeterModuleTestViewModel : ViewModelBase, IDialogAware
         get => _pulseCount;
         set => SetProperty(ref _pulseCount, value);
     }
+    
+    public float? PulseCountStart { get; set; }
 
     public float? PulsePeriod
     {
@@ -99,7 +101,7 @@ public class PulseMeterModuleTestViewModel : ViewModelBase, IDialogAware
         IsPulseCountWork = true;
         
         var pulseCount = await _standController.ReadFreeRunPulseCount(SelectedDevicePulseCountMeterModuleViewModel.PulseMeterNumber, SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber);
-        PulseCount = pulseCount;
+        PulseCountStart = pulseCount;
     }
 
     public DelegateCommand StartPulseDurationCommand { get; }
@@ -143,7 +145,7 @@ public class PulseMeterModuleTestViewModel : ViewModelBase, IDialogAware
         IsPulseCountWork = false;
         
         var pulseCount = await _standController.ReadFreeRunPulseCount(SelectedDevicePulseCountMeterModuleViewModel.PulseMeterNumber, SelectedDevicePulseCountMeterModuleViewModel.PulseMeterChannelNumber);
-        PulseCount = pulseCount - PulseCount;
+        PulseCount = pulseCount - PulseCountStart;
     }
 
     public DelegateCommand StopPulseDurationCommand { get; }

@@ -800,7 +800,7 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                         .DeviceViewModels.IndexOf(_standSettingsService.StandSettingsModel
                             .LineViewModels[(int)SelectedLineIndex].DeviceViewModels.Last());
                     while (_standController.GetPressureDifferenceFromDevice((int)SelectedLineIndex, deviceIndex) <
-                           0.8 * PressureDifferenceMinimum * 1000)
+                           0.4 * PressureDifferenceMinimum * 1000)
                     {
                         if (operationCancellationTokenSource.IsCancellationRequested)
                         {
