@@ -72,11 +72,11 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
     private float? _startTemperature;
     private float? _endTemperature;
     private float? _flowLeak;
-    private float? _targetFrequency;
+    private float? _targetFrequency = 25;
     private StandSettingsFanModel _selectedFanViewModel;
     private int? _selectedFanIndex;
     private int? _selectedLineIndex;
-    private float? _pressureVacuumMinimum;
+    private float? _pressureVacuumMinimum = -50;
     private bool _isFrequencySetEnable;
     private bool _isPressureVacuumEnable;
     private float? _startPressureAbsolute;
@@ -911,7 +911,7 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                     var startPressureDifference = _standController.PressureAtmosphere;
                     var startTemperature = _standController.GetTemperatureFromLine((int)SelectedLineIndex);
 
-                    _logger.Logging(new LogMessage($"Начальное абсолютное давление - {startPressureDifference} Па",
+                    _logger.Logging(new LogMessage($"Начальное абсолютное давление - {startPressureDifference} кПа",
                         LogLevel.Info));
 
                     StartPressureAbsolute = startPressureDifference;
@@ -938,14 +938,14 @@ public class CheckTightnessViewModel : ViewModelBase, IDialogAware
                     var endPressureDifference = _standController.PressureAtmosphere;
                     var endTemperature = _standController.GetTemperatureFromLine((int)SelectedLineIndex);
 
-                    _logger.Logging(new LogMessage($"Конечное абсолютное давление - {endPressureDifference} Па",
+                    _logger.Logging(new LogMessage($"Конечное абсолютное давление - {endPressureDifference} кПа",
                         LogLevel.Info));
 
                     EndPressureAbsolute = endPressureDifference;
                     EndTemperature = endTemperature;
 
                     _logger.Logging(new LogMessage(
-                        $"Разница абсолютного давления - {(startPressureDifference - endPressureDifference)} Па",
+                        $"Разница абсолютного давления - {(startPressureDifference - endPressureDifference)} кПа",
                         LogLevel.Info));
                     _logger.Logging(new LogMessage(
                         $"Разница температуры - {(startTemperature - endTemperature)} °С",
