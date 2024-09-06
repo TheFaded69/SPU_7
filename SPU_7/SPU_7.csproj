@@ -77,5 +77,8 @@
       <Compile Update="Views\ExtensionViews\PulseMeterModuleExtensionView.axaml.cs">
         <DependentUpon>PulseMeterModuleExtensionView.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Views\DeviceNamesView.axaml.cs">
+        <DependentUpon>DeviceNamesView.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>

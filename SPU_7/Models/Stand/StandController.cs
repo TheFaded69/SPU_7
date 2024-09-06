@@ -517,7 +517,7 @@ namespace SPU_7.Models.Stand
                         if (standLine.CurrentFlow < _settingsService.StandSettingsModel.LineViewModels[lineIndex]
                                 .NozzleViewModels.Min(noz => noz.NozzleFactValue * 0.1))
                             standLine.CurrentFlow = 0;
-                        
+
                         var k = SelectMetrologyCoefficient(Temperature, Humidity);
 
                         var flowK = PressureAtmosphere /
@@ -540,12 +540,13 @@ namespace SPU_7.Models.Stand
                                 ? null
                                 : standLine.CurrentFlow
                                 * Math.Sqrt((double)((273.15 + standLine.TemperatureSensor.Temperature) / 293.15))
-                                * (PressureAtmosphere / (PressureAtmosphere + standLine.Devices.Last().PressureDifference / 1000))
+                                * (PressureAtmosphere / (PressureAtmosphere +
+                                                         standLine.Devices.Last().PressureDifference / 1000))
                                 * ((standLine.Devices.First().Temperature + 273.15) /
                                    (standLine.TemperatureSensor.Temperature + 273.15))
                                 * 1 / k;
 
-RealFlow = flow;
+                            RealFlow = flow;
                             NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
                                 DeviceInfoParameterType.TargetFlow));
                         }
@@ -608,10 +609,12 @@ RealFlow = flow;
 
         #region Текущие значения
 
-        public Task<bool> SetRegulatorFrequencyAsync(StandSettingsFanModel? settingsFanModel, float frequency)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> SetRegulatorFrequencyAsync(StandSettingsFanModel? settingsFanModel, float frequency)
+            =>
+                await _frequencyRegulatorDevices
+                    .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
+                    .SetOutputValueAsync(frequency);
+
 
         public float? TemperatureTube
         {
@@ -1488,7 +1491,7 @@ RealFlow = flow;
                         LogLevel.Error));
                 }
 
-                if (!await device.SetPulseTimeOutAsync(3000))
+                if (!await device.SetPulseTimeOutAsync(3700))
                 {
                     _logger.Logging(new LogMessage("Не удалось установить таймаут БИПЧ",
                         LogLevel.Error));
@@ -1636,6 +1639,9 @@ RealFlow = flow;
         {
             return _lines[lineIndex].Devices[i].IsTemperatureCorrect;
         }
+
+        public async Task<float?> GetPressureDischargerFromLineAsync(int activeLine) =>
+            await _lines[activeLine].PressureDischargeSensor.ReadPressureAsync();
 
         private async Task<(float?, float?, float?)> ReadPulseCoefficientAsync(
             StandSettingsPulseMeterModel settingsPulseMeterModel)
@@ -1889,7 +1895,7 @@ RealFlow = flow;
             //Далее из разницы вычитаем расход сопла, чтобы определить сколько еще расхода нужно получить и повторяем цикл
             //Если разница совпадает с одним из расходов сопер, цикл прервется т.к. нужные сопла для открытия будут известны (исключительно маловероятная ситуация)
             //Важный момент - если заданный расход меньше минимального расхода среди сопел, то расход не будет установлен
-            for (var i = consumptions.Count - 1; i >= 0; i--)
+            /*for (var i = consumptions.Count - 1; i >= 0; i--)
             {
                 if (consumptions[i] > deltaValue) continue;
 
@@ -1919,6 +1925,59 @@ RealFlow = flow;
                 {
                     break;
                 }
+            }*/
+
+            double? selectedValue = 0;
+            var isConsumptionSelected = false;
+
+            for (var i = consumptions.Count - 1; i >= 0; i--)
+            {
+                if (isConsumptionSelected) break;
+
+                var deltaList = new List<double?>();
+
+                for (var j = 0; j < consumptions.Count; j++)
+                {
+                    if (nozzleNumbers.Contains(j + 1))
+                    {
+                        deltaList.Add(null);
+                    }
+
+                    deltaList.Add(Math.Abs((double)(deltaValue - consumptions[j])));
+                }
+
+                foreach (var unused in deltaList.ToList())
+                {
+                    var currentDelta = value - selectedValue;
+                    if (currentDelta < deltaList.Min())
+                    {
+                        isConsumptionSelected = true;
+                        break;
+                    }
+
+                    var deltaMinIndex = deltaList.IndexOf(deltaList.Min());
+
+
+                    if (consumptions[deltaMinIndex] + selectedValue > maximumFlow
+                        || consumptions[deltaMinIndex] + selectedValue < minimumFlow)
+                    {
+                        deltaList[deltaMinIndex] = null;
+                        continue;
+                    }
+                    else if ((consumptions[deltaMinIndex] + selectedValue > value) && deltaMinIndex > 5)
+                    {
+                        deltaList[deltaMinIndex] = null;
+                        continue;
+                    }
+                    else
+                    {
+                        deltaList[deltaMinIndex] = null;
+                        selectedValue += consumptions[deltaMinIndex];
+                        nozzleNumbers.Add(deltaMinIndex + 1);
+                        deltaValue = (double)(deltaValue - consumptions[deltaMinIndex]);
+                        break;
+                    }
+                }
             }
 
             if (deltaValue != 0)
@@ -1931,8 +1990,9 @@ RealFlow = flow;
             foreach (var nozzleNumber in nozzleNumbers)
             {
                 if (!await OpenNozzleAsync(
-                        _settingsService.StandSettingsModel.LineViewModels[pointSelectedLineIndex].NozzleViewModels.FirstOrDefault(nz =>
-                            nz.Number == nozzleNumber)))
+                        _settingsService.StandSettingsModel.LineViewModels[pointSelectedLineIndex].NozzleViewModels
+                            .FirstOrDefault(nz =>
+                                nz.Number == nozzleNumber)))
                 {
                     _logger.Logging(new LogMessage($"Не удалось октрыть сопло №{nozzleNumbers}", LogLevel.Error));
                     return null;
@@ -2047,13 +2107,13 @@ RealFlow = flow;
 
         public async Task<bool> EnableFrequencyRegulatorAsync(StandSettingsFanModel? settingsFanModel) =>
             await _frequencyRegulatorDevices
-                .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.Address)
+                .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
                 .StartFrequencyWorkAsync();
 
         public async Task<bool> DisableFrequencyRegulatorAsync(StandSettingsFanModel? settingsFanModel)
             =>
                 await _frequencyRegulatorDevices
-                    .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.Address)
+                    .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
                     .StopFrequencyWorkAsync();
 
         public async Task<bool> EnableLineFanWorkAsync(int lineIndex, int fanIndex)

@@ -246,21 +246,11 @@ namespace SPU_7.Models.Stand
         Task<bool> DisableLineFanWorkAsync(int lineIndex, int fanIndex);
         Task<bool> SetRegulatorFrequencyAsync(int regulatorIndex ,float frequency);
         Task<bool> SetRegulatorFrequencyAsync(StandSettingsFanModel? settingsFanModel, float frequency);
-
-
-        float? TemperatureTube { get; set; }
+        
         float? PressureAtmosphere { get; set; }
         float? Humidity { get; set; }
         float? Temperature { get; set; }
-        float? PressureResiver { get; set; }
-        double? TargetFlow { get; set; }
-        
         double? RealFlow { get; set; }
-
-        /// <summary>
-        /// Давление перепада, Па
-        /// </summary>
-        float? PressureDifference { get; set; }
         
         void UpdateDeviceInformation(DeviceAboutViewModel deviceAboutViewModel);
         void RegisterDeviceObserver(IDeviceObserver deviceItemViewModel, int deviceNumber, int lineNumber);
@@ -433,5 +423,6 @@ namespace SPU_7.Models.Stand
         Task<bool> EnableVacuumCreator(int? activeLine);
         bool IsDeviceWithTemperatureCorrect(int deviceIndex);
         bool GetTemperatureCorrect(int lineIndex, int i);
+        Task<float?> GetPressureDischargerFromLineAsync(int activeLine);
     }
 }
