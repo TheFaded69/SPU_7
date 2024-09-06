@@ -6,8 +6,9 @@
              x:Class="SPU_7.Views.WriteDeviceInformationView"
              xmlns:controls="using:Material.Styles.Controls"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:deviceInformationViewModels="clr-namespace:SPU_7.ViewModels.DeviceInformationViewModels"
-             x:DataType="deviceInformationViewModels:WriteDeviceInformationViewModel"
+             xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             xmlns:deviceInformationViewModels1="clr-namespace:SPU_7.ViewModels.DeviceInformationViewModels"
+             x:DataType="deviceInformationViewModels1:WriteDeviceInformationViewModel"
              Loaded="Control_OnLoaded">
     
     <DockPanel>
@@ -35,7 +36,21 @@
                 HorizontalAlignment="Center"
                 Content="Oк"
                 Command="{Binding WriteDeviceInformationCommand}"/>
+        <StackPanel Orientation="Horizontal"
+                    DockPanel.Dock="Top">
+            <Button Margin="5"
+                    Classes="flat"
+                    Command="{Binding OpenDeviceNamesEditorCommand}">
+                <avalonia:MaterialIcon Kind="Settings" Width="40" Height="40" Foreground="Black"/>
+            </Button>
+            <Button Margin="5"
+                    Classes="flat"
+                    Command="{Binding ClearDeviceInfoCommand}">
+                <avalonia:MaterialIcon Kind="Clear" Width="40" Height="40" Foreground="Black"/>
+            </Button>
+        </StackPanel>
         <DataGrid Margin="5"
+                  CanUserSortColumns="False"
                   ItemsSource="{Binding DeviceInformationViewModels}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="№"
@@ -43,6 +58,38 @@
                                     IsReadOnly="True"/>
                 <DataGridTextColumn Header="Серийный номер"
                                     Binding="{Binding DeviceVendorNumber}"/>
+                <DataGridTextColumn Header="Владелец СИ"
+                                    Binding="{Binding VendorName}"
+                                    Width="250"/>
+                <DataGridTemplateColumn Header="Тип СИ"
+                                        IsReadOnly="False"
+                                        Width="500">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DeviceTypesInfo}"
+                                      SelectedItem="{Binding SelectedDeviceTypeInfo}"
+                                      Margin="5"
+                                      Theme="{StaticResource MaterialOutlineComboBox}"
+                                      MaxDropDownHeight="500"
+                                      assists:ComboBoxAssist.Label="Тип СИ">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DeviceTypeInfo}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="ТК"
+                                        IsReadOnly="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox Margin="5"
+                                      IsChecked="{Binding IsTemperatureCorrect}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Вкл\выкл"
                                         IsReadOnly="False">
                     <DataGridTemplateColumn.CellTemplate>
