@@ -15,16 +15,13 @@ public class StandSettingsModel
     public ObservableCollection<StandSettingsPulseCountMeterModuleModel> PulseCountMeterModuleViewModels { get; set; }
     public ObservableCollection<StandSettingsLineModel> LineViewModels { get; set; }
     public ObservableCollection<StandSettingsPortModel> PortViewModels { get; set; }
-    public StandSettingsFrequencyRegulatorModel FrequencyRegulatorViewModel { get; set; }
+
     public string SelectedEquipmentPortName { get; set; }
     public int TemperatureSensorAddress { get; set; }
     public int PressureSensorAddress { get; set; }
     public int THMeterAddress { get; set; }
-    
     public string SelectedTHSensorTypeString{ get; set; }
-
     public SensorType SelectedTHSensorType { get; set; }
-    
     public int PressureResiverSensorAddress { get; set; }
     public int PressureDifferenceSensorAddress { get; set; }
     public string SelectedTemperatureSensorPortName { get; set; }
@@ -36,7 +33,6 @@ public class StandSettingsModel
     public string ProfileName { get; set; }
     public string SelectedEquipmentPort { get; set; }
     public int SelectedEquipmentBaudRate { get; set; }
-
     public string ValidationVendorType { get; set; }
     public string ValidationVendorName { get; set; }
     public string ValidationVendorShortName { get; set; }
@@ -54,6 +50,5 @@ public class StandSettingsModel
     public string OutsideCheckInfo { get; set; }
     public string DeviceTestInfo { get; set; }
     public string PostInfo { get; set; }
-    
     public  StandSettingsExtensionModel  StandSettingsExtensionViewModel { get; set; }
 }

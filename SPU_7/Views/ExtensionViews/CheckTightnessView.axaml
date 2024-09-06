@@ -10,7 +10,7 @@
              x:DataType="extensionViewModels1:CheckTightnessViewModel"
              x:Class="SPU_7.Views.ExtensionViews.CheckTightnessView"
              Loaded="Control_OnLoaded"
-             Width="800">
+             Width="900">
     <Design.DataContext>
         <extensionViewModels1:CheckTightnessViewModel />
     </Design.DataContext>

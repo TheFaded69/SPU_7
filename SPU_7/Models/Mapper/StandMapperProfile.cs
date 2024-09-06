@@ -47,6 +47,7 @@ namespace SPU_7.Models.Mapper
                         Formatting.Indented,
                         new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })));
             
+            
             CreateMap<DbDevice, DeviceInformation>()
                 .ReverseMap();
 

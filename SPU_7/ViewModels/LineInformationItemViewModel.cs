@@ -51,7 +51,7 @@ public class LineInformationItemViewModel : ViewModelBase
     public double? CurrentFlow
     {
         get => _currentFlow;
-        set => SetProperty(ref _currentFlow, value == null ? value : (double?)Math.Round((double)value, 5));
+        set => SetProperty(ref _currentFlow, value == null ? value : Math.Round((double)value, 5));
     }
 
     public float? Temperature

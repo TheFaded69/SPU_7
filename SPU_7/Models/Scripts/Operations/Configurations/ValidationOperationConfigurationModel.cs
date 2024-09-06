@@ -18,4 +18,5 @@ public class ValidationOperationConfigurationModel : BaseOperationConfigurationM
     public double? MinimumFlow { get; set; }
     public double? MaximumFlow { get; set; }
     public double? NominalFlow { get; set; }
+    public float? PulseWeight { get; set; }
 }

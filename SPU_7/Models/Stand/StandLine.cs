@@ -26,6 +26,9 @@ public class StandLine
         LineNumber = lineIndex + 1;
         CurrentFlow = settingsService.StandSettingsModel.LineViewModels[lineIndex].NozzleViewModels
             .Sum(noz => noz.NozzleFactValue);
+        
+        CurrentFlow = 0;
+
 
         foreach (var deviceViewModel in settingsService.StandSettingsModel.LineViewModels[lineIndex].DeviceViewModels)
         {

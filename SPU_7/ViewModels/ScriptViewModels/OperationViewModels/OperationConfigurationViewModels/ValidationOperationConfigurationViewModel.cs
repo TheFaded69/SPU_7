@@ -170,7 +170,8 @@ public class ValidationOperationConfigurationViewModel : ViewModelBase, IOperati
                 SelectedMasterDeviceName = point.SelectedMasterDeviceName,
                 SelectedLineNumber = point.SelectedLineNumber,
                 IsNeedleValveUse = point.IsNeedleValveUse,
-                NeedleValveValue = point.NeedleValveValue
+                NeedleValveValue = point.NeedleValveValue,
+                IsReplaceNozzle = point.IsReplaceNozzle,
             })
             .ToList();
 

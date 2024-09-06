@@ -54,7 +54,6 @@ namespace SPU_7.Models.Stand
         private List<StandDevice> _standDevices = [];
         private List<StandDevice> _standDevicesForFan = [];
 
-        private IFrequencyRegulatorDevice _frequencyRegulatorDevice;
         private List<IFrequencyRegulatorDevice> _frequencyRegulatorDevices = [];
         private List<IPulseCountMeterModule> _pulseCountMeterModules = [];
         private List<IPulseMeter2Channel> _pulseMeter2Channels = [];
@@ -185,8 +184,8 @@ namespace SPU_7.Models.Stand
                                     fanViewModel.FrequencyRegulatorViewModel.ModuleAddress));
                                 break;
                             case FanType.ControlModuleControlFan:
-                                if (fanViewModel.Address != null && !addressFanList.Contains((int)fanViewModel.Address))
-                                    addressFanList.Add((int)fanViewModel.Address);
+                                if (fanViewModel.Address != null && !addressFanList.Contains(fanViewModel.Address))
+                                    addressFanList.Add(fanViewModel.Address);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -437,7 +436,7 @@ namespace SPU_7.Models.Stand
                                             .FirstOrDefault(l => l.Devices.Count == 1).Devices[0]
                                             .ReadPressureAsync();
 
-                                        device.Pressure = firstPressure;
+                                        device.PressureDifference = firstPressure;
                                     }
                                     else
                                     {
@@ -518,12 +517,14 @@ namespace SPU_7.Models.Stand
                         if (standLine.CurrentFlow < _settingsService.StandSettingsModel.LineViewModels[lineIndex]
                                 .NozzleViewModels.Min(noz => noz.NozzleFactValue * 0.1))
                             standLine.CurrentFlow = 0;
-                        var k = SelectMetrologyCoefficient(Temperature, Humidity);
                         
-                        var flowK = PressureAtmosphere / (PressureAtmosphere + standLine.PressureDischargeSensor.Pressure);
+                        var k = SelectMetrologyCoefficient(Temperature, Humidity);
+
+                        var flowK = PressureAtmosphere /
+                                    (PressureAtmosphere + standLine.PressureDischargeSensor.Pressure);
                         NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flowK),
                             DeviceInfoParameterType.CoefficientOfCriticalMode));
-                        
+
                         var isNeedFlow = standLine.CurrentFlow switch
                         {
                             < 1 => flowK >= 2.5,
@@ -532,16 +533,19 @@ namespace SPU_7.Models.Stand
                         };
                         NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, isNeedFlow),
                             DeviceInfoParameterType.IsCoefficientOfCriticalModeGood));
-                        
+
                         if (isNeedFlow)
                         {
                             var flow = k == null
                                 ? null
                                 : standLine.CurrentFlow
                                 * Math.Sqrt((double)((273.15 + standLine.TemperatureSensor.Temperature) / 293.15))
-                                * (PressureAtmosphere / (PressureAtmosphere + standLine.Devices.Last().Pressure / 1000))
-                                * ((standLine.Devices.First().Temperature + 273.15) / (standLine.TemperatureSensor.Temperature + 273.15))
+                                * (PressureAtmosphere / (PressureAtmosphere + standLine.Devices.Last().PressureDifference / 1000))
+                                * ((standLine.Devices.First().Temperature + 273.15) /
+                                   (standLine.TemperatureSensor.Temperature + 273.15))
                                 * 1 / k;
+
+RealFlow = flow;
                             NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
                                 DeviceInfoParameterType.TargetFlow));
                         }
@@ -551,7 +555,6 @@ namespace SPU_7.Models.Stand
                             NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
                                 DeviceInfoParameterType.TargetFlow));
                         }
-                        
                     }
 #endif
 
@@ -604,6 +607,11 @@ namespace SPU_7.Models.Stand
         #endregion
 
         #region Текущие значения
+
+        public Task<bool> SetRegulatorFrequencyAsync(StandSettingsFanModel? settingsFanModel, float frequency)
+        {
+            throw new NotImplementedException();
+        }
 
         public float? TemperatureTube
         {
@@ -666,6 +674,12 @@ namespace SPU_7.Models.Stand
             }
         }
 
+        public double? RealFlow
+        {
+            get => _realFlow;
+            set => _realFlow = value;
+        }
+
         /// <summary>
         /// Получить давление ресивера в Па для регулятора
         /// </summary>
@@ -704,10 +718,9 @@ namespace SPU_7.Models.Stand
                 deviceInformationViewModel.IsManualEnabled;
         }
 
-        public bool GetDeviceManualEnable(int i)
-        {
-            return _line.Devices[i].IsManualEnabled;
-        }
+        public bool GetDeviceManualEnable(int i) => _line.Devices[i].IsManualEnabled;
+
+        public bool GetDeviceManualEnable(int i, int lineIndex) => _lines[lineIndex].Devices[i].IsManualEnabled;
 
         #endregion
 
@@ -787,6 +800,10 @@ namespace SPU_7.Models.Stand
                 new StandInfoData(standSettingsNozzleModel.Number - 1, StateType.Open),
                 DeviceInfoParameterType.NozzleState));
 
+            AddLineTargetFlowValue(standSettingsNozzleModel.NozzleFactValue,
+                _settingsService.StandSettingsModel.LineViewModels.IndexOf(
+                    _settingsService.StandSettingsModel.LineViewModels.FirstOrDefault(line =>
+                        line.NozzleViewModels.Contains(standSettingsNozzleModel))));
 
             return !isWork;
         }
@@ -910,6 +927,11 @@ namespace SPU_7.Models.Stand
                 new StandInfoData(standSettingsNozzleModel.Number - 1, StateType.Close),
                 DeviceInfoParameterType.NozzleState));
 
+
+            AddLineTargetFlowValue(-standSettingsNozzleModel.NozzleFactValue,
+                _settingsService.StandSettingsModel.LineViewModels.IndexOf(
+                    _settingsService.StandSettingsModel.LineViewModels.FirstOrDefault(line =>
+                        line.NozzleViewModels.Contains(standSettingsNozzleModel))));
 
             return !isWork;
         }
@@ -1246,7 +1268,6 @@ namespace SPU_7.Models.Stand
             return result;
         }
 
-        
 
         public async Task<CommonCommandStatus?> ReadCommonCommandStatusPulseCountMeterAsync(
             int? pulseCountMeterModuleIndex)
@@ -1406,7 +1427,7 @@ namespace SPU_7.Models.Stand
 
         public float? GetPressureDifferenceFromDevice(int selectedLineIndex, int deviceIndex)
         {
-            return _lines[selectedLineIndex].Devices[deviceIndex].Pressure;
+            return _lines[selectedLineIndex].Devices[deviceIndex].PressureDifference;
         }
 
         public async Task<uint?> ReadFreeRunPulseCount(int pulseMeterAddress, int pulseMeterChannelNumber)
@@ -1443,6 +1464,167 @@ namespace SPU_7.Models.Stand
                 .ReadChannelStatusAsync();
         }
 
+        public async Task PulseReadStartAsync(double? pulseWeight, double targetVolume)
+        {
+            if (_line == null) return;
+
+            foreach (var device in _line.Devices.Where(device => device.IsManualEnabled))
+            {
+                if (!await device.StartPeriodMeasureAsync((int)(targetVolume / pulseWeight)))
+                {
+                    _logger.Logging(new LogMessage("Не удалось установить количество измерений БИПЧ",
+                        LogLevel.Error));
+                }
+
+                if (!await device.SetPulseTimeOutAsync(3000))
+                {
+                    _logger.Logging(new LogMessage("Не удалось установить таймаут БИПЧ",
+                        LogLevel.Error));
+                }
+            }
+        }
+
+        public async Task PulseReadProcessStartAsync(List<float?> pulseTimeList, double timeValidation, int? activeLine)
+        {
+            var waitPulseTasks = new List<Task<bool>>();
+            for (var i = 0; i < _lines[(int)activeLine].Devices.Count; i++)
+            {
+                var device = _lines[(int)activeLine].Devices[i];
+                if (device.IsManualEnabled)
+                {
+                    waitPulseTasks.Add(Task.Run(async () =>
+                    {
+                        while (true)
+                        {
+                            await Task.Delay(1000);
+
+                            var status = await device.ReadChannelStatusAsync();
+
+                            if (status != PulseMeter2ChannelState.Running)
+                            {
+                                switch (status)
+                                {
+                                    case PulseMeter2ChannelState.None:
+                                    case PulseMeter2ChannelState.Error:
+                                    case PulseMeter2ChannelState.Timeout:
+                                        _logger.Logging(new LogMessage($"Ошибка БИПЧ - {status.ToString()}",
+                                            LogLevel.Error));
+                                        return false;
+                                    case PulseMeter2ChannelState.Ok:
+                                        return true;
+                                    default:
+                                        return false;
+                                }
+                            }
+                        }
+                    }));
+                }
+                else
+                {
+                    waitPulseTasks.Add(Task.Run(() => false));
+                }
+            }
+
+            var taskResult = Task.WhenAll(waitPulseTasks);
+            var taskDelay = Task.Delay(TimeSpan.FromMinutes((double)(timeValidation * 60 * 2.25)));
+
+            if (await Task.WhenAny(taskResult, taskDelay) == taskResult)
+            {
+                for (var i = 0; i < _lines[(int)activeLine].Devices.Count; i++)
+                {
+                    if (!_lines[(int)activeLine].Devices[i].IsManualEnabled)
+                    {
+                        pulseTimeList.Add(null);
+                        continue;
+                    }
+
+                    var task = waitPulseTasks[i];
+                    if (!task.Result)
+                    {
+                        _logger.Logging(
+                            new LogMessage($"Не удалось посчитать импульсы для СГ №{i + 1}", LogLevel.Error));
+                        pulseTimeList.Add(null);
+                    }
+                    else
+                    {
+                        var start = await _lines[(int)activeLine].Devices[i].GetStartMeasureTimeAsync();
+                        var end = await _lines[(int)activeLine].Devices[i].GetEndMeasureTimeAsync();
+
+                        if (start == null || end == null)
+                        {
+                            _logger.Logging(
+                                new LogMessage(
+                                    $"Не удалось считать время начала или конца счета импульсов у СГ №{i + 1}",
+                                    LogLevel.Error));
+                            pulseTimeList.Add(null);
+                        }
+
+                        var time = (float?)(end - start) / 1000 / 3600;
+
+                        pulseTimeList.Add(time);
+                    }
+                }
+            }
+            else
+            {
+                _logger.Logging(
+                    new LogMessage(
+                        $"Тайм-аут измерения импульсов, прошло более {Math.Round((double)(timeValidation * 60 * 2.25), 2)} минут",
+                        LogLevel.Error));
+                for (var i = 0; i < _lines[(int)activeLine].Devices.Count; i++)
+                {
+                    if (waitPulseTasks[i].Result)
+                    {
+                        if (!_lines[(int)activeLine].Devices[i].IsManualEnabled)
+                        {
+                            pulseTimeList.Add(null);
+                            continue;
+                        }
+
+                        var start = await _lines[(int)activeLine].Devices[i].GetStartMeasureTimeAsync();
+                        var end = await _lines[(int)activeLine].Devices[i].GetEndMeasureTimeAsync();
+
+                        if (start == null || end == null)
+                        {
+                            _logger.Logging(
+                                new LogMessage(
+                                    $"Не удалось считать время начала или конца счета импульсов у СГ №{i + 1}",
+                                    LogLevel.Error));
+                            pulseTimeList.Add(null);
+                        }
+
+                        var time = (float?)(end - start) / 1000 / 3600;
+
+                        pulseTimeList.Add(time);
+                    }
+                    else
+                    {
+                        pulseTimeList.Add(null);
+                    }
+                }
+            }
+        }
+
+        public Task<bool> DisableVacuumCreator(int? activeLine)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> EnableVacuumCreator(int? activeLine)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDeviceWithTemperatureCorrect(int deviceIndex)
+        {
+            return _line.Devices[deviceIndex].IsTemperatureCorrect;
+        }
+
+        public bool GetTemperatureCorrect(int lineIndex, int i)
+        {
+            return _lines[lineIndex].Devices[i].IsTemperatureCorrect;
+        }
+
         private async Task<(float?, float?, float?)> ReadPulseCoefficientAsync(
             StandSettingsPulseMeterModel settingsPulseMeterModel)
         {
@@ -1451,8 +1633,9 @@ namespace SPU_7.Models.Stand
                 .Devices.First(device => device.PulseMeterAddress == settingsPulseMeterModel.Address)
                 .ReadPulseCoefficientsAsync();
         }
-        
-        private async Task<bool> WritePulseCoefficientAsync((float, float, float) coefficientTuple, StandSettingsPulseMeterModel pulseMeterViewModel)
+
+        private async Task<bool> WritePulseCoefficientAsync((float, float, float) coefficientTuple,
+            StandSettingsPulseMeterModel pulseMeterViewModel)
         {
             return await _lines.First(l =>
                     l.Devices.Any(device => device.PulseMeterAddress == pulseMeterViewModel.Address))
@@ -1470,12 +1653,6 @@ namespace SPU_7.Models.Stand
 
             return true;
         }
-
-        public void SetTargetFlowValue(double? value)
-            => TargetFlow = value;
-
-        public void AddTargetFlowValue(double? value)
-            => TargetFlow += value;
 
         public void SetLineTargetFlowValue(double? value, int lineIndex)
         {
@@ -1671,9 +1848,110 @@ namespace SPU_7.Models.Stand
             return deltaValue;
         }
 
+        public async Task<double?> SetConsumptionAsync(double value, int pointSelectedLineIndex, double? minimumFlow,
+            double? maximumFlow)
+        {
+            var consumptions = _settingsService.StandSettingsModel.LineViewModels[pointSelectedLineIndex]
+                .NozzleViewModels
+                .Select(nw => nw.NozzleFactValue).ToList();
+
+            var deltaValue = value;
+
+            if (consumptions.Any(consumption => consumption == null))
+            {
+                _logger.Logging(new LogMessage("Необходима настройка сопел", LogLevel.Error));
+                return null;
+            }
+
+            var nozzleNumbers = new List<int>();
+
+#if !DEBUGGUI
+            if (!await CloseAllNozzleAsync(pointSelectedLineIndex))
+            {
+                _logger.Logging(new LogMessage("Не удалось закрыть краны сопел", LogLevel.Error));
+                return null;
+            }
+#endif
+            //Алгоритм выбирает сопла для получения заданного расхода или чуть меньше (расход больше заданного не выставляется)
+            //Начинаем с последнего сопла, если расход сопла меньше разницы записываем его номер и потом открываем.
+            //Далее из разницы вычитаем расход сопла, чтобы определить сколько еще расхода нужно получить и повторяем цикл
+            //Если разница совпадает с одним из расходов сопер, цикл прервется т.к. нужные сопла для открытия будут известны (исключительно маловероятная ситуация)
+            //Важный момент - если заданный расход меньше минимального расхода среди сопел, то расход не будет установлен
+            for (var i = consumptions.Count - 1; i >= 0; i--)
+            {
+                if (consumptions[i] > deltaValue) continue;
+
+                if (consumptions[i] == deltaValue)
+                {
+                    nozzleNumbers.Add(i + 1);
+                    deltaValue = 0;
+                    break;
+                }
+
+                nozzleNumbers.Add(i + 1);
+
+                deltaValue = (double)(deltaValue - consumptions[i]);
+            }
+
+            for (var i = 0; i < consumptions.Count; i++)
+            {
+                if (value - deltaValue < minimumFlow)
+                {
+                    if (nozzleNumbers.Contains(i)) continue;
+
+                    nozzleNumbers.Add(i + 1);
+
+                    deltaValue = (double)(deltaValue - consumptions[i]);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (deltaValue != 0)
+            {
+                _logger.Logging(new LogMessage(
+                    $"Не удалось выставить расход: {value}\tВыставленный расход: {value - deltaValue}\tПогрешность выставления расхода: {deltaValue}",
+                    LogLevel.Warning));
+            }
+#if !DEBUGGUI
+            foreach (var nozzleNumber in nozzleNumbers)
+            {
+                if (!await OpenNozzleAsync(
+                        _settingsService.StandSettingsModel.LineViewModels[pointSelectedLineIndex].NozzleViewModels.FirstOrDefault(nz =>
+                            nz.Number == nozzleNumber)))
+                {
+                    _logger.Logging(new LogMessage($"Не удалось октрыть сопло №{nozzleNumbers}", LogLevel.Error));
+                    return null;
+                }
+            }
+#endif
+            return deltaValue;
+        }
+
+
         public async Task<bool> CloseAllNozzleAsync()
         {
             foreach (var nozzleViewModel in _settingsService.StandSettingsModel.NozzleViewModels)
+            {
+                if (!await CloseNozzleAsync(nozzleViewModel, true))
+                    return false;
+            }
+
+            foreach (var standDevice in _standDevices.Where(d => d.NeedUpdateState))
+            {
+                if (!await standDevice.SetWorkRegisterAsync())
+                    return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> CloseAllNozzleAsync(int pointSelectedLineIndex)
+        {
+            foreach (var nozzleViewModel in _settingsService.StandSettingsModel.LineViewModels[pointSelectedLineIndex]
+                         .NozzleViewModels)
             {
                 if (!await CloseNozzleAsync(nozzleViewModel, true))
                     return false;
@@ -1755,6 +2033,17 @@ namespace SPU_7.Models.Stand
             return await _frequencyRegulatorDevices[regulatorIndex].StartFrequencyWorkAsync();
         }
 
+        public async Task<bool> EnableFrequencyRegulatorAsync(StandSettingsFanModel? settingsFanModel) =>
+            await _frequencyRegulatorDevices
+                .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.Address)
+                .StartFrequencyWorkAsync();
+
+        public async Task<bool> DisableFrequencyRegulatorAsync(StandSettingsFanModel? settingsFanModel)
+            =>
+                await _frequencyRegulatorDevices
+                    .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.Address)
+                    .StopFrequencyWorkAsync();
+
         public async Task<bool> EnableLineFanWorkAsync(int lineIndex, int fanIndex)
         {
             return await _standDevicesForFan.FirstOrDefault(sd =>
@@ -1781,42 +2070,9 @@ namespace SPU_7.Models.Stand
             return await _frequencyRegulatorDevices[regulatorIndex].StopFrequencyWorkAsync();
         }
 
-        public async Task<bool> EndWorkAsync()
-        {
-            if (!await OpenSolenoidValveAsync(
-                    _settingsService.StandSettingsModel.SolenoidValveViewModels.FirstOrDefault(sv =>
-                        sv.SolenoidValveType == SolenoidValveType.NormalClose)))
-                return false;
-
-            if (!await CloseAllNozzleAsync()) return false;
-            if (!await CloseAllValveAsync()) return false;
-
-            if (!await CloseSolenoidValveAsync(
-                    _settingsService.StandSettingsModel.SolenoidValveViewModels.FirstOrDefault(sv =>
-                        sv.SolenoidValveType == SolenoidValveType.NormalClose)))
-                return false;
-
-            return true;
-        }
-
-        public Task<bool> SetFrequencyMeasureModeAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SerPeriodMeasureModeAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public void AddCollectionForPortLogging(ObservableCollection<LogMessage> portLogMessages)
         {
             _portLogMessages = portLogMessages;
-        }
-
-        public void AddCollectionForDevicePortLogging(ObservableCollection<LogMessage> portLogMessages)
-        {
-            //_devicePortLogMessages = portLogMessages;
         }
 
         public void RegisterPressureSensorObserver(IPressureSensorObserver observer, DevicePurpose devicePurpose,
@@ -1829,7 +2085,7 @@ namespace SPU_7.Models.Stand
                         .RegisterPressureSensorObserver(observer);
                     break;
                 case DevicePurpose.ValidationDevice:
-                    ((IPressureSensorObservable)_lines[lineIndex].Devices[deviceIndex])
+                    _lines[lineIndex].Devices[deviceIndex]
                         .RegisterPressureSensorObserver(observer);
                     break;
                 default:
@@ -1847,7 +2103,7 @@ namespace SPU_7.Models.Stand
                         .RegisterTemperatureSensorObserver(observer);
                     break;
                 case DevicePurpose.ValidationDevice:
-                    ((ITemperatureSensorObservable)_lines[lineIndex].Devices[deviceIndex])
+                    _lines[lineIndex].Devices[deviceIndex]
                         .RegisterTemperatureSensorObserver(observer);
                     break;
                 default:
@@ -1865,7 +2121,7 @@ namespace SPU_7.Models.Stand
                         .RegisterFlowObserver(observer);
                     break;
                 case DevicePurpose.ValidationDevice:
-                    ((IFlowObservable)_lines[lineIndex].Devices[deviceIndex])
+                    _lines[lineIndex].Devices[deviceIndex]
                         .RegisterFlowObserver(observer);
                     break;
                 default:
@@ -1884,7 +2140,7 @@ namespace SPU_7.Models.Stand
                         .RemovePressureSensorObserver(observer);
                     break;
                 case DevicePurpose.ValidationDevice:
-                    ((IPressureSensorObservable)_lines[lineIndex].Devices[deviceIndex])
+                    _lines[lineIndex].Devices[deviceIndex]
                         .RemovePressureSensorObserver(observer);
                     break;
                 default:
@@ -1903,7 +2159,7 @@ namespace SPU_7.Models.Stand
                         .RemoveTemperatureSensorObserver(observer);
                     break;
                 case DevicePurpose.ValidationDevice:
-                    ((ITemperatureSensorObservable)_lines[lineIndex].Devices[deviceIndex])
+                    _lines[lineIndex].Devices[deviceIndex]
                         .RemoveTemperatureSensorObserver(observer);
                     break;
                 default:
@@ -1921,7 +2177,7 @@ namespace SPU_7.Models.Stand
                         .RemoveFlowObserver(observer);
                     break;
                 case DevicePurpose.ValidationDevice:
-                    ((IFlowObservable)_lines[lineIndex].Devices[deviceIndex])
+                    _lines[lineIndex].Devices[deviceIndex]
                         .RemoveFlowObserver(observer);
                     break;
                 default:
@@ -1934,7 +2190,14 @@ namespace SPU_7.Models.Stand
 
         public string GetVendorNumber(int deviceNumber) => _line.Devices[deviceNumber].VendorNumberString;
 
+        public string GetVendorNumber(int deviceNumber, int lineIndex) =>
+            _lines[lineIndex].Devices[deviceNumber].VendorNumberString;
+
         public string GetDeviceName(int deviceNumber) => _line.Devices[deviceNumber].DeviceName;
+
+        public string GetDeviceName(int deviceNumber, int lineIndex) =>
+            _lines[lineIndex].Devices[deviceNumber].DeviceName;
+
 
         public async Task EmergencyPowerOffAsync()
         {
@@ -2067,19 +2330,6 @@ namespace SPU_7.Models.Stand
 
         #endregion
 
-        #region Вакуумный насос
-
-        public async Task<bool> DisableVacuumCreator()
-        {
-            return await _frequencyRegulatorDevice.StopFrequencyWorkAsync();
-        }
-
-        public async Task<bool> SetFrequencyRegulatorFrequencyAsync(double value)
-        {
-            return await _frequencyRegulatorDevice.SetOutputValueAsync(value);
-        }
-
-        #endregion
 
         #region Управление задвижкой
 
@@ -2216,6 +2466,7 @@ namespace SPU_7.Models.Stand
         private float? _temperature;
         private float? _pressureResiver;
         private double? _targetFlow = 0;
+        private double? _realFlow;
 
         public void NotifyObservers(object obj)
         {

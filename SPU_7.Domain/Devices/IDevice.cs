@@ -18,7 +18,7 @@ namespace SPU_7.Domain.Devices
         /// <summary>
         /// Давление
         /// </summary>
-        float? Pressure { get; set; }
+        float? PressureDifference { get; set; }
         
         /// <summary>
         /// Доступно ли усройство для использования
@@ -46,8 +46,8 @@ namespace SPU_7.Domain.Devices
         public string DeviceTypeInfo { get; set; }
 
         public int PulseMeterAddress { get; set; }
-
-
+        bool IsTemperatureCorrect { get; set; }
+        
         /// <summary>
         /// Сброс ДД на ноль
         /// </summary>
@@ -112,15 +112,22 @@ namespace SPU_7.Domain.Devices
         /// <summary>
         /// Считать свободно бегущий счетчик с БИПЧа
         /// </summary>
-        /// <param name="pulseMeterChannelNumber"></param>
+        /// <param name="pulseMeterChannelNumber">Номер канала</param>
         /// <returns></returns>
         Task<uint?> ReadFreeRunningCounterAsync(int pulseMeterChannelNumber);
         
         /// <summary>
         /// Считать период измеренных импульсов с БИПЧа
         /// </summary>
-        /// <param name="pulseMeterChannelNumber"></param>
+        /// <param name="pulseMeterChannelNumber">Номер канала</param>
         /// <returns></returns>
         Task<float?> ReadPulseMeterPeriodAsync(int pulseMeterChannelNumber);
+
+        /// <summary>
+        /// Установить тайм-аут
+        /// </summary>
+        /// <param name="timeout">тайм-аут</param>
+        /// <returns></returns>
+        Task<bool> SetPulseTimeOutAsync(int timeout);
     }
 }

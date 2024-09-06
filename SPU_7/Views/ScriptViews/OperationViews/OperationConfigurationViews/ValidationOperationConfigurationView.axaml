@@ -131,6 +131,10 @@
                                      Watermark="Введите расход"
                                      Text="{Binding TargetFlow}" />
                             
+                            <CheckBox IsChecked="{Binding IsReplaceNozzle}"
+                                      Margin="5"
+                                      Content="Заменяемое сопло"/>
+                            
                             <TextBox Margin="5"
                                      extension:TextFieldAssist.Label="Необходимый объем, м³"
                                      UseFloatingWatermark="True"

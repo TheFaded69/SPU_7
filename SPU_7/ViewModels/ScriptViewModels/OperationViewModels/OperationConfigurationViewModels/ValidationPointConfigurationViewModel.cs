@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Models.Services.StandSetting;
@@ -42,6 +43,8 @@ public class ValidationPointConfigurationViewModel : ViewModelBase
     private ObservableCollection<StandSettingsNozzleViewModel> _selectedNozzles;
     private bool _isNeedleValveUse;
     private int? _needleValveValue;
+    private bool _isReplaceNozzle;
+    private bool _isMasterDeviceEnable;
 
     public int Number
     {
@@ -98,10 +101,19 @@ public class ValidationPointConfigurationViewModel : ViewModelBase
 
             MasterDeviceNames.Clear();
 
-            foreach (var masterDeviceModel in _standSettingsService.StandSettingsModel.LineViewModels[value - 1]
-                         .MasterDeviceViewModels)
+            if (_standSettingsService.StandSettingsModel.LineViewModels[value - 1]
+                    .MasterDeviceViewModels.Count > 0)
             {
-                MasterDeviceNames.Add(masterDeviceModel.MasterDeviceName);
+                IsMasterDeviceEnable = true;
+                foreach (var masterDeviceModel in _standSettingsService.StandSettingsModel.LineViewModels[value - 1]
+                             .MasterDeviceViewModels)
+                {
+                    MasterDeviceNames.Add(masterDeviceModel.MasterDeviceName);
+                }
+            }
+            else
+            {
+                IsMasterDeviceEnable = false;
             }
         }
     }
@@ -118,6 +130,12 @@ public class ValidationPointConfigurationViewModel : ViewModelBase
         set => SetProperty(ref _needleValveValue, value);
     }
 
+    public bool IsMasterDeviceEnable
+    {
+        get => _isMasterDeviceEnable;
+        set => SetProperty(ref _isMasterDeviceEnable, value);
+    }
+
     public ObservableCollection<string> MasterDeviceNames { get; set; } = [];
 
     public string SelectedMasterDeviceName
@@ -131,6 +149,13 @@ public class ValidationPointConfigurationViewModel : ViewModelBase
         get => _selectedNozzles;
         set => SetProperty(ref _selectedNozzles, value);
     }
+
+    public bool IsReplaceNozzle
+    {
+        get => _isReplaceNozzle;
+        set => SetProperty(ref _isReplaceNozzle, value);
+    }
+
 
     public DelegateCommand ShowNozzleSelectorCommand { get; }
 

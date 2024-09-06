@@ -90,6 +90,9 @@ public partial class App : PrismApplication
             containerRegistry.Register<IPictureResultDbService, PictureResultDbService>();
             containerRegistry.Register<IRepositoryCreator<DbPictureResult, Guid>, RepositoryCreator<DbPictureResult, Guid>>();
             
+            containerRegistry.Register<IDeviceNameDbService, DeviceNameDbService>();
+            containerRegistry.Register<IRepositoryCreator<DbDeviceInfo, Guid>, RepositoryCreator<DbDeviceInfo, Guid>>();
+            
 
             //Other
             containerRegistry.RegisterSingleton<ILogger, Logger>();
@@ -121,6 +124,8 @@ public partial class App : PrismApplication
             containerRegistry.RegisterDialog<PulseMeterModuleTestView, PulseMeterModuleTestViewModel>();
             containerRegistry.RegisterDialog<CheckTightnessView, CheckTightnessViewModel>();
             containerRegistry.RegisterDialog<CheckAverageQuadraticDifferenceView, CheckAverageQuadraticDifferenceViewModel>();
+            containerRegistry.RegisterDialog<DeviceNamesView, DeviceNamesViewModel>();
+
         }
 
         protected override void OnInitialized()

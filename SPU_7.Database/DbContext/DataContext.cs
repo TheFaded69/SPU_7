@@ -99,6 +99,8 @@ public sealed class DataContext : Microsoft.EntityFrameworkCore.DbContext, IData
         CreateDbDevicesModel(modelBuilder);
         CreateDbCompletedOperationsModel(modelBuilder);
         CreateDbPictureResultModel(modelBuilder);
+        CreateDbDeviceInfoModel(modelBuilder);
+
     }
 
 
@@ -211,5 +213,14 @@ public sealed class DataContext : Microsoft.EntityFrameworkCore.DbContext, IData
             .HasOne(db => db.OperationResult)
             .WithMany(db => db.PictureResults)
             .HasForeignKey(db => db.OperationResultId);
+    }
+    
+    private void CreateDbDeviceInfoModel(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<DbDeviceInfo>()
+            .ToTable("DeviceInfo");
+        CreateBaseEntity<DbDeviceInfo, Guid>(modelBuilder);
+        modelBuilder.Entity<DbDeviceInfo>().Property(db => db.DeviceTypeInformation)
+            .HasMaxLength(500);
     }
 }

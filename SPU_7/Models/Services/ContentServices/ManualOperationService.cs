@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Settings;
 using SPU_7.Models.Scripts.Operations.Results.Extensions;
+using SPU_7.ViewModels;
 using SPU_7.ViewModels.ScriptViewModels.OperationViewModels.OperationExecutingViewModels;
 
 namespace SPU_7.Models.Services.ContentServices;
@@ -16,7 +17,15 @@ public class ManualOperationService : IManualOperationService
     {
         _dialogService = dialogService;
     }
-    
+
+    public void ShowConfirmMessageDialog(string message, Action positive, Action negative)
+    {
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            ConfirmViewModel.Show(_dialogService, message, positive, negative);
+        });
+    }
+
     public void ShowManualValidationResultDialog(Action<List<ValidationPointResult>> positiveAction, Action<List<ValidationPointResult>> negativeAction, List<ValidationPointResult> validationPointModels, ValidationType validationType, int deviceNumber)
     {
         Dispatcher.UIThread.Invoke(() =>

@@ -28,4 +28,6 @@ public class ValidationPointModel
     public bool IsNeedleValveUse { get; set; }
 
     public int? NeedleValveValue { get; set; }
+    
+    public bool IsReplaceNozzle { get; set; }
 }

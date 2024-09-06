@@ -67,7 +67,7 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     private readonly IPulseMeter2Channel? _pulseMeter2Channel;
     private readonly PulseMeterChannel _pulseMeterChannelType;
 
-    public float? Pressure
+    public float? PressureDifference
     {
         get => _pressure;
         set
@@ -112,6 +112,8 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     public string VendorName { get; set; }
     public string DeviceTypeInfo { get; set; }
     public int PulseMeterAddress { get; set; }
+    public bool IsTemperatureCorrect
+    { get; set; }
 
     public async Task<bool> ResetToZeroAsync() => await _pressureSensor.ResetToZeroAsync();
 
@@ -153,24 +155,24 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
                && await _pulseMeter2Channel.WriteCoefficientFrequencyCorrectionAsync(thirdCoefficient);
     }
 
-    public async Task<bool> SetPulseTimeOutAsync(int i)
+    public async Task<bool> SetPulseTimeOutAsync(int timeout)
     {
-        return await _pulseMeter2Channel.SetTimeOutValueAsync(i);
+        return await _pulseMeter2Channel.SetTimeOutValueAsync(timeout);
     }
 
     public async Task<float?> ReadPressureAsync()
     {
 #if DEBUGGUI
-        return Pressure = (float?)new Random().NextDouble() * 1000;
+        return PressureDifference = (float?)new Random().NextDouble() * 1000;
 #else
-        return Pressure = await _pressureSensor.ReadPressureAsync();
+        return PressureDifference = await _pressureSensor.ReadPressureAsync();
 #endif
     }
 
     public async Task<float?> ReadTemperatureAsync()
     {
 #if DEBUGGUI
-        return Pressure = (float?)new Random().NextDouble() * 1000;
+        return Temperature = (float?)new Random().NextDouble() * 1000;
 #else
         return Temperature = await _temperatureSensor.ReadTemperatureAsync(true);
 #endif

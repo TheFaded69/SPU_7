@@ -7,5 +7,6 @@ namespace SPU_7.Models.Services.ContentServices;
 
 public interface IManualOperationService
 {
+   void ShowConfirmMessageDialog(string message, Action positive, Action negative);
    void ShowManualValidationResultDialog(Action< List<ValidationPointResult>> positiveAction, Action< List<ValidationPointResult>> negativeAction, List<ValidationPointResult> validationPointModels, ValidationType validationType, int deviceNumber);
 }

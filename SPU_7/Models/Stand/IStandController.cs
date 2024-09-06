@@ -158,18 +158,13 @@ namespace SPU_7.Models.Stand
         /// <param name="value">Расход</param>
         /// <returns>Результат установки расхода</returns>
         Task<double?> SetConsumptionAsync(double value, double? minimumFlow, double? maximumFlow);
-
+        
         /// <summary>
-        /// Установить режим измерения частоты
+        /// Установить расход сопел на линии
         /// </summary>
-        /// <returns>Результат отправки запроса</returns>
-        Task<bool> SetFrequencyMeasureModeAsync();
-
-        /// <summary>
-        /// Установить режим измерения периодов
-        /// </summary>
-        /// <returns>Результат отправки запроса</returns>
-        Task<bool> SerPeriodMeasureModeAsync();
+        /// <param name="value">Расход</param>
+        /// <returns>Результат установки расхода</returns>
+        Task<double?>  SetConsumptionAsync(double pointTargetConsumption, int pointSelectedLineIndex, double? minimumFlow, double? maximumFlow);
         
         /// <summary>
         /// 
@@ -177,12 +172,6 @@ namespace SPU_7.Models.Stand
         /// <param name="portLogMessages"></param>
         void AddCollectionForPortLogging(ObservableCollection<LogMessage> portLogMessages);
         
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="portLogMessages"></param>
-        void AddCollectionForDevicePortLogging(ObservableCollection<LogMessage> portLogMessages);
-
         /// <summary>
         /// Зарегистрировать наблюдателя за ДД на стенде с СГ
         /// </summary>
@@ -245,14 +234,19 @@ namespace SPU_7.Models.Stand
         Task<bool> SetStandWorkModeAsync();
 
         Task<bool> CloseAllNozzleAsync();
+        Task<bool> CloseAllNozzleAsync(int selectedLineIndex);
+
         Task<bool> OpenSolenoidValveAsync(StandSettingsSolenoidValveModel solenoidValveModel);
         Task<bool> CloseSolenoidValveAsync(StandSettingsSolenoidValveModel solenoidValveModel);
         Task<bool> EnableFrequencyRegulatorAsync(int regulatorIndex);
+        Task<bool> EnableFrequencyRegulatorAsync(StandSettingsFanModel? settingsFanModel);
+        Task<bool> DisableFrequencyRegulatorAsync(int regulatorIndex);
+        Task<bool> DisableFrequencyRegulatorAsync(StandSettingsFanModel? settingsFanModel);
         Task<bool> EnableLineFanWorkAsync(int lineIndex, int fanIndex);
         Task<bool> DisableLineFanWorkAsync(int lineIndex, int fanIndex);
         Task<bool> SetRegulatorFrequencyAsync(int regulatorIndex ,float frequency);
-        Task<bool> DisableFrequencyRegulatorAsync(int regulatorIndex);
-        Task<bool> EndWorkAsync();
+        Task<bool> SetRegulatorFrequencyAsync(StandSettingsFanModel? settingsFanModel, float frequency);
+
 
         float? TemperatureTube { get; set; }
         float? PressureAtmosphere { get; set; }
@@ -260,6 +254,8 @@ namespace SPU_7.Models.Stand
         float? Temperature { get; set; }
         float? PressureResiver { get; set; }
         double? TargetFlow { get; set; }
+        
+        double? RealFlow { get; set; }
 
         /// <summary>
         /// Давление перепада, Па
@@ -269,6 +265,8 @@ namespace SPU_7.Models.Stand
         void UpdateDeviceInformation(DeviceAboutViewModel deviceAboutViewModel);
         void RegisterDeviceObserver(IDeviceObserver deviceItemViewModel, int deviceNumber, int lineNumber);
         string GetVendorNumber(int deviceNumber);
+        
+        string GetVendorNumber(int deviceNumber, int lineIndex);
         
         /// <summary>
         /// Сброс датчика давления на ноль
@@ -282,14 +280,14 @@ namespace SPU_7.Models.Stand
         /// <param name="deviceNumber"></param>
         /// <returns></returns>
         string GetDeviceName(int deviceNumber);
+        string GetDeviceName(int deviceNumber, int lineIndex);
+        bool GetDeviceManualEnable(int i, int lineIndex);
 
         Task EmergencyPowerOffAsync();
         Task<bool> ResetToZeroPressureDifferenceAsync();
         bool GetDeviceManualEnable(int i);
         Task<bool> SetConsumptionWithoutSelectionAsync(ObservableCollection<StandSettingsNozzleModel> pointSelectedNozzles);
-
-        void SetTargetFlowValue(double? value);
-        void AddTargetFlowValue(double? value);
+        
         
         void SetLineTargetFlowValue(double? value, int lineIndex);
         void AddLineTargetFlowValue(double? value, int lineIndex);
@@ -413,6 +411,27 @@ namespace SPU_7.Models.Stand
         /// <param name="pulseMeterChannelNumber"></param>
         /// <returns></returns>
         Task<PulseMeter2ChannelState> GetPulseMeterStatusAsync(int pulseMeterAddress, int pulseMeterChannelNumber);
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pulseWeight"></param>
+        /// <param name="pulseTimeList"></param>
+        /// <returns></returns>
+        Task PulseReadStartAsync(double? pulseWeight, double targetVolume);
 
+        /// <summary>
+        /// Запуск задачи ожидания работы БИПЧ
+        /// </summary>
+        /// <param name="pulseTimeList"></param>
+        /// <param name="timeValidation"></param>
+        /// <param name="activeLine"></param>
+        /// <returns></returns>
+        Task PulseReadProcessStartAsync(List<float?> pulseTimeList, double timeValidation, int? activeLine);
+
+        Task<bool> DisableVacuumCreator(int? activeLine);
+        Task<bool> EnableVacuumCreator(int? activeLine);
+        bool IsDeviceWithTemperatureCorrect(int deviceIndex);
+        bool GetTemperatureCorrect(int lineIndex, int i);
     }
 }

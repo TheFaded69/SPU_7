@@ -89,7 +89,6 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                     await Task.Delay(5000);
 #else
                     await _standController.CloseNozzleAsync(_standSettingsNozzleModel);
-                    _standController.AddLineTargetFlowValue(-_standSettingsNozzleModel.NozzleFactValue, _lineIndex);
 #endif
                     StateType = StateType.Close;
                     break;
@@ -99,7 +98,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                     await Task.Delay(5000);
 #else
                     await _standController.OpenNozzleAsync(_standSettingsNozzleModel);
-                    _standController.AddLineTargetFlowValue(_standSettingsNozzleModel.NozzleFactValue, _lineIndex);
+                    
 #endif
                     StateType = StateType.Open;
                     break;
