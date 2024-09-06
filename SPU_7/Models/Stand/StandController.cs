@@ -713,9 +713,21 @@ RealFlow = flow;
             _line.Devices[deviceInformationViewModel.DeviceNumber - 1].VendorNumberString =
                 deviceInformationViewModel.DeviceVendorNumber;
             _line.Devices[deviceInformationViewModel.DeviceNumber - 1].DeviceName =
-                deviceInformationViewModel.DeviceName;
+                deviceInformationViewModel.SelectedDeviceTypeInfo == null
+                    ? string.Empty
+                    : deviceInformationViewModel.SelectedDeviceTypeInfo.DeviceTypeInfo;
             _line.Devices[deviceInformationViewModel.DeviceNumber - 1].IsManualEnabled =
                 deviceInformationViewModel.IsManualEnabled;
+            _line.Devices[deviceInformationViewModel.DeviceNumber - 1].IsTemperatureCorrect =
+                deviceInformationViewModel.IsTemperatureCorrect;
+            _line.Devices[deviceInformationViewModel.DeviceNumber - 1].DeviceTypeInfo =
+                deviceInformationViewModel.SelectedDeviceTypeInfo == null
+                    ? string.Empty
+                    : deviceInformationViewModel.SelectedDeviceTypeInfo.DeviceTypeInfo;
+            _line.Devices[deviceInformationViewModel.DeviceNumber - 1].VendorName =
+                string.IsNullOrEmpty(deviceInformationViewModel.VendorName)
+                    ? "-"
+                    : deviceInformationViewModel.VendorName;
         }
 
         public bool GetDeviceManualEnable(int i) => _line.Devices[i].IsManualEnabled;
