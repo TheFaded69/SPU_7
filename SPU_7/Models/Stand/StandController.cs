@@ -570,7 +570,7 @@ namespace SPU_7.Models.Stand
             }
         }
 
-        private double? SelectMetrologyCoefficient(float? temperature, float? humidity)
+        public double? SelectMetrologyCoefficient(float? temperature, float? humidity)
         {
             var i = temperature switch
             {
@@ -735,7 +735,7 @@ namespace SPU_7.Models.Stand
 
         public bool GetDeviceManualEnable(int i) => _line.Devices[i].IsManualEnabled;
 
-        public bool GetDeviceManualEnable(int i, int lineIndex) => _lines[lineIndex].Devices[i].IsManualEnabled;
+        public bool GetDeviceManualEnable(int lineIndex, int deviceIndex) => _lines[lineIndex].Devices[deviceIndex].IsManualEnabled;
 
         #endregion
 
@@ -1443,6 +1443,11 @@ namespace SPU_7.Models.Stand
         public float? GetPressureDifferenceFromDevice(int selectedLineIndex, int deviceIndex)
         {
             return _lines[selectedLineIndex].Devices[deviceIndex].PressureDifference;
+        }
+
+        public float? GetTemperatureFromDevice(int selectedLineIndex, int deviceIndex)
+        {
+            return _lines[selectedLineIndex].Devices[deviceIndex].Temperature;
         }
 
         public async Task<uint?> ReadFreeRunPulseCount(int pulseMeterAddress, int pulseMeterChannelNumber)

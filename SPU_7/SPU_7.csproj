@@ -56,7 +56,7 @@
 
 
     <ItemGroup>
-      <Folder Include="Models\Stand\Settings\Stand\Devices\" />
+        <None Include="Assets\**\*" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always" />
     </ItemGroup>
 
 

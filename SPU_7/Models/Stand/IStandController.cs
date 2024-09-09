@@ -374,6 +374,8 @@ namespace SPU_7.Models.Stand
         float? GetTemperatureFromLine(int lineIndex);
         float? GetPressureDifferenceFromLine(int lineIndex);
         float? GetPressureDifferenceFromDevice(int selectedLineIndex, int deviceIndex);
+        float? GetTemperatureFromDevice(int activeLine, int indexOf);
+
         Task<uint?> ReadFreeRunPulseCount(int pulseMeterAddress, int pulseMeterChannelNumber);
         
         
@@ -424,5 +426,6 @@ namespace SPU_7.Models.Stand
         bool IsDeviceWithTemperatureCorrect(int deviceIndex);
         bool GetTemperatureCorrect(int lineIndex, int i);
         Task<float?> GetPressureDischargerFromLineAsync(int activeLine);
+        double? SelectMetrologyCoefficient(float? temperature, float? humidity);
     }
 }

@@ -16,6 +16,7 @@ public class StandSettingsModel
     public ObservableCollection<StandSettingsLineModel> LineViewModels { get; set; }
     public ObservableCollection<StandSettingsPortModel> PortViewModels { get; set; }
 
+    public ObservableCollection<StandSettingsCheckTightnessModel> CheckTightnessViewModels { get; set; }
     public string SelectedEquipmentPortName { get; set; }
     public int TemperatureSensorAddress { get; set; }
     public int PressureSensorAddress { get; set; }

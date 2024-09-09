@@ -50,6 +50,7 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         LineViewModels = [];
         PulseMeterViewModels = [];
         PortViewModels = [];
+        CheckTightnessViewModels = [];
 
         AddNozzleCommand = new DelegateCommand(AddNozzleCommandHandler);
         RemoveNozzleCommand = new DelegateCommand(RemoveNozzleCommandHandler);
@@ -67,13 +68,15 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
         RemovePulseCountMeterModuleCommand = new DelegateCommand(RemovePulseCountMeterModuleCommandHandler);
         AddPortCommand = new DelegateCommand(AddPortCommandHandler);
         RemovePortCommand = new DelegateCommand(RemovePortCommandHandler);
+        AddCheckTightnessCommand = new DelegateCommand(AddCheckTightnessCommandHandler);
+        RemoveCheckTightnessCommand = new DelegateCommand(RemoveCheckTightnessCommandHandler);
         SaveSettingsCommand = new DelegateCommand(SaveSettingsCommandHandler);
         CancelCommand = new DelegateCommand(CancelCommandHandler);
         CreateNewSettingsProfile = new DelegateCommand(CreateNewSettingsProfileHandler);
         CreateNewSettingsProfileFromOtherCommand = new DelegateCommand(CreateNewSettingsProfileFromOtherCommandHandler);
         DeleteSettingsProfileCommand = new DelegateCommand(DeleteSettingsProfileCommandHandler);
         CloseWindowCommand = new DelegateCommand(CloseWindowCommandHandler);
-
+        
 
         StringStandTypes = new ObservableCollection<string>(Enum
             .GetValues<StandType>()
@@ -201,6 +204,8 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     private string _selectedThSensorTypeString;
     private StandSettingsExtensionViewModel _standSettingsExtensionViewModel;
     private bool _isExtensionSettingsEnable;
+    private ObservableCollection<StandSettingsCheckTightnessViewModel> _checkTightnessViewModels;
+    private StandSettingsCheckTightnessViewModel _selectedCheckTightnessViewModel;
 
     #region Profiles
 
@@ -628,6 +633,23 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
 
     #endregion
 
+    #region CheckTightness
+
+    public ObservableCollection<StandSettingsCheckTightnessViewModel> CheckTightnessViewModels
+    {
+        get => _checkTightnessViewModels;
+        set => SetProperty(ref _checkTightnessViewModels, value);
+    }
+
+    public StandSettingsCheckTightnessViewModel SelectedCheckTightnessViewModel
+    
+    {
+        get => _selectedCheckTightnessViewModel;
+        set => SetProperty(ref _selectedCheckTightnessViewModel, value);
+    }
+
+    #endregion
+    
     #region Extension
 
     public bool IsExtensionSettingsEnable
@@ -682,6 +704,24 @@ public class StandSettingsViewModel : ViewModelBase, IDialogAware
     {
         PortViewModels.Remove(SelectedPortViewModel);
     }
+    
+    public DelegateCommand AddCheckTightnessCommand { get; }
+
+    private void AddCheckTightnessCommandHandler()
+    {
+        CheckTightnessViewModels.Add(new StandSettingsCheckTightnessViewModel()
+        {
+            Number = CheckTightnessViewModels.Count + 1,
+        });
+    }
+
+    public DelegateCommand RemoveCheckTightnessCommand { get; }
+
+    private void RemoveCheckTightnessCommandHandler()
+    {
+        CheckTightnessViewModels.Remove(SelectedCheckTightnessViewModel);
+    }
+
 
     public StandSettingsPortViewModel SelectedPortViewModel
     {
