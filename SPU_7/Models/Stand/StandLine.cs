@@ -51,7 +51,8 @@ public class StandLine
                 new RegisterMapEnum<UniversalDeviceRegisterMap>(), pressureSensor, temperatureSensor,
                 modbusProcessors.FirstOrDefault(mb => mb.PortName == settingsService.StandSettingsModel
                     .PulseMeterViewModels
-                    .FirstOrDefault(p => p.Address == deviceViewModel.PulseMeterNumber).SelectedComPort),
+                    .FirstOrDefault(p => p.Address == deviceViewModel.PulseMeterNumber)
+                    ?.SelectedComPort),
                 deviceViewModel.PulseMeterNumber, deviceViewModel.PulseMeterChannelNumber));
         }
 

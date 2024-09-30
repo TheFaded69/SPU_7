@@ -420,9 +420,9 @@ namespace SPU_7.Models.Stand
                                     break;
                                 case LineType.MasterDeviceLineType:
                                 {
-                                    var device = standLine.Devices[deviceIndex];
+                                    /*var device = standLine.Devices[deviceIndex];
                                     await device.ReadPressureAsync();
-                                    await device.ReadTemperatureAsync();
+                                    await device.ReadTemperatureAsync();*/
                                 }
                                     break;
                                 case LineType.NozzleLineType:
@@ -514,47 +514,51 @@ namespace SPU_7.Models.Stand
                                 DeviceInfoParameterType.PressureResiver));
                         }
 
-                        if (standLine.CurrentFlow < _settingsService.StandSettingsModel.LineViewModels[lineIndex]
-                                .NozzleViewModels.Min(noz => noz.NozzleFactValue * 0.1))
-                            standLine.CurrentFlow = 0;
-
-                        var k = SelectMetrologyCoefficient(Temperature, Humidity);
-
-                        var flowK = PressureAtmosphere /
-                                    (PressureAtmosphere + standLine.PressureDischargeSensor.Pressure);
-                        NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flowK),
-                            DeviceInfoParameterType.CoefficientOfCriticalMode));
-
-                        var isNeedFlow = standLine.CurrentFlow switch
+                        if (_settingsService.StandSettingsModel.LineViewModels[lineIndex].SelectedLineType ==
+                            LineType.NozzleLineType)
                         {
-                            < 1 => flowK >= 2.5,
-                            >= 1 => flowK >= 1.25,
-                            _ => false
-                        };
-                        NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, isNeedFlow),
-                            DeviceInfoParameterType.IsCoefficientOfCriticalModeGood));
+                            if (standLine.CurrentFlow < _settingsService.StandSettingsModel.LineViewModels[lineIndex]
+                                    .NozzleViewModels.Min(noz => noz.NozzleFactValue * 0.1))
+                                standLine.CurrentFlow = 0;
 
-                        if (isNeedFlow)
-                        {
-                            var flow = k == null
-                                ? null
-                                : standLine.CurrentFlow
-                                * Math.Sqrt((double)((273.15 + standLine.TemperatureSensor.Temperature) / 293.15))
-                                * (PressureAtmosphere / (PressureAtmosphere +
-                                                         standLine.Devices.Last().PressureDifference / 1000))
-                                * ((standLine.Devices.First().Temperature + 273.15) /
-                                   (standLine.TemperatureSensor.Temperature + 273.15))
-                                * 1 / k;
+                            var k = SelectMetrologyCoefficient(Temperature, Humidity);
 
-                            RealFlow = flow;
-                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
-                                DeviceInfoParameterType.TargetFlow));
-                        }
-                        else
-                        {
-                            double? flow = null;
-                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
-                                DeviceInfoParameterType.TargetFlow));
+                            var flowK = PressureAtmosphere /
+                                        (PressureAtmosphere + standLine.PressureDischargeSensor.Pressure);
+                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flowK),
+                                DeviceInfoParameterType.CoefficientOfCriticalMode));
+
+                            var isNeedFlow = standLine.CurrentFlow switch
+                            {
+                                < 1 => flowK >= 2.5,
+                                >= 1 => flowK >= 1.25,
+                                _ => false
+                            };
+                            NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, isNeedFlow),
+                                DeviceInfoParameterType.IsCoefficientOfCriticalModeGood));
+
+                            if (isNeedFlow)
+                            {
+                                var flow = k == null
+                                    ? null
+                                    : standLine.CurrentFlow
+                                    * Math.Sqrt((double)((273.15 + standLine.TemperatureSensor.Temperature) / 293.15))
+                                    * (PressureAtmosphere / (PressureAtmosphere +
+                                                             standLine.Devices.Last().PressureDifference / 1000))
+                                    * ((standLine.Devices.First().Temperature + 273.15) /
+                                       (standLine.TemperatureSensor.Temperature + 273.15))
+                                    * 1 / k;
+
+                                RealFlow = flow;
+                                NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
+                                    DeviceInfoParameterType.TargetFlow));
+                            }
+                            else
+                            {
+                                double? flow = null;
+                                NotifyObserverByDataPair(new DataPair(new LineData(lineIndex, flow),
+                                    DeviceInfoParameterType.TargetFlow));
+                            }
                         }
                     }
 #endif
@@ -612,7 +616,9 @@ namespace SPU_7.Models.Stand
         public async Task<bool> SetRegulatorFrequencyAsync(StandSettingsFanModel? settingsFanModel, float frequency)
             =>
                 await _frequencyRegulatorDevices
-                    .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
+                    .FirstOrDefault(f =>
+                        ((FrequencyRegulatorDevice)f).ModuleAddress ==
+                        settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
                     .SetOutputValueAsync(frequency);
 
 
@@ -735,7 +741,8 @@ namespace SPU_7.Models.Stand
 
         public bool GetDeviceManualEnable(int i) => _line.Devices[i].IsManualEnabled;
 
-        public bool GetDeviceManualEnable(int lineIndex, int deviceIndex) => _lines[lineIndex].Devices[deviceIndex].IsManualEnabled;
+        public bool GetDeviceManualEnable(int lineIndex, int deviceIndex) =>
+            _lines[lineIndex].Devices[deviceIndex].IsManualEnabled;
 
         #endregion
 
@@ -858,7 +865,7 @@ namespace SPU_7.Models.Stand
             var isWork = true;
             var count = 60;
 
-            if (standSettingsValveModel.StateOffAddress == standSettingsValveModel.StateOnAddress)
+            if (standSettingsValveModel.StateOffBitNumber == standSettingsValveModel.StateOnBitNumber)
             {
                 while (isWork && count > 0)
                 {
@@ -987,7 +994,7 @@ namespace SPU_7.Models.Stand
             var count = 60;
 
 
-            if (standSettingsValveModel.StateOffAddress == standSettingsValveModel.StateOnAddress)
+            if (standSettingsValveModel.StateOffBitNumber == standSettingsValveModel.StateOnBitNumber)
             {
                 while (isWork && count > 0)
                 {
@@ -2112,13 +2119,17 @@ namespace SPU_7.Models.Stand
 
         public async Task<bool> EnableFrequencyRegulatorAsync(StandSettingsFanModel? settingsFanModel) =>
             await _frequencyRegulatorDevices
-                .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
+                .FirstOrDefault(f =>
+                    ((FrequencyRegulatorDevice)f).ModuleAddress ==
+                    settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
                 .StartFrequencyWorkAsync();
 
         public async Task<bool> DisableFrequencyRegulatorAsync(StandSettingsFanModel? settingsFanModel)
             =>
                 await _frequencyRegulatorDevices
-                    .FirstOrDefault(f => ((FrequencyRegulatorDevice)f).ModuleAddress == settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
+                    .FirstOrDefault(f =>
+                        ((FrequencyRegulatorDevice)f).ModuleAddress ==
+                        settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
                     .StopFrequencyWorkAsync();
 
         public async Task<bool> EnableLineFanWorkAsync(int lineIndex, int fanIndex)

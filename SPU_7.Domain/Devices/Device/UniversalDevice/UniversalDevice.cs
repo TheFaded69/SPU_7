@@ -25,19 +25,21 @@ public class UniversalDevice : ModbusUnitProcessor<UniversalDeviceRegisterMap>, 
     {
         _pressureSensor = pressureSensor;
         _temperatureSensor = temperatureSensor;
-        
-        _pulseMeter2Channel = pulseMeterModbusProcessor == null
-            ? null
-            : new PulseMeter2Channel(pulseMeterModbusProcessor, new RegisterMapEnum<PulseMeter2ChannelRegisterMap>(),
-                pulseMeterAddress);
-        PulseMeterAddress = pulseMeterAddress;
-        
-        _pulseMeterChannelType = pulseMeterChannel switch
+
+        if (pulseMeterModbusProcessor != null)
         {
-            1 => PulseMeterChannel.Channel1,
-            2 => PulseMeterChannel.Channel2,
-            _ => throw new ArgumentOutOfRangeException(),
-        };
+            _pulseMeter2Channel = new PulseMeter2Channel(pulseMeterModbusProcessor,
+                new RegisterMapEnum<PulseMeter2ChannelRegisterMap>(),
+                pulseMeterAddress);
+            PulseMeterAddress = pulseMeterAddress;
+
+            _pulseMeterChannelType = pulseMeterChannel switch
+            {
+                1 => PulseMeterChannel.Channel1,
+                2 => PulseMeterChannel.Channel2,
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        }
     }
     public UniversalDevice(IModbusProcessor modbusProcessor,
         IRegisterMapEnum<UniversalDeviceRegisterMap> registerMap,

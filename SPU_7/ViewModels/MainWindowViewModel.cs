@@ -103,11 +103,21 @@ namespace SPU_7.ViewModels
                     return;
                 }
 
+
+
+                try
+                {
 #if DEBUGGUI
                 //_standController.TestInitialization();
 #else
-                _standController.Initialization();
+                    _standController.Initialization();
 #endif
+                }
+                catch (Exception e)
+                {
+                    _logger.Logging(new LogMessage(e.Message, LogLevel.Error));
+                }
+
 
                 StandView = new StandView
                 {

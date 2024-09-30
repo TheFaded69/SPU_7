@@ -14,7 +14,7 @@ public class LineInformationItemViewModel : ViewModelBase
     private double? _currentFlow;
     private float? _temperature;
     private string _lineName;
-    private bool _lineVisible = true;
+    private bool _lineVisible = false;
     private float? _coefficientOfCriticalMode;
     private bool _isCoefficientOfCriticalModeGood;
 
