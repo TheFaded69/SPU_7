@@ -25,11 +25,16 @@ public class FrequencyRegulatorDevice : ModbusUnitProcessor<FrequencyRegulatorRe
     /// В методе логика записи рассчитаного значения в частотный регулятор для установки нужного питания двигателя
     /// </summary>
     /// <param name="value">Выходное значение из ПИД регулятора </param>
-    private async Task WriteOV(double value) => await SetOutputValueAsync(value);
+    private async Task WriteOV(double value) => await WriteOutputValueAsync(value);
 
-    public async Task<bool> SetOutputValueAsync(double value)
+    public async Task<bool> WriteOutputValueAsync(double value)
         => await WriteRegisterAsync(FrequencyRegulatorRegisterMap.FrequencyValueRegister, BitConverter.GetBytes((ushort)(value / 0.1)).Reverse().ToArray());
-    
+
+    public async Task<ushort?> ReadOutputValueAsync()
+    {
+        return (ushort?)await ReadRegisterAsync(FrequencyRegulatorRegisterMap.FrequencyValueRegister);
+    }
+
     public async Task<ushort?> GetCurrentFrequencyValueAsync()
         => (ushort?)await ReadRegisterAsync(FrequencyRegulatorRegisterMap.PA02);
 
