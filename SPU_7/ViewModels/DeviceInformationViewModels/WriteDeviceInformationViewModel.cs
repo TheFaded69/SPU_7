@@ -106,7 +106,7 @@ public class WriteDeviceInformationViewModel : ViewModelBase, IDialogAware
                 DeviceNumber = DeviceInformationViewModels.Count + 1,
                 DeviceVendorNumber = _standController.GetVendorNumber(i, (int)lineIndex),
                 DeviceName = _standController.GetDeviceName(i, (int)lineIndex),
-                IsManualEnabled = _standController.GetDeviceManualEnable(i, (int)lineIndex),
+                IsManualEnabled = _standController.GetDeviceManualEnable((int)lineIndex, i),
                 IsTemperatureCorrect = _standController.GetTemperatureCorrect((int)lineIndex, i),
                 DeviceTypesInfo = new ObservableCollection<DeviceNameViewModel>(deviceNames),
                 VendorName = _standController.GetVendorName((int)lineIndex,i),
