@@ -94,6 +94,11 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
         return Temperature;
     }
 
+    public float? GetFlow()
+    {
+        return Flow;
+    }
+
     #region Observable
     
     private List<IPressureSensorObserver> _pressureSensorObservers = [];

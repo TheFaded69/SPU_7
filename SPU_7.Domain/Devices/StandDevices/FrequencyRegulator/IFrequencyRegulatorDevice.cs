@@ -19,7 +19,14 @@ public interface IFrequencyRegulatorDevice
     /// </summary>
     /// <param name="value">Выходное значение</param>
     /// <returns>Получилось ли отправить запрос</returns>
-    Task<bool> SetOutputValueAsync(double value);
+    Task<bool> WriteOutputValueAsync(double value);
+    
+    /// <summary>
+    /// Считать выходное значение
+    /// </summary>
+    /// <param name="value">Выходное значение</param>
+    /// <returns>Получилось ли отправить запрос</returns>
+    Task<ushort?> ReadOutputValueAsync();
     
     
     /// <summary>

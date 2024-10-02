@@ -160,6 +160,21 @@ namespace SPU_7.Models.Stand
         Task<double?> SetConsumptionAsync(double value, double? minimumFlow, double? maximumFlow);
         
         /// <summary>
+        /// Установить расход
+        /// </summary>
+        /// <param name="value">Расход</param>
+        /// <returns>Результат установки расхода</returns>
+        Task<bool> EnableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice);
+        
+        /// <summary>
+        /// Выключить расход
+        /// </summary>
+        /// <param name="value">Расход</param>
+        /// <returns>Результат установки расхода</returns>
+        Task<bool> DisableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan);
+
+        
+        /// <summary>
         /// Установить расход сопел на линии
         /// </summary>
         /// <param name="value">Расход</param>
@@ -370,6 +385,8 @@ namespace SPU_7.Models.Stand
 
         float? GetPressureDifferenceFromMasterDevice(int lineIndex);
         float? GetTemperatureFromMasterDevice(int selectedLineIndex, int indexOfMasterDevice);
+        float? GetFlowFromMasterDevice(int selectedLineIndex, int indexOfMasterDevice);
+
         Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel, int selectedNeedleValue);
         float? GetTemperatureFromLine(int lineIndex);
         float? GetPressureDifferenceFromLine(int lineIndex);

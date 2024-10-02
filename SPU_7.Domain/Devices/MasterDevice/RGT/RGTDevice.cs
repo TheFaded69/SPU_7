@@ -85,7 +85,12 @@ public class RGTDevice : IRGTDevice
     {
         return Temperature;
     }
-    
+
+    public float? GetFlow()
+    {
+        return Flow;
+    }
+
     public async Task<float?> ReadFlowAsync(IPulseCountMeterModule? pulseCountMeterModule, int? pulseCountMeterModuleChannelNumber, float pulseWeight)
     {
         var currentFrequency = await pulseCountMeterModule.ReadAverageFrequencyAsync((ChannelNumber)pulseCountMeterModuleChannelNumber);

@@ -68,6 +68,12 @@ namespace SPU_7.Models.Stand
 
         private CancellationTokenSource _requestTaskCancellationTokenSource;
         private Task _requestTask;
+        private CancellationTokenSource _ctsControlConsumption;
+        private Task _controlConsumptionTask;
+
+        private PIDController _pidController;
+        private bool _readyToPidControl = true;
+        
         private bool _isTaskExecute;
 
         private int? _selectedLineIndex;
@@ -560,6 +566,8 @@ namespace SPU_7.Models.Stand
                                     DeviceInfoParameterType.TargetFlow));
                             }
                         }
+
+                        _readyToPidControl = true;
                     }
 #endif
 
@@ -619,7 +627,7 @@ namespace SPU_7.Models.Stand
                     .FirstOrDefault(f =>
                         ((FrequencyRegulatorDevice)f).ModuleAddress ==
                         settingsFanModel.FrequencyRegulatorViewModel.ModuleAddress)
-                    .SetOutputValueAsync(frequency);
+                    .WriteOutputValueAsync(frequency);
 
 
         public float? TemperatureTube
@@ -1411,6 +1419,11 @@ namespace SPU_7.Models.Stand
             return _lines[selectedLineIndex].MasterDevices[indexOfMasterDevice].GetTemperature();
         }
 
+        public float? GetFlowFromMasterDevice(int selectedLineIndex, int indexOfMasterDevice)
+        {
+            return _lines[selectedLineIndex].MasterDevices[indexOfMasterDevice].GetFlow();
+        }
+
         public async Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel,
             int selectedNeedleValue)
         {
@@ -1878,6 +1891,58 @@ namespace SPU_7.Models.Stand
             return deltaValue;
         }
 
+        public async Task<bool> EnableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice)
+        {
+            _ctsControlConsumption = new CancellationTokenSource();
+            _controlConsumptionTask = Task.Run(() => ControlConsumptionAsync(value, indexOfFanLine, indexOfFan, indexOfMasterDeviceLine, indexOfMasterDevice), _ctsControlConsumption.Token);
+            
+            return true;
+        }
+
+        private async Task ControlConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice)
+        {
+            _pidController = new PIDController(1, 1, 1, 
+                0, 50, 
+                (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MinimumFlow,
+                (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MaximumFlow);
+
+            var currentFrequency = await _frequencyRegulatorDevices
+                .FirstOrDefault(f =>
+                    ((FrequencyRegulatorDevice)f).ModuleAddress ==
+                    _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.ModuleAddress)
+                .ReadOutputValueAsync();
+
+            var maxStep = 5;
+            
+            while (!_ctsControlConsumption.IsCancellationRequested)
+            {
+                var targetConsumption = value;
+                var currentConsumption = _lines[indexOfMasterDeviceLine].MasterDevices[indexOfMasterDevice].GetFlow();
+                
+                var targetFrequency = _pidController.Calculate(targetConsumption, (double)currentConsumption);
+
+                if (targetFrequency > currentFrequency + maxStep) targetFrequency = (double)(currentFrequency + maxStep);
+                else if (targetFrequency < currentFrequency - maxStep) targetFrequency = (double)(currentFrequency - maxStep);
+
+                await _frequencyRegulatorDevices
+                    .FirstOrDefault(f =>
+                        ((FrequencyRegulatorDevice)f).ModuleAddress ==
+                        _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.ModuleAddress)
+                    .WriteOutputValueAsync(targetFrequency);
+                
+                _readyToPidControl = false;
+
+                while (!_readyToPidControl) await Task.Delay(100);
+            }
+        }
+        
+        public async Task<bool> DisableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan)
+        {
+            await _ctsControlConsumption.CancelAsync();
+
+            return true;
+        }
+
         public async Task<double?> SetConsumptionAsync(double value, int pointSelectedLineIndex, double? minimumFlow,
             double? maximumFlow)
         {
@@ -2150,7 +2215,7 @@ namespace SPU_7.Models.Stand
 
         public async Task<bool> SetRegulatorFrequencyAsync(int regulatorIndex, float frequency)
         {
-            return await _frequencyRegulatorDevices[regulatorIndex].SetOutputValueAsync(frequency);
+            return await _frequencyRegulatorDevices[regulatorIndex].WriteOutputValueAsync(frequency);
         }
 
         public async Task<bool> DisableFrequencyRegulatorAsync(int regulatorIndex)

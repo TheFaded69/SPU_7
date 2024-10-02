@@ -84,7 +84,12 @@ public class RaboDevice : IRaboDevice
     {
         return Temperature;
     }
-    
+
+    public float? GetFlow()
+    {
+        return Flow;
+    }
+
     public async Task<float?> ReadFlowAsync(IPulseCountMeterModule? pulseCountMeterModule,
         int? pulseCountMeterModuleChannelNumber, float pulseWeight)
     {

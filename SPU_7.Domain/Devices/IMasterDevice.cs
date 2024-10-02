@@ -30,4 +30,6 @@ public interface IMasterDevice : IPressureSensorObservable, ITemperatureSensorOb
     
     float? GetPressureDifference();
     float? GetTemperature();
+
+    float? GetFlow();
 }
