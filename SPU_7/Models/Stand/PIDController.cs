@@ -4,18 +4,6 @@ namespace SPU_7.Models.Stand;
 
 public class PIDController
 {
-    private double _kp; // Пропорциональный коэффициент
-    private double _ki; // Интегральный коэффициент
-    private double _kd; // Дифференциальный коэффициент
-
-    private double _integral;
-    private double _previousError;
-
-    private double _minInput;
-    private double _maxInput;
-    private double _minOutput;
-    private double _maxOutput;
-
     public PIDController(double kp, double ki, double kd, double minInput, double maxInput, double minOutput, double maxOutput)
     {
         _kp = kp;
@@ -29,6 +17,19 @@ public class PIDController
         _integral = 0;
         _previousError = 0;
     }
+    
+    private double _kp; // Пропорциональный коэффициент
+    private double _ki; // Интегральный коэффициент
+    private double _kd; // Дифференциальный коэффициент
+
+    private double _integral;
+    private double _previousError;
+
+    private double _minInput;
+    private double _maxInput;
+    private double _minOutput;
+    private double _maxOutput;
+
 
     public double Calculate(double setPoint, double measuredValue)
     {

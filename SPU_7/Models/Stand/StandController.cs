@@ -1419,6 +1419,11 @@ namespace SPU_7.Models.Stand
             return _lines[selectedLineIndex].MasterDevices[indexOfMasterDevice].GetTemperature();
         }
 
+        public float? GetFlowFromMasterDevice(int selectedLineIndex, int indexOfMasterDevice)
+        {
+            return _lines[selectedLineIndex].MasterDevices[indexOfMasterDevice].GetFlow();
+        }
+
         public async Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel,
             int selectedNeedleValue)
         {
@@ -1890,8 +1895,6 @@ namespace SPU_7.Models.Stand
         {
             _ctsControlConsumption = new CancellationTokenSource();
             _controlConsumptionTask = Task.Run(() => ControlConsumptionAsync(value, indexOfFanLine, indexOfFan, indexOfMasterDeviceLine, indexOfMasterDevice), _ctsControlConsumption.Token);
-
-            
             
             return true;
         }

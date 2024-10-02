@@ -385,6 +385,8 @@ namespace SPU_7.Models.Stand
 
         float? GetPressureDifferenceFromMasterDevice(int lineIndex);
         float? GetTemperatureFromMasterDevice(int selectedLineIndex, int indexOfMasterDevice);
+        float? GetFlowFromMasterDevice(int selectedLineIndex, int indexOfMasterDevice);
+
         Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel, int selectedNeedleValue);
         float? GetTemperatureFromLine(int lineIndex);
         float? GetPressureDifferenceFromLine(int lineIndex);
