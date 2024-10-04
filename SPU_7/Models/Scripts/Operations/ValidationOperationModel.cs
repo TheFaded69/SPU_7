@@ -338,6 +338,7 @@ public class ValidationOperationModel : OperationModel
                                             if ((avgFlow - point.TargetConsumption) / point.TargetConsumption < 0.01) break;
                                             
                                             var currentFlow = _standController.GetFlowFromMasterDevice(indexOfMasterDeviceLine, indexOfMasterDevice);
+                                            flowList.RemoveAt(0);
                                             if (currentFlow != null) flowList.Add(currentFlow);
                                         }
                                         else
