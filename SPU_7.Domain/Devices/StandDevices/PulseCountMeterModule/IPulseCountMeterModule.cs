@@ -77,6 +77,12 @@ public interface IPulseCountMeterModule
     /// </summary>
     /// <returns></returns>
     Task<bool> TurnOnControlBitControlRegisterAsync();
+    
+    /// <summary>
+    /// Выключить бит котроль в регистре управления 
+    /// </summary>
+    /// <returns></returns>
+    Task<bool> TurnOffControlBitControlRegisterAsync();
 
     /// <summary>
     /// Сброс модуля

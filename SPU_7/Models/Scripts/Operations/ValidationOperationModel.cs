@@ -419,6 +419,8 @@ public class ValidationOperationModel : OperationModel
                                         _timerService.Message = "Прогон расхода через СГ";
                                         _timerService.InfoTimerEnable();
 
+                                        //while (await _standController.GetPulseMeterStatusAsync())
+                                        
                                         await Task.Delay(TimeSpan.FromHours(timeValidation));
                                     }
 
