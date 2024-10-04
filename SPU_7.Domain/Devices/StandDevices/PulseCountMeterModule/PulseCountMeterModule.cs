@@ -127,7 +127,7 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
     {
         var controlRegister = await ReadControlRegisterAsync();
 
-        controlRegister |= 0x0010;
+        controlRegister |= (1u << 4);
 
         return await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.ControlRegister,
             BitConverter.GetBytes((uint)controlRegister).SwapBytes().ToArray());
@@ -137,7 +137,7 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
     {
         var controlRegister = await ReadControlRegisterAsync();
 
-        controlRegister &= ~(1u << 1);
+        controlRegister &= ~(1u << 4);
 
         return await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.ControlRegister,
             BitConverter.GetBytes((uint)controlRegister).SwapBytes().ToArray());
