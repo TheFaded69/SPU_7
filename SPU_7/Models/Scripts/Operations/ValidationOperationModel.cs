@@ -63,7 +63,7 @@ public class ValidationOperationModel : OperationModel
 
             var deviceList = new List<DeviceInformation>();
 
-            if (!operationCancellationTokenSource.IsCancellationRequested)
+            /*if (!operationCancellationTokenSource.IsCancellationRequested)
             {
                 if (!await _standController.SetStandWorkModeAsync())
                 {
@@ -75,7 +75,7 @@ public class ValidationOperationModel : OperationModel
             else
             {
                 return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", null);
-            }
+            }*/
 
             for (var pointIndex = 0;
                  pointIndex < ((ValidationOperationConfigurationModel)_configuration).Points.Count;
@@ -114,25 +114,32 @@ public class ValidationOperationModel : OperationModel
                                         .IndexOf(_standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels
                                             .FirstOrDefault(mas => mas.MasterDeviceName == point.SelectedMasterDeviceName));
 
-                                    if (point.SelectedLineNumber - 1 > indexOfFanLine)
+                                    /*if (point.SelectedLineNumber - 1 > indexOfFanLine)
                                     {
                                         var currentIndex = point.SelectedLineNumber - 1;
 
                                         while (currentIndex != indexOfFanLine)
                                         {
-                                            if (!operationCancellationTokenSource.IsCancellationRequested)
+                                            if (currentIndex > 0)
                                             {
-                                                if (!await _standController.OpenValveAsync(
-                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex].EndCommonValveViewModel))
+                                                if (!operationCancellationTokenSource.IsCancellationRequested)
                                                 {
-                                                    _logger.Logging(new LogMessage("Не удалось открыть кран после эталонов", LogLevel.Error));
-                                                    return new OperationResult(OperationResultType.Error, "Не удалось открыть кран после эталонов",
-                                                        null);
+                                                    if (!await _standController.OpenValveAsync(
+                                                            _standSettingsService.StandSettingsModel
+                                                                .LineViewModels[currentIndex - 1].EndCommonValveViewModel))
+                                                    {
+                                                        _logger.Logging(new LogMessage(
+                                                            "Не удалось открыть кран после эталонов", LogLevel.Error));
+                                                        return new OperationResult(OperationResultType.Error,
+                                                            "Не удалось открыть кран после эталонов",
+                                                            null);
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", null);
+                                                else
+                                                {
+                                                    return new OperationResult(OperationResultType.Stop,
+                                                        "Выполнение сценария прервано", null);
+                                                }
                                             }
 
                                             currentIndex--;
@@ -142,21 +149,29 @@ public class ValidationOperationModel : OperationModel
                                     {
                                         var currentIndex = point.SelectedLineNumber - 1;
 
+                                        
                                         while (currentIndex != indexOfFanLine)
                                         {
-                                            if (!operationCancellationTokenSource.IsCancellationRequested)
+                                            if (currentIndex > 0)
                                             {
-                                                if (!await _standController.OpenValveAsync(
-                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex].EndCommonValveViewModel))
+                                                if (!operationCancellationTokenSource.IsCancellationRequested)
                                                 {
-                                                    _logger.Logging(new LogMessage("Не удалось открыть кран после эталонов", LogLevel.Error));
-                                                    return new OperationResult(OperationResultType.Error, "Не удалось открыть кран после эталонов",
-                                                        null);
+                                                    if (!await _standController.OpenValveAsync(
+                                                            _standSettingsService.StandSettingsModel
+                                                                .LineViewModels[currentIndex - 1].EndCommonValveViewModel))
+                                                    {
+                                                        _logger.Logging(new LogMessage(
+                                                            "Не удалось открыть кран после эталонов", LogLevel.Error));
+                                                        return new OperationResult(OperationResultType.Error,
+                                                            "Не удалось открыть кран после эталонов",
+                                                            null);
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", null);
+                                                else
+                                                {
+                                                    return new OperationResult(OperationResultType.Stop,
+                                                        "Выполнение сценария прервано", null);
+                                                }
                                             }
 
                                             currentIndex++;
@@ -169,19 +184,28 @@ public class ValidationOperationModel : OperationModel
 
                                         while (currentIndex != indexOfFanLine)
                                         {
-                                            if (!operationCancellationTokenSource.IsCancellationRequested)
+                                            if (currentIndex > 0)
                                             {
-                                                if (!await _standController.OpenValveAsync(
-                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex].StartCommonValveViewModel))
+                                                if (!operationCancellationTokenSource.IsCancellationRequested)
                                                 {
-                                                    _logger.Logging(new LogMessage("Не удалось открыть общий кран после устройств", LogLevel.Error));
-                                                    return new OperationResult(OperationResultType.Error, "Не удалось открыть общий кран после устройств",
-                                                        null);
+                                                    if (!await _standController.OpenValveAsync(
+                                                            _standSettingsService.StandSettingsModel
+                                                                .LineViewModels[currentIndex - 1]
+                                                                .StartCommonValveViewModel))
+                                                    {
+                                                        _logger.Logging(new LogMessage(
+                                                            "Не удалось открыть общий кран после устройств",
+                                                            LogLevel.Error));
+                                                        return new OperationResult(OperationResultType.Error,
+                                                            "Не удалось открыть общий кран после устройств",
+                                                            null);
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", null);
+                                                else
+                                                {
+                                                    return new OperationResult(OperationResultType.Stop,
+                                                        "Выполнение сценария прервано", null);
+                                                }
                                             }
 
                                             currentIndex--;
@@ -193,19 +217,28 @@ public class ValidationOperationModel : OperationModel
 
                                         while (currentIndex != indexOfFanLine)
                                         {
-                                            if (!operationCancellationTokenSource.IsCancellationRequested)
+                                            if (currentIndex > 0)
                                             {
-                                                if (!await _standController.OpenValveAsync(
-                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex].StartCommonValveViewModel))
+                                                if (!operationCancellationTokenSource.IsCancellationRequested)
                                                 {
-                                                    _logger.Logging(new LogMessage("Не удалось открыть общий кран после устройств", LogLevel.Error));
-                                                    return new OperationResult(OperationResultType.Error, "Не удалось открыть общий кран после устройств",
-                                                        null);
+                                                    if (!await _standController.OpenValveAsync(
+                                                            _standSettingsService.StandSettingsModel
+                                                                .LineViewModels[currentIndex - 1]
+                                                                .StartCommonValveViewModel))
+                                                    {
+                                                        _logger.Logging(new LogMessage(
+                                                            "Не удалось открыть общий кран после устройств",
+                                                            LogLevel.Error));
+                                                        return new OperationResult(OperationResultType.Error,
+                                                            "Не удалось открыть общий кран после устройств",
+                                                            null);
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", null);
+                                                else
+                                                {
+                                                    return new OperationResult(OperationResultType.Stop,
+                                                        "Выполнение сценария прервано", null);
+                                                }
                                             }
 
                                             currentIndex++;
@@ -242,7 +275,7 @@ public class ValidationOperationModel : OperationModel
                                     else
                                     {
                                         return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", null);
-                                    }
+                                    }*/
 
                                     // какие-то действия
                                     var validationMeasureResult = new ValidationMeasureResult();
@@ -250,7 +283,7 @@ public class ValidationOperationModel : OperationModel
 
                                     for (var deviceIndex = 0; deviceIndex < _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels.Count; deviceIndex++)
                                     {
-                                        if (!_standController.GetDeviceManualEnable(deviceIndex)) continue;
+                                        /*if (!_standController.GetDeviceManualEnable(deviceIndex)) continue;
 
                                         var validationDeviceResult = new ValidationDeviceResult()
                                         {
@@ -264,7 +297,7 @@ public class ValidationOperationModel : OperationModel
                                             DeviceInfo = _standController.GetDeviceInfoType((int)activeLine, deviceIndex)
                                                 .DeviceTypeInfo,
                                             PressureDifference =
-                                                _standController.GetPressureDifferenceFromLine((int)activeLine),
+                                                _standController.GetPressureDifferenceFromMasterDevice((int)activeLine),
                                             TargetFlow = point.TargetConsumption
                                         };
 
@@ -304,7 +337,7 @@ public class ValidationOperationModel : OperationModel
 
                                                 await Task.Delay(1000);
                                             }
-                                        }
+                                        }*/
                                     }
 
                                     double? devicePulseCount = null;
@@ -329,13 +362,16 @@ public class ValidationOperationModel : OperationModel
                                     // ожидание стабильности расхода
                                     var isFLowCorrect = false;
                                     var flowList = new List<float?>();
-                                    while (!isFLowCorrect)
+                                    while (true)
                                     {
                                         if (flowList.Count == 20)
                                         {
                                             var avgFlow = flowList.Average();
 
-                                            if ((avgFlow - point.TargetConsumption) / point.TargetConsumption < 0.01) break;
+                                            if ((avgFlow - point.TargetConsumption) / point.TargetConsumption < 0.01)
+                                            {
+                                                
+                                            }
                                             
                                             var currentFlow = _standController.GetFlowFromMasterDevice(indexOfMasterDeviceLine, indexOfMasterDevice);
                                             flowList.RemoveAt(0);
