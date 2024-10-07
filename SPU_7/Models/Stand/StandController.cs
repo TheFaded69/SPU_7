@@ -1915,7 +1915,7 @@ namespace SPU_7.Models.Stand
 
         private async Task ControlConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice)
         {
-            _pidController = new PIDController(0.2, 0.01, 0.01, 
+            _pidController = new PIDController(0.15, 0.022, 0.022, 
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MinimumFlow,
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MaximumFlow, 
                 0, 50);
@@ -1932,6 +1932,11 @@ namespace SPU_7.Models.Stand
             {
                 var targetConsumption = value;
                 var currentConsumption = _lines[indexOfMasterDeviceLine].MasterDevices[indexOfMasterDevice].GetFlow();
+
+                if (currentConsumption > (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine]
+                        .FanViewModels[indexOfFan].MaximumFlow)
+                    currentConsumption = _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine]
+                        .FanViewModels[indexOfFan].MaximumFlow;
                 
                 var targetFrequency = _pidController.Calculate(targetConsumption, (double)currentConsumption);
 
