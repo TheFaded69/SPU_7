@@ -246,6 +246,7 @@ public class LineItemViewModel : ViewModelBase
         {
             MasterDeviceItemViewModels.Add(new MasterDeviceItemViewModel(_dialogService,
                 _standController,
+                _settingsService,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i]
                     .MasterDeviceValveViewModel,
                 settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels[i]

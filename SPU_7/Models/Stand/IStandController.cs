@@ -8,6 +8,7 @@ using SPU_7.Common.Stand;
 using SPU_7.Domain.Devices.StandDevices.PulseCountMeterModule;
 using SPU_7.Domain.Devices.StandDevices.PulseMeter;
 using SPU_7.Domain.Extensions;
+using SPU_7.Extensions.Interface;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 using SPU_7.ViewModels;
 using SPU_7.ViewModels.DeviceInformationViewModels;
@@ -444,5 +445,6 @@ namespace SPU_7.Models.Stand
         bool GetTemperatureCorrect(int lineIndex, int i);
         Task<float?> GetPressureDischargerFromLineAsync(int activeLine);
         double? SelectMetrologyCoefficient(float? temperature, float? humidity);
+        double GetTargetFlowFromMasterDevice(int lineIndex, int masterDeviceIndex);
     }
 }

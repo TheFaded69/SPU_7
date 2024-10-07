@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using DynamicData;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Drawing;
@@ -10,142 +11,155 @@ using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Painting;
+using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SkiaSharp;
+using SPU_7.Extensions.Interface;
+using SPU_7.Models.Services.ContentServices;
+using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 using SPU_7.Views;
 
 namespace SPU_7.ViewModels;
 
-public class MasterDeviceInfoViewModel : ViewModelBase, IDialogAware
+public class MasterDeviceInfoViewModel : ViewModelBase, IDialogAware, IFlowDataObserver
 {
-    public MasterDeviceInfoViewModel()
+    public MasterDeviceInfoViewModel(IStandController standController, IFlowDataService flowDataService)
     {
         Title = "Мастер-устройство";
-        
+
+        _standController = standController;
+        _flowDataService = flowDataService;
+
         CloseWindowCommand = new DelegateCommand(CloseWindowCommandHandler);
-        ChartUpdatedCommand = new DelegateCommand<ChartCommandArgs>(ChartUpdated);
-        PointerUpCommand = new DelegateCommand<PointerCommandArgs>(PointerUp);
-        PointerDownCommand = new DelegateCommand<PointerCommandArgs>(PointerDown);
-        PointerMoveCommand = new DelegateCommand<PointerCommandArgs>(PointerMove);
-        
+        AddValueCommand = new DelegateCommand(AddValueCommandHandler);
+
+        _flowValues = new ObservableCollection<double>();
+        _frequencyValues = new ObservableCollection<double>();
         Series =
         [
-            new ColumnSeries<ObservablePoint>
+            new LineSeries<double>
             {
-                Values = _values,
-                Padding = 0,
-                MaxBarWidth = double.PositiveInfinity,
-                DataPadding = new LvcPoint(0, 1)
+                LineSmoothness = 1,
+                Name = "Расход",
+                Values = _flowValues,
+                Stroke = new SolidColorPaint(s_blue, 2),
+                GeometrySize = 10,
+                GeometryStroke = new SolidColorPaint(s_blue, 2),
+                Fill = null,
+                ScalesYAt = 0 // it will be scaled at the YAxis[0] instance 
+            },
+            new LineSeries<double>
+            {
+                Name = "Частота",
+                Values = _frequencyValues,
+                Stroke = new SolidColorPaint(s_red, 2),
+                GeometrySize = 10,
+                GeometryStroke = new SolidColorPaint(s_red, 2),
+                Fill = null,
+                ScalesYAt = 1 // it will be scaled at the YAxis[1] instance 
             }
         ];
 
-        ScrollbarSeries =
+        YAxes =
         [
-            new LineSeries<ObservablePoint>
+            new Axis
             {
-                Values = _values,
-                GeometryStroke = null,
-                GeometryFill = null,
-                DataPadding = new LvcPoint(0, 1)
+                Name = "Расход, м³/ч",
+                NameTextSize = 14,
+                NamePaint = new SolidColorPaint(s_blue),
+                NamePadding = new Padding(0, 20),
+                Padding = new Padding(0, 0, 20, 0),
+                TextSize = 12,
+                LabelsPaint = new SolidColorPaint(s_blue),
+                TicksPaint = new SolidColorPaint(s_blue),
+                SubticksPaint = new SolidColorPaint(s_blue),
+                DrawTicksPath = true
+            },
+            new Axis
+            {
+                Name = "Частота, гц",
+                NameTextSize = 14,
+                NamePaint = new SolidColorPaint(s_red),
+                NamePadding = new Padding(0, 20),
+                Padding = new Padding(20, 0, 0, 0),
+                TextSize = 12,
+                LabelsPaint = new SolidColorPaint(s_red),
+                TicksPaint = new SolidColorPaint(s_red),
+                SubticksPaint = new SolidColorPaint(s_red),
+                DrawTicksPath = true,
+                ShowSeparatorLines = false,
+                Position = LiveChartsCore.Measure.AxisPosition.End
             }
         ];
 
-        ScrollableAxes = [new Axis()];
-
-        Thumbs =
-        [
-            new RectangularSection
-            {
-                Fill = new SolidColorPaint(new SKColor(255, 205, 210, 100))
-            }
-        ];
-
-        InvisibleX = [new Axis { IsVisible = false }];
-        InvisibleY = [new Axis { IsVisible = false }];
-
-        _ = AddData();
-    }
-    private bool _isAdding = true;
-    private object _sync = new();
-    
-    private async Task AddData()
-    {
-        while (_isAdding)
+        VerticalLines = [new RectangularSection
         {
-            await Task.Delay(1000);
-
-            lock (_sync)
+            Yi = 0,
+            Yj = 0,
+            Stroke = new SolidColorPaint
             {
-                _values.Add(new ObservablePoint(_values.Count, new Random().Next(100, 200)));
+                Color = SKColors.Green,
+                StrokeThickness = 3,
+                PathEffect = new DashEffect(new float[]{6,6})
             }
-        }
+        },];
+    }
+
+    private readonly IStandController _standController;
+    private readonly IFlowDataService _flowDataService;
+
+    private static readonly SKColor s_blue = new(25, 118, 210);
+    private static readonly SKColor s_red = new(229, 57, 53);
+    
+    private readonly ObservableCollection<double> _flowValues;
+    private readonly ObservableCollection<double> _frequencyValues;
+    
+    private double _targetFlow;
+    public ISeries[] Series { get; set; } = [];
+    public ICartesianAxis[] YAxes { get; set; } = [];
+
+    public RectangularSection[] VerticalLines { get; set; } = [];
+
+    public double TargetFlow
+    {
+        get => _targetFlow;
+        set => SetProperty(ref _targetFlow, value);
     }
     
-    private bool _isDown = false;
-    private readonly ObservableCollection<ObservablePoint> _values = [];
-    
-    public ISeries[] Series { get; set; }
-    public ISeries[] ScrollbarSeries { get; set; }
-    public Axis[] ScrollableAxes { get; set; }
-    public Axis[] InvisibleX { get; set; }
-    public Axis[] InvisibleY { get; set; }
-    public RectangularSection[] Thumbs { get; set; }
+    public SolidColorPaint LegendTextPaint { get; set; } =
+        new()
+        {
+            Color = new SKColor(50, 50, 50),
+            SKTypeface = SKTypeface.FromFamilyName("Courier New")
+        };
 
-    public DelegateCommand<ChartCommandArgs> ChartUpdatedCommand { get; }
-    public void ChartUpdated(ChartCommandArgs args)
+    public SolidColorPaint LegendBackgroundPaint { get; set; } = new(new SKColor(240, 240, 240));
+
+    public void AcceptFlowData(double currentFlow, double currentFrequency)
     {
-        var cartesianChart = (ICartesianChartView<SkiaSharpDrawingContext>)args.Chart;
-
-        var x = cartesianChart.XAxes.First();
-
-        // update the scroll bar thumb when the chart is updated (zoom/pan)
-        // this will let the user know the current visible range
-        var thumb = Thumbs[0];
-
-        thumb.Xi = x.MinLimit;
-        thumb.Xj = x.MaxLimit;
+        _flowValues.Add(currentFlow);
+        _frequencyValues.Add(currentFrequency);
     }
 
-    public DelegateCommand<PointerCommandArgs> PointerDownCommand { get; }
-    public void PointerDown(PointerCommandArgs args)
-    {
-        _isDown = true;
-    }
 
-    public DelegateCommand<PointerCommandArgs> PointerMoveCommand { get; }
-    public void PointerMove(PointerCommandArgs args)
-    {
-        if (!_isDown) return;
-
-        var chart = (ICartesianChartView<SkiaSharpDrawingContext>)args.Chart;
-        var positionInData = chart.ScalePixelsToData(args.PointerPosition);
-
-        var thumb = Thumbs[0];
-        var currentRange = thumb.Xj - thumb.Xi;
-
-        // update the scroll bar thumb when the user is dragging the chart
-        thumb.Xi = positionInData.X - currentRange / 2;
-        thumb.Xj = positionInData.X + currentRange / 2;
-
-        // update the chart visible range
-        ScrollableAxes[0].MinLimit = thumb.Xi;
-        ScrollableAxes[0].MaxLimit = thumb.Xj;
-    }
-
-    public DelegateCommand<PointerCommandArgs> PointerUpCommand { get; }
-    public void PointerUp(PointerCommandArgs args)
-    {
-        _isDown = false;
-    }
-    
     public DelegateCommand CloseWindowCommand { get; }
+
+
     private void CloseWindowCommandHandler()
     {
         RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
     }
-    
+
+    public DelegateCommand AddValueCommand { get; }
+
+    private void AddValueCommandHandler()
+    {
+        _flowValues.Add(new Random().Next(0, 1000));
+        _frequencyValues.Add(new Random().Next(0, 50));
+    }
+
     public bool CanCloseDialog()
     {
         return true;
@@ -153,18 +167,26 @@ public class MasterDeviceInfoViewModel : ViewModelBase, IDialogAware
 
     public void OnDialogClosed()
     {
+        _flowDataService.UnsubscribeDataObserver(this);
     }
 
     public void OnDialogOpened(IDialogParameters parameters)
     {
+        TargetFlow = parameters.GetValue<double>("TargetFlow");
+        
+        VerticalLines[0].Yi = TargetFlow;
+        VerticalLines[0].Yj = TargetFlow;
+
+        
+        _flowDataService.SubscribeDataObserver(this);
     }
 
     public event Action<IDialogResult>? RequestClose;
 
-    public static void Show(IDialogService dialogService, StandSettingsMasterDeviceModel standSettingsMasterDeviceModel, Action positive, Action negative)
+    public static void Show(IDialogService dialogService, StandSettingsMasterDeviceModel standSettingsMasterDeviceModel, Action positive, Action negative, double targetFlow)
     {
         dialogService.ShowDialog(nameof(MasterDeviceInfoView),
-            new DialogParameters() { { "StandSettingsMasterDeviceModel", standSettingsMasterDeviceModel } },
+            new DialogParameters() { { "StandSettingsMasterDeviceModel", standSettingsMasterDeviceModel }, {"TargetFlow", targetFlow} },
             result =>
             {
                 switch (result.Result)

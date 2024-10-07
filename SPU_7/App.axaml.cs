@@ -67,6 +67,7 @@ public partial class App : PrismApplication
             containerRegistry.RegisterSingleton<ITimerService, TimerService>();
             containerRegistry.RegisterSingleton<IOperationActionService, OperationActionService>();
             containerRegistry.RegisterInstance(typeof(ITimerService), new TimerService());
+            containerRegistry.RegisterSingleton<IFlowDataService, FlowDataService>();
 
 
             //Db
@@ -134,10 +135,10 @@ public partial class App : PrismApplication
                     config 
                         .AddDarkTheme()  
                         .HasGlobalSKTypeface(SKFontManager.Default.MatchCharacter('Ж'))
-                        .HasMap<Flow>((flow, index) => new Coordinate(index, flow.flowValue == null ? 0 : (double)flow.flowValue)) 
+                        //.HasMap<Flow>((flow, index) => new Coordinate(index, flow.flowValue == null ? 0 : (double)flow.flowValue)) 
             ); 
             
         }
 
-        public record Flow(int measureNumber, float? flowValue);
+        //public record Flow(int measureNumber, float? flowValue);
 }

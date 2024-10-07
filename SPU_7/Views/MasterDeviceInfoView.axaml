@@ -30,29 +30,16 @@
                        VerticalAlignment="Center" />
         </DockPanel>
         
-        <Grid RowDefinitions="*,100">
-            <lvc:CartesianChart
-                Grid.Row="0"
-                Margin="5"
-                Series="{Binding Series}"
-                XAxes="{Binding ScrollableAxes}"
-                ZoomMode="X"
-                UpdateStartedCommand="{Binding ChartUpdatedCommand}">
-            </lvc:CartesianChart>
-
-            <lvc:CartesianChart
-                Margin="5"
-                x:Name="ScrollBarChart"
-                Grid.Row="1"
-                Series="{Binding ScrollbarSeries}"
-                Sections="{Binding Thumbs}"
-                XAxes="{Binding InvisibleX}"
-                YAxes="{Binding InvisibleY}"
-                PointerPressedCommand="{Binding PointerDownCommand}"
-                PointerMoveCommand="{Binding PointerMoveCommand}"
-                PointerReleasedCommand="{Binding PointerUpCommand}"
-                TooltipPosition="Hidden">
-            </lvc:CartesianChart>
-        </Grid>
+        <lvc:CartesianChart
+            Series="{Binding Series}"
+            YAxes="{Binding YAxes}"
+            LegendPosition="Bottom"
+            ZoomMode="X"
+            Sections="{Binding VerticalLines}"
+            LegendTextPaint="{Binding LegendTextPaint}"
+            LegendBackgroundPaint="{Binding LegendBackgroundPaint}"
+            LegendTextSize="16">
+        </lvc:CartesianChart>
+        
     </DockPanel>
 </UserControl>

@@ -54,6 +54,8 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
             NotifyFlowObservers(value);
         }
     }
+    
+    private double TargetFlow { get; set; }
 
     private readonly IPressureSensor _pressureSensor;
     private readonly ITemperatureSensor _temperatureSensor;
@@ -97,6 +99,16 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
     public float? GetFlow()
     {
         return Flow;
+    }
+
+    public void SetTargetFlow(double flow)
+    {
+        TargetFlow = flow;
+    }
+
+    public double GetTargetFlow()
+    {
+        return TargetFlow;
     }
 
     #region Observable

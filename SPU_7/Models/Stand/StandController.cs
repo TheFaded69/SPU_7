@@ -617,6 +617,11 @@ namespace SPU_7.Models.Stand
             return MetrologyData.CoefficientCorrectHumidity[i, j];
         }
 
+        public double GetTargetFlowFromMasterDevice(int lineIndex, int masterDeviceIndex)
+        {
+            return _lines[lineIndex].MasterDevices[masterDeviceIndex].GetTargetFlow();
+        }
+
         #endregion
 
         #region Текущие значения

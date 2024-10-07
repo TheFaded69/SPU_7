@@ -53,6 +53,8 @@ public class RGTDevice : IRGTDevice
             NotifyFlowObservers(value);
         }
     }
+    
+    private double TargetFlow { get; set; }
 
     private readonly IPressureSensor _pressureSensor;
     private readonly ITemperatureSensor _temperatureSensor;
@@ -89,6 +91,16 @@ public class RGTDevice : IRGTDevice
     public float? GetFlow()
     {
         return Flow;
+    }
+    
+    public void SetTargetFlow(double flow)
+    {
+        TargetFlow = flow;
+    }
+
+    public double GetTargetFlow()
+    {
+        return TargetFlow;
     }
 
     public async Task<float?> ReadFlowAsync(IPulseCountMeterModule? pulseCountMeterModule, int? pulseCountMeterModuleChannelNumber, float pulseWeight)

@@ -36,7 +36,8 @@ namespace SPU_7.ViewModels
             IManualOperationService manualOperationService,
             ITimerService timerService,
             IOperationActionService operationActionService,
-            IScriptResultsDbService scriptResultsDbService)
+            IScriptResultsDbService scriptResultsDbService,
+            IFlowDataService flowDataService)
         {
             _dialogService = dialogService;
             _notificationService = notificationService;
@@ -49,6 +50,7 @@ namespace SPU_7.ViewModels
             _timerService = timerService;
             _operationActionService = operationActionService;
             _scriptResultsDbService = scriptResultsDbService;
+            _flowDataService = flowDataService;
 
             CloseWindowCommand = new DelegateCommand<Window>(CloseWindowCommandHandler);
             HideWindowCommand = new DelegateCommand<Window>(HideWindowCommandHandler);
@@ -62,6 +64,15 @@ namespace SPU_7.ViewModels
             ExitUserCommand = new DelegateCommand(ExitUserCommandHandler);
 
             Init();
+            
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    _flowDataService.ReceiveData(new Random().Next(0, 1000), new Random().Next(0, 50));
+                    await Task.Delay(1000);
+                }
+            });
         }
 
         private readonly IDialogService _dialogService;
@@ -75,6 +86,7 @@ namespace SPU_7.ViewModels
         private readonly ITimerService _timerService;
         private readonly IOperationActionService _operationActionService;
         private readonly IScriptResultsDbService _scriptResultsDbService;
+        private readonly IFlowDataService _flowDataService;
 
         #region Боковое меню
 

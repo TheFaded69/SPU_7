@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using SPU_7.Common.Extensions;
 using SPU_7.Domain.Extensions;
+using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
 
@@ -11,13 +13,15 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver, ITemperatureSensorObserver, IFlowObserver
 {
     public MasterDeviceItemViewModel(IDialogService dialogService, 
-        IStandController standController, 
+        IStandController standController,
+        IStandSettingsService standSettingsService,
         StandSettingsValveModel valveViewModel, 
         StandSettingsValveModel pressureValveViewModel,
         StandSettingsMasterDeviceModel masterDeviceModel)
     {
         _dialogService = dialogService;
         _standController = standController;
+        _standSettingsService = standSettingsService;
         _masterDeviceModel = masterDeviceModel;
 
         ValveItemViewModel = new ValveItemViewModel(valveViewModel, standController, StateType.Open);
@@ -32,6 +36,7 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
 
     private readonly IDialogService _dialogService;
     private readonly IStandController _standController;
+    private readonly IStandSettingsService _standSettingsService;
     private readonly StandSettingsMasterDeviceModel _masterDeviceModel;
 
     private StateType _stateType;
@@ -99,8 +104,18 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
 
     private void OpenMasterDeviceInfoCommandHandler()
     {
-        MasterDeviceInfoViewModel.Show(_dialogService, _masterDeviceModel, null, null);
+        var lineIndex = _standSettingsService.StandSettingsModel.LineViewModels.IndexOf(
+            _standSettingsService.StandSettingsModel.LineViewModels.FirstOrDefault(line => line.MasterDeviceViewModels.Contains(_masterDeviceModel)));
+
+        var masterDeviceIndex = _standSettingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.IndexOf(_standSettingsService.StandSettingsModel
+            .LineViewModels[lineIndex].MasterDeviceViewModels.FirstOrDefault(model => model == _masterDeviceModel));
+            
+        MasterDeviceInfoViewModel.Show(_dialogService, _masterDeviceModel, null, null, _standController.GetTargetFlowFromMasterDevice(lineIndex, masterDeviceIndex));
+        //MasterDeviceInfoViewModel.Show(_dialogService, _masterDeviceModel, null, null, 500);
+        
     }
+    
+    
     
     public DelegateCommand EnableFlowCommand { get; }
 
