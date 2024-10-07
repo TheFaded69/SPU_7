@@ -36,8 +36,7 @@ namespace SPU_7.ViewModels
             IManualOperationService manualOperationService,
             ITimerService timerService,
             IOperationActionService operationActionService,
-            IScriptResultsDbService scriptResultsDbService,
-            IFlowDataService flowDataService)
+            IScriptResultsDbService scriptResultsDbService)
         {
             _dialogService = dialogService;
             _notificationService = notificationService;
@@ -50,7 +49,6 @@ namespace SPU_7.ViewModels
             _timerService = timerService;
             _operationActionService = operationActionService;
             _scriptResultsDbService = scriptResultsDbService;
-            _flowDataService = flowDataService;
 
             CloseWindowCommand = new DelegateCommand<Window>(CloseWindowCommandHandler);
             HideWindowCommand = new DelegateCommand<Window>(HideWindowCommandHandler);
@@ -64,15 +62,6 @@ namespace SPU_7.ViewModels
             ExitUserCommand = new DelegateCommand(ExitUserCommandHandler);
 
             Init();
-            
-            Task.Run(async () =>
-            {
-                while (true)
-                {
-                    _flowDataService.ReceiveData(new Random().Next(0, 1000), new Random().Next(0, 50));
-                    await Task.Delay(1000);
-                }
-            });
         }
 
         private readonly IDialogService _dialogService;
