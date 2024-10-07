@@ -28,6 +28,7 @@ using SPU_7.Modbus.Processor;
 using SPU_7.Modbus.Processor.Communicators;
 using SPU_7.Modbus.Requests;
 using SPU_7.Modbus.Responses;
+using SPU_7.Models.Services.ContentServices;
 using SPU_7.Models.Services.Logger;
 using SPU_7.Models.Services.StandSetting;
 using SPU_7.Models.Stand.Settings.Stand.Extensions;
@@ -39,14 +40,16 @@ namespace SPU_7.Models.Stand
 {
     public class StandController : IStandController
     {
-        public StandController(ILogger logger, IStandSettingsService settingsService)
+        public StandController(ILogger logger, IStandSettingsService settingsService, IFlowDataService flowDataService)
         {
             _logger = logger;
             _settingsService = settingsService;
+            _flowDataService = flowDataService;
         }
 
         private readonly ILogger _logger;
         private readonly IStandSettingsService _settingsService;
+        private readonly IFlowDataService _flowDataService;
 
         private List<IModbusProcessor> _modbusProcessors = [];
         private List<StandLine> _lines = [];
@@ -1899,6 +1902,8 @@ namespace SPU_7.Models.Stand
         public async Task<bool> EnableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice)
         {
             _ctsControlConsumption = new CancellationTokenSource();
+            _lines[indexOfMasterDeviceLine].MasterDevices[indexOfMasterDevice].SetTargetFlow(value);
+            
             if (!await EnableFrequencyRegulatorAsync(_frequencyRegulatorDevices.IndexOf(_frequencyRegulatorDevices
                     .FirstOrDefault(f =>
                         ((FrequencyRegulatorDevice)f).ModuleAddress ==
@@ -1934,6 +1939,8 @@ namespace SPU_7.Models.Stand
                 else if (targetFrequency < currentFrequency - maxStep) targetFrequency = (double)(currentFrequency - maxStep);
 
                 currentFrequency = targetFrequency;
+                
+                _flowDataService.ReceiveData((double)currentConsumption, targetFrequency);
                 
                 await _frequencyRegulatorDevices
                     .FirstOrDefault(f =>
