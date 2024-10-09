@@ -1383,6 +1383,16 @@ namespace SPU_7.Models.Stand
             return true;
         }
 
+        public async Task<bool> TurnOffPulseCountMeterControlRegister()
+        {
+            foreach (var pulseCountMeterModule in _pulseCountMeterModules)
+            {
+                if (!await pulseCountMeterModule.TurnOffControlBitControlRegisterAsync()) return false;
+            }
+
+            return true;
+        }
+
         public async Task<bool> ResetPulseCountMeterAsync()
         {
             foreach (var pulseCountMeterModule in _pulseCountMeterModules)
