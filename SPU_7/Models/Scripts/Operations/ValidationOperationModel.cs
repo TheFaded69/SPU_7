@@ -114,7 +114,7 @@ public class ValidationOperationModel : OperationModel
                                         .IndexOf(_standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels
                                             .FirstOrDefault(mas => mas.MasterDeviceName == point.SelectedMasterDeviceName));
 
-                                    /*if (point.SelectedLineNumber - 1 > indexOfFanLine)
+                                    if (point.SelectedLineNumber - 1 > indexOfFanLine)
                                     {
                                         var currentIndex = point.SelectedLineNumber - 1;
 
@@ -275,7 +275,7 @@ public class ValidationOperationModel : OperationModel
                                     else
                                     {
                                         return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", null);
-                                    }*/
+                                    }
 
                                     // какие-то действия
                                     var validationMeasureResult = new ValidationMeasureResult();
@@ -283,7 +283,7 @@ public class ValidationOperationModel : OperationModel
 
                                     for (var deviceIndex = 0; deviceIndex < _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels.Count; deviceIndex++)
                                     {
-                                        /*if (!_standController.GetDeviceManualEnable(deviceIndex)) continue;
+                                        if (!_standController.GetDeviceManualEnable(deviceIndex)) continue;
 
                                         var validationDeviceResult = new ValidationDeviceResult()
                                         {
@@ -337,7 +337,7 @@ public class ValidationOperationModel : OperationModel
 
                                                 await Task.Delay(1000);
                                             }
-                                        }*/
+                                        }
                                     }
 
                                     double? devicePulseCount = null;
@@ -364,13 +364,13 @@ public class ValidationOperationModel : OperationModel
                                     var flowList = new List<float?>();
                                     while (true)
                                     {
-                                        if (flowList.Count == 20)
+                                        if (flowList.Count == 10)
                                         {
                                             var avgFlow = flowList.Average();
 
                                             if ((avgFlow - point.TargetConsumption) / point.TargetConsumption < 0.01)
                                             {
-                                                
+                                                break;
                                             }
                                             
                                             var currentFlow = _standController.GetFlowFromMasterDevice(indexOfMasterDeviceLine, indexOfMasterDevice);
@@ -416,23 +416,22 @@ public class ValidationOperationModel : OperationModel
                                         _timerService.Message = "Прогон расхода через СГ";
                                         _timerService.InfoTimerEnable();
 
+                                        await Task.Delay((int)timeValidation);
+                                        
                                         // счет импульсов с поверяемого СГ , затем с эталона после окончания счета
-                                        var targetPulseCount = point.TargetVolume / ((ValidationOperationConfigurationModel)_configuration).PulseWeight;
-                                        var pulseReadReady = false;
-                                        while (!pulseReadReady)
-                                        {
-                                            devicePulseCount = await _standController.ReadPulseCountFromPulseCountMeterAsync(1, 1);
-
-                                            if (devicePulseCount >= targetPulseCount)
-                                            {
-                                                break;
-                                            }
-                                        }
-
-                                        masterDevicePulseCount = await _standController.ReadPulseCountFromPulseCountMeterAsync(1, 1);
-
+                                        var targetPulseCount = point.TargetVolume / _standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels[indexOfMasterDevice].PulseWeight;
+                                        
                                         await _standController.SendStartPulseCountMeterCommandAsync();
 
+                                        await Task.Delay(2000);
+                                        
+                                        masterDevicePulseCount = await _standController.ReadPulseCountFromPulseCountMeterAsync(_standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels[indexOfMasterDevice]
+                                                .PulseCountMeterModuleNumber - 1,
+                                            (int)_standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels[indexOfMasterDevice]
+                                                .PulseCountMeterModuleChannelNumber);
+                                        devicePulseCount = await _standController.ReadPulseCountFromPulseCountMeterAsync(_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels[0].PulseCountMeterModuleNumber - 1,
+                                            _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels[0].PulseMeterChannelNumber);
+                                        
                                         // остановка подачи расхода
                                         if (!operationCancellationTokenSource.IsCancellationRequested)
                                         {
@@ -450,6 +449,8 @@ public class ValidationOperationModel : OperationModel
                                     }
                                     else
                                     {
+                                        
+                                        
                                         _timerService.TimeSeconds = (int)(timeValidation * 3600);
                                         _timerService.OperationName = OperationName;
                                         _timerService.Message = "Прогон расхода через СГ";

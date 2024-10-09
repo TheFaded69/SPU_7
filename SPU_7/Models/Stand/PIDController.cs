@@ -29,11 +29,9 @@ public class PIDController
     private double _maxInput;
     private double _minOutput;
     private double _maxOutput;
-
-
+    
     public double Calculate(double setPoint, double measuredValue)
     {
-        
         var currentValue = Math.Max(_minInput, Math.Min(measuredValue, _maxInput));
         // Вычисляем ошибку
         double error = setPoint - currentValue;
@@ -56,12 +54,5 @@ public class PIDController
         output = Math.Max(_minOutput, Math.Min(output, _maxOutput));
 
         return output;
-    }
-
-    public void SetCoefficients(double kp, double ki, double kd)
-    {
-        _kp = kp;
-        _ki = ki;
-        _kd = kd;
     }
 }

@@ -1931,7 +1931,8 @@ namespace SPU_7.Models.Stand
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MinimumFlow,
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MaximumFlow, 
                 3, 50);
-
+            
+            
             var currentFrequency = (double?) await _frequencyRegulatorDevices
                 .FirstOrDefault(f =>
                     ((FrequencyRegulatorDevice)f).ModuleAddress ==
@@ -1951,7 +1952,7 @@ namespace SPU_7.Models.Stand
                         .FanViewModels[indexOfFan].MaximumFlow;
                 
                 var targetFrequency = _pidController.Calculate(targetConsumption, (double)currentConsumption);
-
+                
                 if (targetFrequency > currentFrequency + maxStep) targetFrequency = (double)(currentFrequency + maxStep);
                 else if (targetFrequency < currentFrequency - maxStep) targetFrequency = (double)(currentFrequency - maxStep);
 
@@ -1970,15 +1971,22 @@ namespace SPU_7.Models.Stand
                 while (!_readyToPidControl) await Task.Delay(100);
             }
 
-            while (currentFrequency != 0)
+            while (currentFrequency > 0)
             {
                 currentFrequency -= maxStep;
+                if (currentFrequency < 0) currentFrequency = 0;
+                
                 await _frequencyRegulatorDevices
                     .FirstOrDefault(f =>
                         ((FrequencyRegulatorDevice)f).ModuleAddress ==
                         _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.ModuleAddress)
                     .WriteOutputValueAsync((double)currentFrequency);
 
+                if (!await DisableFrequencyRegulatorAsync(_frequencyRegulatorDevices.IndexOf(_frequencyRegulatorDevices
+                        .FirstOrDefault(f =>
+                            ((FrequencyRegulatorDevice)f).ModuleAddress ==
+                            _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.ModuleAddress))))
+                
                 await Task.Delay(2000);
             }
             

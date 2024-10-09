@@ -13,6 +13,7 @@ public class FrequencyRegulatorDevice : ModbusUnitProcessor<FrequencyRegulatorRe
         ModuleAddress = (byte)moduleAddress;
     }
 
+    private bool _currentState;
     private PidController _pid;
     
     public void SetPidParameters(double pG, double iG, double dG, double pMax, double pMin, double oMax, double oMin)
@@ -20,13 +21,7 @@ public class FrequencyRegulatorDevice : ModbusUnitProcessor<FrequencyRegulatorRe
         //_pid = new PidController(pG, iG, dG, pMax, pMin,  oMax,  oMin, ReadPV, ReadSP, WriteOV);
     }
     
-    /// <summary>
-    /// Записать полученное значение из ПИД регулятора (делегат который вызывается ПИД регулятором после расчетов)
-    /// В методе логика записи рассчитаного значения в частотный регулятор для установки нужного питания двигателя
-    /// </summary>
-    /// <param name="value">Выходное значение из ПИД регулятора </param>
-    private async Task WriteOV(double value) => await WriteOutputValueAsync(value);
-
+    
     public async Task<bool> WriteOutputValueAsync(double value)
         => await WriteRegisterAsync(FrequencyRegulatorRegisterMap.FrequencyValueRegister, BitConverter.GetBytes((ushort)(value / 0.1)).Reverse().ToArray());
 
