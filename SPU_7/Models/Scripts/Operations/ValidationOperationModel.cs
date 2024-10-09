@@ -83,7 +83,8 @@ public class ValidationOperationModel : OperationModel
             {
                 var point = ((ValidationOperationConfigurationModel)_configuration).Points[pointIndex];
                 var validationPointResult = new ValidationPointResult();
-
+                float? avgFlow;
+                
                 _validationOperationResult.ValidationPointResults.Add(validationPointResult);
 
                 switch (_standSettingsService.StandSettingsModel.LineViewModels[point.SelectedLineNumber - 1].SelectedLineType)
@@ -297,7 +298,7 @@ public class ValidationOperationModel : OperationModel
                                             DeviceInfo = _standController.GetDeviceInfoType((int)activeLine, deviceIndex)
                                                 .DeviceTypeInfo,
                                             PressureDifference =
-                                                _standController.GetPressureDifferenceFromMasterDevice((int)activeLine),
+                                                _standController.GetPressureDifferenceFromMasterDevice((int)activeLine) / 1000,
                                             TargetFlow = point.TargetConsumption
                                         };
 
@@ -366,9 +367,9 @@ public class ValidationOperationModel : OperationModel
                                     {
                                         if (flowList.Count == 10)
                                         {
-                                            var avgFlow = flowList.Average();
+                                            avgFlow = flowList.Average();
 
-                                            if ((avgFlow - point.TargetConsumption) / point.TargetConsumption < 0.01)
+                                            if (Math.Abs((double)(avgFlow - point.TargetConsumption)) / point.TargetConsumption < 0.01)
                                             {
                                                 break;
                                             }
@@ -394,7 +395,7 @@ public class ValidationOperationModel : OperationModel
 
                                         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(
                                             _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels[0].PulseCountMeterModuleNumber - 1,
-                                            _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels[0].PulseMeterChannelNumber);
+                                            (int)_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels[0].PulseCountMeterModuleChannelNumber);
                                         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(
                                             _standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels[indexOfMasterDevice]
                                                 .PulseCountMeterModuleNumber - 1,
@@ -416,7 +417,9 @@ public class ValidationOperationModel : OperationModel
                                         _timerService.Message = "Прогон расхода через СГ";
                                         _timerService.InfoTimerEnable();
 
-                                        await Task.Delay((int)timeValidation);
+                                        await Task.Delay(TimeSpan.FromHours(timeValidation));
+                                        
+                                        _timerService.InfoTimerDisable();
                                         
                                         // счет импульсов с поверяемого СГ , затем с эталона после окончания счета
                                         var targetPulseCount = point.TargetVolume / _standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels[indexOfMasterDevice].PulseWeight;
@@ -430,7 +433,7 @@ public class ValidationOperationModel : OperationModel
                                             (int)_standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels[indexOfMasterDevice]
                                                 .PulseCountMeterModuleChannelNumber);
                                         devicePulseCount = await _standController.ReadPulseCountFromPulseCountMeterAsync(_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels[0].PulseCountMeterModuleNumber - 1,
-                                            _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels[0].PulseMeterChannelNumber);
+                                            (int)_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels[0].PulseCountMeterModuleChannelNumber);
                                         
                                         // остановка подачи расхода
                                         if (!operationCancellationTokenSource.IsCancellationRequested)
@@ -473,12 +476,6 @@ public class ValidationOperationModel : OperationModel
 
                                         if (((ValidationOperationConfigurationModel)_configuration).IsAutoPulseMeasure)
                                         {
-                                            var isTk = _standController.IsDeviceWithTemperatureCorrect(deviceIndex);
-
-                                            var temperatureCorrectFlow = _standController.RealFlow *
-                                                                         (293.15 / (_standController.GetTemperatureFromLine(
-                                                                             (int)activeLine) + 273.15));
-
                                             if (devicePulseCount == null || masterDevicePulseCount == null)
                                             {
                                                 _logger.Logging(new LogMessage(
@@ -504,13 +501,11 @@ public class ValidationOperationModel : OperationModel
                                                 continue;
                                             }
 
-                                            var deviceVolume = devicePulseCount * ((ValidationOperationConfigurationModel)_configuration).PulseWeight;
+                                            var deviceVolume = devicePulseCount * ((ValidationOperationConfigurationModel)_configuration).PulseMeterConfigurations[0].PulseWeight;
                                             var masterDeviceVolume = masterDevicePulseCount * _standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine]
                                                 .MasterDeviceViewModels[indexOfMasterDevice].PulseWeight;
 
-                                            var realVolume = isTk
-                                                ? masterDeviceVolume * temperatureCorrectFlow
-                                                : masterDeviceVolume;
+                                            var realVolume = masterDeviceVolume;
 
                                             _validationOperationResult.ValidationPointResults[pointIndex]
                                                 .ValidationMeasureResults[measureIndex]
@@ -575,8 +570,8 @@ public class ValidationOperationModel : OperationModel
                                         {
                                             if (!operationCancellationTokenSource.IsCancellationRequested)
                                             {
-                                                if (!await _standController.OpenValveAsync(
-                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex].EndCommonValveViewModel))
+                                                if (!await _standController.CloseValveAsync(
+                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex - 1].EndCommonValveViewModel))
                                                 {
                                                     _logger.Logging(new LogMessage("Не удалось закрыть кран после эталонов", LogLevel.Error));
                                                     return new OperationResult(OperationResultType.Error, "Не удалось закрыть кран после эталонов",
@@ -600,7 +595,7 @@ public class ValidationOperationModel : OperationModel
                                             if (!operationCancellationTokenSource.IsCancellationRequested)
                                             {
                                                 if (!await _standController.CloseValveAsync(
-                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex].EndCommonValveViewModel))
+                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex - 1].EndCommonValveViewModel))
                                                 {
                                                     _logger.Logging(new LogMessage("Не удалось закрыть кран после эталонов", LogLevel.Error));
                                                     return new OperationResult(OperationResultType.Error, "Не удалось закрыть кран после эталонов",
@@ -625,7 +620,7 @@ public class ValidationOperationModel : OperationModel
                                             if (!operationCancellationTokenSource.IsCancellationRequested)
                                             {
                                                 if (!await _standController.CloseValveAsync(
-                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex].StartCommonValveViewModel))
+                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex - 1].StartCommonValveViewModel))
                                                 {
                                                     _logger.Logging(new LogMessage("Не удалось закрыть общий кран после устройств", LogLevel.Error));
                                                     return new OperationResult(OperationResultType.Error, "Не удалось закрыть общий кран после устройств",
@@ -649,7 +644,7 @@ public class ValidationOperationModel : OperationModel
                                             if (!operationCancellationTokenSource.IsCancellationRequested)
                                             {
                                                 if (!await _standController.CloseValveAsync(
-                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex].StartCommonValveViewModel))
+                                                        _standSettingsService.StandSettingsModel.LineViewModels[currentIndex - 1].StartCommonValveViewModel))
                                                 {
                                                     _logger.Logging(new LogMessage("Не удалось закрыть общий кран после устройств", LogLevel.Error));
                                                     return new OperationResult(OperationResultType.Error, "Не удалось закрыть общий кран после устройств",
@@ -697,7 +692,6 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", null);
                                     }
                                 }
-
                                 break;
                             case ValidationType.ValidationByFlow:
                                 break;
@@ -708,619 +702,7 @@ public class ValidationOperationModel : OperationModel
                         }
 
                         break;
-                    case LineType.NozzleLineType:
-                        switch (((ValidationOperationConfigurationModel)_configuration).ValidationType)
-                        {
-                            case ValidationType.ValidationByVolume:
-                            {
-                                for (var measureIndex = 0; measureIndex < point.MeasureCount; measureIndex++)
-                                {
-                                    double timeValidation;
-                                    double? deltaConsumption;
-
-                                    if (point.IsReplaceNozzle)
-                                    {
-                                        deltaConsumption = 0;
-
-                                        _standController.SetLineTargetFlowValue(point.TargetConsumption,
-                                            point.SelectedLineNumber - 1);
-
-                                        _manualOperationService.ShowConfirmMessageDialog(
-                                            $"Установите сопло номиналом {point.TargetConsumption}",
-                                            PositiveReplaceNozzleAction, NegativeReplaceNozzleAction);
-
-                                        while (!_replaceNozzleCancellationTokenSource.Token.IsCancellationRequested)
-                                        {
-                                            if (operationCancellationTokenSource.IsCancellationRequested)
-                                            {
-                                                return new OperationResult(OperationResultType.Stop,
-                                                    "Выполнение сценария прервано", _validationOperationResult);
-                                            }
-
-                                            await Task.Delay(1000);
-                                        }
-
-                                        var needFans = point.TargetConsumption switch
-                                        {
-                                            <= 400 => 1,
-                                            > 400 and <= 800 => 2,
-                                            > 800 and <= 1200 => 3,
-                                            > 1200 and <= 1600 => 4,
-                                        };
-
-                                        if (!operationCancellationTokenSource.IsCancellationRequested)
-                                        {
-                                            for (int i = 0; i < needFans; i++)
-                                            {
-                                                if (!await _standController.EnableLineFanWorkAsync((int)activeLine, i))
-                                                {
-                                                    _logger.Logging(new LogMessage("Не удалось включить насос",
-                                                        LogLevel.Error));
-                                                    return new OperationResult(OperationResultType.Error,
-                                                        "Не удалось включить насос",
-                                                        _validationOperationResult);
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано",
-                                                _validationOperationResult);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                                .IsCloseNormalSolenoidValve &&
-                                            _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                                .IsOpenNormalSolenoidValve)
-                                        {
-                                            if (!await _standController.CloseSolenoidValveAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .OpenNormalSolenoidValveViewModel))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось закрыть НОК соленоидный клапан",
-                                                    LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error,
-                                                    "Не удалось закрыть НОК соленоидный клапан",
-                                                    _validationOperationResult);
-                                            }
-
-                                            if (!await _standController.OpenSolenoidValveAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .CloseNormalSolenoidValveViewModel))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось открыть НЗК соленоидный клапан",
-                                                    LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error,
-                                                    "Не удалось открыть НЗК соленоидный клапан",
-                                                    _validationOperationResult);
-                                            }
-                                        }
-
-                                        if (_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                            .IsAfterDeviceValve)
-                                        {
-                                            if (!await _standController.OpenValveAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .AfterDeviceValveViewModel))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось открыть кран после СГ",
-                                                    LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error,
-                                                    "Не удалось открыть кран после СГ",
-                                                    _validationOperationResult);
-                                            }
-                                        }
-
-                                        if (_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                            .IsCheckTightnessLine)
-                                        {
-                                            if (!await _standController.OpenValveAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .FirstTightnessValveViewModel))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось открыть кран ДАД",
-                                                    LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error,
-                                                    "Не удалось открыть кран ДАД",
-                                                    _validationOperationResult);
-                                            }
-                                        }
-
-                                        deltaConsumption = await _standController.SetConsumptionAsync(
-                                            point.TargetConsumption,
-                                            point.SelectedLineNumber - 1,
-                                            ((ValidationOperationConfigurationModel)_configuration).MinimumFlow,
-                                            ((ValidationOperationConfigurationModel)_configuration).MaximumFlow);
-
-                                        if (deltaConsumption == null)
-                                        {
-                                            _logger.Logging(new LogMessage(
-                                                $"Не удалось установить заданный расход в точке {point.Number}",
-                                                LogLevel.Error));
-                                            return new OperationResult(OperationResultType.Error,
-                                                $"Не удалось установить заданный расход в точке {point.Number}",
-                                                _validationOperationResult);
-                                        }
-
-                                        var frequency = point.TargetConsumption switch
-                                        {
-                                            <= 0.04 => 30f,
-                                            > 0.04 and <= 0.1 => 40f,
-                                            > 0.1 and <= 1 => 50f,
-                                            > 1 => 50f,
-                                        };
-
-                                        if (!operationCancellationTokenSource.IsCancellationRequested)
-                                        {
-                                            if (!await _standController.SetRegulatorFrequencyAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .FanViewModels.FirstOrDefault(), frequency))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось включить ПЧВ", LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error, "Не удалось включить ПЧВ",
-                                                    _validationOperationResult);
-                                            }
-
-                                            if (!await _standController.EnableFrequencyRegulatorAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .FanViewModels.FirstOrDefault()))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось включить ПЧВ", LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error, "Не удалось включить ПЧВ",
-                                                    _validationOperationResult);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано",
-                                                _validationOperationResult);
-                                        }
-                                    }
-
-                                    switch (activeLine)
-                                    {
-                                        case 0:
-                                            if (_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                                .IsAfterDeviceValve)
-                                            {
-                                                if (!await _standController.OpenValveAsync(_standSettingsService
-                                                        .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                        .AfterDeviceValveViewModel))
-                                                {
-                                                }
-                                            }
-
-                                            if (_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                                .IsCheckTightnessLine)
-                                            {
-                                                if (!await _standController.OpenValveAsync(_standSettingsService
-                                                        .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                        .FirstTightnessValveViewModel))
-                                                {
-                                                }
-                                            }
-
-                                            break;
-                                        default:
-                                            if (_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                                .IsAfterDeviceValve)
-                                            {
-                                                if (!await _standController.OpenValveAsync(_standSettingsService
-                                                        .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                        .AfterDeviceValveViewModel))
-                                                {
-                                                }
-                                            }
-
-                                            if (_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine - 1]
-                                                .IsCheckTightnessLine)
-                                            {
-                                                if (!await _standController.OpenValveAsync(_standSettingsService
-                                                        .StandSettingsModel.LineViewModels[(int)(activeLine - 1)]
-                                                        .SecondTightnessValveViewModel))
-                                                {
-                                                }
-                                            }
-
-                                            break;
-                                    }
-
-                                    if (activeLine > point.SelectedLineNumber - 1)
-                                    {
-                                        var currentIndex = activeLine;
-
-                                        while (currentIndex != point.SelectedLineNumber - 1)
-                                        {
-                                            if (!await _standController.OpenValveAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)(currentIndex - 1)]
-                                                    .StartCommonValveViewModel))
-                                            {
-                                            }
-
-                                            currentIndex--;
-                                        }
-                                    }
-                                    else if (activeLine < point.SelectedLineNumber - 1)
-                                    {
-                                        var currentIndex = activeLine;
-
-                                        while (currentIndex != point.SelectedLineNumber - 1)
-                                        {
-                                            if (_standSettingsService.StandSettingsModel.LineViewModels[(int)currentIndex]
-                                                .IsStartCommonValve)
-                                            {
-                                                if (!await _standController.OpenValveAsync(_standSettingsService
-                                                        .StandSettingsModel.LineViewModels[(int)currentIndex]
-                                                        .StartCommonValveViewModel))
-                                                {
-                                                }
-
-                                                currentIndex++;
-                                            }
-                                        }
-                                    }
-
-                                    while (await _standController.GetPressureDischargerFromLineAsync((int)activeLine) > -60)
-                                    {
-                                        await Task.Delay(1000);
-                                    }
-
-                                    await Task.Delay(10000);
-
-                                    var k = _standController.SelectMetrologyCoefficient(_standController.Temperature,
-                                        _standController.Humidity);
-
-                                    if (k == null)
-                                    {
-                                        return new OperationResult(OperationResultType.Error,
-                                            "Не удалось расчитать расхода - коэфф. расхода", null);
-                                    }
-
-                                    var realFlow = (point.TargetConsumption - deltaConsumption)
-                                                   * Math.Sqrt(
-                                                       (double)((273.15 + _standController.GetTemperatureFromLine(
-                                                                    (int)activeLine)) /
-                                                                293.15))
-                                                   * _standController.PressureAtmosphere /
-                                                   (_standController.PressureAtmosphere +
-                                                    _standController
-                                                        .GetPressureDifferenceFromDevice(
-                                                            (int)activeLine,
-                                                            _standSettingsService
-                                                                .StandSettingsModel
-                                                                .LineViewModels[(int)activeLine]
-                                                                .DeviceViewModels
-                                                                .IndexOf(_standSettingsService
-                                                                    .StandSettingsModel
-                                                                    .LineViewModels[(int)activeLine]
-                                                                    .DeviceViewModels.Last())))
-                                                   * (_standController.GetTemperatureFromDevice((int)activeLine,
-                                                       _standSettingsService
-                                                           .StandSettingsModel
-                                                           .LineViewModels[(int)activeLine]
-                                                           .DeviceViewModels
-                                                           .IndexOf(_standSettingsService
-                                                               .StandSettingsModel
-                                                               .LineViewModels[(int)activeLine]
-                                                               .DeviceViewModels.First())) + 273.15)
-                                                   / (_standController.GetTemperatureFromLine((int)activeLine) + 273.15)
-                                                   / k;
-
-                                    timeValidation = (double)(point.TargetVolume / realFlow);
-
-                                    if (timeValidation == null)
-                                    {
-                                        _logger.Logging(new LogMessage(
-                                            $"Не удалось расчитать время поверки в точке {point.Number}", LogLevel.Error));
-                                        return new OperationResult(OperationResultType.Error,
-                                            $"Не удалось расчитать время поверки в точке {point.Number}",
-                                            _validationOperationResult);
-                                    }
-
-                                    var validationMeasureResult = new ValidationMeasureResult();
-                                    validationPointResult.ValidationMeasureResults.Add(validationMeasureResult);
-
-                                    for (var deviceIndex = 0;
-                                         deviceIndex < _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                             .DeviceViewModels.Count;
-                                         deviceIndex++)
-                                    {
-                                        if (!_standController.GetDeviceManualEnable(deviceIndex)) continue;
-
-                                        var validationDeviceResult = new ValidationDeviceResult()
-                                        {
-                                            PointNumber = point.Number,
-                                            MeasureNumber = measureIndex + 1,
-                                            TargetVolume = point.TargetVolume,
-                                            TargetVolumeDifference = point.Inaccuracy,
-                                            ValidationVolumeTime = timeValidation * 3600,
-                                            VendorNumber = _standController.GetVendorNumber(deviceIndex),
-                                            OwnerName = _standController.GetVendorName((int)activeLine, deviceIndex),
-                                            DeviceInfo = _standController.GetDeviceInfoType((int)activeLine, deviceIndex)
-                                                .DeviceTypeInfo,
-                                            PressureDifference =
-                                                _standController.GetPressureDifferenceFromDevice((int)activeLine, deviceIndex),
-                                            TargetFlow = point.TargetConsumption
-                                        };
-
-                                        if (_validationOperationResult.ValidationPointResults.Any(vp =>
-                                                vp.ValidationMeasureResults.Count > 1))
-                                        {
-                                            var measureCount = _validationOperationResult.ValidationPointResults
-                                                .LastOrDefault()
-                                                .ValidationMeasureResults.Count;
-
-                                            validationDeviceResult.StartVolumeValue = _validationOperationResult
-                                                .ValidationPointResults
-                                                .LastOrDefault()
-                                                .ValidationMeasureResults[measureCount - 1]
-                                                .ValidationDeviceResults[deviceIndex]
-                                                .EndVolumeValue;
-
-                                            validationMeasureResult.ValidationDeviceResults.Add(validationDeviceResult);
-                                        }
-                                        else
-                                        {
-                                            validationMeasureResult.ValidationDeviceResults.Add(validationDeviceResult);
-                                            _cancellationTokenSource = new CancellationTokenSource();
-
-                                            _manualOperationService.ShowManualValidationResultDialog(OkAction, CancelAction
-                                                , _validationOperationResult.ValidationPointResults,
-                                                ((ValidationOperationConfigurationModel)_configuration).ValidationType,
-                                                deviceIndex);
-
-                                            while (!_cancellationTokenSource.Token.IsCancellationRequested)
-                                            {
-                                                if (operationCancellationTokenSource.IsCancellationRequested)
-                                                {
-                                                    return new OperationResult(OperationResultType.Stop,
-                                                        "Выполнение сценария прервано", _validationOperationResult);
-                                                }
-
-                                                await Task.Delay(1000);
-                                            }
-                                        }
-                                    }
-
-                                    if (((ValidationOperationConfigurationModel)_configuration).IsAutoPulseMeasure)
-                                    {
-                                        await _standController.PulseReadStartAsync(
-                                            ((ValidationOperationConfigurationModel)_configuration).PulseMeterConfigurations[0].PulseWeight,
-                                            point.TargetVolume);
-                                    }
-
-                                    if (!operationCancellationTokenSource.IsCancellationRequested)
-                                    {
-                                        if (_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                                .IsCloseNormalSolenoidValve &&
-                                            _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                                .IsOpenNormalSolenoidValve)
-                                        {
-                                            if (!await _standController.OpenSolenoidValveAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .OpenNormalSolenoidValveViewModel))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось открыть НОК соленоидный клапан",
-                                                    LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error,
-                                                    "Не удалось открыть НОК соленоидный клапан",
-                                                    _validationOperationResult);
-                                            }
-
-                                            if (!await _standController.CloseSolenoidValveAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .CloseNormalSolenoidValveViewModel))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось закрыть НЗК соленоидный клапан",
-                                                    LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error,
-                                                    "Не удалось закрыть НЗК соленоидный клапан",
-                                                    _validationOperationResult);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано",
-                                            _validationOperationResult);
-                                    }
-
-                                    _logger.Logging(new LogMessage(
-                                        $"Установленный расход для точки №{point.Number} отличается от заданного на {point.TargetConsumption - _standController.RealFlow}",
-                                        LogLevel.Warning));
-                                    _logger.Logging(new LogMessage(
-                                        $"Время ожидания для точки №{point.Number} измерения №{measureIndex + 1}: {Math.Round(timeValidation * 3600, 2)} сек",
-                                        LogLevel.Info));
-
-                                    _timerService.TimeSeconds = (int)(timeValidation * 3600);
-                                    _timerService.OperationName = OperationName;
-                                    _timerService.Message = "Прогон расхода через СГ";
-                                    _timerService.InfoTimerEnable();
-
-                                    var pulseTimeList = new List<float?>();
-                                    if (((ValidationOperationConfigurationModel)_configuration).IsAutoPulseMeasure)
-                                    {
-                                        await _standController.PulseReadProcessStartAsync(pulseTimeList, timeValidation,
-                                            activeLine);
-                                    }
-                                    else
-                                    {
-                                        await Task.Delay(TimeSpan.FromHours(timeValidation));
-                                    }
-
-                                    _timerService.InfoTimerDisable();
-
-                                    if (!operationCancellationTokenSource.IsCancellationRequested)
-                                    {
-                                        if (_standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                                .IsCloseNormalSolenoidValve &&
-                                            _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                                .IsOpenNormalSolenoidValve)
-                                        {
-                                            if (!await _standController.CloseSolenoidValveAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .OpenNormalSolenoidValveViewModel))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось закрыть НОК соленоидный клапан",
-                                                    LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error,
-                                                    "Не удалось закрыть НОК соленоидный клапан",
-                                                    _validationOperationResult);
-                                            }
-
-                                            if (!await _standController.OpenSolenoidValveAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .CloseNormalSolenoidValveViewModel))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось открыть НЗК соленоидный клапан",
-                                                    LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error,
-                                                    "Не удалось открыть НЗК соленоидный клапан",
-                                                    _validationOperationResult);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано",
-                                            _validationOperationResult);
-                                    }
-
-                                    if (point.IsReplaceNozzle)
-                                    {
-                                    }
-                                    else
-                                    {
-                                        if (!operationCancellationTokenSource.IsCancellationRequested)
-                                        {
-                                            if (!await _standController.DisableFrequencyRegulatorAsync(_standSettingsService
-                                                    .StandSettingsModel.LineViewModels[(int)activeLine]
-                                                    .FanViewModels.FirstOrDefault()))
-                                            {
-                                                _logger.Logging(new LogMessage("Не удалось выключить насос", LogLevel.Error));
-                                                return new OperationResult(OperationResultType.Error, "Не удалось выключить насос",
-                                                    _validationOperationResult);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано",
-                                                _validationOperationResult);
-                                        }
-                                    }
-
-                                    var deviceEnableIndex = -1;
-
-                                    for (var deviceIndex = 0;
-                                         deviceIndex < _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
-                                             .DeviceViewModels.Count;
-                                         deviceIndex++)
-                                    {
-                                        if (!_standController.GetDeviceManualEnable((int)activeLine, deviceIndex)) continue;
-
-                                        deviceEnableIndex++;
-
-                                        if (((ValidationOperationConfigurationModel)_configuration).IsAutoPulseMeasure)
-                                        {
-                                            var isTk = _standController.IsDeviceWithTemperatureCorrect(deviceIndex);
-
-                                            var temperatureCorrectFlow = _standController.RealFlow *
-                                                                         (293.15 / (_standController.GetTemperatureFromLine(
-                                                                             (int)activeLine) + 273.15));
-
-                                            if (pulseTimeList[deviceIndex] == null)
-                                            {
-                                                _logger.Logging(new LogMessage(
-                                                    $"Не удалось измерить импульсы на устройстве №{deviceIndex + 1}",
-                                                    LogLevel.Error));
-
-                                                _validationOperationResult.ValidationPointResults[pointIndex]
-                                                    .ValidationMeasureResults[measureIndex]
-                                                    .ValidationDeviceResults[deviceEnableIndex].TargetVolume = 0;
-                                                _validationOperationResult.ValidationPointResults[pointIndex]
-                                                        .ValidationMeasureResults[measureIndex]
-                                                        .ValidationDeviceResults[deviceEnableIndex].EndVolumeValue =
-                                                    _validationOperationResult.ValidationPointResults[pointIndex]
-                                                        .ValidationMeasureResults[measureIndex]
-                                                        .ValidationDeviceResults[deviceEnableIndex].StartVolumeValue +
-                                                    point.TargetVolume;
-                                                _validationOperationResult.ValidationPointResults[pointIndex]
-                                                    .ValidationMeasureResults[measureIndex]
-                                                    .ValidationDeviceResults[deviceEnableIndex].ValidationVolumeTime = 0;
-                                                _validationOperationResult.ValidationPointResults[pointIndex]
-                                                    .ValidationMeasureResults[measureIndex]
-                                                    .ValidationDeviceResults[deviceEnableIndex].VolumeDifference = null;
-                                                continue;
-                                            }
-
-                                            var realVolume = isTk
-                                                ? pulseTimeList[deviceIndex] * temperatureCorrectFlow
-                                                : pulseTimeList[deviceIndex] * _standController.RealFlow;
-
-                                            _validationOperationResult.ValidationPointResults[pointIndex]
-                                                .ValidationMeasureResults[measureIndex]
-                                                .ValidationDeviceResults[deviceEnableIndex].TargetVolume = (double)realVolume;
-                                            _validationOperationResult.ValidationPointResults[pointIndex]
-                                                .ValidationMeasureResults[measureIndex]
-                                                .ValidationDeviceResults[deviceEnableIndex].StartVolumeValue = 0;
-                                            _validationOperationResult.ValidationPointResults[pointIndex]
-                                                    .ValidationMeasureResults[measureIndex]
-                                                    .ValidationDeviceResults[deviceEnableIndex].EndVolumeValue =
-                                                _validationOperationResult.ValidationPointResults[pointIndex]
-                                                    .ValidationMeasureResults[measureIndex]
-                                                    .ValidationDeviceResults[deviceEnableIndex].StartVolumeValue +
-                                                point.TargetVolume;
-                                            _validationOperationResult.ValidationPointResults[pointIndex]
-                                                    .ValidationMeasureResults[measureIndex]
-                                                    .ValidationDeviceResults[deviceEnableIndex].ValidationVolumeTime =
-                                                (double)pulseTimeList[deviceIndex];
-                                            _validationOperationResult.ValidationPointResults[pointIndex]
-                                                .ValidationMeasureResults[measureIndex]
-                                                .ValidationDeviceResults[deviceEnableIndex].VolumeDifference = Math.Round(
-                                                (double)((_validationOperationResult.ValidationPointResults[pointIndex]
-                                                              .ValidationMeasureResults[measureIndex]
-                                                              .ValidationDeviceResults[deviceEnableIndex].EndVolumeValue -
-                                                          _validationOperationResult.ValidationPointResults[pointIndex]
-                                                              .ValidationMeasureResults[measureIndex]
-                                                              .ValidationDeviceResults[deviceEnableIndex].StartVolumeValue -
-                                                          _validationOperationResult.ValidationPointResults[pointIndex]
-                                                              .ValidationMeasureResults[measureIndex]
-                                                              .ValidationDeviceResults[deviceEnableIndex].TargetVolume) /
-                                                    _validationOperationResult.ValidationPointResults[pointIndex]
-                                                        .ValidationMeasureResults[measureIndex]
-                                                        .ValidationDeviceResults[deviceEnableIndex].TargetVolume * 100)!, 2);
-                                        }
-                                        else
-                                        {
-                                            _cancellationTokenSource = new CancellationTokenSource();
-
-                                            _manualOperationService.ShowManualValidationResultDialog(OkAction, CancelAction,
-                                                _validationOperationResult.ValidationPointResults,
-                                                ((ValidationOperationConfigurationModel)_configuration).ValidationType,
-                                                deviceIndex);
-
-                                            while (!_cancellationTokenSource.Token.IsCancellationRequested)
-                                            {
-                                                if (operationCancellationTokenSource.IsCancellationRequested)
-                                                {
-                                                    return new OperationResult(OperationResultType.Stop,
-                                                        "Выполнение сценария прервано", _validationOperationResult);
-                                                }
-
-                                                await Task.Delay(1000);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-
-                        break;
+                    
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

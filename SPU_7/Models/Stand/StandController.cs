@@ -429,9 +429,9 @@ namespace SPU_7.Models.Stand
                                     break;
                                 case LineType.MasterDeviceLineType:
                                 {
-                                    /*var device = standLine.Devices[deviceIndex];
-                                    await device.ReadPressureAsync();
-                                    await device.ReadTemperatureAsync();*/
+                                    var device = standLine.Devices[deviceIndex];
+                                    //await device.ReadPressureAsync();
+                                    await device.ReadTemperatureAsync();
                                 }
                                     break;
                                 case LineType.NozzleLineType:
@@ -1982,14 +1982,19 @@ namespace SPU_7.Models.Stand
                         _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.ModuleAddress)
                     .WriteOutputValueAsync((double)currentFrequency);
 
-                if (!await DisableFrequencyRegulatorAsync(_frequencyRegulatorDevices.IndexOf(_frequencyRegulatorDevices
-                        .FirstOrDefault(f =>
-                            ((FrequencyRegulatorDevice)f).ModuleAddress ==
-                            _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.ModuleAddress))))
                 
                 await Task.Delay(2000);
             }
-            
+
+            if (!await DisableFrequencyRegulatorAsync(_frequencyRegulatorDevices.IndexOf(_frequencyRegulatorDevices
+                    .FirstOrDefault(f =>
+                        ((FrequencyRegulatorDevice)f).ModuleAddress ==
+                        _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan]
+                            .FrequencyRegulatorViewModel.ModuleAddress))))
+            {
+                
+            }
+                
         }
         
         public async Task<bool> DisableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan)
