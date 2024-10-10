@@ -41,10 +41,10 @@ public class PIDController
 
         // Интегральная составляющая
         _integral += error;
-        double iTerm = _ki * _integral;
+        double iTerm = _ki * _integral * multiplication;
          
         // Дифференциальная составляющая
-        double dTerm = _kd * (error - _previousError);
+        double dTerm = _kd * (error - _previousError)  * multiplication;
         _previousError = error;
 
         // Вычисляем выходное значение

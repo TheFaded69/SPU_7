@@ -1937,8 +1937,6 @@ namespace SPU_7.Models.Stand
 
         private async Task ControlConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice, int? needleValveValue = null)
         {
-            
-            
             _pidController = new PIDController((double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kP,
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kI,
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kD, 
@@ -1965,7 +1963,7 @@ namespace SPU_7.Models.Stand
                     currentConsumption = _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine]
                         .FanViewModels[indexOfFan].MaximumFlow;
 
-                var maximumFlow = needleValveValue == null ? 1 : RecalculateFlow(100);
+                var maximumFlow = needleValveValue == null ? 1 : RecalculateFlow(needleValveValue);
                 
                 var targetFrequency = _pidController.Calculate(targetConsumption, (double)currentConsumption, (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MaximumFlow / maximumFlow);
                 
