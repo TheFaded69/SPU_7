@@ -1981,6 +1981,18 @@ namespace SPU_7.Models.Stand
                         ((FrequencyRegulatorDevice)f).ModuleAddress ==
                         _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.ModuleAddress)
                     .WriteOutputValueAsync(targetFrequency);
+
+                var delay = _settingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels[indexOfMasterDevice].SelectedMasterDeviceType switch
+                {
+                    MasterDeviceType.None => 0,
+                    MasterDeviceType.GFG => 15000,
+                    MasterDeviceType.Rabo => 0,
+                    MasterDeviceType.RGT => 0,
+                    MasterDeviceType.SG16 => 0,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+
+                await Task.Delay(delay);
                 
                 _readyToPidControl = false;
 
