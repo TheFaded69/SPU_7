@@ -115,7 +115,7 @@ public class ValidationOperationModel : OperationModel
                                         .IndexOf(_standSettingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels
                                             .FirstOrDefault(mas => mas.MasterDeviceName == point.SelectedMasterDeviceName));
 
-                                    if (point.SelectedLineNumber - 1 > indexOfFanLine)
+                                    /*if (point.SelectedLineNumber - 1 > indexOfFanLine)
                                     {
                                         var currentIndex = point.SelectedLineNumber - 1;
 
@@ -276,13 +276,13 @@ public class ValidationOperationModel : OperationModel
                                     else
                                     {
                                         return new OperationResult(OperationResultType.Stop, "Выполнение сценария прервано", null);
-                                    }
+                                    }*/
 
                                     // какие-то действия
                                     var validationMeasureResult = new ValidationMeasureResult();
                                     validationPointResult.ValidationMeasureResults.Add(validationMeasureResult);
 
-                                    for (var deviceIndex = 0; deviceIndex < _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels.Count; deviceIndex++)
+                                    /*for (var deviceIndex = 0; deviceIndex < _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine].DeviceViewModels.Count; deviceIndex++)
                                     {
                                         if (!_standController.GetDeviceManualEnable(deviceIndex)) continue;
 
@@ -339,7 +339,7 @@ public class ValidationOperationModel : OperationModel
                                                 await Task.Delay(1000);
                                             }
                                         }
-                                    }
+                                    }*/
 
                                     double? devicePulseCount = null;
                                     float? masterDevicePulseCount = null;
@@ -348,7 +348,7 @@ public class ValidationOperationModel : OperationModel
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
                                         if (!await _standController.EnableConsumptionAsync(targetConsumption, indexOfFanLine, indexOfFan, indexOfMasterDeviceLine,
-                                                indexOfMasterDevice))
+                                                indexOfMasterDevice, point.NeedleValveValue))
                                         {
                                             _logger.Logging(new LogMessage("Не удалось начать подачу расхода", LogLevel.Error));
                                             return new OperationResult(OperationResultType.Error, "Не удалось начать подачу расхода",
@@ -371,7 +371,7 @@ public class ValidationOperationModel : OperationModel
 
                                             if (Math.Abs((double)(avgFlow - point.TargetConsumption)) / point.TargetConsumption < 0.01)
                                             {
-                                                break;
+                                                //break;
                                             }
                                             
                                             var currentFlow = _standController.GetFlowFromMasterDevice(indexOfMasterDeviceLine, indexOfMasterDevice);

@@ -165,7 +165,7 @@ namespace SPU_7.Models.Stand
         /// </summary>
         /// <param name="value">Расход</param>
         /// <returns>Результат установки расхода</returns>
-        Task<bool> EnableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice);
+        Task<bool> EnableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice, int? needleValveValue = null);
         
         /// <summary>
         /// Выключить расход

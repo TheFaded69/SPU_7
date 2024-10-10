@@ -1909,7 +1909,7 @@ namespace SPU_7.Models.Stand
             return deltaValue;
         }
 
-        public async Task<bool> EnableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice)
+        public async Task<bool> EnableConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice, int? needleValveValue = null)
         {
             _ctsControlConsumption = new CancellationTokenSource();
             _lines[indexOfMasterDeviceLine].MasterDevices[indexOfMasterDevice].SetTargetFlow(value);
@@ -1918,19 +1918,22 @@ namespace SPU_7.Models.Stand
                     .FirstOrDefault(f =>
                         ((FrequencyRegulatorDevice)f).ModuleAddress ==
                         _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.ModuleAddress)))) return false;
-            _controlConsumptionTask = Task.Run(() => ControlConsumptionAsync(value, indexOfFanLine, indexOfFan, indexOfMasterDeviceLine, indexOfMasterDevice), _ctsControlConsumption.Token);
+            _controlConsumptionTask = Task.Run(() => ControlConsumptionAsync(value, indexOfFanLine, indexOfFan, indexOfMasterDeviceLine, indexOfMasterDevice, needleValveValue), _ctsControlConsumption.Token);
             
             return true;
         }
 
-        private async Task ControlConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice)
+        private async Task ControlConsumptionAsync(double value, int indexOfFanLine, int indexOfFan, int indexOfMasterDeviceLine, int indexOfMasterDevice, int? needleValveValue = null)
         {
-            _pidController = new PIDController((double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kP,
-                (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kI,
-                (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kD, 
+            _pidController = new PIDController((double)(needleValveValue == null ? _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kP 
+                    : _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kP * 2.1 / needleValveValue * 100 ),
+                (double)(needleValveValue == null ?  _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kI
+                    :  _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kI /*/ needleValveValue * 100*/),
+                    (double)(needleValveValue == null ? _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kD
+                    : _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kD /*/ needleValveValue * 100*/), 
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MinimumFlow,
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MaximumFlow, 
-                3, 50);
+                3.5, 50);
             
             
             var currentFrequency = (double?) await _frequencyRegulatorDevices
@@ -1965,6 +1968,19 @@ namespace SPU_7.Models.Stand
                         ((FrequencyRegulatorDevice)f).ModuleAddress ==
                         _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.ModuleAddress)
                     .WriteOutputValueAsync(targetFrequency);
+
+                var delay = _settingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine]
+                    .MasterDeviceViewModels[indexOfMasterDevice].SelectedMasterDeviceType switch
+                    {
+                        MasterDeviceType.Rabo => 0,
+                        MasterDeviceType.None => 0,
+                        MasterDeviceType.GFG => 20000,
+                        MasterDeviceType.RGT => 0,
+                        MasterDeviceType.SG16 => 0,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+
+                await Task.Delay(delay);
                 
                 _readyToPidControl = false;
 
