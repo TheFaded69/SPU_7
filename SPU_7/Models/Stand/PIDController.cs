@@ -30,14 +30,14 @@ public class PIDController
     private double _minOutput;
     private double _maxOutput;
     
-    public double Calculate(double setPoint, double measuredValue)
+    public double Calculate(double setPoint, double measuredValue, double multiplication = 1)
     {
         var currentValue = Math.Max(_minInput, Math.Min(measuredValue, _maxInput));
         // Вычисляем ошибку
         double error = setPoint - currentValue;
 
         // Пропорциональная составляющая
-        double pTerm = _kp * error;
+        double pTerm = _kp * error * multiplication;
 
         // Интегральная составляющая
         _integral += error;
