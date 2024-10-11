@@ -83,7 +83,10 @@ public class StandLine
                         MasterDeviceType.GFG => new GfgDevice(null,
                             new RegisterMapEnum<GFGRegisterMap>(),
                             pressureSensor,
-                            temperatureSensor),
+                            temperatureSensor)
+                        {
+                            ModuleAddress = (byte)(MasterDevices.Count + 1),
+                        },
                         MasterDeviceType.Rabo => new RaboDevice(pressureSensor, temperatureSensor),
                         MasterDeviceType.RGT => new RGTDevice(pressureSensor, temperatureSensor),
                     });

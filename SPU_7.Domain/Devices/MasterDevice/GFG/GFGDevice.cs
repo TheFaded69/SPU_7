@@ -182,7 +182,8 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
 
     public async Task<float?> ReadWorkConsumptionAsync()
     {
-        return (float?)await  ReadRegisterAsync(GFGRegisterMap.VolumeFlowRegister);
+        var a = await  ReadRegisterAsync(GFGRegisterMap.VolumeFlowRegister);
+        return (float?)a;
 
     }
 }

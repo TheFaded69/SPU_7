@@ -348,7 +348,7 @@ public class ValidationOperationModel : OperationModel
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
                                         if (!await _standController.EnableConsumptionAsync(targetConsumption, indexOfFanLine, indexOfFan, indexOfMasterDeviceLine,
-                                                indexOfMasterDevice, point.NeedleValveValue))
+                                                indexOfMasterDevice, !point.IsNeedleValveUse? null : point.NeedleValveValue))
                                         {
                                             _logger.Logging(new LogMessage("Не удалось начать подачу расхода", LogLevel.Error));
                                             return new OperationResult(OperationResultType.Error, "Не удалось начать подачу расхода",

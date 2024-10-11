@@ -1943,7 +1943,8 @@ namespace SPU_7.Models.Stand
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.kD, 
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MinimumFlow,
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MaximumFlow, 
-                3.5, 50);
+                (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.outMin,
+                (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].FrequencyRegulatorViewModel.outMax);
             
             
             var currentFrequency = (double?) await _frequencyRegulatorDevices
@@ -1986,9 +1987,14 @@ namespace SPU_7.Models.Stand
                     currentConsumption = _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine]
                         .FanViewModels[indexOfFan].MaximumFlow;
 
-                var maximumFlow = needleValveValue == null ? 1 : RecalculateFlow(needleValveValue);
+                double? maximumFlow = needleValveValue == null ? null : RecalculateFlow(needleValveValue);
                 
-                var targetFrequency = _pidController.Calculate(targetConsumption, (double)currentConsumption, (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan].MaximumFlow / maximumFlow);
+                var multiplicate = maximumFlow == null
+                    ? 1
+                    : (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine]
+                        .FanViewModels[indexOfFan].MaximumFlow / maximumFlow;
+                
+                var targetFrequency = _pidController.Calculate(targetConsumption, (double)currentConsumption, (double)multiplicate);
                 
                 if (targetFrequency > currentFrequency + maxStep) targetFrequency = (double)(currentFrequency + maxStep);
                 else if (targetFrequency < currentFrequency - maxStep) targetFrequency = (double)(currentFrequency - maxStep);
