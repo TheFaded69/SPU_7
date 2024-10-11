@@ -13,6 +13,7 @@ using SPU_7.CommonDevice.Devices;
 using SPU_7.CommonDevice.Devices.ElmetroPascal;
 using SPU_7.DeviceCommunication.Communication;
 using SPU_7.Domain.Devices.Device.UniversalDevice;
+using SPU_7.Domain.Devices.MasterDevice.GFG;
 using SPU_7.Domain.Devices.StandDevices.FrequencyRegulator;
 using SPU_7.Domain.Devices.StandDevices.NeedleValveController;
 using SPU_7.Domain.Devices.StandDevices.Owen;
@@ -1958,6 +1959,28 @@ namespace SPU_7.Models.Stand
                 var targetConsumption = value;
                 var currentConsumption = _lines[indexOfMasterDeviceLine].MasterDevices[indexOfMasterDevice].GetFlow();
 
+                var currentFrequencyFromMasterDevice = _settingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels[indexOfMasterDevice]
+                        .SelectedMasterDeviceType switch
+                    {
+                        MasterDeviceType.None => 0,
+                        MasterDeviceType.GFG => await ((IGFGDevice)_lines[indexOfMasterDeviceLine].MasterDevices[indexOfMasterDevice]).ReadFrequencyAsync(),
+                        MasterDeviceType.Rabo => 0,
+                        MasterDeviceType.RGT => 0,
+                        MasterDeviceType.SG16 => 0,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                
+                var currentWorkFlow = _settingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine].MasterDeviceViewModels[indexOfMasterDevice]
+                        .SelectedMasterDeviceType switch
+                    {
+                        MasterDeviceType.None => currentConsumption,
+                        MasterDeviceType.GFG => await ((IGFGDevice)_lines[indexOfMasterDeviceLine].MasterDevices[indexOfMasterDevice]).ReadWorkConsumptionAsync(),
+                        MasterDeviceType.Rabo => currentConsumption,
+                        MasterDeviceType.RGT => currentConsumption,
+                        MasterDeviceType.SG16 => currentConsumption,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                
                 if (currentConsumption > (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine]
                         .FanViewModels[indexOfFan].MaximumFlow)
                     currentConsumption = _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine]

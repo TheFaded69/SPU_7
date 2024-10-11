@@ -2,5 +2,7 @@
 
 public interface IGFGDevice : IMasterDevice
 {
+    Task<float?> ReadFrequencyAsync();
     
+    Task<float?> ReadWorkConsumptionAsync();
 }

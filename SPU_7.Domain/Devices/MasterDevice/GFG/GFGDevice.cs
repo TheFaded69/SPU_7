@@ -174,4 +174,15 @@ public class GfgDevice : ModbusUnitProcessor<GFGRegisterMap>, IGFGDevice
     }
     
     #endregion
+
+    public async Task<float?> ReadFrequencyAsync()
+    {
+        return (float?)await ReadRegisterAsync(GFGRegisterMap.FrequencyRegister);
+    }
+
+    public async Task<float?> ReadWorkConsumptionAsync()
+    {
+        return (float?)await  ReadRegisterAsync(GFGRegisterMap.VolumeFlowRegister);
+
+    }
 }

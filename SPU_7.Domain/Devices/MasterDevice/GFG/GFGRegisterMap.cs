@@ -15,8 +15,14 @@ public enum GFGRegisterMap
     /// <summary>
     /// Расход рабочий
     /// </summary>
-    [RegisterSetup(0x0002, ModbusFunction.ReadHoldingRegisters, ModbusFunction.WriteMultipleRegisters, 2, RegisterDataType.Float, ByteOrderType.BigEndian_ABCD)]
+    [RegisterSetup(0x000A, ModbusFunction.ReadHoldingRegisters, ModbusFunction.WriteMultipleRegisters, 2, RegisterDataType.Float, ByteOrderType.BigEndian_ABCD)]
     VolumeFlowRegister,
+    
+    /// <summary>
+    /// Расход рабочий
+    /// </summary>
+    [RegisterSetup(0x0006, ModbusFunction.ReadHoldingRegisters, ModbusFunction.WriteMultipleRegisters, 2, RegisterDataType.Float, ByteOrderType.BigEndian_ABCD)]
+    FrequencyRegister,
 
     #region Специальные регистры (технологические)
 
