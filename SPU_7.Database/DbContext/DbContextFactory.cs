@@ -13,9 +13,15 @@ public class DbContextFactory : IDbContextFactory<DataContext>
                 .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
                 .AddJsonFile("appsettings.json", false, true);
             var config = builder.Build();
+#if REALEASE
             var optionsBuilder = new DbContextOptionsBuilder<DataContext>()
                 .UseSqlServer(config.GetConnectionString("StandConnection"))
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+#else
+            var optionsBuilder = new DbContextOptionsBuilder<DataContext>()
+                .UseSqlServer(config.GetConnectionString("StandConnectionDebug"))
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+#endif
             return new DataContext(optionsBuilder.Options);
         }
         catch (Exception e)
