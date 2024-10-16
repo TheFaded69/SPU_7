@@ -8,6 +8,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <Configurations>Debug;Release;DebugGUI</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <ApplicationIcon>tdLogo128px.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
