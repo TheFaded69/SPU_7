@@ -191,7 +191,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                         _manualOperationService,
                         _timerService,
                         _operationActionService),
-                    OperationType.CheckTightness => new CheckTightnessOperationModel(_standController,
+                    /*OperationType.CheckTightness => new CheckTightnessOperationModel(_standController,
                         _logger,
                         _settingsService,
                         (CheckTightnessOperationConfigurationModel)operationViewModel.ConfigurationModel,
@@ -202,7 +202,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                         _settingsService,
                         operationViewModel.ConfigurationModel,
                         _timerService,
-                        _operationActionService),
+                        _operationActionService),*/
                     _ => throw new ArgumentOutOfRangeException()
                 };
 

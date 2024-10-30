@@ -76,14 +76,14 @@ public class OperationEditorViewModel : ViewModelBase, IDialogAware
                 {
                     DataContext = new ValidationOperationConfigurationViewModel(_operation.ConfigurationModel, _standController, _dialogService, _mapper, _standSettingsService, _lineNumber)
                 },
-                OperationType.CheckTightness => new CheckTightnessOperationConfigurationView()
+                /*OperationType.CheckTightness => new CheckTightnessOperationConfigurationView()
                 {
                     DataContext = new CheckTightnessOperationConfigurationViewModel(_operation.ConfigurationModel, _standSettingsService)
                 },
                 OperationType.SetStandWorkMode => new SetStandWorkModeOperationConfigurationView()
                 {
                     DataContext = new SetStandWorkModeOperationConfigurationViewModel(_operation.ConfigurationModel)
-                },
+                },*/
                 _ => throw new ArgumentOutOfRangeException(nameof(SelectedOperationType))
             };
         }
