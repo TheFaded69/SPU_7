@@ -65,28 +65,6 @@
                                         IsReadOnly="True"
                                         IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByVolumeConverter}}"/>
                     
-                    <DataGridTextColumn Header="Начальное значение"
-                                        Binding="{Binding StartVolumeValue}"
-                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
-                    <DataGridTextColumn Header="Конечное значние"
-                                        Binding="{Binding EndVolumeValue}"
-                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
-                    <DataGridTextColumn Header="Время поверки расхода"
-                                        Binding="{Binding ValidationFlowTime}"
-                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
-                    <DataGridTextColumn Header="Эталонный расход"
-                                        Binding="{Binding TargetFlow}"
-                                        IsReadOnly="True"
-                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
-                    <DataGridTextColumn Header="Реальный расход"
-                                        Binding="{Binding CalculateFlow}"
-                                        IsReadOnly="True"
-                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
-                    <DataGridTextColumn Header="Отклонение"
-                                        Binding="{Binding FlowDifference}"
-                                        IsReadOnly="True"
-                                        IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByFlowConverter}}"/>
-
                 </DataGrid.Columns>
             </DataGrid>
             

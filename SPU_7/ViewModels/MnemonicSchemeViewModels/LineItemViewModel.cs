@@ -45,8 +45,7 @@ public class LineItemViewModel : ViewModelBase
                 MasterDeviceHeightValue =
                     20 + (settingsService.StandSettingsModel.LineViewModels[lineIndex].MasterDeviceViewModels.Count -
                           1) * 110;
-
-
+                
                 double firstHeight = 0;
                 double secondHeight = 0;
                 double totalHeight = 0;
@@ -312,11 +311,7 @@ public class LineItemViewModel : ViewModelBase
         IsDropValveEnable = _settingsService.StandSettingsModel.LineViewModels[lineIndex].IsDropValveEnable;
 
         LineNumber = lineIndex + 1;
-
-        ReverseFlowCommand = new DelegateCommand(ReverseFlowCommandHandler);
-        SetLineStateCommand = new DelegateCommand(SetLineStateCommandHandler);
-        CloseAllCommand = new DelegateCommand(CloseAllCommandHandler);
-        OpenAllCommand = new DelegateCommand(OpenAllCommandHandler);
+        
     }
 
     private readonly IDialogService _dialogService;
@@ -430,53 +425,5 @@ public class LineItemViewModel : ViewModelBase
     {
         get => _selectedLineType;
         set => SetProperty(ref _selectedLineType, value);
-    }
-
-    public DelegateCommand ReverseFlowCommand { get; }
-
-    public async void ReverseFlowCommandHandler()
-    {
-        switch (LineDirectionFlowState)
-        {
-            case LineDirectionFlowState.AllOpen:
-                await _standController.SetFlowDirectionAsync(LineDirectionFlowState.DirectDirection, LineNumber);
-                break;
-            case LineDirectionFlowState.AllClose:
-                await _standController.SetFlowDirectionAsync(LineDirectionFlowState.DirectDirection, LineNumber);
-                break;
-            case LineDirectionFlowState.DirectDirection:
-                await _standController.SetFlowDirectionAsync(LineDirectionFlowState.ReverseDirection, LineNumber);
-                break;
-            case LineDirectionFlowState.ReverseDirection:
-                await _standController.SetFlowDirectionAsync(LineDirectionFlowState.DirectDirection, LineNumber);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
-
-    public DelegateCommand SetLineStateCommand { get; }
-
-    private void SetLineStateCommandHandler()
-    {
-        IsLineActive = !IsLineActive;
-
-        _standController.SetActiveLine(LineNumber, IsLineActive);
-    }
-
-
-    public DelegateCommand CloseAllCommand { get; set; }
-
-    private async void CloseAllCommandHandler()
-    {
-        await _standController.SetFlowDirectionAsync(LineDirectionFlowState.AllClose, LineNumber);
-    }
-
-    public DelegateCommand OpenAllCommand { get; set; }
-
-
-    private async void OpenAllCommandHandler()
-    {
-        await _standController.SetFlowDirectionAsync(LineDirectionFlowState.AllOpen, LineNumber);
     }
 }

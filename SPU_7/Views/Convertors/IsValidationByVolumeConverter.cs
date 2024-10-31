@@ -13,7 +13,7 @@ public class IsValidationByVolumeConverter : MarkupExtension, IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is ValidationType validationType)
-            return validationType is ValidationType.ValidationByVolume or ValidationType.AutoValidationByVolume;
+            return validationType is ValidationType.ValidationByVolume;
 
         return null;
     }
