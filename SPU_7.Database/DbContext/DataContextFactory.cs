@@ -19,7 +19,7 @@ public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 #else
         var optionsBuilder = new DbContextOptionsBuilder<DataContext>()
-            .UseSqlServer(config.GetConnectionString("StandConnectionDebug"))
+            .UseSqlServer(config.GetConnectionString("StandConnection"))
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 #endif
 
