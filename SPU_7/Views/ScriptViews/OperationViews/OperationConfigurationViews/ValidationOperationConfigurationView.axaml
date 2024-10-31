@@ -169,7 +169,7 @@
                                      extension:TextFieldAssist.Label="Игольчатый кран, %"
                                      IsVisible="{Binding IsNeedleValveUse}"
                                      UseFloatingWatermark="True"
-                                     Watermark="Введите расход"
+                                     Watermark="Введите %"
                                      Text="{Binding NeedleValveValue}" />
                         </StackPanel>
                     </DataTemplate>
