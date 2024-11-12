@@ -1,16 +1,30 @@
-﻿using SPU_7.ViewModels;
+﻿using SPU_7.Models.Stand.Settings.Stand.Extensions;
+using SPU_7.ViewModels;
 
 namespace SPU_7.Extensions;
 
 public class StandInfoData
 {
-    public StandInfoData(int number, StateType stateType)
+    public StandInfoData(int index, StateType stateType)
     {
-        Number = number;
+        Index = index;
         StateType = stateType;
     }
 
-    public int Number { get; set; }
+    public StandInfoData(StandSettingsValveModel standSettingsValveModel, StateType stateType)
+    {
+        StandSettingsValveModel = standSettingsValveModel;
+        StateType = stateType;
+    }
     
+    public StandInfoData(StandSettingsFanModel standSettingsFanModel, StateType stateType)
+    {
+        StandSettingsFanModel = standSettingsFanModel;
+        StateType = stateType;
+    }
+    
+    public int Index { get; set; }
+    public StandSettingsValveModel StandSettingsValveModel { get; }
+    public StandSettingsFanModel StandSettingsFanModel { get; }
     public StateType StateType { get; set; }
 }

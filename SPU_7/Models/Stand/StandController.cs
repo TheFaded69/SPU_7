@@ -855,7 +855,7 @@ namespace SPU_7.Models.Stand
         public async Task<bool> OpenValveAsync(StandSettingsValveModel standSettingsValveModel,
             bool withoutWrite = false)
         {
-            NotifyObserverByDataPair(new DataPair(new StandInfoData(standSettingsValveModel.Number - 1, StateType.Work),
+            NotifyObserverByDataPair(new DataPair(new StandInfoData(standSettingsValveModel, StateType.Work),
                 DeviceInfoParameterType.ValveState));
 
             if (!await _standDevices
@@ -866,7 +866,7 @@ namespace SPU_7.Models.Stand
             if (withoutWrite)
             {
                 NotifyObserverByDataPair(
-                    new DataPair(new StandInfoData(standSettingsValveModel.Number - 1, StateType.Open),
+                    new DataPair(new StandInfoData(standSettingsValveModel, StateType.Open),
                         DeviceInfoParameterType.ValveState));
                 return true;
             }
@@ -874,7 +874,7 @@ namespace SPU_7.Models.Stand
             if (!standSettingsValveModel.IsControlState)
             {
                 NotifyObserverByDataPair(
-                    new DataPair(new StandInfoData(standSettingsValveModel.Number - 1, StateType.Open),
+                    new DataPair(new StandInfoData(standSettingsValveModel, StateType.Open),
                         DeviceInfoParameterType.ValveState));
                 return true;
             }
@@ -909,7 +909,7 @@ namespace SPU_7.Models.Stand
                     count--;
                 }
 
-            NotifyObserverByDataPair(new DataPair(new StandInfoData(standSettingsValveModel.Number - 1, StateType.Open),
+            NotifyObserverByDataPair(new DataPair(new StandInfoData(standSettingsValveModel, StateType.Open),
                 DeviceInfoParameterType.ValveState));
             return !isWork;
         }
@@ -983,7 +983,7 @@ namespace SPU_7.Models.Stand
         public async Task<bool> CloseValveAsync(StandSettingsValveModel standSettingsValveModel,
             bool withoutWrite = false)
         {
-            NotifyObserverByDataPair(new DataPair(new StandInfoData(standSettingsValveModel.Number - 1, StateType.Work),
+            NotifyObserverByDataPair(new DataPair(new StandInfoData(standSettingsValveModel, StateType.Work),
                 DeviceInfoParameterType.ValveState));
 
             if (!await _standDevices
@@ -994,7 +994,7 @@ namespace SPU_7.Models.Stand
             if (withoutWrite)
             {
                 NotifyObserverByDataPair(new DataPair(
-                    new StandInfoData(standSettingsValveModel.Number - 1, StateType.Close),
+                    new StandInfoData(standSettingsValveModel, StateType.Close),
                     DeviceInfoParameterType.ValveState));
                 return true;
             }
@@ -1002,7 +1002,7 @@ namespace SPU_7.Models.Stand
             if (!standSettingsValveModel.IsControlState)
             {
                 NotifyObserverByDataPair(new DataPair(
-                    new StandInfoData(standSettingsValveModel.Number - 1, StateType.Close),
+                    new StandInfoData(standSettingsValveModel, StateType.Close),
                     DeviceInfoParameterType.ValveState));
                 return true;
             }
@@ -1039,7 +1039,7 @@ namespace SPU_7.Models.Stand
                 }
 
             NotifyObserverByDataPair(new DataPair(
-                new StandInfoData(standSettingsValveModel.Number - 1, StateType.Close),
+                new StandInfoData(standSettingsValveModel, StateType.Close),
                 DeviceInfoParameterType.ValveState));
             return !isWork;
         }
@@ -2295,7 +2295,18 @@ namespace SPU_7.Models.Stand
 
         public async Task<bool> EnableFrequencyRegulatorAsync(int regulatorIndex)
         {
+            NotifyObserverByDataPair(new DataPair(new StandInfoData(regulatorIndex, StateType.Work),
+                DeviceInfoParameterType.FanState));
+            
             return await _frequencyRegulatorDevices[regulatorIndex].StartFrequencyWorkAsync();
+        }
+        
+        public async Task<bool> DisableFrequencyRegulatorAsync(int regulatorIndex)
+        {
+            NotifyObserverByDataPair(new DataPair(new StandInfoData(regulatorIndex, StateType.None),
+                DeviceInfoParameterType.FanState));
+            
+            return await _frequencyRegulatorDevices[regulatorIndex].StopFrequencyWorkAsync();
         }
 
         public async Task<bool> EnableFrequencyRegulatorAsync(StandSettingsFanModel? settingsFanModel) =>
@@ -2334,10 +2345,7 @@ namespace SPU_7.Models.Stand
             return await _frequencyRegulatorDevices[regulatorIndex].WriteOutputValueAsync(frequency);
         }
 
-        public async Task<bool> DisableFrequencyRegulatorAsync(int regulatorIndex)
-        {
-            return await _frequencyRegulatorDevices[regulatorIndex].StopFrequencyWorkAsync();
-        }
+        
 
         public void AddCollectionForPortLogging(ObservableCollection<LogMessage> portLogMessages)
         {

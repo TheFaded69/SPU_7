@@ -12,7 +12,7 @@ public class FanItemViewModel : ViewModelBase
     private readonly IStandController _standController;
     private readonly IStandSettingsService _settingsService;
     private readonly int _lineIndex;
-    private readonly int _fanIndex;
+    public readonly int FanIndex;
     private readonly int _regulatorIndex;
     private readonly int _bitIndex;
 
@@ -28,7 +28,7 @@ public class FanItemViewModel : ViewModelBase
         _lineIndex = lineIndex;
         _regulatorIndex = fanIndex;
         _bitIndex = fanIndex;
-        _fanIndex = fanIndex;
+        FanIndex = fanIndex;
 
         if (lineIndex > 0)
         {
@@ -117,7 +117,7 @@ public class FanItemViewModel : ViewModelBase
     private async void EnableFanCommandHandler()
     {
         switch (_settingsService.StandSettingsModel.LineViewModels[_lineIndex]
-                    .FanViewModels[_fanIndex]
+                    .FanViewModels[FanIndex]
                     .SelectedFanType)
         {
             case FanType.FrequencyControlFan:
@@ -145,7 +145,7 @@ public class FanItemViewModel : ViewModelBase
     private async void DisableFanCommandHandler()
     {
         switch (_settingsService.StandSettingsModel.LineViewModels[_lineIndex]
-                    .FanViewModels[_fanIndex]
+                    .FanViewModels[FanIndex]
                     .SelectedFanType)
         {
             case FanType.FrequencyControlFan:
