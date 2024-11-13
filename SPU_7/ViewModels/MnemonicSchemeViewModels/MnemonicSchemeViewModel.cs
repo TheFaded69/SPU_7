@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using Prism.Services.Dialogs;
 using SPU_7.Extensions;
 using SPU_7.Models.Scripts;
@@ -23,10 +24,10 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             _settingsService = settingsService;
             _standController = standController;
             _scriptController = scriptController;
-            
-            
+
+
             standController.RegisterObserver(this);
-            
+
             LineViewModels = [];
             foreach (var lineViewModel in settingsService.StandSettingsModel.LineViewModels)
             {
@@ -37,7 +38,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                     SelectedLineType = lineViewModel.SelectedLineType,
                 });
             }
-            
+
             FirstSize = 80;
         }
 
@@ -56,7 +57,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             get => _isSchemeEnabled;
             set => SetProperty(ref _isSchemeEnabled, value);
         }
-        
+
         public ObservableCollection<LineItemViewModel> LineViewModels { get; set; }
 
 
@@ -65,8 +66,8 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             get => _firstSize;
             set => SetProperty(ref _firstSize, value);
         }
-        
-        
+
+
         public void Update(object obj)
         {
             throw new System.NotImplementedException();
@@ -74,7 +75,78 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
 
         public void UpdateFromDataPair(DataPair dataPair)
         {
-           
+            if (dataPair.Data is StandInfoData standInfoData)
+            {
+                switch (dataPair.DataType)
+                {
+                    case DeviceInfoParameterType.ValveState:
+                        var lineItem = LineViewModels.FirstOrDefault(line =>
+                            line.DeviceItemViewModels.Any(device => device.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
+                        if (lineItem != null)
+                        {
+                            lineItem.DeviceItemViewModels.FirstOrDefault(fan => fan.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel)
+                                .ValveItemViewModel.StateType = standInfoData.StateType;
+                            return;
+                        }
+                        
+                        lineItem = LineViewModels.FirstOrDefault(line =>
+                            line.MasterDeviceItemViewModels.Any(device => device.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
+                        if (lineItem != null)
+                        {
+                            lineItem.MasterDeviceItemViewModels.FirstOrDefault(fan => fan.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel)
+                                .ValveItemViewModel.StateType = standInfoData.StateType;
+                            return;
+                        }
+                        
+                        lineItem = LineViewModels.FirstOrDefault(line =>
+                            line.MasterDeviceItemViewModels.Any(device => device.PressureValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
+                        if (lineItem != null)
+                        {
+                            lineItem.MasterDeviceItemViewModels.FirstOrDefault(fan => fan.PressureValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel)
+                                .PressureValveItemViewModel.StateType = standInfoData.StateType;
+                            return;
+                        }
+                        
+                        lineItem = LineViewModels.FirstOrDefault(line =>
+                            line.FanItemViewModels.Any(device => device.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
+                        if (lineItem != null)
+                        {
+                            lineItem.FanItemViewModels.FirstOrDefault(fan => fan.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel)
+                                .ValveItemViewModel.StateType = standInfoData.StateType;
+                            return;
+                        }
+                        
+                        lineItem = LineViewModels.FirstOrDefault(line =>
+                            line.StartCommonValveViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel);
+                        if (lineItem != null)
+                        {
+                            lineItem.StartCommonValveViewModel.StateType = standInfoData.StateType;
+                            return;
+                        }
+                        
+                        lineItem = LineViewModels.FirstOrDefault(line =>
+                            line.EndCommonValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel);
+                        if (lineItem != null)
+                        {
+                            lineItem.EndCommonValveItemViewModel.StateType = standInfoData.StateType;
+                            return;
+                        }
+
+
+                        break;
+                    case DeviceInfoParameterType.FanState:
+                    {
+                        lineItem = LineViewModels.FirstOrDefault(line =>
+                            line.FanItemViewModels.Any(fan => fan.FanIndex == standInfoData.Index));
+                        if (lineItem != null)
+                        {
+                            lineItem.FanItemViewModels.FirstOrDefault(fan => fan.FanIndex == standInfoData.Index).IsFanWorking = standInfoData.StateType == StateType.Work;
+                            return;
+                        }
+                    }
+                        break;
+                }
+            }
         }
     }
 }

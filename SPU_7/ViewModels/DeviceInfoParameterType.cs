@@ -41,6 +41,7 @@ public enum DeviceInfoParameterType
     
     CoefficientOfCriticalMode = 18,
     
-    IsCoefficientOfCriticalModeGood = 19, 
-    
+    IsCoefficientOfCriticalModeGood = 19,
+
+    FanState = 20,
 }
