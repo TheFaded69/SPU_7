@@ -431,7 +431,7 @@ namespace SPU_7.Models.Stand
                                 case LineType.MasterDeviceLineType:
                                 {
                                     var device = standLine.Devices[deviceIndex];
-                                    //await device.ReadPressureAsync();
+                                    await device.ReadPressureAsync();
                                     await device.ReadTemperatureAsync();
                                 }
                                     break;

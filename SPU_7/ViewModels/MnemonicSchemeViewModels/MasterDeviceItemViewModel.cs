@@ -77,7 +77,7 @@ public class MasterDeviceItemViewModel : ViewModelBase, IPressureSensorObserver,
     public float? Flow
     {
         get => _flow;
-        set => SetProperty(ref _flow, value == null ? value : (float?)Math.Round((float)value, 2));
+        set => SetProperty(ref _flow, value == null ? value : (float?)Math.Round((float)value, 3));
     }
 
     public float? SelectedFlow
