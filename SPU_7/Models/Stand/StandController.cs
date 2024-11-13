@@ -1944,7 +1944,7 @@ namespace SPU_7.Models.Stand
         {
             var x = (double)needleValue;
 
-            double a4 = 3.14052250e-4, a3 = -2.25820564e-2, a2 = -2.87625370e-3, a1 = -5.59414784e-1, a0 = 2.50475359e1;
+            double a4 = 3.29637001e-4, a3 = -2.38279327e-2, a2 = 5.94363340e-1, a1 = -5.92985343e0, a0 = 2.65253307e1;
 
             var y = a0 + a1 * x + a2 * Math.Pow(x, 2) + a3 * Math.Pow(x, 3) + a4 * Math.Pow(x, 4);
 
