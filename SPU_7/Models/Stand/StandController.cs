@@ -1954,7 +1954,7 @@ namespace SPU_7.Models.Stand
         private async Task ControlConsumptionAsync(double value, int indexOfFanLine, int indexOfFan,
             int indexOfMasterDeviceLine, int indexOfMasterDevice, int? needleValveValue = null)
         {
-            var frequencyMin = RecalculateMinimumFrequency(needleValveValue);
+            var frequencyMin = needleValveValue == null ? 0 : RecalculateMinimumFrequency(needleValveValue);
 
             _pidController = new PIDController(
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan]
