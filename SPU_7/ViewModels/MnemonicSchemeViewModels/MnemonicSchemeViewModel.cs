@@ -81,7 +81,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                 {
                     case DeviceInfoParameterType.ValveState:
                         var lineItem = LineViewModels.FirstOrDefault(line =>
-                            line.DeviceItemViewModels.Any(device => device.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
+                            line.DeviceItemViewModels.Any(device => device.ValveItemViewModel?.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
                         if (lineItem != null)
                         {
                             lineItem.DeviceItemViewModels.FirstOrDefault(fan => fan.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel)
@@ -90,7 +90,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                         }
                         
                         lineItem = LineViewModels.FirstOrDefault(line =>
-                            line.MasterDeviceItemViewModels.Any(device => device.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
+                            line.MasterDeviceItemViewModels.Any(device => device.ValveItemViewModel?.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
                         if (lineItem != null)
                         {
                             lineItem.MasterDeviceItemViewModels.FirstOrDefault(fan => fan.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel)
@@ -99,7 +99,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                         }
                         
                         lineItem = LineViewModels.FirstOrDefault(line =>
-                            line.MasterDeviceItemViewModels.Any(device => device.PressureValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
+                            line.MasterDeviceItemViewModels.Any(device => device.PressureValveItemViewModel?.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
                         if (lineItem != null)
                         {
                             lineItem.MasterDeviceItemViewModels.FirstOrDefault(fan => fan.PressureValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel)
@@ -111,13 +111,13 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                             line.FanItemViewModels.Any(device => device.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel));
                         if (lineItem != null)
                         {
-                            lineItem.FanItemViewModels.FirstOrDefault(fan => fan.ValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel)
+                            lineItem.FanItemViewModels.FirstOrDefault(fan => fan.ValveItemViewModel?.StandSettingsValveModel == standInfoData.StandSettingsValveModel)
                                 .ValveItemViewModel.StateType = standInfoData.StateType;
                             return;
                         }
                         
                         lineItem = LineViewModels.FirstOrDefault(line =>
-                            line.StartCommonValveViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel);
+                            line.StartCommonValveViewModel?.StandSettingsValveModel == standInfoData.StandSettingsValveModel);
                         if (lineItem != null)
                         {
                             lineItem.StartCommonValveViewModel.StateType = standInfoData.StateType;
@@ -125,7 +125,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                         }
                         
                         lineItem = LineViewModels.FirstOrDefault(line =>
-                            line.EndCommonValveItemViewModel.StandSettingsValveModel == standInfoData.StandSettingsValveModel);
+                            line.EndCommonValveItemViewModel?.StandSettingsValveModel == standInfoData.StandSettingsValveModel);
                         if (lineItem != null)
                         {
                             lineItem.EndCommonValveItemViewModel.StateType = standInfoData.StateType;
