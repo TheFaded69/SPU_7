@@ -626,6 +626,8 @@ namespace SPU_7.Models.Stand
             return _lines[lineIndex].MasterDevices[masterDeviceIndex].GetTargetFlow();
         }
 
+        
+
         #endregion
 
         #region Текущие значения
@@ -1419,6 +1421,23 @@ namespace SPU_7.Models.Stand
             };
 
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulseCountAsync();
+        }
+        
+        public async Task<CommonCommandStatus?> GetPulseCountMeterStatusAsync(int? pulseCountMeterModuleIndex,
+            int pulseCountMeterModuleChannelNumber)
+        {
+            if (pulseCountMeterModuleIndex == null) return null;
+            
+            var channel = pulseCountMeterModuleChannelNumber switch
+            {
+                1 => ChannelNumber.First,
+                2 => ChannelNumber.Second,
+                3 => ChannelNumber.Third,
+                4 => ChannelNumber.Fourth,
+                _ => ChannelNumber.None
+            };
+            
+            return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulseCountMeterStatusAsync(channel);
         }
 
         public async Task<float?> ReadMeasureTimeFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex)

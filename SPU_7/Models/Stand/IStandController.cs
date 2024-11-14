@@ -448,5 +448,7 @@ namespace SPU_7.Models.Stand
         Task<float?> GetPressureDischargerFromLineAsync(int activeLine);
         double? SelectMetrologyCoefficient(float? temperature, float? humidity);
         double GetTargetFlowFromMasterDevice(int lineIndex, int masterDeviceIndex);
+        Task<CommonCommandStatus?> GetPulseCountMeterStatusAsync(int? pulseCountMeterModuleIndex,
+            int pulseCountMeterModuleChannelNumber);
     }
 }

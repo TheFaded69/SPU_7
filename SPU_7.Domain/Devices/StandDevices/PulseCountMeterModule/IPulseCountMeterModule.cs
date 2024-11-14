@@ -114,4 +114,6 @@ public interface IPulseCountMeterModule
     /// <param name="pulseCountMeterModuleChannelNumber"></param>
     /// <returns></returns>
     Task<float?> ReadAverageFrequencyAsync(ChannelNumber pulseCountMeterModuleChannelNumber);
+
+    Task<CommonCommandStatus?> ReadPulseCountMeterStatusAsync(ChannelNumber pulseCountMeterModuleChannelNumber);
 }

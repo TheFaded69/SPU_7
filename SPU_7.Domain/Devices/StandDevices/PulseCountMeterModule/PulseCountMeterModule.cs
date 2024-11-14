@@ -43,6 +43,18 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
         };
     }
 
+    public async Task<CommonCommandStatus?> ReadPulseCountMeterStatusAsync(ChannelNumber pulseCountMeterModuleChannelNumber)
+    {
+        return pulseCountMeterModuleChannelNumber switch
+        {
+            ChannelNumber.First => (CommonCommandStatus?)(uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.AverageFrequencyFirstRegister),
+            ChannelNumber.Second => (CommonCommandStatus?)(uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.AverageFrequencySecondRegister),
+            ChannelNumber.Third => (CommonCommandStatus?)(uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.AverageFrequencyThirdRegister),
+            ChannelNumber.Fourth => (CommonCommandStatus?)(uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.AverageFrequencyFourthRegister),
+            _ => throw new ArgumentOutOfRangeException(nameof(pulseCountMeterModuleChannelNumber), pulseCountMeterModuleChannelNumber, null)
+        };
+    }
+
     public async Task<bool> StartMeasurePulseCountAsync() =>
         await WriteRegisterAsync(PulseMeterCountModuleRegisterMap.CommonCommandRegister,
             BitConverter.GetBytes((uint)1).SwapBytes().ToArray());

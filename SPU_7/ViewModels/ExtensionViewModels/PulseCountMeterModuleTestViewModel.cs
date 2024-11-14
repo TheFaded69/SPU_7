@@ -125,11 +125,11 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
         await Task.Delay(2000);
 
-        await _standController.StartPulseCountMeterModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
+        //await _standController.StartPulseCountMeterModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
 
         await Task.Delay(2000);
 
-        await _standController.SendStartPulseCountMeterCommandAsync();
+        //await _standController.SendStartPulseCountMeterCommandAsync();
 
         IsOffPulseCountWork = true;
     }

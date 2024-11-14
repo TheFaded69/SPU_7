@@ -32,45 +32,61 @@ public class PIDController
     private double _minOutput;
     private double _maxOutput;
 
-    private List<double> _calculatetValues = [];
+    private List<double> _calculatedValues = [];
     
     public double? Calculate(double setPoint, double measuredValue, double multiplication = 1)
     {
         var currentValue = Math.Max(_minInput, Math.Min(measuredValue, _maxInput));
         // Вычисляем ошибку
-        double error = setPoint - currentValue;
+        var error = setPoint - currentValue;
 
         // Пропорциональная составляющая
-        double pTerm = _kp * error * multiplication;
+        var pTerm = _kp * error * multiplication;
 
         // Интегральная составляющая
         _integral += error;
-        double iTerm = _ki * _integral * multiplication;
+        var iTerm = _ki * _integral * multiplication;
          
         // Дифференциальная составляющая
-        double dTerm = _kd * (error - _previousError)  * multiplication;
+        var dTerm = _kd * (error - _previousError)  * multiplication;
         _previousError = error;
 
         // Вычисляем выходное значение
-        double output = pTerm + iTerm + dTerm;
+        var output = pTerm + iTerm + dTerm;
 
         // Ограничиваем выходное значение в заданном диапазоне
         output = Math.Max(_minOutput, Math.Min(output, _maxOutput));
 
-        if (_calculatetValues.Count == 5)
+        switch (_calculatedValues.Count)
         {
-            _calculatetValues.RemoveAt(0);
-            _calculatetValues.Add(output);
-        }
-        else
-        {
-            _calculatetValues.Add(output);
+            //заносим последние 5 значений в список
+            case 5:
+                _calculatedValues.RemoveAt(0);
+                _calculatedValues.Add(output);
+                break;
+            case > 5:
+            {
+                while (_calculatedValues.Count >= 5)
+                {
+                    _calculatedValues.RemoveAt(0);
+                }
+            
+                _calculatedValues.Add(output);
+                break;
+            }
+            default:
+                _calculatedValues.Add(output);
+                break;
         }
 
-        if (measuredValue >= setPoint * 1.05)
-            if (_calculatetValues.Average() == output && _calculatetValues.Count == 5) _integral /= 2;
-        else if (measuredValue <= setPoint * 0.95)
-            if (_calculatetValues.Average() == output && _calculatetValues.Count == 5) return null;
+        //Если Расход превышает цель последние 5 измерений при максимальном выходе в 50 Гц то сбрасываем интегральную ошибку чтобы вывести систему из
+        //статического состояния (слишком большая интегральная ошибка накопилась)
+        if (measuredValue >= setPoint * 1.05 && Math.Abs(_calculatedValues.Average() - _maxOutput) >= 0 && _calculatedValues.Count == 5)
+            _integral /= 2;
+        //Если расход не может достигнуть цель на максильной частоте в течении 5 последних измерений - нет смысла регулировать систему, нужно менять расход в 
+        //сценарии, другой переход ставить, другой СГ
+        else if (measuredValue <= setPoint * 0.95 && Math.Abs(_calculatedValues.Average() - _maxOutput) >= 0 && _calculatedValues.Count == 5)
+            return null;
         
         return output;
     }
