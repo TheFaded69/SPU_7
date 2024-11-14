@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SPU_7.Models.Stand;
 
@@ -29,6 +31,8 @@ public class PIDController
     private double _maxInput;
     private double _minOutput;
     private double _maxOutput;
+
+    private List<double> _calculatetValues = [];
     
     public double Calculate(double setPoint, double measuredValue, double multiplication = 1)
     {
@@ -53,6 +57,18 @@ public class PIDController
         // Ограничиваем выходное значение в заданном диапазоне
         output = Math.Max(_minOutput, Math.Min(output, _maxOutput));
 
+        if (_calculatetValues.Count == 5)
+        {
+            _calculatetValues.RemoveAt(0);
+            _calculatetValues.Add(output);
+        }
+        else
+        {
+            _calculatetValues.Add(output);
+        }
+
+        if (_calculatetValues.Average() == output) _integral /= 2;
+        
         return output;
     }
 }
