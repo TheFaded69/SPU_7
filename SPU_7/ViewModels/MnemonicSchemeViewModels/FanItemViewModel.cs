@@ -29,6 +29,7 @@ public class FanItemViewModel : ViewModelBase
         _regulatorIndex = fanIndex;
         _bitIndex = fanIndex;
         FanIndex = fanIndex;
+        
 
         if (lineIndex > 0)
         {
@@ -123,11 +124,11 @@ public class FanItemViewModel : ViewModelBase
             case FanType.FrequencyControlFan:
                 await _standController.SetRegulatorFrequencyAsync(_regulatorIndex, FanFrequencyValue);
                 await _standController.EnableFrequencyRegulatorAsync(_regulatorIndex);
-                IsFanWorking = true;
+                    // IsFanWorking = true;
                 break;
             case FanType.ControlModuleControlFan:
                 await _standController.EnableLineFanWorkAsync(_lineIndex, _bitIndex);
-                IsFanWorking = true;
+                //IsFanWorking = true;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

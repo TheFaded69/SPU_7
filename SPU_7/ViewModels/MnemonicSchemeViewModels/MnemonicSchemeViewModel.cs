@@ -136,13 +136,34 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                         break;
                     case DeviceInfoParameterType.FanState:
                     {
-                        lineItem = LineViewModels.FirstOrDefault(line =>
-                            line.FanItemViewModels.Any(fan => fan.FanIndex == standInfoData.Index));
-                        if (lineItem != null)
+                        var regulatorIndex = standInfoData.Index;
+                        var lineIndex = 0;
+                        var fanIndex = 0;
+                        var currentItteretion = 0;
+
+                        var indexReady = false;
+                        
+                        foreach (var line in _settingsService.StandSettingsModel.LineViewModels)
                         {
-                            lineItem.FanItemViewModels.FirstOrDefault(fan => fan.FanIndex == standInfoData.Index).IsFanWorking = standInfoData.StateType == StateType.Work;
-                            return;
+                            foreach (var fanViewModel in line.FanViewModels)
+                            {
+                                if (currentItteretion == regulatorIndex)
+                                {
+                                    indexReady = true;
+                                    break;
+                                }
+                                currentItteretion++;
+                                fanIndex++;
+                            }
+                            
+                            if (indexReady) break;
+                            
+                            lineIndex++;
+                            fanIndex = 0;
                         }
+
+                        LineViewModels[lineIndex].FanItemViewModels[fanIndex].IsFanWorking =
+                            standInfoData.StateType == StateType.Work;
                     }
                         break;
                 }

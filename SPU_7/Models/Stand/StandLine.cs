@@ -10,6 +10,7 @@ using SPU_7.Domain.Devices.Device.UniversalDevice;
 using SPU_7.Domain.Devices.MasterDevice.GFG;
 using SPU_7.Domain.Devices.MasterDevice.Rabo;
 using SPU_7.Domain.Devices.MasterDevice.RGT;
+using SPU_7.Domain.Devices.MasterDevice.SG16;
 using SPU_7.Domain.Devices.StandDevices.PressureSensor;
 using SPU_7.Domain.Devices.StandDevices.TemperatureSensor;
 using SPU_7.Domain.Modbus;
@@ -89,6 +90,7 @@ public class StandLine
                         },
                         MasterDeviceType.Rabo => new RaboDevice(pressureSensor, temperatureSensor),
                         MasterDeviceType.RGT => new RGTDevice(pressureSensor, temperatureSensor),
+                        MasterDeviceType.SG16 => new SG16Device(pressureSensor, temperatureSensor),
                     });
                 }
 

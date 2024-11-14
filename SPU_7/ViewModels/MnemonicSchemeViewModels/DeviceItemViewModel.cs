@@ -18,7 +18,7 @@ public class DeviceItemViewModel : ViewModelBase, IPressureSensorObserver, IDevi
         _deviceIndex = deviceIndex;
 
         //standController.RegisterPressureSensorObserver(this, deviceIndex, lineIndex);
-        //standController.RegisterDeviceObserver(this, deviceIndex, lineIndex);
+        standController.RegisterDeviceObserver(this, deviceIndex, lineIndex);
 
         var valveSettings = new StandSettingsValveModel
         {
