@@ -67,7 +67,7 @@ public class PIDController
             _calculatetValues.Add(output);
         }
 
-        if (_calculatetValues.Average() == output) _integral /= 2;
+        if (_calculatetValues.Average() == output && _calculatetValues.Count == 5) _integral /= 2;
         
         return output;
     }
