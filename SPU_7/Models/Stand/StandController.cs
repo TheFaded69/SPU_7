@@ -2028,6 +2028,14 @@ namespace SPU_7.Models.Stand
                 var targetFrequency =
                     _pidController.Calculate(targetConsumption, (double)currentConsumption, (double)multiplicate);
 
+                if (targetFrequency == null)
+                {
+                    _logger.Logging(new LogMessage("Не удалось достичь необходимиого расхода, исправьте сценарий",
+                        LogLevel.Error));
+                    //await EmergencyPowerOffAsync();
+                    return;
+                }
+                
                 if (targetFrequency > currentFrequency + maxStep)
                     targetFrequency = (double)(currentFrequency + maxStep);
                 else if (targetFrequency < currentFrequency - maxStep)
@@ -2035,14 +2043,14 @@ namespace SPU_7.Models.Stand
 
                 currentFrequency = targetFrequency;
 
-                _flowDataService.ReceiveData((double)currentConsumption, targetFrequency);
+                _flowDataService.ReceiveData((double)currentConsumption, (double)targetFrequency);
 
                 await _frequencyRegulatorDevices
                     .FirstOrDefault(f =>
                         ((FrequencyRegulatorDevice)f).ModuleAddress ==
                         _settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan]
                             .FrequencyRegulatorViewModel.ModuleAddress)
-                    .WriteOutputValueAsync(targetFrequency);
+                    .WriteOutputValueAsync((double)targetFrequency);
 
                 var delay = _settingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine]
                         .MasterDeviceViewModels[indexOfMasterDevice].SelectedMasterDeviceType switch

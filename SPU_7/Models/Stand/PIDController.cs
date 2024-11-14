@@ -34,7 +34,7 @@ public class PIDController
 
     private List<double> _calculatetValues = [];
     
-    public double Calculate(double setPoint, double measuredValue, double multiplication = 1)
+    public double? Calculate(double setPoint, double measuredValue, double multiplication = 1)
     {
         var currentValue = Math.Max(_minInput, Math.Min(measuredValue, _maxInput));
         // Вычисляем ошибку
@@ -67,7 +67,10 @@ public class PIDController
             _calculatetValues.Add(output);
         }
 
-        if (_calculatetValues.Average() == output && _calculatetValues.Count == 5) _integral /= 2;
+        if (measuredValue >= setPoint * 1.05)
+            if (_calculatetValues.Average() == output && _calculatetValues.Count == 5) _integral /= 2;
+        else if (measuredValue <= setPoint * 0.95)
+            if (_calculatetValues.Average() == output && _calculatetValues.Count == 5) return null;
         
         return output;
     }
