@@ -117,7 +117,7 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
             .PulseCountMeterModuleNumber;
         var pulseCountMeterModuleChannelNumber = SelectedDevicePulseCountMeterModuleViewModel.PulseCountMeterChannelNumber;
         
-        await _standController.ResetPulseCountMeterAsync();
+            await _standController.ResetPulseCountMeterAsync();
         //await _standController.TurnOnPulseCountMeterControlRegister();
         await _standController.TurnOffPulseCountMeterControlRegister();
         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(pulseCountMeterModuleNumber - 1,
@@ -125,7 +125,7 @@ public class PulseCountMeterModuleTestViewModel : ViewModelBase, IDialogAware
 
         await Task.Delay(2000);
 
-        //await _standController.StartPulseCountMeterModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
+        await _standController.StartPulseCountMeterModuleMeasureAsync(pulseCountMeterModuleNumber - 1);
 
         await Task.Delay(2000);
 

@@ -54,7 +54,8 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="5"
-                                           Text="{Binding LineNumber, StringFormat='МПКИ - №{0}'}"/>
+                                           Text="{Binding LineNumber, StringFormat='Линия - №{0}'}"/>
+
                                 <TextBlock Margin="5"
                                            Text="{Binding PulseCountMeterChannelNumber, StringFormat='Канал - №{0}'}"/>
                             </StackPanel>
