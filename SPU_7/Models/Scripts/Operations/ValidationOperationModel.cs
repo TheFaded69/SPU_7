@@ -380,6 +380,8 @@ public class ValidationOperationModel : OperationModel
                                     }
 
                                     _timerService.InfoTimerDisable();
+                                    
+                                    await Task.Delay(2000);
 
                                     // какие-то действия
                                     var validationMeasureResult = new ValidationMeasureResult();
@@ -480,6 +482,8 @@ public class ValidationOperationModel : OperationModel
                                     }
 
                                     _timerService.InfoTimerDisable();
+                                    
+                                    await Task.Delay(2000);
 
                                     _timerService.OperationName = OperationName;
                                     _timerService.TimeSeconds = 300;
@@ -533,6 +537,8 @@ public class ValidationOperationModel : OperationModel
                                     }
 
                                     _timerService.InfoTimerDisable();
+                                    
+                                    await Task.Delay(2000);
 
                                     if (((ValidationOperationConfigurationModel)_configuration).IsAutoPulseMeasure)
                                     {
@@ -578,6 +584,8 @@ public class ValidationOperationModel : OperationModel
                                         await Task.Delay(TimeSpan.FromHours(timeValidation));
 
                                         _timerService.InfoTimerDisable();
+                                        
+                                        await Task.Delay(2000);
 
                                         // счет импульсов с поверяемого СГ , затем с эталона после окончания счета
                                         var targetPulseCount = point.TargetVolume / _standSettingsService
@@ -664,6 +672,8 @@ public class ValidationOperationModel : OperationModel
 
                                         _timerService.InfoTimerDisable();
                                         
+                                        await Task.Delay(2000);
+                                        
                                         _timerService.TimeSeconds = (int)(timeValidation * 3600);
                                         _timerService.OperationName = OperationName;
                                         _timerService.Message = "Прогон расхода через СГ";
@@ -699,6 +709,8 @@ public class ValidationOperationModel : OperationModel
                                         }
 
                                         _timerService.InfoTimerDisable();
+                                        
+                                        await Task.Delay(2000);
                                         
                                         masterDevicePulseCount =
                                             await _standController.ReadPulseCountFromPulseCountMeterAsync(
@@ -739,6 +751,8 @@ public class ValidationOperationModel : OperationModel
                                     }
 
                                     _timerService.InfoTimerDisable();
+                                    
+                                    await Task.Delay(2000);
 
                                     var deviceEnableIndex = -1;
 
