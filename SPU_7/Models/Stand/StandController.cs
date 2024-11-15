@@ -772,13 +772,13 @@ namespace SPU_7.Models.Stand
         {
             return await _standDevices[address - 1].SetWorkRegisterAsync();
         }
-
-        [Obsolete("Старый вариант отправления требуемого состояния битов для всех устройств")]
+        
         public async Task<bool> UpdateAllDevice()
         {
-            foreach (var device in _standDevices)
+            foreach (var device in _standDevices.Where(d => d.NeedUpdateState))
             {
                 if (!await device.SetWorkRegisterAsync()) return false;
+                await Task.Delay(100);
             }
 
             return true;
