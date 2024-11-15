@@ -85,8 +85,8 @@ public class PIDController
             _integral /= 2;
         //Если расход не может достигнуть цель на максильной частоте в течении 5 последних измерений - нет смысла регулировать систему, нужно менять расход в 
         //сценарии, другой переход ставить, другой СГ
-        else if (measuredValue <= setPoint * 0.95 && Math.Abs(_calculatedValues.Average() - _maxOutput) >= 0 && _calculatedValues.Count == 5)
-            return null;
+        /*else if (measuredValue <= setPoint * 0.95 && Math.Abs(_calculatedValues.Average() - _maxOutput) >= 0 && _calculatedValues.Count == 5)
+            return null;*/
         
         return output;
     }
