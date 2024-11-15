@@ -138,7 +138,7 @@ public class ValidationOperationModel : OperationModel
                                                 mas.MasterDeviceName == point.SelectedMasterDeviceName));
 
                                     _timerService.OperationName = OperationName;
-                                    _timerService.TimeSeconds = 120;
+                                    _timerService.TimeSeconds = 90;
                                     _timerService.Message = $"Открытие кранов для точки №{point.Number}";
                                     _timerService.InfoTimerEnable();
 
@@ -155,7 +155,7 @@ public class ValidationOperationModel : OperationModel
                                                     if (!await _standController.OpenValveAsync(
                                                             _standSettingsService.StandSettingsModel
                                                                 .LineViewModels[currentIndex - 1]
-                                                                .EndCommonValveViewModel))
+                                                                .EndCommonValveViewModel, true))
                                                     {
                                                         _logger.Logging(new LogMessage(
                                                             "Не удалось открыть кран после эталонов", LogLevel.Error));
@@ -221,7 +221,7 @@ public class ValidationOperationModel : OperationModel
                                                     if (!await _standController.OpenValveAsync(
                                                             _standSettingsService.StandSettingsModel
                                                                 .LineViewModels[currentIndex - 1]
-                                                                .StartCommonValveViewModel))
+                                                                .StartCommonValveViewModel, true))
                                                     {
                                                         _logger.Logging(new LogMessage(
                                                             "Не удалось открыть общий кран после устройств",
@@ -281,7 +281,7 @@ public class ValidationOperationModel : OperationModel
                                                 _standSettingsService.StandSettingsModel
                                                     .LineViewModels[indexOfMasterDeviceLine]
                                                     .MasterDeviceViewModels[indexOfMasterDevice]
-                                                    .PressureSensorValveViewModel))
+                                                    .PressureSensorValveViewModel, true))
                                         {
                                             _logger.Logging(new LogMessage(
                                                 "Не удалось открыть кран датчика перепада эталона", LogLevel.Error));
@@ -302,7 +302,7 @@ public class ValidationOperationModel : OperationModel
                                                 _standSettingsService.StandSettingsModel
                                                     .LineViewModels[indexOfMasterDeviceLine]
                                                     .MasterDeviceViewModels[indexOfMasterDevice]
-                                                    .MasterDeviceValveViewModel))
+                                                    .MasterDeviceValveViewModel, true))
                                         {
                                             _logger.Logging(new LogMessage("Не удалось открыть кран эталона",
                                                 LogLevel.Error));
@@ -323,7 +323,7 @@ public class ValidationOperationModel : OperationModel
                                                 _standSettingsService.StandSettingsModel
                                                     .LineViewModels[indexOfFanLine]
                                                     .FanViewModels[indexOfFan]
-                                                    .FanValveViewModel))
+                                                    .FanValveViewModel, true))
                                         {
                                             _logger.Logging(new LogMessage("Не удалось открыть кран подачи расхода",
                                                 LogLevel.Error));
@@ -331,6 +331,45 @@ public class ValidationOperationModel : OperationModel
                                                 "Не удалось открыть кран подачи расхода",
                                                 null);
                                         }
+                                    }
+                                    else
+                                    {
+                                        return new OperationResult(OperationResultType.Stop,
+                                            "Выполнение сценария прервано", null);
+                                    }
+                                    
+                                    if (!operationCancellationTokenSource.IsCancellationRequested)
+                                    {
+                                        if (!await _standController.OpenValveAsync(
+                                                _standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfMasterDeviceLine]
+                                                    .StartValveMasterDeviceViewModel, true))
+                                        {
+                                            _logger.Logging(new LogMessage("Не удалось открыть кран перед группой эталонов",
+                                                LogLevel.Error));
+                                            return new OperationResult(OperationResultType.Error,
+                                                "Не удалось открыть кран перед группой эталонов",
+                                                null);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return new OperationResult(OperationResultType.Stop,
+                                            "Выполнение сценария прервано", null);
+                                    }
+                                    
+                                    if (!operationCancellationTokenSource.IsCancellationRequested)
+                                    {
+                                        if (!await _standController.UpdateAllDevice())
+                                        {
+                                            _logger.Logging(new LogMessage($"Не удалось открыть краны для точки {point.Number}",
+                                                LogLevel.Error));
+                                            return new OperationResult(OperationResultType.Error,
+                                                $"Не удалось открыть краны для точки {point.Number}",
+                                                null);
+                                        }
+
+                                        await Task.Delay(40000);
                                     }
                                     else
                                     {

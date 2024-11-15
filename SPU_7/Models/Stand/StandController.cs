@@ -779,8 +779,6 @@ namespace SPU_7.Models.Stand
             foreach (var device in _standDevices)
             {
                 if (!await device.SetWorkRegisterAsync()) return false;
-
-                await Task.Delay(200);
             }
 
             return true;
