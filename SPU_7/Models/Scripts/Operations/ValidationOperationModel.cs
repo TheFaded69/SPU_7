@@ -316,6 +316,27 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop,
                                             "Выполнение сценария прервано", null);
                                     }
+                                    
+                                    if (!operationCancellationTokenSource.IsCancellationRequested)
+                                    {
+                                        if (!await _standController.OpenValveAsync(
+                                                _standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfFanLine]
+                                                    .FanViewModels[indexOfFan]
+                                                    .FanValveViewModel))
+                                        {
+                                            _logger.Logging(new LogMessage("Не удалось открыть кран подачи расхода",
+                                                LogLevel.Error));
+                                            return new OperationResult(OperationResultType.Error,
+                                                "Не удалось открыть кран подачи расхода",
+                                                null);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return new OperationResult(OperationResultType.Stop,
+                                            "Выполнение сценария прервано", null);
+                                    }
 
                                     _timerService.InfoTimerDisable();
 
