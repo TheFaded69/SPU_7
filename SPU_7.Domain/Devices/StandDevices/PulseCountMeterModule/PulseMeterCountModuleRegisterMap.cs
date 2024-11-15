@@ -189,6 +189,17 @@ public enum PulseMeterCountModuleRegisterMap
         RegisterDataType.Float,
         ByteOrderType.MidLittleEndian_CDAB)]
     StatusRegisterChannel4,
+    
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
+    [RegisterSetup(0x0036,
+        ModbusFunction.ReadInputRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.UInt32,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    ChannelStateRegister,
 
     #endregion
 
@@ -221,23 +232,14 @@ public enum PulseMeterCountModuleRegisterMap
     /// Регистр выбора профиля настроек
     /// </summary>
     [RegisterSetup(0x0022,
-        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,
         2,
         RegisterDataType.UInt32,
         ByteOrderType.MidLittleEndian_CDAB)]
     ControlRegister,
     
-    /// <summary>
-    /// Регистр выбора профиля настроек
-    /// </summary>
-    [RegisterSetup(0x0036,
-        ModbusFunction.ReadHoldingRegisters,
-        ModbusFunction.WriteMultipleRegisters,
-        2,
-        RegisterDataType.UInt32,
-        ByteOrderType.MidLittleEndian_CDAB)]
-    ChannelStateRegister,
+
     
     /// <summary>
     /// Регистр выбора профиля настроек
