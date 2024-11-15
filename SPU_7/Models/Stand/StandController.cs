@@ -2603,7 +2603,10 @@ namespace SPU_7.Models.Stand
                         if (lineViewModel.IsEndCommonValve)
                             if (!await CloseValveAsync(lineViewModel.EndCommonValveViewModel, true))
                                 return false;
-
+                        
+                        
+                        
+                        
                         if (lineViewModel.IsCheckTightnessLine)
                         {
                             if (!await CloseValveAsync(lineViewModel.FirstTightnessValveViewModel, true))

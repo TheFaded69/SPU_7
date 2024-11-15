@@ -125,6 +125,14 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                         }
                         
                         lineItem = LineViewModels.FirstOrDefault(line =>
+                            line.StartValveItemViewModel?.StandSettingsValveModel == standInfoData.StandSettingsValveModel);
+                        if (lineItem != null)
+                        {
+                            lineItem.StartValveItemViewModel.StateType = standInfoData.StateType;
+                            return;
+                        }
+                        
+                        lineItem = LineViewModels.FirstOrDefault(line =>
                             line.EndCommonValveItemViewModel?.StandSettingsValveModel == standInfoData.StandSettingsValveModel);
                         if (lineItem != null)
                         {
