@@ -310,6 +310,8 @@
                                Margin="5"
                                FontSize="18"/>
                     <TextBlock Text="{Binding Message}"
+                               TextWrapping="Wrap"
+                               TextAlignment="Left"
                                Margin="5"
                                FontSize="18"/>
                 </StackPanel>

@@ -61,7 +61,7 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
 
         if (currentState == null) return null;
 
-        return ((uint)currentState & (1 << 27)) != 0;
+        return ((uint)currentState & (1 << 27)) == 1;
     }
 
     public async Task<bool> StartMeasurePulseCountAsync() =>
