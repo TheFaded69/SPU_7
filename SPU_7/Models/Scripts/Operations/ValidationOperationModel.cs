@@ -635,6 +635,36 @@ public class ValidationOperationModel : OperationModel
                                     }
                                     else
                                     {
+                                        await _standController.ResetPulseCountMeterAsync();
+                                        await _standController.TurnOffPulseCountMeterControlRegister();
+
+                                        await _standController.SetPulseCountMeterModuleChannelSettingsAsync(
+                                            _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
+                                                .DeviceViewModels[0].PulseCountMeterModuleNumber - 1,
+                                            (int)_standSettingsService.StandSettingsModel
+                                                .LineViewModels[(int)activeLine].DeviceViewModels[0]
+                                                .PulseCountMeterModuleChannelNumber);
+                                        await _standController.SetPulseCountMeterModuleChannelSettingsAsync(
+                                            _standSettingsService.StandSettingsModel
+                                                .LineViewModels[indexOfMasterDeviceLine]
+                                                .MasterDeviceViewModels[indexOfMasterDevice]
+                                                .PulseCountMeterModuleNumber - 1,
+                                            (int)_standSettingsService.StandSettingsModel
+                                                .LineViewModels[indexOfMasterDeviceLine]
+                                                .MasterDeviceViewModels[indexOfMasterDevice]
+                                                .PulseCountMeterModuleChannelNumber);
+                                        await Task.Delay(2000);
+
+                                        await _standController.StartPulseCountMeterModuleMeasureAsync(
+                                            _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
+                                                .DeviceViewModels[0].PulseCountMeterModuleNumber - 1);
+                                        await _standController.StartPulseCountMeterModuleMeasureAsync(
+                                            _standSettingsService.StandSettingsModel
+                                                .LineViewModels[indexOfMasterDeviceLine]
+                                                .MasterDeviceViewModels[indexOfMasterDevice]
+                                                .PulseCountMeterModuleNumber - 1);
+                                        await Task.Delay(2000);
+                                        
                                         _timerService.TimeSeconds = 300;
                                         _timerService.OperationName = OperationName;
                                         _timerService.Message = "Ожидание запуска измерения с пульта";
