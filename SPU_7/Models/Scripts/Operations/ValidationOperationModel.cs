@@ -85,6 +85,8 @@ public class ValidationOperationModel : OperationModel
 
             _timerService.InfoTimerDisable();
 
+            await Task.Delay(2000);
+
             for (var pointIndex = 0;
                  pointIndex < ((ValidationOperationConfigurationModel)_configuration).Points.Count;
                  pointIndex++)

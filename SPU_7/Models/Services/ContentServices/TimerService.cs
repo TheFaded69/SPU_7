@@ -17,17 +17,23 @@ public class TimerService : ITimerService
     public int TimeSeconds { get; set; }
     public string Message { get; set; }
     public string OperationName { get; set; }
-    
+
+    private object _locker = new();
     
     public void InfoTimerEnable()
     {
-        Dispatcher.UIThread.Invoke(_timerEnableAction);
+        lock (_locker)
+        {
+            Dispatcher.UIThread.Invoke(_timerEnableAction);
+        }
     }
 
     public void InfoTimerDisable()
     {
-        Dispatcher.UIThread.Invoke(_timerDisableAction);
-
+        lock (_locker)
+        {
+            Dispatcher.UIThread.Invoke(_timerDisableAction);
+        }
     }
 
     public void SetInfoTimerEnableAction(Action timerAction)
