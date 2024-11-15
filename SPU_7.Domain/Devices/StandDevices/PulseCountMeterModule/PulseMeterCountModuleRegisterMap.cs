@@ -231,6 +231,17 @@ public enum PulseMeterCountModuleRegisterMap
     /// <summary>
     /// Регистр выбора профиля настроек
     /// </summary>
+    [RegisterSetup(0x0036,
+        ModbusFunction.ReadHoldingRegisters,
+        ModbusFunction.WriteMultipleRegisters,
+        2,
+        RegisterDataType.UInt32,
+        ByteOrderType.MidLittleEndian_CDAB)]
+    ChannelStateRegister,
+    
+    /// <summary>
+    /// Регистр выбора профиля настроек
+    /// </summary>
     [RegisterSetup(0x0056,
         ModbusFunction.ReadInputRegisters,
         ModbusFunction.WriteMultipleRegisters,

@@ -1440,6 +1440,22 @@ namespace SPU_7.Models.Stand
             return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulseCountMeterStatusAsync(channel);
         }
 
+        public async Task<bool?> ReadPulseCountMeterMeasureStatusAsync(int? pulseCountMeterModuleIndex, int pulseCountMeterModuleChannelNumber)
+        {
+            if (pulseCountMeterModuleIndex == null) return null;
+            
+            var channel = pulseCountMeterModuleChannelNumber switch
+            {
+                1 => ChannelNumber.First,
+                2 => ChannelNumber.Second,
+                3 => ChannelNumber.Third,
+                4 => ChannelNumber.Fourth,
+                _ => ChannelNumber.None
+            };
+            
+            return await _pulseCountMeterModules[(int)pulseCountMeterModuleIndex].ReadPulseCountMeterMeasureStatusAsync(channel);
+        }
+
         public async Task<float?> ReadMeasureTimeFromPulseCountMeterAsync(int? pulseCountMeterModuleIndex)
         {
             if (pulseCountMeterModuleIndex == null) return null;

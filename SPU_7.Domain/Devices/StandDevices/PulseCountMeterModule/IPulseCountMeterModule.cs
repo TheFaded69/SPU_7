@@ -116,4 +116,5 @@ public interface IPulseCountMeterModule
     Task<float?> ReadAverageFrequencyAsync(ChannelNumber pulseCountMeterModuleChannelNumber);
 
     Task<CommonCommandStatus?> ReadPulseCountMeterStatusAsync(ChannelNumber pulseCountMeterModuleChannelNumber);
+    Task<bool?> ReadPulseCountMeterMeasureStatusAsync(ChannelNumber channel);
 }

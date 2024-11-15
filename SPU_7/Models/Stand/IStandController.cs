@@ -450,5 +450,8 @@ namespace SPU_7.Models.Stand
         double GetTargetFlowFromMasterDevice(int lineIndex, int masterDeviceIndex);
         Task<CommonCommandStatus?> GetPulseCountMeterStatusAsync(int? pulseCountMeterModuleIndex,
             int pulseCountMeterModuleChannelNumber);
+
+        Task<bool?> ReadPulseCountMeterMeasureStatusAsync(int? pulseCountMeterModuleIndex,
+            int pulseCountMeterModuleChannelNumber);
     }
 }

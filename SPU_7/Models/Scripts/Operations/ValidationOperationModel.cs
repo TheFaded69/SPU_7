@@ -551,34 +551,79 @@ public class ValidationOperationModel : OperationModel
                                     }
                                     else
                                     {
+                                        _timerService.TimeSeconds = 300;
+                                        _timerService.OperationName = OperationName;
+                                        _timerService.Message = "Ожидание запуска измерения с пульта";
+                                        _timerService.InfoTimerEnable();
+
+                                        while (true)
+                                        {
+                                            var status1 = await _standController.ReadPulseCountMeterMeasureStatusAsync(
+                                                _standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfMasterDeviceLine]
+                                                    .MasterDeviceViewModels[indexOfMasterDevice]
+                                                    .PulseCountMeterModuleNumber - 1,
+                                                (int)_standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfMasterDeviceLine]
+                                                    .MasterDeviceViewModels[indexOfMasterDevice]
+                                                    .PulseCountMeterModuleChannelNumber);
+                                            var status2 = await _standController.ReadPulseCountMeterMeasureStatusAsync(
+                                                _standSettingsService.StandSettingsModel
+                                                    .LineViewModels[(int)activeLine].DeviceViewModels[0]
+                                                    .PulseCountMeterModuleNumber - 1,
+                                                (int)_standSettingsService.StandSettingsModel
+                                                    .LineViewModels[(int)activeLine].DeviceViewModels[0]
+                                                    .PulseCountMeterModuleChannelNumber);
+
+                                            if (status1 == null || status2 == null)
+                                            {
+                                                _logger.Logging(new LogMessage("Не удалось считать состояние МПКИ",
+                                                    LogLevel.Warning));
+                                            }
+                                            else if ((bool)status1 && (bool)status2) break;
+
+                                            await Task.Delay(2000);
+                                        }
+                                        
+
+                                        _timerService.InfoTimerDisable();
+                                        
                                         _timerService.TimeSeconds = (int)(timeValidation * 3600);
                                         _timerService.OperationName = OperationName;
                                         _timerService.Message = "Прогон расхода через СГ";
                                         _timerService.InfoTimerEnable();
-
-                                        while (await _standController.GetPulseCountMeterStatusAsync(
-                                                   _standSettingsService.StandSettingsModel
-                                                       .LineViewModels[indexOfMasterDeviceLine]
-                                                       .MasterDeviceViewModels[indexOfMasterDevice]
-                                                       .PulseCountMeterModuleNumber - 1,
-                                                   (int)_standSettingsService.StandSettingsModel
-                                                       .LineViewModels[indexOfMasterDeviceLine]
-                                                       .MasterDeviceViewModels[indexOfMasterDevice]
-                                                       .PulseCountMeterModuleChannelNumber) !=
-                                               CommonCommandStatus.Done &&
-                                               await _standController.GetPulseCountMeterStatusAsync(
-                                                   _standSettingsService.StandSettingsModel
-                                                       .LineViewModels[(int)activeLine].DeviceViewModels[0]
-                                                       .PulseCountMeterModuleNumber - 1,
-                                                   (int)_standSettingsService.StandSettingsModel
-                                                       .LineViewModels[(int)activeLine].DeviceViewModels[0]
-                                                       .PulseCountMeterModuleChannelNumber) != CommonCommandStatus.Done)
+                                        
+                                        while (true)
                                         {
-                                            await Task.Delay(1000);
+                                            var status1 = await _standController.ReadPulseCountMeterMeasureStatusAsync(
+                                                _standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfMasterDeviceLine]
+                                                    .MasterDeviceViewModels[indexOfMasterDevice]
+                                                    .PulseCountMeterModuleNumber - 1,
+                                                (int)_standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfMasterDeviceLine]
+                                                    .MasterDeviceViewModels[indexOfMasterDevice]
+                                                    .PulseCountMeterModuleChannelNumber);
+                                            var status2 = await _standController.ReadPulseCountMeterMeasureStatusAsync(
+                                                _standSettingsService.StandSettingsModel
+                                                    .LineViewModels[(int)activeLine].DeviceViewModels[0]
+                                                    .PulseCountMeterModuleNumber - 1,
+                                                (int)_standSettingsService.StandSettingsModel
+                                                    .LineViewModels[(int)activeLine].DeviceViewModels[0]
+                                                    .PulseCountMeterModuleChannelNumber);
+
+                                            if (status1 == null || status2 == null)
+                                            {
+                                                _logger.Logging(new LogMessage("Не удалось считать состояние МПКИ",
+                                                    LogLevel.Warning));
+                                            }
+                                            else if (!(bool)status1 && !(bool)status2) break;
+
+                                            await Task.Delay(2000);
                                         }
 
                                         _timerService.InfoTimerDisable();
-
+                                        
                                         masterDevicePulseCount =
                                             await _standController.ReadPulseCountFromPulseCountMeterAsync(
                                                 _standSettingsService.StandSettingsModel
