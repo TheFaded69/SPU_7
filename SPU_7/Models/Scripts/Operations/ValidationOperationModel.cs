@@ -907,23 +907,27 @@ public class ValidationOperationModel : OperationModel
 
                                         while (currentIndex != indexOfFanLine)
                                         {
-                                            if (!operationCancellationTokenSource.IsCancellationRequested)
+                                            if (currentIndex > 0)
                                             {
-                                                if (!await _standController.CloseValveAsync(
-                                                        _standSettingsService.StandSettingsModel
-                                                            .LineViewModels[currentIndex - 1].EndCommonValveViewModel))
+                                                if (!operationCancellationTokenSource.IsCancellationRequested)
                                                 {
-                                                    _logger.Logging(new LogMessage(
-                                                        "Не удалось закрыть кран после эталонов", LogLevel.Error));
-                                                    return new OperationResult(OperationResultType.Error,
-                                                        "Не удалось закрыть кран после эталонов",
-                                                        null);
+                                                    if (!await _standController.CloseValveAsync(
+                                                            _standSettingsService.StandSettingsModel
+                                                                .LineViewModels[currentIndex - 1]
+                                                                .EndCommonValveViewModel, true))
+                                                    {
+                                                        _logger.Logging(new LogMessage(
+                                                            "Не удалось закрыть кран после эталонов", LogLevel.Error));
+                                                        return new OperationResult(OperationResultType.Error,
+                                                            "Не удалось закрыть кран после эталонов",
+                                                            null);
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                return new OperationResult(OperationResultType.Stop,
-                                                    "Выполнение сценария прервано", null);
+                                                else
+                                                {
+                                                    return new OperationResult(OperationResultType.Stop,
+                                                        "Выполнение сценария прервано", null);
+                                                }
                                             }
 
                                             currentIndex--;
@@ -933,25 +937,30 @@ public class ValidationOperationModel : OperationModel
                                     {
                                         var currentIndex = point.SelectedLineNumber - 1;
 
+
                                         while (currentIndex != indexOfFanLine)
                                         {
-                                            if (!operationCancellationTokenSource.IsCancellationRequested)
+                                            if (currentIndex > 0)
                                             {
-                                                if (!await _standController.CloseValveAsync(
-                                                        _standSettingsService.StandSettingsModel
-                                                            .LineViewModels[currentIndex - 1].EndCommonValveViewModel))
+                                                if (!operationCancellationTokenSource.IsCancellationRequested)
                                                 {
-                                                    _logger.Logging(new LogMessage(
-                                                        "Не удалось закрыть кран после эталонов", LogLevel.Error));
-                                                    return new OperationResult(OperationResultType.Error,
-                                                        "Не удалось закрыть кран после эталонов",
-                                                        null);
+                                                    if (!await _standController.CloseValveAsync(
+                                                            _standSettingsService.StandSettingsModel
+                                                                .LineViewModels[currentIndex - 1]
+                                                                .EndCommonValveViewModel))
+                                                    {
+                                                        _logger.Logging(new LogMessage(
+                                                            "Не удалось закрыть кран после эталонов", LogLevel.Error));
+                                                        return new OperationResult(OperationResultType.Error,
+                                                            "Не удалось закрыть кран после эталонов",
+                                                            null);
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                return new OperationResult(OperationResultType.Stop,
-                                                    "Выполнение сценария прервано", null);
+                                                else
+                                                {
+                                                    return new OperationResult(OperationResultType.Stop,
+                                                        "Выполнение сценария прервано", null);
+                                                }
                                             }
 
                                             currentIndex++;
@@ -964,25 +973,28 @@ public class ValidationOperationModel : OperationModel
 
                                         while (currentIndex != indexOfFanLine)
                                         {
-                                            if (!operationCancellationTokenSource.IsCancellationRequested)
+                                            if (currentIndex > 0)
                                             {
-                                                if (!await _standController.CloseValveAsync(
-                                                        _standSettingsService.StandSettingsModel
-                                                            .LineViewModels[currentIndex - 1]
-                                                            .StartCommonValveViewModel))
+                                                if (!operationCancellationTokenSource.IsCancellationRequested)
                                                 {
-                                                    _logger.Logging(new LogMessage(
-                                                        "Не удалось закрыть общий кран после устройств",
-                                                        LogLevel.Error));
-                                                    return new OperationResult(OperationResultType.Error,
-                                                        "Не удалось закрыть общий кран после устройств",
-                                                        null);
+                                                    if (!await _standController.CloseValveAsync(
+                                                            _standSettingsService.StandSettingsModel
+                                                                .LineViewModels[currentIndex - 1]
+                                                                .StartCommonValveViewModel, true))
+                                                    {
+                                                        _logger.Logging(new LogMessage(
+                                                            "Не удалось закрыть общий кран после устройств",
+                                                            LogLevel.Error));
+                                                        return new OperationResult(OperationResultType.Error,
+                                                            "Не удалось закрыть общий кран после устройств",
+                                                            null);
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                return new OperationResult(OperationResultType.Stop,
-                                                    "Выполнение сценария прервано", null);
+                                                else
+                                                {
+                                                    return new OperationResult(OperationResultType.Stop,
+                                                        "Выполнение сценария прервано", null);
+                                                }
                                             }
 
                                             currentIndex--;
@@ -994,25 +1006,28 @@ public class ValidationOperationModel : OperationModel
 
                                         while (currentIndex != indexOfFanLine)
                                         {
-                                            if (!operationCancellationTokenSource.IsCancellationRequested)
+                                            if (currentIndex > 0)
                                             {
-                                                if (!await _standController.CloseValveAsync(
-                                                        _standSettingsService.StandSettingsModel
-                                                            .LineViewModels[currentIndex - 1]
-                                                            .StartCommonValveViewModel))
+                                                if (!operationCancellationTokenSource.IsCancellationRequested)
                                                 {
-                                                    _logger.Logging(new LogMessage(
-                                                        "Не удалось закрыть общий кран после устройств",
-                                                        LogLevel.Error));
-                                                    return new OperationResult(OperationResultType.Error,
-                                                        "Не удалось закрыть общий кран после устройств",
-                                                        null);
+                                                    if (!await _standController.CloseValveAsync(
+                                                            _standSettingsService.StandSettingsModel
+                                                                .LineViewModels[currentIndex - 1]
+                                                                .StartCommonValveViewModel))
+                                                    {
+                                                        _logger.Logging(new LogMessage(
+                                                            "Не удалось закрыть общий кран после устройств",
+                                                            LogLevel.Error));
+                                                        return new OperationResult(OperationResultType.Error,
+                                                            "Не удалось закрыть общий кран после устройств",
+                                                            null);
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                return new OperationResult(OperationResultType.Stop,
-                                                    "Выполнение сценария прервано", null);
+                                                else
+                                                {
+                                                    return new OperationResult(OperationResultType.Stop,
+                                                        "Выполнение сценария прервано", null);
+                                                }
                                             }
 
                                             currentIndex++;
@@ -1025,7 +1040,7 @@ public class ValidationOperationModel : OperationModel
                                                 _standSettingsService.StandSettingsModel
                                                     .LineViewModels[indexOfMasterDeviceLine]
                                                     .MasterDeviceViewModels[indexOfMasterDevice]
-                                                    .PressureSensorValveViewModel))
+                                                    .PressureSensorValveViewModel, true))
                                         {
                                             _logger.Logging(new LogMessage(
                                                 "Не удалось закрыть кран датчика перепада эталона", LogLevel.Error));
@@ -1046,7 +1061,7 @@ public class ValidationOperationModel : OperationModel
                                                 _standSettingsService.StandSettingsModel
                                                     .LineViewModels[indexOfMasterDeviceLine]
                                                     .MasterDeviceViewModels[indexOfMasterDevice]
-                                                    .MasterDeviceValveViewModel))
+                                                    .MasterDeviceValveViewModel, true))
                                         {
                                             _logger.Logging(new LogMessage("Не удалось закрыть кран эталона",
                                                 LogLevel.Error));
@@ -1054,6 +1069,66 @@ public class ValidationOperationModel : OperationModel
                                                 "Не удалось закрыть кран эталона",
                                                 null);
                                         }
+                                    }
+                                    else
+                                    {
+                                        return new OperationResult(OperationResultType.Stop,
+                                            "Выполнение сценария прервано", null);
+                                    }
+                                    
+                                    if (!operationCancellationTokenSource.IsCancellationRequested)
+                                    {
+                                        if (!await _standController.CloseValveAsync(
+                                                _standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfFanLine]
+                                                    .FanViewModels[indexOfFan]
+                                                    .FanValveViewModel, true))
+                                        {
+                                            _logger.Logging(new LogMessage("Не удалось закрыть кран подачи расхода",
+                                                LogLevel.Error));
+                                            return new OperationResult(OperationResultType.Error,
+                                                "Не удалось закрыть кран подачи расхода",
+                                                null);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return new OperationResult(OperationResultType.Stop,
+                                            "Выполнение сценария прервано", null);
+                                    }
+                                    
+                                    if (!operationCancellationTokenSource.IsCancellationRequested)
+                                    {
+                                        if (!await _standController.CloseValveAsync(
+                                                _standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfMasterDeviceLine]
+                                                    .StartValveMasterDeviceViewModel, true))
+                                        {
+                                            _logger.Logging(new LogMessage("Не удалось закрыть кран перед группой эталонов",
+                                                LogLevel.Error));
+                                            return new OperationResult(OperationResultType.Error,
+                                                "Не удалось закрыть кран перед группой эталонов",
+                                                null);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return new OperationResult(OperationResultType.Stop,
+                                            "Выполнение сценария прервано", null);
+                                    }
+                                    
+                                    if (!operationCancellationTokenSource.IsCancellationRequested)
+                                    {
+                                        if (!await _standController.UpdateAllDevice())
+                                        {
+                                            _logger.Logging(new LogMessage($"Не удалось закрыть краны для точки {point.Number}",
+                                                LogLevel.Error));
+                                            return new OperationResult(OperationResultType.Error,
+                                                $"Не удалось закрыть краны для точки {point.Number}",
+                                                null);
+                                        }
+
+                                        await Task.Delay(40000);
                                     }
                                     else
                                     {
