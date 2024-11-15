@@ -430,7 +430,7 @@ public class ValidationOperationModel : OperationModel
                                         }
                                         else
                                         {
-                                            validationMeasureResult.ValidationDeviceResults.Add(validationDeviceResult);
+                                            /*validationMeasureResult.ValidationDeviceResults.Add(validationDeviceResult);
                                             _cancellationTokenSource = new CancellationTokenSource();
 
                                             _manualOperationService.ShowManualValidationResultDialog(OkAction,
@@ -448,7 +448,7 @@ public class ValidationOperationModel : OperationModel
                                                 }
 
                                                 await Task.Delay(1000);
-                                            }
+                                            }*/
                                         }
                                     }
 
@@ -881,7 +881,16 @@ public class ValidationOperationModel : OperationModel
                                         else
                                         {
                                             _cancellationTokenSource = new CancellationTokenSource();
+                                            
+                                            var masterDeviceVolume = masterDevicePulseCount * _standSettingsService
+                                                .StandSettingsModel.LineViewModels[indexOfMasterDeviceLine]
+                                                .MasterDeviceViewModels[indexOfMasterDevice].PulseWeight;
 
+                                            _validationOperationResult.ValidationPointResults[pointIndex]
+                                                    .ValidationMeasureResults[measureIndex]
+                                                    .ValidationDeviceResults[deviceEnableIndex].TargetVolume =
+                                                (double)masterDeviceVolume;
+                                            
                                             _manualOperationService.ShowManualValidationResultDialog(OkAction,
                                                 CancelAction,
                                                 _validationOperationResult.ValidationPointResults,
