@@ -425,10 +425,24 @@ public class ValidationOperationModel : OperationModel
                                     _timerService.InfoTimerEnable();
 
                                     // ожидание стабильности расхода
+
+                                    var dateStart = DateTime.Now;
+                                    
                                     var isFLowCorrect = false;
                                     var flowList = new List<float?>();
                                     while (true)
                                     {
+                                        if ((DateTime.Now - dateStart).Seconds > 300)
+                                        {
+                                            _logger.Logging(new LogMessage(
+                                                $"Не удалось стабилизировать расхода в точке {point.Number}",
+                                                LogLevel.Error));
+
+                                            return new OperationResult(OperationResultType.Error,
+                                                $"Не удалось стабилизировать расхода в точке {point.Number}",
+                                                _validationOperationResult);
+                                        }
+                                        
                                         if (flowList.Count == 10)
                                         {
                                             avgFlow = flowList.Average();
