@@ -430,8 +430,8 @@ public class ValidationOperationModel : OperationModel
                                         }
                                         else
                                         {
-                                            /*validationMeasureResult.ValidationDeviceResults.Add(validationDeviceResult);
-                                            _cancellationTokenSource = new CancellationTokenSource();
+                                            validationMeasureResult.ValidationDeviceResults.Add(validationDeviceResult);
+                                            /*_cancellationTokenSource = new CancellationTokenSource();
 
                                             _manualOperationService.ShowManualValidationResultDialog(OkAction,
                                                 CancelAction
