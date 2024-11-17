@@ -293,7 +293,7 @@ public class ValidationProtocolCreator
                     .AddCell(new Cell().Add(new Paragraph(devicePoint.TargetFlow.ToString()).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph( Math.Round(devicePoint.TargetVolume, 3).ToString()).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph( Math.Round( (double)(devicePoint.EndVolumeValue - devicePoint.StartVolumeValue), 3).ToString()).SetTextAlignment(TextAlignment.CENTER)))
-                    .AddCell(new Cell().Add(new Paragraph(devicePoint.PressureDifference.ToString()).SetTextAlignment(TextAlignment.CENTER)))
+                    .AddCell(new Cell().Add(new Paragraph(Math.Round((double)devicePoint.PressureDifference, 3).ToString()).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph(devicePoint.VolumeDifference.ToString()).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph("\u00b1" + devicePoint.TargetVolumeDifference.ToString()).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph(devicePoint.VolumeDifference >= devicePoint.TargetVolumeDifference || devicePoint.VolumeDifference <= -devicePoint.TargetVolumeDifference ? "НЕ ГОДЕН" : "ГОДЕН").SetTextAlignment(TextAlignment.CENTER)));
@@ -661,7 +661,7 @@ public class ValidationProtocolCreator
                     .AddCell(new Cell().Add(new Paragraph(devicePoint.TargetFlow.ToString()).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph( Math.Round(devicePoint.TargetVolume, 3).ToString()).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph( Math.Round( (double)(devicePoint.EndVolumeValue - devicePoint.StartVolumeValue), 3).ToString()).SetTextAlignment(TextAlignment.CENTER)))
-                    .AddCell(new Cell().Add(new Paragraph(devicePoint.PressureDifference.ToString()).SetTextAlignment(TextAlignment.CENTER)))
+                    .AddCell(new Cell().Add(new Paragraph(Math.Round((double)devicePoint.PressureDifference, 3).ToString()).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph(devicePoint.VolumeDifference.ToString()).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph("\u00b1" + devicePoint.TargetVolumeDifference).SetTextAlignment(TextAlignment.CENTER)))
                     .AddCell(new Cell().Add(new Paragraph(devicePoint.VolumeDifference >= devicePoint.TargetVolumeDifference || devicePoint.VolumeDifference <= -devicePoint.TargetVolumeDifference ? "НЕ ГОДЕН" : "ГОДЕН").SetTextAlignment(TextAlignment.CENTER)));
