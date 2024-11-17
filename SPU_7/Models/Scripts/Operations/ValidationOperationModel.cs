@@ -144,9 +144,9 @@ public class ValidationOperationModel : OperationModel
                                     _timerService.Message = $"Открытие кранов для точки №{point.Number}";
                                     _timerService.InfoTimerEnable();
 
-                                    if (point.SelectedLineNumber - 1 > indexOfFanLine)
+                                    if (indexOfMasterDeviceLine > indexOfFanLine)
                                     {
-                                        var currentIndex = point.SelectedLineNumber - 1;
+                                        var currentIndex = indexOfMasterDeviceLine;
 
                                         while (currentIndex != indexOfFanLine)
                                         {
@@ -176,9 +176,9 @@ public class ValidationOperationModel : OperationModel
                                             currentIndex--;
                                         }
                                     }
-                                    else if (point.SelectedLineNumber - 1 < indexOfFanLine)
+                                    else if (indexOfMasterDeviceLine < indexOfFanLine)
                                     {
-                                        var currentIndex = point.SelectedLineNumber - 1;
+                                        var currentIndex = indexOfMasterDeviceLine;
 
 
                                         while (currentIndex != indexOfFanLine)
@@ -910,9 +910,9 @@ public class ValidationOperationModel : OperationModel
                                         }
                                     }
 
-                                    if (point.SelectedLineNumber - 1 > indexOfFanLine)
+                                    if (indexOfMasterDeviceLine > indexOfFanLine)
                                     {
-                                        var currentIndex = point.SelectedLineNumber - 1;
+                                        var currentIndex = indexOfMasterDeviceLine;
 
                                         while (currentIndex != indexOfFanLine)
                                         {
@@ -942,9 +942,9 @@ public class ValidationOperationModel : OperationModel
                                             currentIndex--;
                                         }
                                     }
-                                    else if (point.SelectedLineNumber - 1 < indexOfFanLine)
+                                    else if (indexOfMasterDeviceLine < indexOfFanLine)
                                     {
-                                        var currentIndex = point.SelectedLineNumber - 1;
+                                        var currentIndex = indexOfMasterDeviceLine;
 
 
                                         while (currentIndex != indexOfFanLine)
@@ -976,11 +976,11 @@ public class ValidationOperationModel : OperationModel
                                         }
                                     }
 
-                                    if (point.SelectedLineNumber - 1 > indexOfDeviceLine)
+                                    if (point.SelectedLineNumber - 1 > indexOfMasterDeviceLine)
                                     {
                                         var currentIndex = point.SelectedLineNumber - 1;
 
-                                        while (currentIndex != indexOfFanLine)
+                                        while (currentIndex != indexOfMasterDeviceLine)
                                         {
                                             if (currentIndex > 0)
                                             {
@@ -1009,11 +1009,11 @@ public class ValidationOperationModel : OperationModel
                                             currentIndex--;
                                         }
                                     }
-                                    else if (point.SelectedLineNumber - 1 < indexOfDeviceLine)
+                                    else if (point.SelectedLineNumber - 1 < indexOfMasterDeviceLine)
                                     {
                                         var currentIndex = point.SelectedLineNumber - 1;
 
-                                        while (currentIndex != indexOfFanLine)
+                                        while (currentIndex != indexOfMasterDeviceLine)
                                         {
                                             if (currentIndex > 0)
                                             {
