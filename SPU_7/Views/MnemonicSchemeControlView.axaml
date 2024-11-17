@@ -313,6 +313,7 @@
                                TextWrapping="Wrap"
                                TextAlignment="Left"
                                Margin="5"
+                               Width="275"
                                FontSize="18"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
