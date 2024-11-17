@@ -8,17 +8,17 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels;
 
 public class NeedleValveItemViewModel : ViewModelBase
 {
-    public NeedleValveItemViewModel(StandSettingsNeedleValveModel standSettingsValveModel,
+    public NeedleValveItemViewModel(StandSettingsNeedleValveModel standSettingsNeedleValveModel,
         IStandController standController, 
         StateType stateType)
     {
-        _standSettingsValveModel = standSettingsValveModel;
+        StandSettingsNeedleValveModel = standSettingsNeedleValveModel;
         _standController = standController;
         _stateType = stateType;
         
         UseValveCommand = new DelegateCommand(UseValveCommandHandler);
     }
-    private readonly StandSettingsNeedleValveModel _standSettingsValveModel;
+    public readonly StandSettingsNeedleValveModel StandSettingsNeedleValveModel;
     private readonly IStandController _standController;
    
     private StateType _stateType;
@@ -49,7 +49,7 @@ public class NeedleValveItemViewModel : ViewModelBase
 #if DEBUGGUI
                 await Task.Delay(5000);
 #else
-                await _standController.UseNeedleValveAsync(_standSettingsValveModel, 0);
+                await _standController.UseNeedleValveAsync(StandSettingsNeedleValveModel, 0);
 #endif
                 StateType = StateType.Close;
             }
@@ -60,7 +60,7 @@ public class NeedleValveItemViewModel : ViewModelBase
 #if DEBUGGUI
                 await Task.Delay(5000);
 #else
-                await _standController.UseNeedleValveAsync(_standSettingsValveModel, SelectedNeedleValue);
+                await _standController.UseNeedleValveAsync(StandSettingsNeedleValveModel, SelectedNeedleValue);
 #endif
                 StateType = StateType.Open;
             }

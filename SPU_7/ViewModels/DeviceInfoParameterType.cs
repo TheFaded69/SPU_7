@@ -44,4 +44,5 @@ public enum DeviceInfoParameterType
     IsCoefficientOfCriticalModeGood = 19,
 
     FanState = 20,
+    NeedleValve = 21,
 }

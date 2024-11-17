@@ -321,7 +321,20 @@ public class ValidationOperationModel : OperationModel
                                     
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
-                                        if (!await _standController.OpenValveAsync(
+                                        if (point.IsNeedleValveUse)
+                                        {
+                                            if (!await _standController.UseNeedleValveAsync(_standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfFanLine]
+                                                    .FanViewModels[indexOfFan].NeedleValveViewModel, (int)point.NeedleValveValue))
+                                            {
+                                                _logger.Logging(new LogMessage("Не удалось открыть игольчатый кран подачи расхода",
+                                                    LogLevel.Error));
+                                                return new OperationResult(OperationResultType.Error,
+                                                    "Не удалось открыть игольчатый кран подачи расхода",
+                                                    null);
+                                            }
+                                        }
+                                        else if (!await _standController.OpenValveAsync(
                                                 _standSettingsService.StandSettingsModel
                                                     .LineViewModels[indexOfFanLine]
                                                     .FanViewModels[indexOfFan]
@@ -1087,6 +1100,19 @@ public class ValidationOperationModel : OperationModel
                                     
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
+                                        if (point.IsNeedleValveUse)
+                                        {
+                                            if (!await _standController.UseNeedleValveAsync(_standSettingsService.StandSettingsModel
+                                                    .LineViewModels[indexOfFanLine]
+                                                    .FanViewModels[indexOfFan].NeedleValveViewModel, 0))
+                                            {
+                                                _logger.Logging(new LogMessage("Не удалось закрыть игольчатый кран подачи расхода",
+                                                    LogLevel.Error));
+                                                return new OperationResult(OperationResultType.Error,
+                                                    "Не удалось закрыть игольчатый кран подачи расхода",
+                                                    null);
+                                            }
+                                        }
                                         if (!await _standController.CloseValveAsync(
                                                 _standSettingsService.StandSettingsModel
                                                     .LineViewModels[indexOfFanLine]

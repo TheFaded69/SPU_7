@@ -1479,6 +1479,8 @@ namespace SPU_7.Models.Stand
         public async Task<bool> UseNeedleValveAsync(StandSettingsNeedleValveModel standSettingsValveModel,
             int selectedNeedleValue)
         {
+            NotifyObserverByDataPair(new DataPair(new StandInfoData(standSettingsValveModel, selectedNeedleValue), DeviceInfoParameterType.NeedleValve));
+            
             var res = await _needleValveControllers.First(ctrl =>
                               ctrl.PortName == standSettingsValveModel.SelectedComPort
                               && ctrl.ModuleAddressInt ==
