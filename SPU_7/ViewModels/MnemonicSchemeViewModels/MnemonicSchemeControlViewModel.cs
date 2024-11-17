@@ -226,7 +226,7 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
             _scriptController.SetScript(scriptModel);
             _standController.SetActiveLine(scriptModel.LineNumber, true);
             
-            IsStartEnable = true;
+            //IsStartEnable = true;
         }
 
         public DelegateCommand StartScriptCommand { get; }
@@ -255,7 +255,12 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
 
         private void WriteDeviceInformationCommandHandler()
         {
-            WriteDeviceInformationViewModel.Show(_dialogService,  LineIndex, null, null);
+            WriteDeviceInformationViewModel.Show(_dialogService,  LineIndex, WriteDeviceInformationPositive, null);
+        }
+
+        private void WriteDeviceInformationPositive()
+        {
+            IsStartEnable = true;
         }
         
         public bool IsWriteDeviceInformationEnabled
