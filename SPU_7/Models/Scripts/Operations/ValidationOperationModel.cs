@@ -140,7 +140,7 @@ public class ValidationOperationModel : OperationModel
                                                 mas.MasterDeviceName == point.SelectedMasterDeviceName));
 
                                     _timerService.OperationName = OperationName;
-                                    _timerService.TimeSeconds = 90;
+                                    _timerService.TimeSeconds = 50;
                                     _timerService.Message = $"Открытие кранов для точки №{point.Number}";
                                     _timerService.InfoTimerEnable();
 
@@ -210,9 +210,9 @@ public class ValidationOperationModel : OperationModel
                                         }
                                     }
 
-                                    if (point.SelectedLineNumber - 1 > indexOfMasterDeviceLine)
+                                    if (indexOfDeviceLine > indexOfMasterDeviceLine)
                                     {
-                                        var currentIndex = point.SelectedLineNumber - 1;
+                                        var currentIndex = indexOfDeviceLine;
 
                                         while (currentIndex != indexOfMasterDeviceLine)
                                         {
@@ -222,7 +222,7 @@ public class ValidationOperationModel : OperationModel
                                                 {
                                                     if (!await _standController.OpenValveAsync(
                                                             _standSettingsService.StandSettingsModel
-                                                                .LineViewModels[currentIndex - 1]
+                                                                .LineViewModels[(int)(currentIndex - 1)]
                                                                 .StartCommonValveViewModel, true))
                                                     {
                                                         _logger.Logging(new LogMessage(
@@ -243,9 +243,9 @@ public class ValidationOperationModel : OperationModel
                                             currentIndex--;
                                         }
                                     }
-                                    else if (point.SelectedLineNumber - 1 < indexOfMasterDeviceLine)
+                                    else if (indexOfDeviceLine < indexOfMasterDeviceLine)
                                     {
-                                        var currentIndex = point.SelectedLineNumber - 1;
+                                        var currentIndex = indexOfDeviceLine;
 
                                         while (currentIndex != indexOfMasterDeviceLine)
                                         {
@@ -255,7 +255,7 @@ public class ValidationOperationModel : OperationModel
                                                 {
                                                     if (!await _standController.OpenValveAsync(
                                                             _standSettingsService.StandSettingsModel
-                                                                .LineViewModels[currentIndex - 1]
+                                                                .LineViewModels[(int)(currentIndex - 1)]
                                                                 .StartCommonValveViewModel))
                                                     {
                                                         _logger.Logging(new LogMessage(
@@ -923,6 +923,11 @@ public class ValidationOperationModel : OperationModel
                                         }
                                     }
 
+                                    _timerService.OperationName = OperationName;
+                                    _timerService.TimeSeconds = 50;
+                                    _timerService.Message = $"Закрытие кранов для точки №{point.Number}";
+                                    _timerService.InfoTimerEnable();
+                                    
                                     if (indexOfMasterDeviceLine > indexOfFanLine)
                                     {
                                         var currentIndex = indexOfMasterDeviceLine;
@@ -989,9 +994,9 @@ public class ValidationOperationModel : OperationModel
                                         }
                                     }
 
-                                    if (point.SelectedLineNumber - 1 > indexOfMasterDeviceLine)
+                                    if (indexOfDeviceLine > indexOfMasterDeviceLine)
                                     {
-                                        var currentIndex = point.SelectedLineNumber - 1;
+                                        var currentIndex = indexOfDeviceLine;
 
                                         while (currentIndex != indexOfMasterDeviceLine)
                                         {
@@ -1001,7 +1006,7 @@ public class ValidationOperationModel : OperationModel
                                                 {
                                                     if (!await _standController.CloseValveAsync(
                                                             _standSettingsService.StandSettingsModel
-                                                                .LineViewModels[currentIndex - 1]
+                                                                .LineViewModels[(int)(currentIndex - 1)]
                                                                 .StartCommonValveViewModel, true))
                                                     {
                                                         _logger.Logging(new LogMessage(
@@ -1022,9 +1027,9 @@ public class ValidationOperationModel : OperationModel
                                             currentIndex--;
                                         }
                                     }
-                                    else if (point.SelectedLineNumber - 1 < indexOfMasterDeviceLine)
+                                    else if (indexOfDeviceLine < indexOfMasterDeviceLine)
                                     {
-                                        var currentIndex = point.SelectedLineNumber - 1;
+                                        var currentIndex = indexOfDeviceLine;
 
                                         while (currentIndex != indexOfMasterDeviceLine)
                                         {
@@ -1034,7 +1039,7 @@ public class ValidationOperationModel : OperationModel
                                                 {
                                                     if (!await _standController.CloseValveAsync(
                                                             _standSettingsService.StandSettingsModel
-                                                                .LineViewModels[currentIndex - 1]
+                                                                .LineViewModels[(int)(currentIndex - 1)]
                                                                 .StartCommonValveViewModel))
                                                     {
                                                         _logger.Logging(new LogMessage(
@@ -1170,6 +1175,10 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop,
                                             "Выполнение сценария прервано", null);
                                     }
+                                    
+                                    _timerService.InfoTimerDisable();
+
+                                    await Task.Delay(2000);
                                 }
 
                                 break;
