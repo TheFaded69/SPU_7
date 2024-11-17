@@ -34,7 +34,7 @@ public class ValidationResultViewModel : ViewModelBase
         {
             VendorNumbers.Add(validationDeviceResult.VendorNumber);
         }
-
+        
         ShowProtocolViewerCommand = new DelegateCommand(ShowProtocolViewerCommandHandler);
     }
     private readonly ValidationOperationResult _validationOperationResult;

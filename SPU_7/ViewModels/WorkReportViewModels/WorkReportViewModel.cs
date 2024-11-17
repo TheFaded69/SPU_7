@@ -76,6 +76,9 @@ public class WorkReportViewModel : ViewModelBase, IDialogAware
                 OperationType.Validation => new ValidationResultView()
                 {
                     DataContext = new ValidationResultViewModel(value.BaseOperationResult as ValidationOperationResult, _dialogService, _logger, value.PictureResults)
+                    {
+                        
+                    }
                 },
                 _ => new BaseResultView()
             };

@@ -420,8 +420,8 @@ public class ValidationOperationModel : OperationModel
                                                 .GetDeviceInfoType((int)activeLine, deviceIndex)
                                                 .DeviceTypeInfo,
                                             PressureDifference =
-                                                _standController
-                                                    .GetPressureDifferenceFromMasterDevice((int)activeLine) / 1000,
+                                                (float?)Math.Round((double)(_standController
+                                                    .GetPressureDifferenceFromMasterDevice((int)activeLine) / 1000), 4),
                                             TargetFlow = point.TargetConsumption
                                         };
 
@@ -549,6 +549,8 @@ public class ValidationOperationModel : OperationModel
                                         await Task.Delay(3000);
                                     }
 
+                                    
+                                    
                                     _timerService.InfoTimerDisable();
                                     
                                     await Task.Delay(2000);
@@ -902,7 +904,7 @@ public class ValidationOperationModel : OperationModel
                                             _validationOperationResult.ValidationPointResults[pointIndex]
                                                     .ValidationMeasureResults[measureIndex]
                                                     .ValidationDeviceResults[deviceEnableIndex].TargetVolume =
-                                                (double)masterDeviceVolume;
+                                                Math.Round((double)masterDeviceVolume, 3);
                                             
                                             _manualOperationService.ShowManualValidationResultDialog(OkAction,
                                                 CancelAction,

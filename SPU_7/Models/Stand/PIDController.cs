@@ -26,6 +26,7 @@ public class PIDController
 
     private double _integral;
     private double _previousError;
+    private double _previousValue;
 
     private double _minInput;
     private double _maxInput;
@@ -50,6 +51,7 @@ public class PIDController
         // Дифференциальная составляющая
         var dTerm = _kd * (error - _previousError)  * multiplication;
         _previousError = error;
+
 
         // Вычисляем выходное значение
         var output = pTerm + iTerm + dTerm;
@@ -87,7 +89,13 @@ public class PIDController
         //сценарии, другой переход ставить, другой СГ
         /*else if (measuredValue <= setPoint * 0.95 && Math.Abs(_calculatedValues.Average() - _maxOutput) >= 0 && _calculatedValues.Count == 5)
             return null;*/
+
+        if (measuredValue >= setPoint * 0.97 && measuredValue <= setPoint * 1.03 && _previousValue != 0)
+        {
+            output = _previousValue;
+        }
         
+        _previousValue = output;
         return output;
     }
 }
