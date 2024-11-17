@@ -60,8 +60,10 @@ public class PulseCountMeterModule : ModbusUnitProcessor<PulseMeterCountModuleRe
         var currentState = (uint?)await ReadRegisterAsync(PulseMeterCountModuleRegisterMap.ChannelStateRegister);
 
         if (currentState == null) return null;
+        
+        var isBitSet = ((uint)currentState & (1 << 28)) != 0;
 
-        return ((uint)currentState & (1 << 27)) == 1;
+        return isBitSet;
     }
 
     public async Task<bool> StartMeasurePulseCountAsync() =>
