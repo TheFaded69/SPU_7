@@ -2006,8 +2006,7 @@ namespace SPU_7.Models.Stand
                     .FrequencyRegulatorViewModel.outMin > frequencyMin
                     ? (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine]
                         .FanViewModels[indexOfFan].FrequencyRegulatorViewModel.outMin
-                    : (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine]
-                        .FanViewModels[indexOfFan].FrequencyRegulatorViewModel.outMin,
+                    : frequencyMin,
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan]
                     .FrequencyRegulatorViewModel.outMax);
 
@@ -2091,7 +2090,7 @@ namespace SPU_7.Models.Stand
                         .MasterDeviceViewModels[indexOfMasterDevice].SelectedMasterDeviceType switch
                     {
                         MasterDeviceType.None => 0,
-                        MasterDeviceType.GFG => 15000,
+                        MasterDeviceType.GFG => 0,
                         MasterDeviceType.Rabo => 0,
                         MasterDeviceType.RGT => 5000,
                         MasterDeviceType.SG16 => 0,

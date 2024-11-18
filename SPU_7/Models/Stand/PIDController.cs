@@ -38,7 +38,7 @@ public class PIDController
     public double? Calculate(double setPoint, double measuredValue, double multiplication = 1)
     {
         
-        if (measuredValue >= setPoint * 0.97 && measuredValue <= setPoint * 1.03 && _previousValue != 0)
+        if (measuredValue >= setPoint * 0.95 && measuredValue <= setPoint * 1.05 && _previousValue != 0)
         {
             var output2 = _previousValue;
 
