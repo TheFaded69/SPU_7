@@ -527,7 +527,7 @@ public class ValidationOperationModel : OperationModel
                                             avgFlow = flowList.Average();
 
                                             if (Math.Abs((double)(avgFlow - point.TargetConsumption)) /
-                                                point.TargetConsumption < 0.04)
+                                                point.TargetConsumption < 0.05)
                                             {
                                                 break;
                                             }

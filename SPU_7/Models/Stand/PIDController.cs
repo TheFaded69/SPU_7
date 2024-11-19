@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SPU_7.Common.Device;
 
 namespace SPU_7.Models.Stand;
 
@@ -19,10 +20,10 @@ public class PIDController
         _integral = 0;
         _previousError = 0;
     }
-    
-    private double _kp; // Пропорциональный коэффициент
-    private double _ki; // Интегральный коэффициент
-    private double _kd; // Дифференциальный коэффициент
+
+    public double _kp; // Пропорциональный коэффициент
+    public double _ki; // Интегральный коэффициент
+    public double _kd; // Дифференциальный коэффициент
 
     private double _integral;
     private double _previousError;
@@ -35,16 +36,30 @@ public class PIDController
 
     private List<double> _calculatedValues = [];
     
-    public double? Calculate(double setPoint, double measuredValue, double multiplication = 1)
+    public double? Calculate(double setPoint, double measuredValue, MasterDeviceType deviceType , double multiplication = 1)
     {
-        
-        if (measuredValue >= setPoint * 0.95 && measuredValue <= setPoint * 1.05 && _previousValue != 0)
+        switch (deviceType)
         {
-            var output2 = _previousValue;
+            case MasterDeviceType.GFG:
+                if (measuredValue >= setPoint * 0.90 && measuredValue <= setPoint * 1.1 && _previousValue != 0)
+                {
+                    var output2 = _previousValue;
 
-            return output2;
+                    return output2;
+                }
+
+                break;
+            default:
+                if (measuredValue >= setPoint * 0.95 && measuredValue <= setPoint * 1.05 && _previousValue != 0)
+                {
+                    var output2 = _previousValue;
+
+                    return output2;
+                }
+
+                break;
         }
-        
+
         var currentValue = Math.Max(_minInput, Math.Min(measuredValue, _maxInput));
         // Вычисляем ошибку
         var error = setPoint - currentValue;

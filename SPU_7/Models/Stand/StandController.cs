@@ -2010,7 +2010,33 @@ namespace SPU_7.Models.Stand
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan]
                     .FrequencyRegulatorViewModel.outMax);
 
+            if (_settingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine]
+                    .MasterDeviceViewModels[indexOfMasterDevice]
+                    .SelectedMasterDeviceType == MasterDeviceType.GFG)
+            {
+                
+                //todo Переделать коэффициенты регулирования с ПЧВ на каждое мастер устройство
+                switch (indexOfMasterDevice)
+                {
+                    case 0:
+                        _pidController._kp = 6;
+                        _pidController._ki = 6;
+                        _pidController._kd = 0.01;
+                        break;
+                    
+                    case 1:
+                        _pidController._kp = 2;
+                        _pidController._ki = 1;
+                        _pidController._kd = 0.001;
+                        break;
+                }
+            }
 
+            var deviceType = _settingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine]
+                .MasterDeviceViewModels[indexOfMasterDevice]
+                .SelectedMasterDeviceType;
+            
+            
             var currentFrequency = (double?)await _frequencyRegulatorDevices
                 .FirstOrDefault(f =>
                     ((FrequencyRegulatorDevice)f).ModuleAddress ==
@@ -2060,7 +2086,7 @@ namespace SPU_7.Models.Stand
                         .FanViewModels[indexOfFan].MaximumFlow / maximumFlow;
 
                 var targetFrequency =
-                    _pidController.Calculate(targetConsumption, (double)currentConsumption, (double)multiplicate);
+                    _pidController.Calculate(targetConsumption, (double)currentConsumption, deviceType, (double)multiplicate);
 
                 if (targetFrequency == null)
                 {
@@ -2091,7 +2117,7 @@ namespace SPU_7.Models.Stand
                     {
                         MasterDeviceType.None => 0,
                         MasterDeviceType.GFG => 1000,
-                        MasterDeviceType.Rabo => 0,
+                        MasterDeviceType.Rabo => 5000,
                         MasterDeviceType.RGT => 5000,
                         MasterDeviceType.SG16 => 0,
                         _ => throw new ArgumentOutOfRangeException()
