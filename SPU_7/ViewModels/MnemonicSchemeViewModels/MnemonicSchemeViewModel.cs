@@ -186,6 +186,8 @@ namespace SPU_7.ViewModels.MnemonicSchemeViewModels
                         {
                             lineItem.FanItemViewModels.FirstOrDefault(fan => fan.NeedleValveItemViewModel.StandSettingsNeedleValveModel == standInfoData.SettingsNeedleValveModel)
                                 .NeedleValveItemViewModel.SelectedNeedleValue = standInfoData.Value;
+                            lineItem.FanItemViewModels.FirstOrDefault(fan => fan.NeedleValveItemViewModel.StandSettingsNeedleValveModel == standInfoData.SettingsNeedleValveModel)
+                                .NeedleValveItemViewModel.StateType = standInfoData.Value == 0? StateType.Close : StateType.Open;
                             return;
                         }
                     }

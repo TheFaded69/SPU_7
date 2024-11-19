@@ -904,7 +904,7 @@ public class ValidationOperationModel : OperationModel
                                             _validationOperationResult.ValidationPointResults[pointIndex]
                                                     .ValidationMeasureResults[measureIndex]
                                                     .ValidationDeviceResults[deviceEnableIndex].TargetVolume =
-                                                Math.Round((double)masterDeviceVolume, 3);
+                                                Math.Round((double)masterDeviceVolume, 5);
                                             
                                             _manualOperationService.ShowManualValidationResultDialog(OkAction,
                                                 CancelAction,

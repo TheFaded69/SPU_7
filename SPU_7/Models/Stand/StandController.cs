@@ -2090,7 +2090,7 @@ namespace SPU_7.Models.Stand
                         .MasterDeviceViewModels[indexOfMasterDevice].SelectedMasterDeviceType switch
                     {
                         MasterDeviceType.None => 0,
-                        MasterDeviceType.GFG => 0,
+                        MasterDeviceType.GFG => 1000,
                         MasterDeviceType.Rabo => 0,
                         MasterDeviceType.RGT => 5000,
                         MasterDeviceType.SG16 => 0,
