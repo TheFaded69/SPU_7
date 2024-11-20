@@ -36,28 +36,13 @@ public class PIDController
 
     private List<double> _calculatedValues = [];
     
-    public double? Calculate(double setPoint, double measuredValue, MasterDeviceType deviceType , double multiplication = 1)
+    public double? Calculate(double setPoint, double measuredValue, MasterDeviceType deviceType , double targetDifference ,double multiplication = 1)
     {
-        switch (deviceType)
+        if (measuredValue >= setPoint * (1 - targetDifference) && measuredValue <= setPoint * (1+targetDifference) && _previousValue != 0)
         {
-            case MasterDeviceType.GFG:
-                if (measuredValue >= setPoint * 0.90 && measuredValue <= setPoint * 1.1 && _previousValue != 0)
-                {
-                    var output2 = _previousValue;
+            var output2 = _previousValue;
 
-                    return output2;
-                }
-
-                break;
-            default:
-                if (measuredValue >= setPoint * 0.95 && measuredValue <= setPoint * 1.05 && _previousValue != 0)
-                {
-                    var output2 = _previousValue;
-
-                    return output2;
-                }
-
-                break;
+            return output2;
         }
 
         var currentValue = Math.Max(_minInput, Math.Min(measuredValue, _maxInput));

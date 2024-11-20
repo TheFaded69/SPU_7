@@ -526,11 +526,11 @@ public class ValidationOperationModel : OperationModel
                                         {
                                             avgFlow = flowList.Average();
 
-                                            if (Math.Abs((double)(avgFlow - point.TargetConsumption)) /
-                                                point.TargetConsumption < 0.05)
-                                            {
-                                                break;
-                                            }
+                                            if (flowList.All(flow => flow != null))
+                                                if (flowList.All(flow => Math.Abs((double)(flow - point.TargetConsumption)) / point.TargetConsumption < 0.05))
+                                                {
+                                                    break;
+                                                }
 
                                             var currentFlow =
                                                 _standController.GetFlowFromMasterDevice(indexOfMasterDeviceLine,
@@ -546,10 +546,8 @@ public class ValidationOperationModel : OperationModel
                                             if (currentFlow != null) flowList.Add(currentFlow);
                                         }
 
-                                        await Task.Delay(3000);
+                                        await Task.Delay(5000);
                                     }
-
-                                    
                                     
                                     _timerService.InfoTimerDisable();
                                     

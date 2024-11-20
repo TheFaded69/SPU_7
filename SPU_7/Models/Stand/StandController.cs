@@ -1990,7 +1990,9 @@ namespace SPU_7.Models.Stand
             int indexOfMasterDeviceLine, int indexOfMasterDevice, int? needleValveValue = null)
         {
             var frequencyMin = needleValveValue == null ? 0 : RecalculateMinimumFrequency(needleValveValue);
-
+            
+            
+            
             _pidController = new PIDController(
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan]
                     .FrequencyRegulatorViewModel.kP,
@@ -2010,6 +2012,8 @@ namespace SPU_7.Models.Stand
                 (double)_settingsService.StandSettingsModel.LineViewModels[indexOfFanLine].FanViewModels[indexOfFan]
                     .FrequencyRegulatorViewModel.outMax);
 
+            var targetDifference = indexOfMasterDevice == 0 ? indexOfMasterDeviceLine == 0 ? 0.1 : 0.04 : 0.04;
+            
             if (_settingsService.StandSettingsModel.LineViewModels[indexOfMasterDeviceLine]
                     .MasterDeviceViewModels[indexOfMasterDevice]
                     .SelectedMasterDeviceType == MasterDeviceType.GFG)
@@ -2086,7 +2090,7 @@ namespace SPU_7.Models.Stand
                         .FanViewModels[indexOfFan].MaximumFlow / maximumFlow;
 
                 var targetFrequency =
-                    _pidController.Calculate(targetConsumption, (double)currentConsumption, deviceType, (double)multiplicate);
+                    _pidController.Calculate(targetConsumption, (double)currentConsumption, deviceType,  targetDifference,(double)multiplicate);
 
                 if (targetFrequency == null)
                 {
