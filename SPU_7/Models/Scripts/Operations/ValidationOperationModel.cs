@@ -557,14 +557,16 @@ public class ValidationOperationModel : OperationModel
                                     {
                                         //Настройка МПКИ
                                         await _standController.ResetPulseCountMeterAsync();
+                                        await Task.Delay(3000);
                                         await _standController.TurnOnPulseCountMeterControlRegister();
-
+                                        await Task.Delay(3000);
                                         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(
                                             _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
                                                 .DeviceViewModels[0].PulseCountMeterModuleNumber - 1,
                                             (int)_standSettingsService.StandSettingsModel
                                                 .LineViewModels[(int)activeLine].DeviceViewModels[0]
                                                 .PulseCountMeterModuleChannelNumber);
+                                        await Task.Delay(3000);
                                         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(
                                             _standSettingsService.StandSettingsModel
                                                 .LineViewModels[indexOfMasterDeviceLine]
@@ -574,17 +576,17 @@ public class ValidationOperationModel : OperationModel
                                                 .LineViewModels[indexOfMasterDeviceLine]
                                                 .MasterDeviceViewModels[indexOfMasterDevice]
                                                 .PulseCountMeterModuleChannelNumber);
-                                        await Task.Delay(2000);
-
+                                        await Task.Delay(3000);
                                         await _standController.StartPulseCountMeterModuleMeasureAsync(
                                             _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
                                                 .DeviceViewModels[0].PulseCountMeterModuleNumber - 1);
+                                        await Task.Delay(3000);
                                         await _standController.StartPulseCountMeterModuleMeasureAsync(
                                             _standSettingsService.StandSettingsModel
                                                 .LineViewModels[indexOfMasterDeviceLine]
                                                 .MasterDeviceViewModels[indexOfMasterDevice]
                                                 .PulseCountMeterModuleNumber - 1);
-                                        await Task.Delay(2000);
+                                        await Task.Delay(3000);
 
                                         await _standController.SendStartPulseCountMeterCommandAsync();
 
@@ -607,7 +609,7 @@ public class ValidationOperationModel : OperationModel
 
                                         await _standController.SendStartPulseCountMeterCommandAsync();
 
-                                        await Task.Delay(2000);
+                                        await Task.Delay(3000);
 
                                         masterDevicePulseCount =
                                             await _standController.ReadPulseCountFromPulseCountMeterAsync(
@@ -619,6 +621,7 @@ public class ValidationOperationModel : OperationModel
                                                     .LineViewModels[indexOfMasterDeviceLine]
                                                     .MasterDeviceViewModels[indexOfMasterDevice]
                                                     .PulseCountMeterModuleChannelNumber);
+                                        await Task.Delay(3000);
                                         devicePulseCount =
                                             await _standController.ReadPulseCountFromPulseCountMeterAsync(
                                                 _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
@@ -649,14 +652,16 @@ public class ValidationOperationModel : OperationModel
                                     else
                                     {
                                         await _standController.ResetPulseCountMeterAsync();
+                                        await Task.Delay(3000);
                                         await _standController.TurnOffPulseCountMeterControlRegister();
-
+                                        await Task.Delay(3000);
                                         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(
                                             _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
                                                 .DeviceViewModels[0].PulseCountMeterModuleNumber - 1,
                                             (int)_standSettingsService.StandSettingsModel
                                                 .LineViewModels[(int)activeLine].DeviceViewModels[0]
                                                 .PulseCountMeterModuleChannelNumber);
+                                        await Task.Delay(3000);
                                         await _standController.SetPulseCountMeterModuleChannelSettingsAsync(
                                             _standSettingsService.StandSettingsModel
                                                 .LineViewModels[indexOfMasterDeviceLine]
@@ -666,17 +671,17 @@ public class ValidationOperationModel : OperationModel
                                                 .LineViewModels[indexOfMasterDeviceLine]
                                                 .MasterDeviceViewModels[indexOfMasterDevice]
                                                 .PulseCountMeterModuleChannelNumber);
-                                        await Task.Delay(2000);
-
+                                        await Task.Delay(3000);
                                         await _standController.StartPulseCountMeterModuleMeasureAsync(
                                             _standSettingsService.StandSettingsModel.LineViewModels[(int)activeLine]
                                                 .DeviceViewModels[0].PulseCountMeterModuleNumber - 1);
+                                        await Task.Delay(3000);
                                         await _standController.StartPulseCountMeterModuleMeasureAsync(
                                             _standSettingsService.StandSettingsModel
                                                 .LineViewModels[indexOfMasterDeviceLine]
                                                 .MasterDeviceViewModels[indexOfMasterDevice]
                                                 .PulseCountMeterModuleNumber - 1);
-                                        await Task.Delay(2000);
+                                        await Task.Delay(3000);
                                         
                                         _timerService.TimeSeconds = 300;
                                         _timerService.OperationName = OperationName;

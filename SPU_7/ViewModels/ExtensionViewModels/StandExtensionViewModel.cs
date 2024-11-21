@@ -42,6 +42,7 @@ public class StandExtensionViewModel : ViewModelBase
                 if (!await _standController.ResetToZeroAsync(deviceViewModel.Number))
                     _logger.Logging(new LogMessage($"Не удалось сбросить на ноль ДД №{deviceViewModel.Number}", LogLevel.Error));
             }
+            
         }
 
         if (!await _standController.ResetToZeroPressureDifferenceAsync())
