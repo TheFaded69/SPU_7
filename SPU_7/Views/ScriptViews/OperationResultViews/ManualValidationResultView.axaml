@@ -57,7 +57,7 @@
                     <DataGridTextColumn Header="Начальный объем"
                                         Binding="{Binding StartVolumeValue}"
                                         IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByVolumeConverter}}"/>
-                    <DataGridTextColumn Header="Конченый объем"
+                    <DataGridTextColumn Header="Конечный объем"
                                         Binding="{Binding EndVolumeValue}"
                                         IsVisible="{Binding ValidationType, Converter={convertors:IsValidationByVolumeConverter}}"/>
                     <DataGridTextColumn Header="Отклонение"
