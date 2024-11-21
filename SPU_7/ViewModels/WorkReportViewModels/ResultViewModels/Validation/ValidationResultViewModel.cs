@@ -9,6 +9,7 @@ using Prism.Services.Dialogs;
 using SPU_7.Common.Stand;
 using SPU_7.Models.Scripts.Operations.Results;
 using SPU_7.Models.Services.Logger;
+using SPU_7.Models.Stand;
 
 namespace SPU_7.ViewModels.WorkReportViewModels.ResultViewModels.Validation;
 
@@ -17,12 +18,14 @@ public class ValidationResultViewModel : ViewModelBase
     public ValidationResultViewModel(ValidationOperationResult validationOperationResult, 
         IDialogService dialogService,
         ILogger logger, 
-        List<PictureResultModel> valuePictureResults)
+        List<PictureResultModel> valuePictureResults,
+        IStandController standController)
     {
         _validationOperationResult = validationOperationResult;
         _dialogService = dialogService;
         _logger = logger;
         _valuePictureResults = valuePictureResults;
+        _standController = standController;
         VendorNumbers = [];
 
         foreach (var validationDeviceResult in validationOperationResult.ValidationPointResults
@@ -35,12 +38,17 @@ public class ValidationResultViewModel : ViewModelBase
             VendorNumbers.Add(validationDeviceResult.VendorNumber);
         }
         
+        Pressure = standController.PressureAtmosphere;
+        Temperature = standController.Temperature;
+        Humidity = standController.Humidity;
+        
         ShowProtocolViewerCommand = new DelegateCommand(ShowProtocolViewerCommandHandler);
     }
     private readonly ValidationOperationResult _validationOperationResult;
     private readonly IDialogService _dialogService;
     private readonly ILogger _logger;
     private readonly List<PictureResultModel> _valuePictureResults;
+    private readonly IStandController _standController;
 
     private string _selectedVendorNumber;
     private ObservableCollection<ValidationDeviceResultViewModel> _validationDeviceResultViewModels;

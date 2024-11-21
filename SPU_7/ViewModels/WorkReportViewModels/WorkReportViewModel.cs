@@ -7,6 +7,7 @@ using SPU_7.Common.Scripts;
 using SPU_7.Models.Scripts.Operations.Results;
 using SPU_7.Models.Services.DbServices;
 using SPU_7.Models.Services.Logger;
+using SPU_7.Models.Stand;
 using SPU_7.ViewModels.WorkReportViewModels.ResultViewModels.Validation;
 using SPU_7.Views.WorkReportViews;
 using SPU_7.Views.WorkReportViews.ResultView;
@@ -19,13 +20,15 @@ public class WorkReportViewModel : ViewModelBase, IDialogAware
         IDialogService dialogService, 
         IScriptResultsDbService scriptResultsDbService,
         IOperationResultsDbService operationResultsDbService,
-        ILogger logger)
+        ILogger logger,
+        IStandController standController)
     {
         _deviceDbService = deviceDbService;
         _dialogService = dialogService;
         _scriptResultsDbService = scriptResultsDbService;
         _operationResultsDbService = operationResultsDbService;
         _logger = logger;
+        _standController = standController;
         Title = "Отчет работы стенда";
         
         CloseWindowCommand = new DelegateCommand(CloseWindowCommandHandler);
@@ -39,6 +42,7 @@ public class WorkReportViewModel : ViewModelBase, IDialogAware
     private readonly IScriptResultsDbService _scriptResultsDbService;
     private readonly IOperationResultsDbService _operationResultsDbService;
     private readonly ILogger _logger;
+    private readonly IStandController _standController;
 
     #region ScriptReport
 
@@ -75,7 +79,7 @@ public class WorkReportViewModel : ViewModelBase, IDialogAware
             {
                 OperationType.Validation => new ValidationResultView()
                 {
-                    DataContext = new ValidationResultViewModel(value.BaseOperationResult as ValidationOperationResult, _dialogService, _logger, value.PictureResults)
+                    DataContext = new ValidationResultViewModel(value.BaseOperationResult as ValidationOperationResult, _dialogService, _logger, value.PictureResults, _standController)
                     {
                         
                     }
