@@ -318,16 +318,19 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop,
                                             "Выполнение сценария прервано", null);
                                     }
-                                    
+
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
                                         if (point.IsNeedleValveUse)
                                         {
-                                            if (!await _standController.UseNeedleValveAsync(_standSettingsService.StandSettingsModel
-                                                    .LineViewModels[indexOfFanLine]
-                                                    .FanViewModels[indexOfFan].NeedleValveViewModel, (int)point.NeedleValveValue))
+                                            if (!await _standController.UseNeedleValveAsync(_standSettingsService
+                                                        .StandSettingsModel
+                                                        .LineViewModels[indexOfFanLine]
+                                                        .FanViewModels[indexOfFan].NeedleValveViewModel,
+                                                    (int)point.NeedleValveValue))
                                             {
-                                                _logger.Logging(new LogMessage("Не удалось открыть игольчатый кран подачи расхода",
+                                                _logger.Logging(new LogMessage(
+                                                    "Не удалось открыть игольчатый кран подачи расхода",
                                                     LogLevel.Error));
                                                 return new OperationResult(OperationResultType.Error,
                                                     "Не удалось открыть игольчатый кран подачи расхода",
@@ -335,10 +338,10 @@ public class ValidationOperationModel : OperationModel
                                             }
                                         }
                                         else if (!await _standController.OpenValveAsync(
-                                                _standSettingsService.StandSettingsModel
-                                                    .LineViewModels[indexOfFanLine]
-                                                    .FanViewModels[indexOfFan]
-                                                    .FanValveViewModel, true))
+                                                     _standSettingsService.StandSettingsModel
+                                                         .LineViewModels[indexOfFanLine]
+                                                         .FanViewModels[indexOfFan]
+                                                         .FanValveViewModel, true))
                                         {
                                             _logger.Logging(new LogMessage("Не удалось открыть кран подачи расхода",
                                                 LogLevel.Error));
@@ -352,7 +355,7 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop,
                                             "Выполнение сценария прервано", null);
                                     }
-                                    
+
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
                                         if (!await _standController.OpenValveAsync(
@@ -360,7 +363,8 @@ public class ValidationOperationModel : OperationModel
                                                     .LineViewModels[indexOfMasterDeviceLine]
                                                     .StartValveMasterDeviceViewModel, true))
                                         {
-                                            _logger.Logging(new LogMessage("Не удалось открыть кран перед группой эталонов",
+                                            _logger.Logging(new LogMessage(
+                                                "Не удалось открыть кран перед группой эталонов",
                                                 LogLevel.Error));
                                             return new OperationResult(OperationResultType.Error,
                                                 "Не удалось открыть кран перед группой эталонов",
@@ -372,12 +376,13 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop,
                                             "Выполнение сценария прервано", null);
                                     }
-                                    
+
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
                                         if (!await _standController.UpdateAllDevice())
                                         {
-                                            _logger.Logging(new LogMessage($"Не удалось открыть краны для точки {point.Number}",
+                                            _logger.Logging(new LogMessage(
+                                                $"Не удалось открыть краны для точки {point.Number}",
                                                 LogLevel.Error));
                                             return new OperationResult(OperationResultType.Error,
                                                 $"Не удалось открыть краны для точки {point.Number}",
@@ -393,7 +398,7 @@ public class ValidationOperationModel : OperationModel
                                     }
 
                                     _timerService.InfoTimerDisable();
-                                    
+
                                     await Task.Delay(2000);
 
                                     // какие-то действия
@@ -495,7 +500,7 @@ public class ValidationOperationModel : OperationModel
                                     }
 
                                     _timerService.InfoTimerDisable();
-                                    
+
                                     await Task.Delay(2000);
 
                                     _timerService.OperationName = OperationName;
@@ -506,7 +511,7 @@ public class ValidationOperationModel : OperationModel
                                     // ожидание стабильности расхода
 
                                     var dateStart = DateTime.Now;
-                                    
+
                                     var isFLowCorrect = false;
                                     var flowList = new List<float?>();
                                     while (true)
@@ -521,13 +526,15 @@ public class ValidationOperationModel : OperationModel
                                                 $"Не удалось стабилизировать расхода в точке {point.Number}",
                                                 _validationOperationResult);
                                         }
-                                        
+
                                         if (flowList.Count == 10)
                                         {
                                             avgFlow = flowList.Average();
 
                                             if (flowList.All(flow => flow != null))
-                                                if (flowList.All(flow => Math.Abs((double)(flow - point.TargetConsumption)) / point.TargetConsumption < 0.05))
+                                                if (flowList.All(flow =>
+                                                        Math.Abs((double)(flow - point.TargetConsumption)) /
+                                                        point.TargetConsumption < 0.05))
                                                 {
                                                     break;
                                                 }
@@ -548,9 +555,9 @@ public class ValidationOperationModel : OperationModel
 
                                         await Task.Delay(5000);
                                     }
-                                    
+
                                     _timerService.InfoTimerDisable();
-                                    
+
                                     await Task.Delay(2000);
 
                                     if (((ValidationOperationConfigurationModel)_configuration).IsAutoPulseMeasure)
@@ -599,7 +606,7 @@ public class ValidationOperationModel : OperationModel
                                         await Task.Delay(TimeSpan.FromHours(timeValidation));
 
                                         _timerService.InfoTimerDisable();
-                                        
+
                                         await Task.Delay(2000);
 
                                         // счет импульсов с поверяемого СГ , затем с эталона после окончания счета
@@ -682,7 +689,7 @@ public class ValidationOperationModel : OperationModel
                                                 .MasterDeviceViewModels[indexOfMasterDevice]
                                                 .PulseCountMeterModuleNumber - 1);
                                         await Task.Delay(3000);
-                                        
+
                                         _timerService.TimeSeconds = 300;
                                         _timerService.OperationName = OperationName;
                                         _timerService.Message = "Ожидание запуска измерения с пульта";
@@ -716,17 +723,17 @@ public class ValidationOperationModel : OperationModel
 
                                             await Task.Delay(2000);
                                         }
-                                        
+
 
                                         _timerService.InfoTimerDisable();
-                                        
+
                                         await Task.Delay(2000);
-                                        
+
                                         _timerService.TimeSeconds = (int)(timeValidation * 3600);
                                         _timerService.OperationName = OperationName;
                                         _timerService.Message = "Прогон расхода через СГ";
                                         _timerService.InfoTimerEnable();
-                                        
+
                                         while (true)
                                         {
                                             var status1 = await _standController.ReadPulseCountMeterMeasureStatusAsync(
@@ -757,9 +764,9 @@ public class ValidationOperationModel : OperationModel
                                         }
 
                                         _timerService.InfoTimerDisable();
-                                        
+
                                         await Task.Delay(2000);
-                                        
+
                                         masterDevicePulseCount =
                                             await _standController.ReadPulseCountFromPulseCountMeterAsync(
                                                 _standSettingsService.StandSettingsModel
@@ -799,7 +806,7 @@ public class ValidationOperationModel : OperationModel
                                     }
 
                                     _timerService.InfoTimerDisable();
-                                    
+
                                     await Task.Delay(2000);
 
                                     var deviceEnableIndex = -1;
@@ -849,8 +856,17 @@ public class ValidationOperationModel : OperationModel
                                             var masterDeviceVolume = masterDevicePulseCount * _standSettingsService
                                                 .StandSettingsModel.LineViewModels[indexOfMasterDeviceLine]
                                                 .MasterDeviceViewModels[indexOfMasterDevice].PulseWeight;
-
-                                            var realVolume = masterDeviceVolume;
+                                            
+                                            var realVolume = masterDeviceVolume *
+                                                ((_standController.PressureAtmosphere -
+                                                  _standController.GetPressureDifferenceFromMasterDevice(
+                                                      (int)activeLine)) *
+                                                 (_standController.GetTemperatureFromDevice((int)activeLine,
+                                                     deviceIndex) + 273.15)) / (_standController.PressureAtmosphere -
+                                                    _standController.GetPressureDifferenceFromDevice(
+                                                        (int)indexOfDeviceLine, (int)indexOfDeviceLine)) *
+                                                (_standController.GetTemperatureFromMasterDevice(indexOfMasterDeviceLine,
+                                                    indexOfMasterDevice) + 273.15) ;
 
                                             _validationOperationResult.ValidationPointResults[pointIndex]
                                                     .ValidationMeasureResults[measureIndex]
@@ -899,16 +915,27 @@ public class ValidationOperationModel : OperationModel
                                         else
                                         {
                                             _cancellationTokenSource = new CancellationTokenSource();
-                                            
+
                                             var masterDeviceVolume = masterDevicePulseCount * _standSettingsService
                                                 .StandSettingsModel.LineViewModels[indexOfMasterDeviceLine]
                                                 .MasterDeviceViewModels[indexOfMasterDevice].PulseWeight;
 
+                                            var realVolume = masterDeviceVolume *
+                                                             ((_standController.PressureAtmosphere -
+                                                               _standController.GetPressureDifferenceFromMasterDevice(
+                                                                   (int)activeLine)) *
+                                                              (_standController.GetTemperatureFromDevice((int)activeLine,
+                                                                  deviceIndex) + 273.15)) / (_standController.PressureAtmosphere -
+                                                                 _standController.GetPressureDifferenceFromDevice(
+                                                                     (int)indexOfDeviceLine, (int)indexOfDeviceLine)) *
+                                                             (_standController.GetTemperatureFromMasterDevice(indexOfMasterDeviceLine,
+                                                                 indexOfMasterDevice) + 273.15) ;
+                                            
                                             _validationOperationResult.ValidationPointResults[pointIndex]
                                                     .ValidationMeasureResults[measureIndex]
                                                     .ValidationDeviceResults[deviceEnableIndex].TargetVolume =
-                                                Math.Round((double)masterDeviceVolume, 5);
-                                            
+                                                Math.Round((double)realVolume, 5);
+
                                             _manualOperationService.ShowManualValidationResultDialog(OkAction,
                                                 CancelAction,
                                                 _validationOperationResult.ValidationPointResults,
@@ -932,7 +959,7 @@ public class ValidationOperationModel : OperationModel
                                     _timerService.TimeSeconds = 50;
                                     _timerService.Message = $"Закрытие кранов для точки №{point.Number}";
                                     _timerService.InfoTimerEnable();
-                                    
+
                                     if (indexOfMasterDeviceLine > indexOfFanLine)
                                     {
                                         var currentIndex = indexOfMasterDeviceLine;
@@ -1107,22 +1134,25 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop,
                                             "Выполнение сценария прервано", null);
                                     }
-                                    
+
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
                                         if (point.IsNeedleValveUse)
                                         {
-                                            if (!await _standController.UseNeedleValveAsync(_standSettingsService.StandSettingsModel
+                                            if (!await _standController.UseNeedleValveAsync(_standSettingsService
+                                                    .StandSettingsModel
                                                     .LineViewModels[indexOfFanLine]
                                                     .FanViewModels[indexOfFan].NeedleValveViewModel, 0))
                                             {
-                                                _logger.Logging(new LogMessage("Не удалось закрыть игольчатый кран подачи расхода",
+                                                _logger.Logging(new LogMessage(
+                                                    "Не удалось закрыть игольчатый кран подачи расхода",
                                                     LogLevel.Error));
                                                 return new OperationResult(OperationResultType.Error,
                                                     "Не удалось закрыть игольчатый кран подачи расхода",
                                                     null);
                                             }
                                         }
+
                                         if (!await _standController.CloseValveAsync(
                                                 _standSettingsService.StandSettingsModel
                                                     .LineViewModels[indexOfFanLine]
@@ -1141,7 +1171,7 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop,
                                             "Выполнение сценария прервано", null);
                                     }
-                                    
+
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
                                         if (!await _standController.CloseValveAsync(
@@ -1149,7 +1179,8 @@ public class ValidationOperationModel : OperationModel
                                                     .LineViewModels[indexOfMasterDeviceLine]
                                                     .StartValveMasterDeviceViewModel, true))
                                         {
-                                            _logger.Logging(new LogMessage("Не удалось закрыть кран перед группой эталонов",
+                                            _logger.Logging(new LogMessage(
+                                                "Не удалось закрыть кран перед группой эталонов",
                                                 LogLevel.Error));
                                             return new OperationResult(OperationResultType.Error,
                                                 "Не удалось закрыть кран перед группой эталонов",
@@ -1161,12 +1192,13 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop,
                                             "Выполнение сценария прервано", null);
                                     }
-                                    
+
                                     if (!operationCancellationTokenSource.IsCancellationRequested)
                                     {
                                         if (!await _standController.UpdateAllDevice())
                                         {
-                                            _logger.Logging(new LogMessage($"Не удалось закрыть краны для точки {point.Number}",
+                                            _logger.Logging(new LogMessage(
+                                                $"Не удалось закрыть краны для точки {point.Number}",
                                                 LogLevel.Error));
                                             return new OperationResult(OperationResultType.Error,
                                                 $"Не удалось закрыть краны для точки {point.Number}",
@@ -1180,7 +1212,7 @@ public class ValidationOperationModel : OperationModel
                                         return new OperationResult(OperationResultType.Stop,
                                             "Выполнение сценария прервано", null);
                                     }
-                                    
+
                                     _timerService.InfoTimerDisable();
 
                                     await Task.Delay(2000);
