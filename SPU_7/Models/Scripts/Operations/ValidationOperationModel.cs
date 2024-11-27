@@ -56,6 +56,8 @@ public class ValidationOperationModel : OperationModel
                 NominalFlow = ((ValidationOperationConfigurationModel)_configuration).NominalFlow,
             };
 
+            
+            
             var activeLine = _standController.GetActiveLine();
 
             if (activeLine == null)
@@ -139,6 +141,17 @@ public class ValidationOperationModel : OperationModel
                                             .FirstOrDefault(mas =>
                                                 mas.MasterDeviceName == point.SelectedMasterDeviceName));
 
+                                    var ф = 100 *
+                                                     ((_standController.PressureAtmosphere -
+                                                       _standController.GetPressureDifferenceFromMasterDevice(
+                                                           (int)activeLine)) *
+                                                      (_standController.GetTemperatureFromDevice((int)activeLine,
+                                                          0) + 273.15)) / (_standController.PressureAtmosphere -
+                                                                                     _standController.GetPressureDifferenceFromDevice(
+                                                                                         (int)indexOfDeviceLine, (int)indexOfDeviceLine)) *
+                                                     (_standController.GetTemperatureFromMasterDevice(indexOfMasterDeviceLine,
+                                                         indexOfMasterDevice) + 273.15) ;
+                                    
                                     _timerService.OperationName = OperationName;
                                     _timerService.TimeSeconds = 50;
                                     _timerService.Message = $"Открытие кранов для точки №{point.Number}";
@@ -539,6 +552,7 @@ public class ValidationOperationModel : OperationModel
                                                     break;
                                                 }
 
+                                            
                                             var currentFlow =
                                                 _standController.GetFlowFromMasterDevice(indexOfMasterDeviceLine,
                                                     indexOfMasterDevice);
